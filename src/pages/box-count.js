@@ -14,6 +14,7 @@ import {
 } from '@material-ui/core';
 
 import services from '../services'
+import util from '../util'
 
 import {useState, useEffect} from 'react';
 
@@ -106,8 +107,8 @@ export default function BoxCount() {
 
     const [ui, setUi] = useState({
         ballotBundleTypes: [
-            {"names": "normal", "title": "Ballot Bundles"},
-            {"names": "tender", "title": "Tender allot Bundles"}
+            {"name": "normal", "title": "Ballot Bundles"},
+            {"name": "tender", "title": "Tender allot Bundles"}
         ],
         electoralDistricts: [],
         pollingDivisions: [],
@@ -180,7 +181,7 @@ export default function BoxCount() {
                 setModel({
                     ...model,
                     boxes: model.boxes.slice(0, boxIndex)
-                        .concat([parseInt(e.target.value)])
+                        .concat([e.target.value])
                         .concat(model.boxes.slice(boxIndex + 1))
                 })
             },
@@ -215,7 +216,7 @@ export default function BoxCount() {
                         ballotBundles: model.ballotBundles.slice(0, boxIndex)
                             .concat([{
                                 ...model.ballotBundles[boxIndex],
-                                to: parseInt(e.target.value)
+                                to: e.target.value.trim()
                             }])
                             .concat(model.ballotBundles.slice(boxIndex + 1))
                     })
@@ -239,17 +240,21 @@ export default function BoxCount() {
                     }
                 }
             },
-            add: () => e => {
+            add: (bundleObjectSample) => e => {
                 setModel({
                     ...model,
                     ballotBundles: [
                         ...model.ballotBundles,
-                        {from: undefined, to: undefined}
+                        {...bundleObjectSample, from: undefined, to: undefined}
                     ]
                 })
             }
         }
     };
+
+    const onSaveClick = function () {
+        util.messages.showMessages("Success", "Box Count Save", JSON.stringify(model, null, 2))
+    }
 
 
     return (
@@ -405,7 +410,9 @@ export default function BoxCount() {
                     </Typography>
 
                     {model.ballotBundles.map((ballotBundle, ballotBundleIndex) => {
-                        return <div className={classes.sectionRow} key={ballotBundleIndex}>
+
+                        if (ballotBundle.type === ballotBundleType.name) {
+                            return <div className={classes.sectionRow} key={ballotBundleIndex}>
                             <TextField
                                 id="outlined-dense"
                                 label="From"
@@ -440,17 +447,21 @@ export default function BoxCount() {
                                 value={actions.ballotBundles.count(ballotBundleIndex)}
                             />
                         </div>
+                        }
                     })}
 
-                    <Button size="small" variant="contained" className={classes.button}>
-                        Add
+                    <Button
+                        size="small" variant="contained" className={classes.button}
+                        onClick={actions.ballotBundles.add(ballotBundleType.name)}
+                    >
+                        Add {ballotBundleType.name}
                     </Button>
                 </div>
             })}
 
 
             <div className={clsx(classes.section, classes.right)}>
-                <Button variant="contained" className={classes.button}>
+                <Button variant="contained" className={classes.button} onClick={onSaveClick}>
                     Save
                 </Button>
                 <Button variant="contained" className={classes.button} color="primary">
