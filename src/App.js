@@ -40,6 +40,7 @@ class App extends Component {
 */}
                         <Route exact path="/" component={Pages.BoxCount}/>
                         <Route path="/about" component={Pages.IssuingAndReceiving}/>
+                        <Route path="/pre-41" component={Pages.Pre41}/>
                     </div>
                 </Router>
             </MuiThemeProvider>
