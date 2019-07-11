@@ -10,7 +10,13 @@ import {
     InputLabel,
     Select,
     FilledInput,
-    OutlinedInput
+    OutlinedInput,
+    Table,
+    TableRow,
+    TableCell,
+    TableHead,
+    TableBody,
+    Paper
 } from '@material-ui/core';
 
 import services from '../services'
@@ -82,18 +88,17 @@ const useStyles = makeStyles(theme => ({
     label: {
         margin: theme.spacing(1)
     },
-    td: {
-        paddingLeft: theme.spacing(2),
-        paddingRight: theme.spacing(1)
+    root: {
+        width: '100%',
+        marginTop: theme.spacing(3),
+        overflowX: 'auto',
     },
-    th: {
-        marginLeft: theme.spacing(1),
-        marginRight: theme.spacing(1)
+    table: {
+        minWidth: 650,
     }
 }));
 
-
-export default function BoxCount() {
+export default function Pre41() {
     const classes = useStyles();
 
 
@@ -175,8 +180,48 @@ export default function BoxCount() {
                 districtCentreId: countingCentre.districtCentreId,
                 countingCentreId: countingCentre.countingCentreId
             })
-        }
-
+        },
+        partyWiseResults: {
+            voteCountInWords: {
+                edit: (candidateIndex) => e => {
+                    setModel({
+                        ...model,
+                        partyWiseResults: model.partyWiseResults.slice(0, candidateIndex)
+                            .concat([{
+                                ...model.partyWiseResults[candidateIndex],
+                                voteCountInWords: e.target.value.trim()
+                            }])
+                            .concat(model.partyWiseResults.slice(candidateIndex + 1))
+                    })
+                },
+            },
+            voteCount: {
+                edit: (candidateIndex) => e => {
+                    setModel({
+                        ...model,
+                        partyWiseResults: model.partyWiseResults.slice(0, candidateIndex)
+                            .concat([{
+                                ...model.partyWiseResults[candidateIndex],
+                                voteCount: e.target.value.trim()
+                            }])
+                            .concat(model.partyWiseResults.slice(candidateIndex + 1))
+                    })
+                },
+            },
+            agent: {
+                edit: (candidateIndex) => e => {
+                    setModel({
+                        ...model,
+                        partyWiseResults: model.partyWiseResults.slice(0, candidateIndex)
+                            .concat([{
+                                ...model.partyWiseResults[candidateIndex],
+                                agent: e.target.value.trim()
+                            }])
+                            .concat(model.partyWiseResults.slice(candidateIndex + 1))
+                    })
+                },
+            },
+         }
     };
 
 
@@ -247,52 +292,54 @@ export default function BoxCount() {
 
             </div>
 
-            <div className={classes.section}>
+            <Paper className={classes.root}>
 
-                    <div className={classes.sectionRow}>
-                        <table>
-                        <tbody>
-                            <tr align="center">
-                                <th>Symbol</th>
-                                <th>Name of Candidate</th>
-                                <th>No. of votes in words</th>
-                                <th>No. of votes in figures</th>
-                                <th>Agent</th>
-                             </tr>
+                <Table className={classes.table}>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Symbol</TableCell>
+                            <TableCell>Name of Candidate</TableCell>
+                            <TableCell>No. of votes in words</TableCell>
+                            <TableCell>No. of votes in figures</TableCell>
+                            <TableCell>Agent</TableCell>
+                         </TableRow>
+                     </TableHead>
+                     <TableBody>
 
                     {ui.candidates.map((candidate, candidateIndex) => {
-                        return <tr><td>
+                        return <TableRow key={candidateIndex}>
+                            <TableCell>{candidate.symbol}</TableCell>
+                            <TableCell>{candidate.candidateName}</TableCell>
 
-                            <label>{candidate.symbol}</label></td>
-                            <td><label>{candidate.candidateName}</label></td>
-
-                            <td><TextField
+                             <TableCell><TextField
                                 id="outlined-dense"
                                 className={clsx(classes.textField)}
                                 margin="dense"
                                 variant="outlined"
-                                value={""}
-                            /></td>
-                            <td><TextField
+                                value={model.partyWiseResults.voteCountInWords}
+                                onChange={actions.partyWiseResults.voteCountInWords.edit(candidateIndex)}
+                            /></TableCell>
+                            <TableCell><TextField
                                 id="outlined-dense"
                                 className={clsx(classes.textField)}
                                 margin="dense"
                                 variant="outlined"
-                                value={""}
-                            /></td>
-                            <td><TextField
+                                value={model.partyWiseResults.voteCount}
+                                onChange={actions.partyWiseResults.voteCount.edit(candidateIndex)}
+                            /></TableCell>
+                            <TableCell><TextField
                                 id="outlined-dense"
                                 className={clsx(classes.textField)}
                                 margin="dense"
                                 variant="outlined"
-                                value={""}
-                            /></td>
-                            </tr>
+                                value={model.partyWiseResults.agent}
+                                onChange={actions.partyWiseResults.agent.edit(candidateIndex)}
+                            /></TableCell>
+                         </TableRow>
                     })}
-                    </tbody>
-                    </table>
-                    </div>
-                </div>
+                    </TableBody>
+                    </Table>
+                </Paper>
 
 
 
