@@ -5,7 +5,6 @@ import {
     Typography,
     Button,
     FormControl,
-    TextField,
     InputLabel,
     Select,
     OutlinedInput,
@@ -17,7 +16,7 @@ import {
     Paper
 } from '@material-ui/core';
 
-export default function InvalidBallots() {
+export default function PartywiseCount() {
     const classes = useStyles();
 
     return (
@@ -25,10 +24,10 @@ export default function InvalidBallots() {
             <div>
 
                 <Typography variant="h5" gutterBottom>
-                    Invalid Ballot Count
+                    Party-wise Ballot Counts
                 </Typography>
                 <Typography variant="body2" gutterBottom>
-                    This is to be filled at the counting centre before counting the valid votes.
+                    This is to be filled at the counting centre when the votes for each candidate is counted.
                     Please Select the District Centre and Counting Center at first.
                 </Typography>
             </div>
@@ -81,80 +80,29 @@ export default function InvalidBallots() {
                 <Table className={classes.table}>
                     <TableHead>
                         <TableRow>
-                            <TableCell style={{fontSize:13,fontWeight:'bold'}}>Ground For Rejection</TableCell>
-                            <TableCell style={{fontSize:13,fontWeight:'bold'}}>No of Ballot Papers Rejected</TableCell>
+                            <TableCell style={{fontSize:13,fontWeight:'bold'}}>Symbol</TableCell>
+                            <TableCell style={{fontSize:13,fontWeight:'bold'}}>Name of Candidate</TableCell>
+                            <TableCell style={{fontSize:13,fontWeight:'bold'}}>No of votes in words</TableCell>
+                            <TableCell style={{fontSize:13,fontWeight:'bold'}}>No of votes in figures</TableCell>
+                            <TableCell style={{fontSize:13,fontWeight:'bold'}}>Agent</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         <TableRow>
-                            <TableCell style={{fontSize:13}}>Does not bear the official mark</TableCell>
-                            <TableCell style={{fontSize:13}}>
-                                <TextField
-                                    id="outlined-dense"
-                                    className={clsx(classes.textField)}
-                                    margin="dense"
-                                    variant="outlined"
-                                />
-                            </TableCell>
-
+                            <TableCell style={{fontSize:13}}>Elephant</TableCell>
+                            <TableCell style={{fontSize:13}}>ABC Perera</TableCell>
+                            <TableCell style={{fontSize:13}}>Seven Hundred and Fifty Thousand</TableCell>
+                            <TableCell style={{fontSize:13}}>750 000</TableCell>
+                            <TableCell style={{fontSize:13}}>Ryan Samuel</TableCell>
                         </TableRow>
                         <TableRow>
-                            <TableCell style={{fontSize:13}}>Voted for more than one candidate</TableCell>
-                            <TableCell style={{fontSize:13}}>
-                                <TextField
-                                    id="outlined-dense"
-                                    className={clsx(classes.textField)}
-                                    margin="dense"
-                                    variant="outlined"
-                                />
-                            </TableCell>
-
-                        </TableRow>
-                        <TableRow>
-                            <TableCell style={{fontSize:13}}>Specified a second preference or a third preference only both such preference only</TableCell>
-                            <TableCell style={{fontSize:13}}>
-                                <TextField
-                                    id="outlined-dense"
-                                    className={clsx(classes.textField)}
-                                    margin="dense"
-                                    variant="outlined"
-                                />
-                            </TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell style={{fontSize:13}}>Something is written or marked by which the voter can be identified</TableCell>
-                            <TableCell style={{fontSize:13}}>
-                                <TextField
-                                    id="outlined-dense"
-                                    className={clsx(classes.textField)}
-                                    margin="dense"
-                                    variant="outlined"
-                                />
-                            </TableCell>
+                            <TableCell style={{fontSize:13}}>Elephant</TableCell>
+                            <TableCell style={{fontSize:13}}>ABC Perera</TableCell>
+                            <TableCell style={{fontSize:13}}>Seven Hundred and Fifty Thousand</TableCell>
+                            <TableCell style={{fontSize:13}}>750 000</TableCell>
+                            <TableCell style={{fontSize:13}}>Ryan Samuel</TableCell>
                         </TableRow>
 
-                        <TableRow>
-                            <TableCell style={{fontSize:13}}>Unmarked</TableCell>
-                            <TableCell style={{fontSize:13}}>
-                                <TextField
-                                    id="outlined-dense"
-                                    className={clsx(classes.textField)}
-                                    margin="dense"
-                                    variant="outlined"
-                                />
-                            </TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell style={{fontSize:13}}>Void for Uncertainty</TableCell>
-                            <TableCell style={{fontSize:13}}>
-                                <TextField
-                                    id="outlined-dense"
-                                    className={clsx(classes.textField)}
-                                    margin="dense"
-                                    variant="outlined"
-                                />
-                            </TableCell>
-                        </TableRow>
                     </TableBody>
                 </Table>
             </Paper>
