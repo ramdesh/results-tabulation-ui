@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import clsx from 'clsx';
+import axios from 'axios';
 import {makeStyles} from '@material-ui/core/styles';
 import {
     Typography,
@@ -16,14 +17,22 @@ import {
     TableBody,
     Paper
 } from '@material-ui/core';
+import MenuItem from '@material-ui/core/MenuItem';
 
 export default function InvalidBallots() {
+
     const classes = useStyles();
+
+    const config = {
+        method: 'get',
+        url: 'http://webcode.me',
+        headers: { 'User-Agent': 'Console app' }
+    }
+    axios(config)
 
     return (
         <form className={classes.container} noValidate autoComplete="off">
             <div>
-
                 <Typography variant="h5" gutterBottom>
                     Invalid Ballot Count
                 </Typography>
@@ -40,18 +49,16 @@ export default function InvalidBallots() {
                         District Centre
                     </InputLabel>
                     <Select
-                        native
-                        input={
-                            <OutlinedInput
-                                name="age"
-                                margin="dense"
-                                labelWidth={130}
-                                id="outlined-age-native-simple"
-                            />
-                        }
+                        // value={values.age}
+                        // onChange={handleChange}
+                        inputProps={{
+                            name: 'age',
+                            id: 'age-simple',
+                        }}
                     >
-
-                        })}
+                        <MenuItem value={10}>Ten</MenuItem>
+                        <MenuItem value={20}>Twenty</MenuItem>
+                        <MenuItem value={30}>Thirty</MenuItem>
                     </Select>
                 </FormControl>
 
@@ -61,7 +68,6 @@ export default function InvalidBallots() {
                     </InputLabel>
                     <Select
                         native
-
                         input={
                             <OutlinedInput
                                 name="age"

@@ -49,8 +49,8 @@ const NavBar = () => {
                             <li>
                                 <a href="">Data Entry</a>
                                 <ul>
-                                    <li><a href="">Receiving</a></li>
-                                    <li><a href="">Dispatching</a></li>
+                                    <li><a href="/invalid">Invalid Ballot Count</a></li>
+                                    <li><a href="/party-wise">Party-wise Count</a></li>
                                 </ul>
                             </li>
                             <li>
