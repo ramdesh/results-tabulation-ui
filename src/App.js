@@ -5,6 +5,7 @@ import {BrowserRouter as Router, Route} from "react-router-dom";
 import InvalidBallots from "./components/invalid-ballots/InvalidBallots";
 import PartywiseCount from "./components/partywise-count/PartywiseCount";
 import Invalid from "./components/invalid-ballots/Invalid";
+import Preferences from "./components/preferences/Preferences";
 
 function App() {
     return (
@@ -14,6 +15,7 @@ function App() {
                 <Route exact path="/" component={InvalidBallots}/>
                 <Route exact path="/party-wise" component={PartywiseCount}/>
                 <Route exact path="/invalid" component={Invalid}/>
+                <Route exact path="/preference" component={Preferences}/>
             </div>
         </Router>
 

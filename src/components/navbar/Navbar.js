@@ -51,6 +51,7 @@ const NavBar = () => {
                                 <ul>
                                     <li><a href="/invalid">Invalid Ballot Count</a></li>
                                     <li><a href="/party-wise">Party-wise Count</a></li>
+                                    <li><a href="/preference">Preferences </a></li>
                                 </ul>
                             </li>
                             <li>
