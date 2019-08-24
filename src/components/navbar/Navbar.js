@@ -38,7 +38,7 @@ const NavBar = () => {
                                 <a href="">Reports</a>
                                 <ul>
                                     <li><a href="">PRE-30-PD</a></li>
-                                    <li><a href="">PRE-30-PV</a></li>
+                                    <li><a href="">PRE-30-ED</a></li>
                                 </ul>
                             </li>
                         </ul>

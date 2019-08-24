@@ -6,6 +6,7 @@ import InvalidBallots from "./components/invalid-ballots/InvalidBallots";
 import PartywiseCount from "./components/partywise-count/PartywiseCount";
 import Invalid from "./components/invalid-ballots/Invalid";
 import Preferences from "./components/preferences/Preferences";
+import Report from "./components/report/reports";
 
 function App() {
     return (
@@ -16,6 +17,7 @@ function App() {
                 <Route exact path="/party-wise" component={PartywiseCount}/>
                 <Route exact path="/invalid" component={Invalid}/>
                 <Route exact path="/preference" component={Preferences}/>
+                <Route exact path="/report" component={Report}/>
             </div>
         </Router>
 
