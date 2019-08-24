@@ -2,7 +2,6 @@ import React from 'react';
 import './App.css';
 import NavBar from "./components/navbar/Navbar";
 import {BrowserRouter as Router, Route} from "react-router-dom";
-import Preferences from "./components/preferences/Preferences";
 import CE201 from "./components/CE201/CE201";
 import PRE28A from "./components/PRE28A/PRE28A";
 import PRE28AEntry from "./components/PRE28A/PRE28AEntry";
@@ -15,13 +14,16 @@ import PRE41 from "./components/partywise-count/PRE41";
 import PRE41Entry from "./components/partywise-count/PRE41Entry";
 import PRE41PV from "./components/partywise-count/postal-votes/PRE41PV";
 import PRE41PVEntry from "./components/partywise-count/postal-votes/PRE41PVEntry";
+import PRE34CO from "./components/preferences/PRE34CO";
+import PRE34COEntry from "./components/preferences/PRE34COEntry";
+import PRE34COPV from "./components/preferences/postal-votes/PRE34COPV";
+import PRE34COPVEntry from "./components/preferences/postal-votes/PRE34COPVEntry";
 
 function App() {
     return (
         <Router>
             <div>
                 <NavBar/>
-                <Route exact path="/preferences" component={Preferences}/>
                 <Route exact path="/CE201" component={CE201}/>
                 <Route exact path="/PRE28A" component={PRE28A}/>
                 <Route exact path="/PRE28A-Entry" component={PRE28AEntry}/>
@@ -34,7 +36,10 @@ function App() {
                 <Route exact path="/PRE41-Entry" component={PRE41Entry}/>
                 <Route exact path="/PRE41PV" component={PRE41PV}/>
                 <Route exact path="/PRE41PV-Entry" component={PRE41PVEntry}/>
-
+                <Route exact path="/PRE34CO" component={PRE34CO}/>
+                <Route exact path="/PRE34CO-Entry" component={PRE34COEntry}/>
+                <Route exact path="/PRE34COPV" component={PRE34COPV}/>
+                <Route exact path="/PRE34COPV-Entry" component={PRE34COPVEntry}/>
             </div>
         </Router>
 
