@@ -13,6 +13,8 @@ import PRE21PVEntry from "./components/invalid-ballots/postal-votes/PRE21PVEntry
 import PRE21PV from "./components/invalid-ballots/postal-votes/PRE21PV";
 import PRE41 from "./components/partywise-count/PRE41";
 import PRE41Entry from "./components/partywise-count/PRE41Entry";
+import PRE41PV from "./components/partywise-count/postal-votes/PRE41PV";
+import PRE41PVEntry from "./components/partywise-count/postal-votes/PRE41PVEntry";
 
 function App() {
     return (
@@ -30,6 +32,8 @@ function App() {
                 <Route exact path="/PRE21PV-Entry" component={PRE21PVEntry}/>
                 <Route exact path="/PRE41" component={PRE41}/>
                 <Route exact path="/PRE41-Entry" component={PRE41Entry}/>
+                <Route exact path="/PRE41PV" component={PRE41PV}/>
+                <Route exact path="/PRE41PV-Entry" component={PRE41PVEntry}/>
 
             </div>
         </Router>

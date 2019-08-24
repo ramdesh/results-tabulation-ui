@@ -62,9 +62,7 @@ const NavBar = () => {
                             <li>
                                 <a href="">Reports</a>
                                 <ul>
-                                    <li><a href="/report">PRE-41</a></li>
-                                    <li><a href="/report">PRE-21</a></li>
-                                    <li><a href="/report">PRE-30-CO</a></li>
+                                    <li><a href="/report">Report</a></li>
                                 </ul>
                             </li>
                         </ul>
