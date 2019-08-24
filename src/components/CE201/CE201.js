@@ -22,7 +22,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import MenuItem from '@material-ui/core/MenuItem';
 
-class Preferences extends Component {
+class CE201 extends Component {
     constructor(props, context) {
         super(props, context);
         this.handleClose = this.handleClose.bind(this);
@@ -66,7 +66,6 @@ class Preferences extends Component {
         })
             .catch((error) => console.log(error));
 
-
         axios.get('https://cors-anywhere.herokuapp.com/https://dev.tabulation.ecdev.opensource.lk/office?limit=20&offset=0&electionId=1', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
@@ -91,7 +90,7 @@ class Preferences extends Component {
                 <div>
                     <div style={{marginBottom: '3%'}}>
                         <Typography variant="h5" gutterBottom>
-                            Preferences (PRE-34-CO)
+                           Ballot Count ( CE-201 )
                         </Typography>
                         <Typography variant="body2" gutterBottom>
                             This is to be filled at the counting centres. It's the 2nd and 3rd Preferences counted in
@@ -302,4 +301,4 @@ class Preferences extends Component {
     }
 }
 
-export default Preferences;
+export default CE201;

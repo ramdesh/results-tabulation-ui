@@ -1,12 +1,9 @@
 import React, {Component} from 'react'
-import Grid from '@material-ui/core/Grid';
 import axios from 'axios';
 import {
     Typography,
     Button,
-    FormControl,
     TextField,
-    InputLabel,
     Select,
     Table,
     TableRow,
@@ -21,7 +18,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-class PRE28AEntry extends Component {
+class PRE41Entry extends Component {
     constructor(props, context) {
         super(props, context);
         this.handleClose = this.handleClose.bind(this);
@@ -40,8 +37,9 @@ class PRE28AEntry extends Component {
         console.log("open")
         this.setState({open: true});
     }
+
     handleBack() {
-        this.props.history.replace('/PRE28A')
+        this.props.history.replace('/PRE41')
     }
 
     // modal controllers
@@ -80,76 +78,40 @@ class PRE28AEntry extends Component {
                 <div>
                     <div style={{marginBottom: '3%'}}>
                         <Typography variant="h5" gutterBottom>
-                            Presidential Election 2019 - Box Count ( PRE-28A ) - Polling Station : A
+                            Presidential Election 2019 - Party-Wise Count ( PRE-41 ) - Polling Station : A
                         </Typography>
 
                     </div>
-
-
                     <Paper>
                         <Table>
                             <TableHead>
                                 <TableRow>
-                                    <TableCell style={{fontSize: 13, fontWeight: 'bold'}}>Ballot Box ID</TableCell>
-                                    <TableCell style={{fontSize: 13, fontWeight: 'bold'}}>Ordinary Ballot Paper Count</TableCell>
-                                    <TableCell style={{fontSize: 13, fontWeight: 'bold'}}>Tender Ballot Paper Count</TableCell>
-                                    <TableCell style={{fontSize: 13, fontWeight: 'bold'}}>Box Count</TableCell>
+                                    <TableCell style={{fontSize:13,fontWeight:'bold'}}>Symbol</TableCell>
+                                    <TableCell style={{fontSize:13,fontWeight:'bold'}}>Name of Candidate</TableCell>
+                                    <TableCell style={{fontSize:13,fontWeight:'bold'}}>No of votes in words</TableCell>
+                                    <TableCell style={{fontSize:13,fontWeight:'bold'}}>No of votes in figures</TableCell>
+                                    <TableCell style={{fontSize:13,fontWeight:'bold'}}>Agent</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
                                 <TableRow>
-                                    <TableCell style={{fontSize: 13}}>
+                                    <TableCell style={{fontSize:13}}>Elephant</TableCell>
+                                    <TableCell style={{fontSize:13}}>ABC Perera</TableCell>
+                                    <TableCell style={{fontSize:13}}>
                                         <TextField
                                             id="outlined-dense"
                                             margin="dense"
                                             variant="outlined"
                                         />
                                     </TableCell>
-                                    <TableCell style={{fontSize: 13}}>
+                                    <TableCell style={{fontSize:13}}>
                                         <TextField
                                             id="outlined-dense"
                                             margin="dense"
                                             variant="outlined"
                                         />
                                     </TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
-                                </TableRow>
-                                <TableRow>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
-                                    <TableCell style={{fontSize: 13}}>
+                                    <TableCell style={{fontSize:13}}>
                                         <TextField
                                             id="outlined-dense"
                                             margin="dense"
@@ -158,58 +120,23 @@ class PRE28AEntry extends Component {
                                     </TableCell>
                                 </TableRow>
                                 <TableRow>
-                                    <TableCell style={{fontSize: 13}}>
+                                    <TableCell style={{fontSize:13}}>Swan</TableCell>
+                                    <TableCell style={{fontSize:13}}>DLU Ramanayake</TableCell>
+                                    <TableCell style={{fontSize:13}}>
                                         <TextField
                                             id="outlined-dense"
                                             margin="dense"
                                             variant="outlined"
                                         />
                                     </TableCell>
-                                    <TableCell style={{fontSize: 13}}>
+                                    <TableCell style={{fontSize:13}}>
                                         <TextField
                                             id="outlined-dense"
                                             margin="dense"
                                             variant="outlined"
                                         />
                                     </TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
-                                </TableRow>
-                                <TableRow>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
-                                    <TableCell style={{fontSize: 13}}>
+                                    <TableCell style={{fontSize:13}}>
                                         <TextField
                                             id="outlined-dense"
                                             margin="dense"
@@ -219,25 +146,75 @@ class PRE28AEntry extends Component {
                                 </TableRow>
 
                                 <TableRow>
-                                    <TableCell style={{fontWeight: 'bold',fontSize: 14}}>
+                                    <TableCell style={{fontSize:13}}>Bell</TableCell>
+                                    <TableCell style={{fontSize:13}}>JKL Fernando</TableCell>
+                                    <TableCell style={{fontSize:13}}>
+                                        <TextField
+                                            id="outlined-dense"
+                                            margin="dense"
+                                            variant="outlined"
+                                        />
+                                    </TableCell>
+                                    <TableCell style={{fontSize:13}}>
+                                        <TextField
+                                            id="outlined-dense"
+                                            margin="dense"
+                                            variant="outlined"
+                                        />
+                                    </TableCell>
+                                    <TableCell style={{fontSize:13}}>
+                                        <TextField
+                                            id="outlined-dense"
+                                            margin="dense"
+                                            variant="outlined"
+                                        />
+                                    </TableCell>
+                                </TableRow>
 
-                                        Total Ballot Counts :
-                                    </TableCell>
-                                    <TableCell style={{fontSize: 13}}>
+                                <TableRow>
+                                    <TableCell style={{fontSize:13}}>Tree</TableCell>
+                                    <TableCell style={{fontSize:13}}>MRKG Perera</TableCell>
+                                    <TableCell style={{fontSize:13}}>
                                         <TextField
                                             id="outlined-dense"
                                             margin="dense"
                                             variant="outlined"
                                         />
                                     </TableCell>
-                                    <TableCell style={{fontSize: 13}}>
+                                    <TableCell style={{fontSize:13}}>
                                         <TextField
                                             id="outlined-dense"
                                             margin="dense"
                                             variant="outlined"
                                         />
                                     </TableCell>
-                                    <TableCell style={{fontSize: 13}}>
+                                    <TableCell style={{fontSize:13}}>
+                                        <TextField
+                                            id="outlined-dense"
+                                            margin="dense"
+                                            variant="outlined"
+                                        />
+                                    </TableCell>
+                                </TableRow>
+
+                                <TableRow>
+                                    <TableCell style={{fontSize:13}}>Chair</TableCell>
+                                    <TableCell style={{fontSize:13}}>DSW Silva</TableCell>
+                                    <TableCell style={{fontSize:13}}>
+                                        <TextField
+                                            id="outlined-dense"
+                                            margin="dense"
+                                            variant="outlined"
+                                        />
+                                    </TableCell>
+                                    <TableCell style={{fontSize:13}}>
+                                        <TextField
+                                            id="outlined-dense"
+                                            margin="dense"
+                                            variant="outlined"
+                                        />
+                                    </TableCell>
+                                    <TableCell style={{fontSize:13}}>
                                         <TextField
                                             id="outlined-dense"
                                             margin="dense"
@@ -249,21 +226,15 @@ class PRE28AEntry extends Component {
                             </TableBody>
                         </Table>
                     </Paper>
-
                 </div>
-                {/*<div style={{marginTop: '2%', marginBottom: '2%'}}>*/}
-                {/*<Typography variant="body2" gutterBottom>*/}
-                {/*The Total 2 :*/}
-                {/*</Typography>*/}
-                {/*</div>*/}
-                <div style={{marginLeft:'80%',marginTop:'2%'}}>
 
-                    <Button style={{borderRadius: 18,color:'white',marginRight: '4%'}}   onClick={this.handleBack} className="button">Back</Button>
-                    <Button style={{borderRadius: 18,color:'white'}}  onClick={this.handleClickOpen} className="button">Submit</Button>
+                <div style={{marginLeft: '80%', marginTop: '2%'}}>
+                    <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleBack}
+                            className="button">Back</Button>
+                    <Button style={{borderRadius: 18, color: 'white'}} onClick={this.handleClickOpen}
+                            className="button">Submit</Button>
                 </div>
-                {/*<Button variant="outlined" color="primary" onClick={this.handleClickOpen}>*/}
-                {/*Open alert dialog*/}
-                {/*</Button>*/}
+
                 <Dialog
                     open={this.state.open}
                     onClose={this.handleClose}
@@ -290,4 +261,4 @@ class PRE28AEntry extends Component {
     }
 }
 
-export default PRE28AEntry;
+export default PRE41Entry;

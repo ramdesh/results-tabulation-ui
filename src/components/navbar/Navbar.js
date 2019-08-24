@@ -38,7 +38,7 @@ const NavBar = () => {
                                 <a href="">Reports</a>
                                 <ul>
                                     <li><a href="">PRE-30-PD</a></li>
-                                    <li><a href="">PRE-30-ED</a></li>
+                                    <li><a href="">PRE-30-PV</a></li>
                                 </ul>
                             </li>
                         </ul>
@@ -49,8 +49,10 @@ const NavBar = () => {
                             <li>
                                 <a href="">Data Entry</a>
                                 <ul>
-                                    <li><a href="/invalid">Invalid Ballot Count</a></li>
-                                    <li><a href="/party-wise">Party-wise Count</a></li>
+                                    <li><a href="/PRE21">PRE-21</a></li>
+                                    <li><a href="/PRE21PV">PRE-21 PV</a></li>
+                                    <li><a href="/PRE41">PRE-41</a></li>
+                                    <li><a href="/PRE41PV">PRE-41 PV</a></li>
                                     <li><a href="/preferences">Preferences(PRE-34-CO)</a></li>
                                     <li><a href="/CE201">Box Count(CE-201)</a></li>
                                     <li><a href="/PRE28A">Box Count(PRE-28A)</a></li>
@@ -60,9 +62,9 @@ const NavBar = () => {
                             <li>
                                 <a href="">Reports</a>
                                 <ul>
-                                    <li><a href="">PRE-41</a></li>
-                                    <li><a href="">PRE-21</a></li>
-                                    <li><a href="">PRE-30-CO</a></li>
+                                    <li><a href="/report">PRE-41</a></li>
+                                    <li><a href="/report">PRE-21</a></li>
+                                    <li><a href="/report">PRE-30-CO</a></li>
                                 </ul>
                             </li>
                         </ul>

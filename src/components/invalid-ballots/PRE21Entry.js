@@ -1,12 +1,9 @@
 import React, {Component} from 'react'
-import Grid from '@material-ui/core/Grid';
 import axios from 'axios';
 import {
     Typography,
     Button,
-    FormControl,
     TextField,
-    InputLabel,
     Select,
     Table,
     TableRow,
@@ -15,19 +12,18 @@ import {
     TableBody,
     Paper
 } from '@material-ui/core';
-import './Invalid.css';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import MenuItem from '@material-ui/core/MenuItem';
 
-class Invalid extends Component {
+class PRE21Entry extends Component {
     constructor(props, context) {
         super(props, context);
         this.handleClose = this.handleClose.bind(this);
         this.handleClickOpen = this.handleClickOpen.bind(this);
+        this.handleBack = this.handleBack.bind(this);
         this.state = {
             open: false,
             allUsers: [],
@@ -40,6 +36,10 @@ class Invalid extends Component {
     handleClickOpen() {
         console.log("open")
         this.setState({open: true});
+    }
+
+    handleBack() {
+        this.props.history.replace('/PRE21')
     }
 
     // modal controllers
@@ -78,41 +78,11 @@ class Invalid extends Component {
                 <div>
                     <div style={{marginBottom: '3%'}}>
                         <Typography variant="h5" gutterBottom>
-                            Invalid Ballot Count
+                            Presidential Election 2019 - Invalid Ballot Count ( PRE-21 ) - Polling Station : A
                         </Typography>
-                        <Typography variant="body2" gutterBottom>
-                            This is to be filled at the counting centre before counting the valid votes.
-                            Please Select the District Centre and Counting Center at first.
-                        </Typography>
+
                     </div>
 
-                    <Grid container spacing={3} style={{marginBottom: '2%'}}>
-                        <Grid item xs={6} sm={3}>
-                            <FormControl variant="outlined" margin="dense">
-                                <InputLabel>
-                                    District Centre
-                                </InputLabel>
-                                <Select className="width50" value={this.state.selected} onChange={this.handleChange}>
-                                    {this.state.offices.map((office, idx) => (
-                                        <MenuItem value={office.officeName}>{office.officeName}</MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                        </Grid>
-                        <Grid item xs={6} sm={3}>
-                            <FormControl variant="outlined" margin="dense">
-                                <InputLabel>
-                                    Counting Centre
-                                </InputLabel>
-                                <Select className="width50" value={this.state.selected} onChange={this.handleChange}>
-                                    {this.state.offices.map((day1, idx) => (
-                                        <MenuItem value={day1.officeName}>{day1.officeName}</MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                        </Grid>
-                        {/*<h3>Selected Country - {this.state.selected}</h3>*/}
-                    </Grid>
 
                     <Paper>
                         <Table>
@@ -193,20 +163,15 @@ class Invalid extends Component {
                             </TableBody>
                         </Table>
                     </Paper>
-                    {/*{this.state.offices.map((sub, i) => (*/}
-                    {/*<ul>*/}
-                    {/*<li key={i}>{sub.electionId}{" - Office Name :" + sub.officeName}</li>*/}
-                    {/*</ul>*/}
-                    {/*))}*/}
+                </div>
 
+                <div style={{marginLeft: '80%', marginTop: '2%'}}>
+                    <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleBack}
+                            className="button">Back</Button>
+                    <Button style={{borderRadius: 18, color: 'white'}} onClick={this.handleClickOpen}
+                            className="button">Submit</Button>
                 </div>
-                <div>
-                    <Button style={{margin: '1%'}} onClick={this.handleClickOpen} className="button">Save</Button>
-                    <Button className="button">Submit</Button>
-                </div>
-                {/*<Button variant="outlined" color="primary" onClick={this.handleClickOpen}>*/}
-                {/*Open alert dialog*/}
-                {/*</Button>*/}
+
                 <Dialog
                     open={this.state.open}
                     onClose={this.handleClose}
@@ -233,4 +198,4 @@ class Invalid extends Component {
     }
 }
 
-export default Invalid;
+export default PRE21Entry;
