@@ -68,3 +68,7 @@
     visibility: visible;
     opacity: 1;
 }
+.MuiAppBar-colorPrimary {
+    color: #fff;
+    background-color: #4778cf;
+}
