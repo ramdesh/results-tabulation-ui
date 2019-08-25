@@ -29,7 +29,8 @@ class PRE41Entry extends Component {
             election: [],
             offices: [],
             selected: 'Select',
-            setOpen: false
+            setOpen: false,
+            test: 0
         };
     }
 
@@ -39,6 +40,7 @@ class PRE41Entry extends Component {
     }
 
     handleBack() {
+        console.log(this.state.test)
         this.props.history.replace('/PRE41')
     }
 
@@ -50,6 +52,12 @@ class PRE41Entry extends Component {
 
     handleChange = event => {
         this.setState({selected: event.target.value, name: event.target.name});
+    };
+
+    handlevalue = ({ target }) => {
+        console.log(target.name)
+        this.setState({ [target.name]: target.value });
+
     };
 
     componentDidMount() {
@@ -66,6 +74,20 @@ class PRE41Entry extends Component {
                 election: res.data[0].parties
             })
         }).catch((error) => console.log(error));
+
+        axios.post(`https://cors-anywhere.herokuapp.com/https://dev.tabulation.ecdev.opensource.lk/tally-sheet/PRE-41/10/version`,  {
+            "tallySheetContent": [
+                {
+                    "candidateId": 3,
+                    "count": 100,
+                    "countInWords": "One Hundreas"
+                }
+            ]
+        })
+            .then(res => {
+                console.log(res);
+                console.log(res.data);
+            })
     }
 
 
