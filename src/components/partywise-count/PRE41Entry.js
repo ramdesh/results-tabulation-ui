@@ -30,8 +30,75 @@ class PRE41Entry extends Component {
             offices: [],
             selected: 'Select',
             setOpen: false,
-            test: 0
+
+            votes1:null,
+            votes2:null,
+            votes3:null,
+            votes4:null,
+            votes5:null,
+
+            votesWords1:null,
+            votesWords2:null,
+            votesWords3:null,
+            votesWords4:null,
+            votesWords5:null,
+            agent1:null,
+            agent2:null,
+            agent3:null,
+            agent4:null,
+            agent5:null,
         };
+    }
+
+    handleSubmit = (event) => {
+        console.log(this.state.votes1+" "+this.state.votesWords1)
+        event.preventDefault()
+        if (this.state.votes1 === null || this.state.votes2 === 0) {
+            alert("Please Fill the necessary fields !")
+
+        } else {
+            // alert("new!")
+            axios.post(`https://cors-anywhere.herokuapp.com/https://dev.tabulation.ecdev.opensource.lk/tally-sheet/PRE-41/14/version`,  {
+                "tallySheetContent": [
+                    {
+                        "candidateId": 1,
+                        "count": parseInt(this.state.votes1),
+                        "countInWords": this.state.votesWords1
+                    },
+                    {
+                        "candidateId": 2,
+                        "count": parseInt(this.state.votes2),
+                        "countInWords": this.state.votesWords2
+                    },
+                    {
+                        "candidateId": 3,
+                        "count": parseInt(this.state.votes3),
+                        "countInWords": this.state.votesWords3
+                    },
+                    {
+                        "candidateId": 4,
+                        "count": parseInt(this.state.votes4),
+                        "countInWords": this.state.votesWords4
+                    }
+                ]
+            })
+            .then(res => {
+                    console.log(res);
+                    console.log("mmlmkmk"+res.data);
+            })
+        }
+    }
+
+    handleInputChange = (event) => {
+        console.log("open",event.target.name)
+        event.preventDefault()
+        this.setState({
+            [event.target.name]: event.target.value
+        })
+        console.log("No of votes 1",this.state.votes1)
+        console.log("No of votes 2",this.state.votes2)
+        console.log("No of votes Words 1",this.state.votesWords1)
+        console.log("No of agent 1",this.state.agent1)
     }
 
     handleClickOpen() {
@@ -40,7 +107,6 @@ class PRE41Entry extends Component {
     }
 
     handleBack() {
-        console.log(this.state.test)
         this.props.history.replace('/PRE41')
     }
 
@@ -52,12 +118,6 @@ class PRE41Entry extends Component {
 
     handleChange = event => {
         this.setState({selected: event.target.value, name: event.target.name});
-    };
-
-    handlevalue = ({ target }) => {
-        console.log(target.name)
-        this.setState({ [target.name]: target.value });
-
     };
 
     componentDidMount() {
@@ -74,20 +134,19 @@ class PRE41Entry extends Component {
                 election: res.data[0].parties
             })
         }).catch((error) => console.log(error));
-
-        axios.post(`https://cors-anywhere.herokuapp.com/https://dev.tabulation.ecdev.opensource.lk/tally-sheet/PRE-41/10/version`,  {
-            "tallySheetContent": [
-                {
-                    "candidateId": 3,
-                    "count": 100,
-                    "countInWords": "One Hundreas"
-                }
-            ]
-        })
-            .then(res => {
-                console.log(res);
-                console.log(res.data);
-            })
+        // axios.post(`https://cors-anywhere.herokuapp.com/https://dev.tabulation.ecdev.opensource.lk/tally-sheet/PRE-41/10/version`,  {
+        //     "tallySheetContent": [
+        //         {
+        //             "candidateId": 3,
+        //             "count": 100,
+        //             "countInWords": "One Hundreas"
+        //         }
+        //     ]
+        // })
+        //     .then(res => {
+        //         console.log(res);
+        //         console.log(""+res.data);
+        //     })
     }
 
 
@@ -125,6 +184,9 @@ class PRE41Entry extends Component {
                                                 id="outlined-dense"
                                                 margin="dense"
                                                 variant="outlined"
+                                                placeholder="No of Votes"
+                                                name={'votes'+(idx+1)}
+                                                onChange={this.handleInputChange}
                                             />
                                         </TableCell>
                                         <TableCell style={{fontSize: 13}}>
@@ -132,6 +194,8 @@ class PRE41Entry extends Component {
                                                 id="outlined-dense"
                                                 margin="dense"
                                                 variant="outlined"
+                                                name={'votesWords'+(idx+1)}
+                                                onChange={this.handleInputChange}
                                             />
                                         </TableCell>
                                         <TableCell style={{fontSize: 13}}>
@@ -139,6 +203,8 @@ class PRE41Entry extends Component {
                                                 id="outlined-dense"
                                                 margin="dense"
                                                 variant="outlined"
+                                                name={'agent'+(idx+1)}
+                                                onChange={this.handleInputChange}
                                             />
                                         </TableCell>
                                     </TableRow>
@@ -152,7 +218,7 @@ class PRE41Entry extends Component {
                 <div style={{marginLeft: '80%', marginTop: '2%'}}>
                     <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleBack}
                             className="button">Back</Button>
-                    <Button style={{borderRadius: 18, color: 'white'}} onClick={this.handleClickOpen}
+                    <Button style={{borderRadius: 18, color: 'white'}} onClick={this.handleSubmit}
                             className="button">Submit</Button>
                 </div>
 
