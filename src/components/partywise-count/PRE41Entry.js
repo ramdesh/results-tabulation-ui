@@ -26,7 +26,7 @@ class PRE41Entry extends Component {
         this.handleBack = this.handleBack.bind(this);
         this.state = {
             open: false,
-            allUsers: [],
+            election: [],
             offices: [],
             selected: 'Select',
             setOpen: false
@@ -53,9 +53,7 @@ class PRE41Entry extends Component {
     };
 
     componentDidMount() {
-        console.log("Election Result Test")
-        // let token = localStorage.getItem('id_token');
-        axios.get('https://cors-anywhere.herokuapp.com/https://dev.tabulation.ecdev.opensource.lk/office?limit=20&offset=0&electionId=1', {
+        axios.get('https://cors-anywhere.herokuapp.com/https://dev.tabulation.ecdev.opensource.lk/election?limit=20&offset=0', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -63,12 +61,11 @@ class PRE41Entry extends Component {
                 'X-Requested-With': 'XMLHttpRequest'
             }
         }).then(res => {
-            console.log("Election" + res.data)
+            console.log("Election" + res.data[0].parties)
             this.setState({
-                offices: res.data
+                election: res.data[0].parties
             })
-        })
-            .catch((error) => console.log(error));
+        }).catch((error) => console.log(error));
     }
 
 
@@ -94,134 +91,36 @@ class PRE41Entry extends Component {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                <TableRow>
-                                    <TableCell style={{fontSize:13}}>Elephant</TableCell>
-                                    <TableCell style={{fontSize:13}}>ABC Perera</TableCell>
-                                    <TableCell style={{fontSize:13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
-                                    <TableCell style={{fontSize:13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
-                                    <TableCell style={{fontSize:13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
-                                </TableRow>
-                                <TableRow>
-                                    <TableCell style={{fontSize:13}}>Swan</TableCell>
-                                    <TableCell style={{fontSize:13}}>DLU Ramanayake</TableCell>
-                                    <TableCell style={{fontSize:13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
-                                    <TableCell style={{fontSize:13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
-                                    <TableCell style={{fontSize:13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
-                                </TableRow>
+                                {this.state.election.map((party, idx) => (
+                                    <TableRow>
+                                        <TableCell style={{fontSize: 13}}>{party.partyName}</TableCell>
 
-                                <TableRow>
-                                    <TableCell style={{fontSize:13}}>Bell</TableCell>
-                                    <TableCell style={{fontSize:13}}>JKL Fernando</TableCell>
-                                    <TableCell style={{fontSize:13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
-                                    <TableCell style={{fontSize:13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
-                                    <TableCell style={{fontSize:13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
-                                </TableRow>
+                                        <TableCell
+                                            style={{fontSize: 13}}>{party.candidates[0].candidateName}</TableCell>
 
-                                <TableRow>
-                                    <TableCell style={{fontSize:13}}>Tree</TableCell>
-                                    <TableCell style={{fontSize:13}}>MRKG Perera</TableCell>
-                                    <TableCell style={{fontSize:13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
-                                    <TableCell style={{fontSize:13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
-                                    <TableCell style={{fontSize:13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
-                                </TableRow>
-
-                                <TableRow>
-                                    <TableCell style={{fontSize:13}}>Chair</TableCell>
-                                    <TableCell style={{fontSize:13}}>DSW Silva</TableCell>
-                                    <TableCell style={{fontSize:13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
-                                    <TableCell style={{fontSize:13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
-                                    <TableCell style={{fontSize:13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
-                                </TableRow>
+                                        <TableCell style={{fontSize: 13}}>
+                                            <TextField
+                                                id="outlined-dense"
+                                                margin="dense"
+                                                variant="outlined"
+                                            />
+                                        </TableCell>
+                                        <TableCell style={{fontSize: 13}}>
+                                            <TextField
+                                                id="outlined-dense"
+                                                margin="dense"
+                                                variant="outlined"
+                                            />
+                                        </TableCell>
+                                        <TableCell style={{fontSize: 13}}>
+                                            <TextField
+                                                id="outlined-dense"
+                                                margin="dense"
+                                                variant="outlined"
+                                            />
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
 
                             </TableBody>
                         </Table>

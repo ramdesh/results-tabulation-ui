@@ -5,15 +5,8 @@ import {
     Typography,
     Button,
     FormControl,
-    TextField,
     InputLabel,
-    Select,
-    Table,
-    TableRow,
-    TableCell,
-    TableHead,
-    TableBody,
-    Paper
+    Select
 } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -80,11 +73,10 @@ class PRE28A extends Component {
                         <Typography variant="h5" gutterBottom>
                             Presidential Election 2019 - Box Count ( PRE-28A )
                         </Typography>
-
                     </div>
 
                     <Grid container spacing={3} style={{marginBottom: '2%'}}>
-                        <Grid item xs={4} sm={2}>
+                        <Grid item xs={5} sm={4}>
                             <FormControl variant="outlined" margin="dense">
                                 <InputLabel>
                                     District Centre
@@ -96,7 +88,7 @@ class PRE28A extends Component {
                                 </Select>
                             </FormControl>
                         </Grid>
-                        <Grid item xs={4} sm={2}>
+                        <Grid item xs={5} sm={4}>
                             <FormControl variant="outlined" margin="dense">
                                 <InputLabel>
                                     Counting Centre
@@ -108,7 +100,7 @@ class PRE28A extends Component {
                                 </Select>
                             </FormControl>
                         </Grid>
-                        <Grid item xs={4} sm={2}>
+                        <Grid item xs={5} sm={4}>
                             <FormControl variant="outlined" margin="dense">
                                 <InputLabel>
                                     Polling Station
@@ -120,22 +112,13 @@ class PRE28A extends Component {
                                 </Select>
                             </FormControl>
                         </Grid>
-                        {/*<h3>Selected Country - {this.state.selected}</h3>*/}
                     </Grid>
+                </div>
 
-                </div>
-                {/*<div style={{marginTop: '2%', marginBottom: '2%'}}>*/}
-                    {/*<Typography variant="body2" gutterBottom>*/}
-                        {/*The Total 2 :*/}
-                    {/*</Typography>*/}
-                {/*</div>*/}
-                <div style={{marginLeft:'80%',marginTop:'2%'}}>
+                <div style={{marginLeft:'76%',marginTop:'4%'}}>
                     <Button style={{borderRadius: 18,color:'white',marginRight: '4%'}} onClick={this.handleClickOpen} className="button">Next</Button>
-                    {/*<Button style={{borderRadius: 18,color:'white'}}  className="button">Submit</Button>*/}
                 </div>
-                {/*<Button variant="outlined" color="primary" onClick={this.handleClickOpen}>*/}
-                {/*Open alert dialog*/}
-                {/*</Button>*/}
+
                 <Dialog
                     open={this.state.open}
                     onClose={this.handleClose}

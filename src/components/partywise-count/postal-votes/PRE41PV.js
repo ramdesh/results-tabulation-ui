@@ -74,7 +74,7 @@ class PRE41PV extends Component {
                     </div>
 
                     <Grid container spacing={3} style={{marginBottom: '2%'}}>
-                        <Grid item xs={4} sm={2}>
+                        <Grid item xs={5} sm={4}>
                             <FormControl variant="outlined" margin="dense">
                                 <InputLabel>
                                     District Centre
@@ -86,7 +86,7 @@ class PRE41PV extends Component {
                                 </Select>
                             </FormControl>
                         </Grid>
-                        <Grid item xs={4} sm={2}>
+                        <Grid item xs={5} sm={4}>
                             <FormControl variant="outlined" margin="dense">
                                 <InputLabel>
                                     Counting Centre
@@ -98,7 +98,7 @@ class PRE41PV extends Component {
                                 </Select>
                             </FormControl>
                         </Grid>
-                        <Grid item xs={4} sm={2}>
+                        <Grid item xs={5} sm={4}>
                             <FormControl variant="outlined" margin="dense">
                                 <InputLabel>
                                     Polling Station
@@ -113,7 +113,7 @@ class PRE41PV extends Component {
                     </Grid>
                 </div>
 
-                <div style={{marginLeft: '80%', marginTop: '2%'}}>
+                <div style={{marginLeft: '76%', marginTop: '4%'}}>
                     <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleClickOpen}
                             className="button">Next</Button>
                 </div>
