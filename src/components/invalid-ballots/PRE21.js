@@ -26,7 +26,10 @@ class PRE21 extends Component {
             allUsers: [],
             offices: [],
             selected: 'Select',
-            setOpen: false
+            setOpen: false,
+            districtCentres : [],
+            countingCentres : [],
+            pollingStation : [],
         };
     }
 

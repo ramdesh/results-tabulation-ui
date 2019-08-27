@@ -74,7 +74,7 @@ class PRE21Entry extends Component {
 
     render() {
         return (
-            <div style={{margin: '3%'}}>
+            <div style={{margin: '3%',marginRight:'8%'}}>
                 <div>
                     <div style={{marginBottom: '3%'}}>
                         <Typography variant="h5" gutterBottom>
@@ -84,19 +84,19 @@ class PRE21Entry extends Component {
                     </div>
 
 
-                    <Paper>
-                        <Table>
+                    <Paper style={{margin: '3%'}}>
+                        <Table >
                             <TableHead>
                                 <TableRow>
-                                    <TableCell style={{fontSize: 13, fontWeight: 'bold'}}>Ground For
+                                    <TableCell style={{fontSize: 14, color:'black',fontWeight: 'bold'}}>Ground For
                                         Rejection</TableCell>
-                                    <TableCell style={{fontSize: 13, fontWeight: 'bold'}}>No of Ballot Papers
+                                    <TableCell style={{fontSize: 14,color:'black', fontWeight: 'bold'}}>No of Ballot Papers
                                         Rejected</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
                                 <TableRow>
-                                    <TableCell style={{fontSize: 13}}>Does not bear the official mark</TableCell>
+                                    <TableCell style={{width:'70%',fontSize: 13}}>Does not bear the official mark</TableCell>
                                     <TableCell style={{fontSize: 13}}>
                                         <TextField
                                             id="outlined-dense"
@@ -165,7 +165,7 @@ class PRE21Entry extends Component {
                     </Paper>
                 </div>
 
-                <div style={{marginLeft: '80%', marginTop: '2%'}}>
+                <div style={{marginLeft: '69%', marginTop: '2%'}}>
                     <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleBack}
                             className="button">Back</Button>
                     <Button style={{borderRadius: 18, color: 'white'}} onClick={this.handleClickOpen}

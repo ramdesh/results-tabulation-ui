@@ -21,7 +21,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-class PRE28AEntry extends Component {
+class PRE28Entry extends Component {
     constructor(props, context) {
         super(props, context);
         this.handleClose = this.handleClose.bind(this);
@@ -76,11 +76,11 @@ class PRE28AEntry extends Component {
 
     render() {
         return (
-            <div style={{margin: '3%'}}>
+            <div style={{margin: '3%',marginRight:'24%'}}>
                 <div>
                     <div style={{marginBottom: '3%'}}>
                         <Typography variant="h5" gutterBottom>
-                            Presidential Election 2019 - Box Count ( PRE-28A ) - Polling Station : A
+                            Presidential Election 2019 - Box Count ( PRE-28 ) - Polling Station : A
                         </Typography>
 
                     </div>
@@ -90,10 +90,8 @@ class PRE28AEntry extends Component {
                         <Table>
                             <TableHead>
                                 <TableRow>
-                                    <TableCell style={{fontSize: 13, fontWeight: 'bold'}}>Ballot Box ID</TableCell>
-                                    <TableCell style={{fontSize: 13, fontWeight: 'bold'}}>Ordinary Ballot Paper Count</TableCell>
-                                    <TableCell style={{fontSize: 13, fontWeight: 'bold'}}>Tender Ballot Paper Count</TableCell>
-                                    <TableCell style={{fontSize: 13, fontWeight: 'bold'}}>Box Count</TableCell>
+                                    <TableCell style={{fontSize: 13, color:'black',fontWeight: 'bold'}}>Ballot Box ID</TableCell>
+                                    <TableCell style={{fontSize: 13, color:'black',fontWeight: 'bold'}}>Box Count</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -112,20 +110,7 @@ class PRE28AEntry extends Component {
                                             variant="outlined"
                                         />
                                     </TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
+
                                 </TableRow>
                                 <TableRow>
                                     <TableCell style={{fontSize: 13}}>
@@ -142,20 +127,7 @@ class PRE28AEntry extends Component {
                                             variant="outlined"
                                         />
                                     </TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
+
                                 </TableRow>
                                 <TableRow>
                                     <TableCell style={{fontSize: 13}}>
@@ -172,20 +144,7 @@ class PRE28AEntry extends Component {
                                             variant="outlined"
                                         />
                                     </TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
+
                                 </TableRow>
                                 <TableRow>
                                     <TableCell style={{fontSize: 13}}>
@@ -202,20 +161,7 @@ class PRE28AEntry extends Component {
                                             variant="outlined"
                                         />
                                     </TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
+
                                 </TableRow>
 
                                 <TableRow>
@@ -230,20 +176,7 @@ class PRE28AEntry extends Component {
                                             variant="outlined"
                                         />
                                     </TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
+
                                 </TableRow>
 
                             </TableBody>
@@ -290,4 +223,4 @@ class PRE28AEntry extends Component {
     }
 }
 
-export default PRE28AEntry;
+export default PRE28Entry;

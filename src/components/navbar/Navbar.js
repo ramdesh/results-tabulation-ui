@@ -57,6 +57,7 @@ const NavBar = () => {
                                             <li><a href="/PRE34CO">PRE-34-CO</a></li>
                                             <li><a href="/CE201">CE-201</a></li>
                                             <li><a href="/PRE28A">PRE-28A</a></li>
+                                            <li><a href="/PRE28">PRE-28</a></li>
                                         </ul>
                                     </li>
                                     <li>

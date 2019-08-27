@@ -30,7 +30,7 @@ class PRE28A extends Component {
     }
 
     handleClickOpen() {
-        this.props.history.replace('/PRE28A-Entry')
+        this.props.history.replace('/PRE28-Entry')
         // console.log("open")
         // this.setState({open: true});
     }

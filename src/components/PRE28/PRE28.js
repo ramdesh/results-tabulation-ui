@@ -6,7 +6,7 @@ import {
     Button,
     FormControl,
     InputLabel,
-    Select,
+    Select
 } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -15,25 +15,24 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import MenuItem from '@material-ui/core/MenuItem';
 
-class CE201 extends Component {
+class PRE28 extends Component {
     constructor(props, context) {
         super(props, context);
         this.handleClose = this.handleClose.bind(this);
         this.handleClickOpen = this.handleClickOpen.bind(this);
         this.state = {
             open: false,
+            allUsers: [],
             offices: [],
             selected: 'Select',
-            selected1: 'Select',
-            selected2: 'Select',
-            setOpen: false,
-            countingCenter:[],
-            pollingStation:[]
+            setOpen: false
         };
     }
 
     handleClickOpen() {
-        this.props.history.replace('/CE201-Entry')
+        this.props.history.replace('/PRE28-Entry')
+        // console.log("open")
+        // this.setState({open: true});
     }
 
     // modal controllers
@@ -44,56 +43,12 @@ class CE201 extends Component {
 
     handleChange = event => {
         this.setState({selected: event.target.value, name: event.target.name});
-        console.log(event.target.value)
-        axios.get('https://cors-anywhere.herokuapp.com/https://dev.tabulation.ecdev.opensource.lk/office?limit=20&offset=0&parentOfficeId='+event.target.value+'&officeType=CountingCentre', {
-            headers: {
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': 'GET',
-                'Access-Control-Allow-Headers': 'Content-Type',
-                'X-Requested-With': 'XMLHttpRequest'
-            }
-        }).then(res => {
-            console.log("Election" + res.data[0])
-            this.setState({
-                countingCenter: res.data
-            })
-        })
-            .catch((error) => console.log(error));
-
     };
-
-    handleCounting = event => {
-        this.setState({selected1: event.target.value, name: event.target.name});
-        // console.log(event.target.value)
-
-        axios.get('https://cors-anywhere.herokuapp.com/https://dev.tabulation.ecdev.opensource.lk/office?limit=20&offset=0&parentOfficeId='+event.target.value+'&officeType=PollingStation', {
-            headers: {
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': 'GET',
-                'Access-Control-Allow-Headers': 'Content-Type',
-                'X-Requested-With': 'XMLHttpRequest'
-            }
-        }).then(res => {
-            console.log("Election" + res.data[0])
-            this.setState({
-                pollingStation: res.data
-            })
-        })
-            .catch((error) => console.log(error));
-
-
-    };
-
-    handlePolling = event => {
-        this.setState({selected2: event.target.value, name: event.target.name});
-
-    };
-
-
 
     componentDidMount() {
         console.log("Election Result Test")
-        axios.get('https://cors-anywhere.herokuapp.com/https://dev.tabulation.ecdev.opensource.lk/office?limit=20&offset=0&officeType=DistrictCentre', {
+        // let token = localStorage.getItem('id_token');
+        axios.get('https://cors-anywhere.herokuapp.com/https://dev.tabulation.ecdev.opensource.lk/office?limit=20&offset=0&electionId=1', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -101,14 +56,12 @@ class CE201 extends Component {
                 'X-Requested-With': 'XMLHttpRequest'
             }
         }).then(res => {
-            console.log("Election" + res.data[0])
+            console.log("Election" + res.data)
             this.setState({
                 offices: res.data
             })
         })
             .catch((error) => console.log(error));
-
-
     }
 
 
@@ -118,9 +71,8 @@ class CE201 extends Component {
                 <div>
                     <div style={{marginBottom: '3%'}}>
                         <Typography variant="h5" gutterBottom>
-                            Presidential Election 2019 - CE-201
+                            Presidential Election 2019 - Box Count ( PRE-28 )
                         </Typography>
-
                     </div>
 
                     <Grid container spacing={3} style={{marginBottom: '2%'}}>
@@ -131,7 +83,7 @@ class CE201 extends Component {
                                 </InputLabel>
                                 <Select className="width50" value={this.state.selected} onChange={this.handleChange}>
                                     {this.state.offices.map((office, idx) => (
-                                        <MenuItem value={office.officeId}>{office.officeName}</MenuItem>
+                                        <MenuItem value={office.officeName}>{office.officeName}</MenuItem>
                                     ))}
                                 </Select>
                             </FormControl>
@@ -141,31 +93,30 @@ class CE201 extends Component {
                                 <InputLabel>
                                     Counting Centre
                                 </InputLabel>
-                                <Select className="width50" value={this.state.selected1} onChange={this.handleCounting}>
-                                    {this.state.countingCenter.map((day1, idx) => (
-                                        <MenuItem value={day1.officeId}>{day1.officeName}</MenuItem>
+                                <Select className="width50" value={this.state.selected} onChange={this.handleChange}>
+                                    {this.state.offices.map((day1, idx) => (
+                                        <MenuItem value={day1.officeName}>{day1.officeName}</MenuItem>
                                     ))}
                                 </Select>
                             </FormControl>
                         </Grid>
-                        {/*<Grid item xs={5} sm={4}>*/}
-                            {/*<FormControl variant="outlined" margin="dense">*/}
-                                {/*<InputLabel>*/}
-                                    {/*Polling Station*/}
-                                {/*</InputLabel>*/}
-                                {/*<Select className="width50" value={this.state.selected2} onChange={this.handlePolling}>*/}
-                                    {/*{this.state.pollingStation.map((day1, idx) => (*/}
-                                        {/*<MenuItem value={day1.officeId}>{day1.officeName}</MenuItem>*/}
-                                    {/*))}*/}
-                                {/*</Select>*/}
-                            {/*</FormControl>*/}
-                        {/*</Grid>*/}
+                        <Grid item xs={5} sm={4}>
+                            <FormControl variant="outlined" margin="dense">
+                                <InputLabel>
+                                    Polling Station
+                                </InputLabel>
+                                <Select className="width50" value={this.state.selected} onChange={this.handleChange}>
+                                    {this.state.offices.map((day1, idx) => (
+                                        <MenuItem value={day1.officeName}>{day1.officeName}</MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                        </Grid>
                     </Grid>
                 </div>
 
-                <div style={{marginLeft: '76%', marginTop: '4%'}}>
-                    <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleClickOpen}
-                            className="button">Next</Button>
+                <div style={{marginLeft:'76%',marginTop:'4%'}}>
+                    <Button style={{borderRadius: 18,color:'white',marginRight: '4%'}} onClick={this.handleClickOpen} className="button">Next</Button>
                 </div>
 
                 <Dialog
@@ -194,4 +145,4 @@ class CE201 extends Component {
     }
 }
 
-export default CE201;
+export default PRE28;

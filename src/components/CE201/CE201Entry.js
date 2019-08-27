@@ -79,7 +79,7 @@ class CE201Entry extends Component {
                 <div>
                     <div style={{marginBottom: '3%'}}>
                         <Typography variant="h5" gutterBottom>
-                            Presidential Election 2019 - Box Count ( CE-201 )
+                            Presidential Election 2019 - CE-201
                         </Typography>
 
                     </div>
@@ -362,7 +362,7 @@ class CE201Entry extends Component {
                                     </TableCell>
                                 </TableRow>
 
-                                
+
                             </TableBody>
                         </Table>
                     </Paper>
