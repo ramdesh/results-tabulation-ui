@@ -41,7 +41,6 @@ class Reports extends Component {
         // window.open('newPageUrl', "https://dev.tabulation.ecdev.opensource.lk")
 
 
-
         this.setState({open: true});
     }
 
@@ -72,8 +71,7 @@ class Reports extends Component {
     };
 
 
-    componentDidMount()
-    {
+    componentDidMount() {
         console.log("Election Result Test")
         axios.get('https://cors-anywhere.herokuapp.com/https://dev.tabulation.ecdev.opensource.lk/office?limit=20&offset=0&electionId=1', {
             headers: {
@@ -148,7 +146,6 @@ class Reports extends Component {
                 </Grid>
 
             </div>
-
 
 
         )

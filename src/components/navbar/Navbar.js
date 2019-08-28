@@ -50,7 +50,7 @@ const NavBar = () => {
                                 <a href="">Data Entry</a>
                                 <ul>
                                     <li>
-                                        <a href="">Normal Votes</a>
+                                        <a href="">Votes</a>
                                         <ul>
                                             <li><a href="/PRE21">PRE-21</a></li>
                                             <li><a href="/PRE41">PRE-41</a></li>
@@ -75,7 +75,7 @@ const NavBar = () => {
                             <li>
                                 <a href="">Reports</a>
                                 <ul>
-                                    <li><a href="/report">Report</a></li>
+                                    <li><a href="/ReportsEntry">Report</a></li>
                                 </ul>
                             </li>
 
