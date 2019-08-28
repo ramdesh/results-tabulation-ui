@@ -5,15 +5,8 @@ import {
     Typography,
     Button,
     FormControl,
-    TextField,
     InputLabel,
     Select,
-    Table,
-    TableRow,
-    TableCell,
-    TableHead,
-    TableBody,
-    Paper
 } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -29,29 +22,30 @@ class CE201 extends Component {
         this.handleClickOpen = this.handleClickOpen.bind(this);
         this.state = {
             open: false,
-            allUsers: [],
             offices: [],
             selected: 'Select',
+            selected1: 'Select',
+            selected2: 'Select',
             setOpen: false,
-            election: []
+            countingCenter:[],
+            pollingStation:[]
         };
     }
 
-    // dialog controllers
     handleClickOpen() {
-        this.setState({open: true});
+        this.props.history.replace('/CE201-Entry')
     }
 
+    // modal controllers
     handleClose() {
+        console.log("close")
         this.setState({open: false});
     }
 
     handleChange = event => {
         this.setState({selected: event.target.value, name: event.target.name});
-    };
-
-    componentDidMount() {
-        axios.get('https://cors-anywhere.herokuapp.com/https://dev.tabulation.ecdev.opensource.lk/election?limit=20&offset=0', {
+        console.log(event.target.value)
+        axios.get('https://cors-anywhere.herokuapp.com/https://dev.tabulation.ecdev.opensource.lk/office?limit=20&offset=0&parentOfficeId='+event.target.value+'&officeType=CountingCentre', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -59,14 +53,20 @@ class CE201 extends Component {
                 'X-Requested-With': 'XMLHttpRequest'
             }
         }).then(res => {
-            console.log("Election" + res.data[0].parties)
+            console.log("Election" + res.data[0])
             this.setState({
-                election: res.data[0].parties
+                countingCenter: res.data
             })
         })
             .catch((error) => console.log(error));
 
-        axios.get('https://cors-anywhere.herokuapp.com/https://dev.tabulation.ecdev.opensource.lk/office?limit=20&offset=0&electionId=1', {
+    };
+
+    handleCounting = event => {
+        this.setState({selected1: event.target.value, name: event.target.name});
+        // console.log(event.target.value)
+
+        axios.get('https://cors-anywhere.herokuapp.com/https://dev.tabulation.ecdev.opensource.lk/office?limit=20&offset=0&parentOfficeId='+event.target.value+'&officeType=PollingStation', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -74,12 +74,40 @@ class CE201 extends Component {
                 'X-Requested-With': 'XMLHttpRequest'
             }
         }).then(res => {
-            console.log("Election" + res.data)
+            console.log("Election" + res.data[0])
+            this.setState({
+                pollingStation: res.data
+            })
+        })
+            .catch((error) => console.log(error));
+
+
+    };
+
+    handlePolling = event => {
+        this.setState({selected2: event.target.value, name: event.target.name});
+
+    };
+
+
+
+    componentDidMount() {
+        console.log("Election Result Test")
+        axios.get('https://cors-anywhere.herokuapp.com/https://dev.tabulation.ecdev.opensource.lk/office?limit=20&offset=0&officeType=DistrictCentre', {
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET',
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        }).then(res => {
+            console.log("Election" + res.data[0])
             this.setState({
                 offices: res.data
             })
         })
             .catch((error) => console.log(error));
+
 
     }
 
@@ -90,189 +118,54 @@ class CE201 extends Component {
                 <div>
                     <div style={{marginBottom: '3%'}}>
                         <Typography variant="h5" gutterBottom>
-                           Ballot Count ( CE-201 )
+                            Presidential Election 2019 - CE-201
                         </Typography>
-                        <Typography variant="body2" gutterBottom>
-                            This is to be filled at the counting centres. It's the 2nd and 3rd Preferences counted in
-                            favour of the each of the
-                            remaining two candidates.
-                        </Typography>
+
                     </div>
 
                     <Grid container spacing={3} style={{marginBottom: '2%'}}>
-                        <Grid item xs={6} sm={3}>
+                        <Grid item xs={5} sm={4}>
                             <FormControl variant="outlined" margin="dense">
                                 <InputLabel>
                                     District Centre
                                 </InputLabel>
                                 <Select className="width50" value={this.state.selected} onChange={this.handleChange}>
                                     {this.state.offices.map((office, idx) => (
-                                        <MenuItem value={office.officeName}>{office.officeName}</MenuItem>
+                                        <MenuItem value={office.officeId}>{office.officeName}</MenuItem>
                                     ))}
                                 </Select>
                             </FormControl>
                         </Grid>
-                        <Grid item xs={6} sm={3}>
+                        <Grid item xs={5} sm={4}>
                             <FormControl variant="outlined" margin="dense">
                                 <InputLabel>
                                     Counting Centre
                                 </InputLabel>
-                                <Select className="width50" value={this.state.selected} onChange={this.handleChange}>
-                                    {this.state.offices.map((day1, idx) => (
-                                        <MenuItem value={day1.officeName}>{day1.officeName}</MenuItem>
+                                <Select className="width50" value={this.state.selected1} onChange={this.handleCounting}>
+                                    {this.state.countingCenter.map((day1, idx) => (
+                                        <MenuItem value={day1.officeId}>{day1.officeName}</MenuItem>
                                     ))}
                                 </Select>
                             </FormControl>
                         </Grid>
-                        {/*<h3>Selected Country - {this.state.selected}</h3>*/}
+                        {/*<Grid item xs={5} sm={4}>*/}
+                            {/*<FormControl variant="outlined" margin="dense">*/}
+                                {/*<InputLabel>*/}
+                                    {/*Polling Station*/}
+                                {/*</InputLabel>*/}
+                                {/*<Select className="width50" value={this.state.selected2} onChange={this.handlePolling}>*/}
+                                    {/*{this.state.pollingStation.map((day1, idx) => (*/}
+                                        {/*<MenuItem value={day1.officeId}>{day1.officeName}</MenuItem>*/}
+                                    {/*))}*/}
+                                {/*</Select>*/}
+                            {/*</FormControl>*/}
+                        {/*</Grid>*/}
                     </Grid>
-
-                    <Grid container spacing={1} style={{marginBottom: '1%'}}>
-                        <Grid item xs={3.5}>
-                            <Typography variant="h6" gutterBottom>
-                                2nd and 3rd Preferences in favour of ( Candidate No 1 ) :
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={6}>
-                            <TextField
-                            /></Grid></Grid>
-
-                    <Paper>
-                        <Table>
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell style={{fontSize: 13, fontWeight: 'bold'}}>Symbol</TableCell>
-                                    <TableCell style={{fontSize: 13, fontWeight: 'bold'}}>Name of Candidate</TableCell>
-                                    <TableCell style={{fontSize: 13, fontWeight: 'bold'}}>No of 2nd
-                                        Preferences</TableCell>
-                                    <TableCell style={{fontSize: 13, fontWeight: 'bold'}}>No of 3rd
-                                        Preferences</TableCell>
-                                    <TableCell style={{fontSize: 13, fontWeight: 'bold'}}>Not Counted</TableCell>
-                                    <TableCell style={{fontSize: 13, fontWeight: 'bold'}}>Total</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {this.state.election.map((party, idx) => (
-                                    <TableRow>
-                                        <TableCell style={{fontSize: 13}}>{party.partyName}</TableCell>
-
-                                        <TableCell
-                                            style={{fontSize: 13}}>{party.candidates[0].candidateName}</TableCell>
-
-                                        <TableCell style={{fontSize: 13}}>
-                                            <TextField
-                                                id="outlined-dense"
-                                                margin="dense"
-                                                variant="outlined"
-                                            />
-                                        </TableCell>
-                                        <TableCell style={{fontSize: 13}}>
-                                            <TextField
-                                                id="outlined-dense"
-                                                margin="dense"
-                                                variant="outlined"
-                                            />
-                                        </TableCell>
-                                        <TableCell style={{fontSize: 13}}>
-                                            <TextField
-                                                id="outlined-dense"
-                                                margin="dense"
-                                                variant="outlined"
-                                            />
-                                        </TableCell>
-                                        <TableCell style={{fontSize: 13}}>
-                                            <TextField
-                                                id="outlined-dense"
-                                                margin="dense"
-                                                variant="outlined"
-                                            />
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
-
-                            </TableBody>
-                        </Table>
-                    </Paper>
-
-                    <Typography variant="body2" gutterBottom style={{marginTop: '2%'}}>
-                        The Total no of 2nd and 3rd Preferences in favor of Candidate No 1 :
-                    </Typography>
-                    <Grid container spacing={1} style={{marginTop: '4%', marginBottom: '1%'}}>
-                        <Grid item xs={3.5}>
-                            <Typography variant="h6" gutterBottom>
-                                2nd and 3rd Preferences in favour of ( Candidate No 2 ) :
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={6}>
-                            <TextField
-                            /></Grid></Grid>
-
-                    <Paper>
-                        <Table>
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell style={{fontSize: 13, fontWeight: 'bold'}}>Symbol</TableCell>
-                                    <TableCell style={{fontSize: 13, fontWeight: 'bold'}}>Name of Candidate</TableCell>
-                                    <TableCell style={{fontSize: 13, fontWeight: 'bold'}}>No of 2nd
-                                        Preferences</TableCell>
-                                    <TableCell style={{fontSize: 13, fontWeight: 'bold'}}>No of 3rd
-                                        Preferences</TableCell>
-                                    <TableCell style={{fontSize: 13, fontWeight: 'bold'}}>Not Counted</TableCell>
-                                    <TableCell style={{fontSize: 13, fontWeight: 'bold'}}>Total</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {this.state.election.map((party, idx) => (
-                                    <TableRow>
-                                        <TableCell style={{fontSize: 13}}>{party.partyName}</TableCell>
-
-                                        <TableCell
-                                            style={{fontSize: 13}}>{party.candidates[0].candidateName}</TableCell>
-
-                                        <TableCell style={{fontSize: 13}}>
-                                            <TextField
-                                                id="outlined-dense"
-                                                margin="dense"
-                                                variant="outlined"
-                                            />
-                                        </TableCell>
-                                        <TableCell style={{fontSize: 13}}>
-                                            <TextField
-                                                id="outlined-dense"
-                                                margin="dense"
-                                                variant="outlined"
-                                            />
-                                        </TableCell>
-                                        <TableCell style={{fontSize: 13}}>
-                                            <TextField
-                                                id="outlined-dense"
-                                                margin="dense"
-                                                variant="outlined"
-                                            />
-                                        </TableCell>
-                                        <TableCell style={{fontSize: 13}}>
-                                            <TextField
-                                                id="outlined-dense"
-                                                margin="dense"
-                                                variant="outlined"
-                                            />
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
-
-
-                            </TableBody>
-                        </Table>
-                    </Paper>
                 </div>
-                <div style={{marginTop: '2%', marginBottom: '2%'}}>
-                    <Typography variant="body2" gutterBottom>
-                        The Total no of 2nd and 3rd Preferences in favor of Candidate No 2 :
-                    </Typography>
-                </div>
-                <div style={{align: 'right'}}>
-                    <Button style={{margin: '1%'}} onClick={this.handleClickOpen} className="button">Save</Button>
-                    <Button className="button">Submit</Button>
+
+                <div style={{marginLeft: '76%', marginTop: '4%'}}>
+                    <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleClickOpen}
+                            className="button">Next</Button>
                 </div>
 
                 <Dialog

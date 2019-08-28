@@ -1,9 +1,12 @@
 import React, {Component} from 'react'
+import Grid from '@material-ui/core/Grid';
 import axios from 'axios';
 import {
     Typography,
     Button,
+    FormControl,
     TextField,
+    InputLabel,
     Select,
     Table,
     TableRow,
@@ -18,7 +21,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-class PRE21Entry extends Component {
+class PRE28Entry extends Component {
     constructor(props, context) {
         super(props, context);
         this.handleClose = this.handleClose.bind(this);
@@ -37,9 +40,8 @@ class PRE21Entry extends Component {
         console.log("open")
         this.setState({open: true});
     }
-
     handleBack() {
-        this.props.history.replace('/PRE21')
+        this.props.history.replace('/PRE28')
     }
 
     // modal controllers
@@ -74,29 +76,33 @@ class PRE21Entry extends Component {
 
     render() {
         return (
-            <div style={{margin: '3%',marginRight:'8%'}}>
+            <div style={{margin: '3%',marginRight:'24%'}}>
                 <div>
                     <div style={{marginBottom: '3%'}}>
                         <Typography variant="h5" gutterBottom>
-                            Presidential Election 2019 - Invalid Ballot Count ( PRE-21 ) - Polling Station : A
+                            Presidential Election 2019 - Box Count ( PRE-28 ) - Polling Station : A
                         </Typography>
 
                     </div>
 
 
-                    <Paper style={{margin: '3%'}}>
-                        <Table >
+                    <Paper>
+                        <Table>
                             <TableHead>
                                 <TableRow>
-                                    <TableCell style={{fontSize: 14, color:'black',fontWeight: 'bold'}}>Ground For
-                                        Rejection</TableCell>
-                                    <TableCell style={{fontSize: 14,color:'black', fontWeight: 'bold'}}>No of Ballot Papers
-                                        Rejected</TableCell>
+                                    <TableCell style={{fontSize: 13, color:'black',fontWeight: 'bold'}}>Ballot Box ID</TableCell>
+                                    <TableCell style={{fontSize: 13, color:'black',fontWeight: 'bold'}}>Box Count</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
                                 <TableRow>
-                                    <TableCell style={{width:'70%',fontSize: 13}}>Does not bear the official mark</TableCell>
+                                    <TableCell style={{fontSize: 13}}>
+                                        <TextField
+                                            id="outlined-dense"
+                                            margin="dense"
+                                            variant="outlined"
+                                        />
+                                    </TableCell>
                                     <TableCell style={{fontSize: 13}}>
                                         <TextField
                                             id="outlined-dense"
@@ -107,7 +113,13 @@ class PRE21Entry extends Component {
 
                                 </TableRow>
                                 <TableRow>
-                                    <TableCell style={{fontSize: 13}}>Voted for more than one candidate</TableCell>
+                                    <TableCell style={{fontSize: 13}}>
+                                        <TextField
+                                            id="outlined-dense"
+                                            margin="dense"
+                                            variant="outlined"
+                                        />
+                                    </TableCell>
                                     <TableCell style={{fontSize: 13}}>
                                         <TextField
                                             id="outlined-dense"
@@ -118,8 +130,6 @@ class PRE21Entry extends Component {
 
                                 </TableRow>
                                 <TableRow>
-                                    <TableCell style={{fontSize: 13}}>Specified a second preference or a third
-                                        preference only both such preference only</TableCell>
                                     <TableCell style={{fontSize: 13}}>
                                         <TextField
                                             id="outlined-dense"
@@ -127,10 +137,16 @@ class PRE21Entry extends Component {
                                             variant="outlined"
                                         />
                                     </TableCell>
+                                    <TableCell style={{fontSize: 13}}>
+                                        <TextField
+                                            id="outlined-dense"
+                                            margin="dense"
+                                            variant="outlined"
+                                        />
+                                    </TableCell>
+
                                 </TableRow>
                                 <TableRow>
-                                    <TableCell style={{fontSize: 13}}>Something is written or marked by which the voter
-                                        can be identified</TableCell>
                                     <TableCell style={{fontSize: 13}}>
                                         <TextField
                                             id="outlined-dense"
@@ -138,10 +154,21 @@ class PRE21Entry extends Component {
                                             variant="outlined"
                                         />
                                     </TableCell>
+                                    <TableCell style={{fontSize: 13}}>
+                                        <TextField
+                                            id="outlined-dense"
+                                            margin="dense"
+                                            variant="outlined"
+                                        />
+                                    </TableCell>
+
                                 </TableRow>
 
                                 <TableRow>
-                                    <TableCell style={{fontSize: 13}}>Unmarked</TableCell>
+                                    <TableCell style={{fontWeight: 'bold',fontSize: 14}}>
+
+                                        Total Ballot Counts :
+                                    </TableCell>
                                     <TableCell style={{fontSize: 13}}>
                                         <TextField
                                             id="outlined-dense"
@@ -149,29 +176,27 @@ class PRE21Entry extends Component {
                                             variant="outlined"
                                         />
                                     </TableCell>
+
                                 </TableRow>
-                                <TableRow>
-                                    <TableCell style={{fontSize: 13}}>Void for Uncertainty</TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
-                                </TableRow>
+
                             </TableBody>
                         </Table>
                     </Paper>
-                </div>
 
-                <div style={{marginLeft: '69%', marginTop: '2%'}}>
-                    <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleBack}
-                            className="button">Back</Button>
-                    <Button style={{borderRadius: 18, color: 'white'}} onClick={this.handleClickOpen}
-                            className="button">Submit</Button>
                 </div>
+                {/*<div style={{marginTop: '2%', marginBottom: '2%'}}>*/}
+                {/*<Typography variant="body2" gutterBottom>*/}
+                {/*The Total 2 :*/}
+                {/*</Typography>*/}
+                {/*</div>*/}
+                <div style={{marginLeft:'80%',marginTop:'2%'}}>
 
+                    <Button style={{borderRadius: 18,color:'white',marginRight: '4%'}}   onClick={this.handleBack} className="button">Back</Button>
+                    <Button style={{borderRadius: 18,color:'white'}}  onClick={this.handleClickOpen} className="button">Submit</Button>
+                </div>
+                {/*<Button variant="outlined" color="primary" onClick={this.handleClickOpen}>*/}
+                {/*Open alert dialog*/}
+                {/*</Button>*/}
                 <Dialog
                     open={this.state.open}
                     onClose={this.handleClose}
@@ -198,4 +223,4 @@ class PRE21Entry extends Component {
     }
 }
 
-export default PRE21Entry;
+export default PRE28Entry;

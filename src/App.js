@@ -19,16 +19,18 @@ import PRE34COEntry from "./components/preferences/PRE34COEntry";
 import PRE34COPV from "./components/preferences/postal-votes/PRE34COPV";
 import PRE34COPVEntry from "./components/preferences/postal-votes/PRE34COPVEntry";
 import Login from "./components/login/Login";
+import CE201Entry from "./components/CE201/CE201Entry";
+import PRE28Entry from "./components/PRE28/PRE28Entry";
+import PRE28 from "./components/PRE28/PRE28";
 
 function App() {
     return (
         <Router>
-
             <div>
                 <NavBar/>
                 <Route exact path="/" component={Login}/>
-
                 <Route exact path="/CE201" component={CE201}/>
+                <Route exact path="/CE201-Entry" component={CE201Entry}/>
                 <Route exact path="/PRE28A" component={PRE28A}/>
                 <Route exact path="/PRE28A-Entry" component={PRE28AEntry}/>
                 <Route exact path="/report" component={Reports}/>
@@ -44,6 +46,8 @@ function App() {
                 <Route exact path="/PRE34CO-Entry" component={PRE34COEntry}/>
                 <Route exact path="/PRE34COPV" component={PRE34COPV}/>
                 <Route exact path="/PRE34COPV-Entry" component={PRE34COPVEntry}/>
+                <Route exact path="/PRE28" component={PRE28}/>
+                <Route exact path="/PRE28-Entry" component={PRE28Entry}/>
             </div>
         </Router>
 
