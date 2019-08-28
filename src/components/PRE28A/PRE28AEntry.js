@@ -41,7 +41,7 @@ class PRE28AEntry extends Component {
         this.setState({open: true});
     }
     handleBack() {
-        this.props.history.replace('/PRE28')
+        this.props.history.replace('/PRE28A')
     }
 
     // modal controllers

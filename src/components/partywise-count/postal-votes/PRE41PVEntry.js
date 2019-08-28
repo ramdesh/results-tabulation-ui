@@ -61,7 +61,7 @@ class PRE41PVEntry extends Component {
                 'X-Requested-With': 'XMLHttpRequest'
             }
         }).then(res => {
-            console.log("Election" + res.data[0].parties)
+            console.log("Election Parties" + res.data[0].parties)
             this.setState({
                 election: res.data[0].parties
             })

@@ -15,6 +15,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import MenuItem from '@material-ui/core/MenuItem';
 import './Invalid.css'
+import PRE21Entry from "./PRE21Entry";
 
 class PRE21 extends Component {
     constructor(props, context) {
@@ -69,6 +70,7 @@ class PRE21 extends Component {
     render() {
         return (
             <div style={{margin: '3%'}}>
+
                 <div>
                     <div style={{marginBottom: '3%'}}>
                         <Typography variant="h5" gutterBottom>
@@ -142,7 +144,11 @@ class PRE21 extends Component {
                             Cancel
                         </Button>
                     </DialogActions>
+
                 </Dialog>
+
+                {/*<PRE21Entry callbackFromParent={this.state.selected}/>*/}
+                {/*<PRE21Entry name = {"ron"} />*/}
             </div>
         )
     }
