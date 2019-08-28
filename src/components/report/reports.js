@@ -19,12 +19,25 @@ class Reports extends Component {
             allUsers: [],
             offices: [],
             selected: 'Select',
-            setOpen: false
+            selected1: 'Select',
+            setOpen: false,
+            report:[],
+            v1alue: 0
         };
     }
 
     handleClickOpen() {
         console.log("open")
+
+        axios.post('https://cors-anywhere.herokuapp.com/https://dev.tabulation.ecdev.opensource.lk/report/'+this.state.v1alue+'/version')
+            .then(res => {
+                console.log(res);
+                console.log(res.data.reportFile.urlInline);
+                window.open(res.data.reportFile.urlInline,"_blank")
+            })
+
+        // window.open('newPageUrl', "https://dev.tabulation.ecdev.opensource.lk")
+
         this.setState({open: true});
     }
 
@@ -36,7 +49,32 @@ class Reports extends Component {
 
     handleChange = event => {
         this.setState({selected: event.target.value, name: event.target.name});
+
+        axios.get('https://cors-anywhere.herokuapp.com/https://dev.tabulation.ecdev.opensource.lk/report?limit=20&offset=0&officeId='+event.target.value, {
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET',
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        }).then(res => {
+            console.log("Election" + res.data)
+            this.setState({
+                report: res.data
+            })
+        })
+            .catch((error) => console.log(error));
     };
+
+    handleReport = event => {
+        this.setState({selected1: event.target.value, name: event.target.name});
+
+        this.setState({v1alue:event.target.value});
+
+
+    };
+
+
 
     componentDidMount() {
         console.log("Election Result Test")
@@ -65,11 +103,11 @@ class Reports extends Component {
                     <Grid item lg={4} sm={3}>
                         <FormControl variant="outlined" margin="dense">
                             <InputLabel>
-                                Electional District
+                                Select Office
                             </InputLabel>
                             <Select className="width50" value={this.state.selected} onChange={this.handleChange}>
                                 {this.state.offices.map((office, idx) => (
-                                    <MenuItem value={office.officeName}>{office.officeName}</MenuItem>
+                                    <MenuItem value={office.officeId}>{office.officeName}</MenuItem>
                                 ))}
                             </Select>
                         </FormControl>
@@ -77,11 +115,11 @@ class Reports extends Component {
                     <Grid item lg={4} sm={3}>
                         <FormControl variant="outlined" margin="dense">
                             <InputLabel>
-                                Polling Division
+                                Report ID
                             </InputLabel>
-                            <Select className="width50" value={this.state.selected} onChange={this.handleChange}>
-                                {this.state.offices.map((day1, idx) => (
-                                    <MenuItem value={day1.officeName}>{day1.officeName}</MenuItem>
+                            <Select className="width50" value={this.state.selected1} onChange={this.handleReport}>
+                                {this.state.report.map((day1, idx) => (
+                                    <MenuItem  value={day1.reportId}>{day1.reportCode}</MenuItem>
                                 ))}
                             </Select>
                         </FormControl>
@@ -89,7 +127,7 @@ class Reports extends Component {
                     <Grid item lg={4} sm={3}>
                         <FormControl variant="outlined" margin="dense">
 
-                            <Button color="primary">
+                            <Button color="primary" onClick={this.handleClickOpen}>
                                 Generate
                             </Button>
                         </FormControl>
