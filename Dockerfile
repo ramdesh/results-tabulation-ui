@@ -1,5 +1,4 @@
-FROM node:10.13-alpine
-ENV NODE_ENV production
+FROM tiangolo/node-frontend:10 as builder
 
 ADD ./src /app/src
 COPY package*.json /app/
@@ -8,5 +7,15 @@ WORKDIR /app
 RUN npm install
 RUN npm run build
 
-EXPOSE 3000
-CMD npm start
+FROM nginx:1.15
+
+COPY --from=builder /app/build/ /usr/share/nginx/html
+COPY --from=builder /nginx.conf /etc/nginx/conf.d/default.conf
+WORKDIR /usr/share/nginx/html/
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"];
+# CMD echo 'window._env_ = {}; window._env_.API_BASE ="'${API_BASE}'"' > env-config.js && nginx -g 'daemon off;'
+# CMD ["bash", "-c", "echo 'window._env_.API_BASE = \"$API_BASE\"' > env-config.js && nginx -g 'daemon off;'"]
+# CMD echo ${API_BASE}
