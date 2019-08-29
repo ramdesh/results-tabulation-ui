@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import Grid from '@material-ui/core/Grid';
-import axios from 'axios';
+import axios from '../../axios-base';
 import {
     Typography,
     Button,
@@ -45,7 +45,7 @@ class CE201 extends Component {
     handleChange = event => {
         this.setState({selected: event.target.value, name: event.target.name});
         console.log(event.target.value)
-        axios.get('https://cors-anywhere.herokuapp.com/https://dev.tabulation.ecdev.opensource.lk/office?limit=20&offset=0&parentOfficeId='+event.target.value+'&officeType=CountingCentre', {
+        axios.get('/office?limit=20&offset=0&parentOfficeId='+event.target.value+'&officeType=CountingCentre', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -59,14 +59,13 @@ class CE201 extends Component {
             })
         })
             .catch((error) => console.log(error));
-
     };
 
     handleCounting = event => {
         this.setState({selected1: event.target.value, name: event.target.name});
         // console.log(event.target.value)
 
-        axios.get('https://cors-anywhere.herokuapp.com/https://dev.tabulation.ecdev.opensource.lk/office?limit=20&offset=0&parentOfficeId='+event.target.value+'&officeType=PollingStation', {
+        axios.get('/office?limit=20&offset=0&parentOfficeId='+event.target.value+'&officeType=PollingStation', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -93,7 +92,7 @@ class CE201 extends Component {
 
     componentDidMount() {
         console.log("Election Result Test")
-        axios.get('https://cors-anywhere.herokuapp.com/https://dev.tabulation.ecdev.opensource.lk/office?limit=20&offset=0&officeType=DistrictCentre', {
+        axios.get('/office?limit=20&offset=0&officeType=DistrictCentre', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',

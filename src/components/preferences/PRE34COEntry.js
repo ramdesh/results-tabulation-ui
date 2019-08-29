@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import axios from 'axios';
+import axios from '../../axios-base';
 import {
     Typography,
     Button,
@@ -50,7 +50,7 @@ class PRE34COEntry extends Component {
     };
 
     componentDidMount() {
-        axios.get('https://cors-anywhere.herokuapp.com/https://dev.tabulation.ecdev.opensource.lk/election?limit=20&offset=0', {
+        axios.get('/election?limit=20&offset=0', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -65,14 +65,17 @@ class PRE34COEntry extends Component {
         }).catch((error) => console.log(error));
     }
 
-
     render() {
+        const {name} = this.props.match.params
         return (
             <div style={{margin: '3%'}}>
                 <div>
                     <div style={{marginBottom: '3%'}}>
-                        <Typography variant="h5" gutterBottom>
-                            Presidential Election 2019 - Preferences ( PRE-34-CO ) - Polling Station : A
+                        <Typography variant="h4" gutterBottom>
+                            Presidential Election 2019
+                        </Typography>
+                        <Typography variant="h6" gutterBottom>
+                            Preferences ( PRE-34-CO ) - Polling Station : {this.props.match.params.name}
                         </Typography>
                     </div>
 
@@ -217,8 +220,6 @@ class PRE34COEntry extends Component {
                     <Typography variant="body2" gutterBottom style={{marginTop: '2%'}}>
                         The Total no of 2nd and 3rd Preferences in favor of Candidate No 2 :
                     </Typography>
-                    
-
                 </div>
 
 

@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import Grid from '@material-ui/core/Grid';
-import axios from 'axios';
+import axios from '../../axios-base';
 import {
     Typography,
     Button,
@@ -28,12 +28,12 @@ class PRE41 extends Component {
             selectedPollingStation: '',
             countingCenter: [],
             pollingStation: [],
-            polling:0
+            polling: 0
         };
     }
 
     handleClickOpen() {
-        if (this.state.selectedCountingCenter === '' ) {
+        if (this.state.selectedCountingCenter === '') {
             alert("Please select the necessary fields !")
         } else {
             // axios.get('https://cors-anywhere.herokuapp.com/https://dev.tabulation.ecdev.opensource.lk/office?limit=20&offset=0&officeType=DistrictCentre', {
@@ -50,7 +50,6 @@ class PRE41 extends Component {
             //     })
             // })
             //     .catch((error) => console.log(error));
-
             this.props.history.replace('/PRE41-Entry/' + this.state.polling)
         }
     }
@@ -64,7 +63,7 @@ class PRE41 extends Component {
     handleChange = event => {
         this.setState({selectedDistrictCentre: event.target.value, name: event.target.name});
         console.log(event.target.value)
-        axios.get('https://cors-anywhere.herokuapp.com/https://dev.tabulation.ecdev.opensource.lk/office?limit=20&offset=0&parentOfficeId=' + event.target.value + '&officeType=CountingCentre', {
+        axios.get('/office?limit=20&offset=0&parentOfficeId=' + event.target.value + '&officeType=CountingCentre', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -83,7 +82,7 @@ class PRE41 extends Component {
 
     handleCounting = event => {
         this.setState({selectedCountingCenter: event.target.value, name: event.target.name});
-        axios.get('https://cors-anywhere.herokuapp.com/https://dev.tabulation.ecdev.opensource.lk/office?limit=20&offset=0&parentOfficeId=' + event.target.value + '&officeType=PollingStation', {
+        axios.get('/office?limit=20&offset=0&parentOfficeId=' + event.target.value + '&officeType=PollingStation', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -103,15 +102,15 @@ class PRE41 extends Component {
     handlePolling = event => {
         this.setState({
             selectedPollingStation: event.target.value,
-            name: event.target.name});
+            name: event.target.name
+        });
 
         this.setState({polling: event.target.value});
 
     };
 
     componentDidMount() {
-        console.log("Election Result Test")
-        axios.get('https://cors-anywhere.herokuapp.com/https://dev.tabulation.ecdev.opensource.lk/office?limit=20&offset=0&officeType=DistrictCentre', {
+        axios.get('/office?limit=20&offset=0&officeType=DistrictCentre', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -133,8 +132,11 @@ class PRE41 extends Component {
             <div style={{margin: '3%'}}>
                 <div>
                     <div style={{marginBottom: '3%'}}>
-                        <Typography variant="h5" gutterBottom>
-                            Presidential Election 2019 - Party-Wise Count ( PRE-41 )
+                        <Typography variant="h4" gutterBottom>
+                            Presidential Election 2019
+                        </Typography>
+                        <Typography variant="h6" gutterBottom>
+                            Party-Wise Count ( PRE-41 )
                         </Typography>
                     </div>
 
@@ -144,7 +146,8 @@ class PRE41 extends Component {
                                 <InputLabel>
                                     District Centre
                                 </InputLabel>
-                                <Select className="width50" value={this.state.selectedDistrictCentre} onChange={this.handleChange}>
+                                <Select className="width50" value={this.state.selectedDistrictCentre}
+                                        onChange={this.handleChange}>
                                     {this.state.offices.map((districtCentre, idx) => (
                                         <MenuItem value={districtCentre.officeId}>{districtCentre.officeName}</MenuItem>
                                     ))}
@@ -156,7 +159,8 @@ class PRE41 extends Component {
                                 <InputLabel>
                                     Counting Centre
                                 </InputLabel>
-                                <Select className="width50" value={this.state.selectedCountingCenter} onChange={this.handleCounting}>
+                                <Select className="width50" value={this.state.selectedCountingCenter}
+                                        onChange={this.handleCounting}>
                                     {this.state.countingCenter.map((countingCenter, idx) => (
                                         <MenuItem value={countingCenter.officeId}>{countingCenter.officeName}</MenuItem>
                                     ))}
@@ -168,7 +172,8 @@ class PRE41 extends Component {
                                 <InputLabel>
                                     Polling Station
                                 </InputLabel>
-                                <Select className="width50" value={this.state.selectedPollingStation} onChange={this.handlePolling}>
+                                <Select className="width50" value={this.state.selectedPollingStation}
+                                        onChange={this.handlePolling}>
                                     {this.state.pollingStation.map((pollingStation, idx) => (
                                         <MenuItem value={pollingStation.officeId}>{pollingStation.officeName}</MenuItem>
                                     ))}

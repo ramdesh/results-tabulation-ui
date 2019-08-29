@@ -30,28 +30,39 @@ function App() {
             <div>
                 <NavBar/>
                 <Route exact path="/" component={Login}/>
+                <Route exact path="/report" component={Reports}/>
+                <Route exact path="/ReportsEntry" component={ReportsEntry}/>
                 <Route exact path="/CE201" component={CE201}/>
                 <Route exact path="/CE201-Entry" component={CE201Entry}/>
-                <Route exact path="/PRE28A" component={PRE28A}/>
-                <Route exact path="/PRE28A-Entry" component={PRE28AEntry}/>
-                <Route exact path="/report" component={Reports}/>
                 <Route exact path="/PRE21" component={PRE21}/>
                 <Route exact path="/PRE21-Entry" component={PRE21Entry}/>
-                <Route exact path="/PRE21PV" component={PRE21PV}/>
-                <Route exact path="/PRE21PV-Entry" component={PRE21PVEntry}/>
+
+                <Route exact path="/PRE34CO" component={PRE34CO}/>
+                <Route exact path="/PRE34CO-Entry/:name" component={PRE34COEntry}/>
+
+                <Route exact path="/PRE28" component={PRE28}/>
+                <Route path="/PRE28-Entry/:name" component={PRE28Entry} />
+
                 <Route exact path="/PRE41" component={PRE41}/>
                 <Route path="/PRE41-Entry/:name" component={PRE41Entry} />
 
+                <Route exact path="/PRE28A" component={PRE28A}/>
+                <Route path="/PRE28A-Entry/:name" component={PRE28AEntry} />
+
+                <Route exact path="/PRE28A" component={PRE28A}/>
+                <Route path="/PRE28A-Entry/:name" component={PRE28AEntry} />
+
+                <Route exact path="/PRE21PV" component={PRE21PV}/>
+                <Route exact path="/PRE21PV-Entry" component={PRE21PVEntry}/>
+
                 <Route exact path="/PRE41PV" component={PRE41PV}/>
                 <Route exact path="/PRE41PV-Entry" component={PRE41PVEntry}/>
-                <Route exact path="/PRE34CO" component={PRE34CO}/>
-                <Route exact path="/PRE34CO-Entry" component={PRE34COEntry}/>
+
+
+
                 <Route exact path="/PRE34COPV" component={PRE34COPV}/>
                 <Route exact path="/PRE34COPV-Entry" component={PRE34COPVEntry}/>
-                <Route exact path="/PRE28" component={PRE28}/>
-                <Route exact path="/PRE28-Entry" component={PRE28Entry}/>
 
-                <Route exact path="/ReportsEntry" component={ReportsEntry}/>
             </div>
         </Router>
 

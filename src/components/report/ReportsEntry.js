@@ -1,6 +1,5 @@
 import React, {Component} from 'react'
-
-import axios from 'axios';
+import axios from '../../axios-base';
 import {
     Typography,
     Table,
@@ -36,7 +35,7 @@ class ReportsEntry extends Component {
     }
 
     handleClickOpen() {
-        axios.post('https://cors-anywhere.herokuapp.com/https://dev.tabulation.ecdev.opensource.lk/report/' + this.state.value + '/version')
+        axios.post('/report/' + this.state.value + '/version')
             .then(res => {
                 console.log(res);
                 console.log(res.data.reportFile.urlInline);
@@ -58,7 +57,7 @@ class ReportsEntry extends Component {
     handleChange = event => {
         this.setState({selected: event.target.value, name: event.target.name});
 
-        axios.get('https://cors-anywhere.herokuapp.com/https://dev.tabulation.ecdev.opensource.lk/report?limit=20&offset=0&officeId=' + event.target.value, {
+        axios.get('/report?limit=20&offset=0&officeId=' + event.target.value, {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -78,7 +77,7 @@ class ReportsEntry extends Component {
 
     componentDidMount() {
         console.log("Election Result Test")
-        axios.get('https://cors-anywhere.herokuapp.com/https://dev.tabulation.ecdev.opensource.lk/office?limit=20&offset=0&electionId=1', {
+        axios.get('/office?limit=20&offset=0&electionId=1', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',

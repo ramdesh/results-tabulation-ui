@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import axios from 'axios';
+import axios from '../../axios-base';
 import {
     Typography,
     Button,
@@ -55,7 +55,7 @@ class PRE21Entry extends Component {
     componentDidMount() {
         console.log("Election Result Test")
         // let token = localStorage.getItem('id_token');
-        axios.get('https://cors-anywhere.herokuapp.com/https://dev.tabulation.ecdev.opensource.lk/office?limit=20&offset=0&electionId=1', {
+        axios.get('/office?limit=20&offset=0&electionId=1', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',

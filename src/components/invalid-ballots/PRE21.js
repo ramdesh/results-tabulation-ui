@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import Grid from '@material-ui/core/Grid';
-import axios from 'axios';
+import axios from '../../axios-base';
 import {
     Typography,
     Button,
@@ -15,7 +15,6 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import MenuItem from '@material-ui/core/MenuItem';
 import './Invalid.css'
-import PRE21Entry from "./PRE21Entry";
 
 class PRE21 extends Component {
     constructor(props, context) {
@@ -50,7 +49,7 @@ class PRE21 extends Component {
 
     componentDidMount() {
         console.log("Election Result Test")
-        axios.get('https://cors-anywhere.herokuapp.com/https://dev.tabulation.ecdev.opensource.lk/office?limit=20&offset=0&electionId=1', {
+        axios.get('/office?limit=20&offset=0&electionId=1', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -144,11 +143,7 @@ class PRE21 extends Component {
                             Cancel
                         </Button>
                     </DialogActions>
-
                 </Dialog>
-
-                {/*<PRE21Entry callbackFromParent={this.state.selected}/>*/}
-                {/*<PRE21Entry name = {"ron"} />*/}
             </div>
         )
     }

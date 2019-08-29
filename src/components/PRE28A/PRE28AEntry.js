@@ -1,12 +1,9 @@
 import React, {Component} from 'react'
-import Grid from '@material-ui/core/Grid';
-import axios from 'axios';
+import axios from '../../axios-base';
 import {
     Typography,
     Button,
-    FormControl,
     TextField,
-    InputLabel,
     Select,
     Table,
     TableRow,
@@ -37,7 +34,6 @@ class PRE28AEntry extends Component {
     }
 
     handleClickOpen() {
-        console.log("open")
         this.setState({open: true});
     }
     handleBack() {
@@ -46,7 +42,6 @@ class PRE28AEntry extends Component {
 
     // modal controllers
     handleClose() {
-        console.log("close")
         this.setState({open: false});
     }
 
@@ -55,9 +50,7 @@ class PRE28AEntry extends Component {
     };
 
     componentDidMount() {
-        console.log("Election Result Test")
-        // let token = localStorage.getItem('id_token');
-        axios.get('https://cors-anywhere.herokuapp.com/https://dev.tabulation.ecdev.opensource.lk/office?limit=20&offset=0&electionId=1', {
+        axios.get('/office?limit=20&offset=0&electionId=1', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -73,14 +66,17 @@ class PRE28AEntry extends Component {
             .catch((error) => console.log(error));
     }
 
-
     render() {
+        const {name} = this.props.match.params
         return (
             <div style={{margin: '3%'}}>
                 <div>
                     <div style={{marginBottom: '3%'}}>
-                        <Typography variant="h5" gutterBottom>
-                            Presidential Election 2019 - Box Count ( PRE-28A ) - Polling Station : A
+                        <Typography variant="h4" gutterBottom>
+                            Presidential Election 2019
+                        </Typography>
+                        <Typography variant="h6" gutterBottom>
+                            Box Count ( PRE-28A ) - Polling Station : {this.props.match.params.name}
                         </Typography>
 
                     </div>

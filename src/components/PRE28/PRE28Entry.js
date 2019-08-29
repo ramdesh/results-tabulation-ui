@@ -1,12 +1,9 @@
 import React, {Component} from 'react'
-import Grid from '@material-ui/core/Grid';
 import axios from 'axios';
 import {
     Typography,
     Button,
-    FormControl,
     TextField,
-    InputLabel,
     Select,
     Table,
     TableRow,
@@ -56,6 +53,7 @@ class PRE28Entry extends Component {
 
     componentDidMount() {
         console.log("Election Result Test")
+        const {name} = this.props.match.params
         // let token = localStorage.getItem('id_token');
         axios.get('https://cors-anywhere.herokuapp.com/https://dev.tabulation.ecdev.opensource.lk/office?limit=20&offset=0&electionId=1', {
             headers: {
@@ -79,12 +77,13 @@ class PRE28Entry extends Component {
             <div style={{margin: '3%',marginRight:'24%'}}>
                 <div>
                     <div style={{marginBottom: '3%'}}>
-                        <Typography variant="h5" gutterBottom>
-                            Presidential Election 2019 - Box Count ( PRE-28 ) - Polling Station : A
+                        <Typography variant="h4" gutterBottom>
+                            Presidential Election 2019
                         </Typography>
-
+                        <Typography variant="h6" gutterBottom>
+                            Box Count ( PRE-28 ) - Polling Station : {this.props.match.params.name}
+                        </Typography>
                     </div>
-
 
                     <Paper>
                         <Table>
@@ -184,19 +183,13 @@ class PRE28Entry extends Component {
                     </Paper>
 
                 </div>
-                {/*<div style={{marginTop: '2%', marginBottom: '2%'}}>*/}
-                {/*<Typography variant="body2" gutterBottom>*/}
-                {/*The Total 2 :*/}
-                {/*</Typography>*/}
-                {/*</div>*/}
+
                 <div style={{marginLeft:'80%',marginTop:'2%'}}>
 
                     <Button style={{borderRadius: 18,color:'white',marginRight: '4%'}}   onClick={this.handleBack} className="button">Back</Button>
                     <Button style={{borderRadius: 18,color:'white'}}  onClick={this.handleClickOpen} className="button">Submit</Button>
                 </div>
-                {/*<Button variant="outlined" color="primary" onClick={this.handleClickOpen}>*/}
-                {/*Open alert dialog*/}
-                {/*</Button>*/}
+
                 <Dialog
                     open={this.state.open}
                     onClose={this.handleClose}

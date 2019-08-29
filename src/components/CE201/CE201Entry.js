@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import Grid from '@material-ui/core/Grid';
-import axios from 'axios';
+import axios from '../../axios-base';
 import {
     Typography,
     Button,
@@ -56,7 +56,7 @@ class CE201Entry extends Component {
     componentDidMount() {
         console.log("Election Result Test")
         // let token = localStorage.getItem('id_token');
-        axios.get('https://cors-anywhere.herokuapp.com/https://dev.tabulation.ecdev.opensource.lk/office?limit=20&offset=0&electionId=1', {
+        axios.get('/office?limit=20&offset=0&electionId=1', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',

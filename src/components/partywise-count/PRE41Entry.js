@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import axios from 'axios';
+import axios from '../../axios-base';
 import {
     Typography,
     Button,
@@ -27,13 +27,8 @@ class PRE41Entry extends Component {
         this.setElection = this.setElection.bind(this);
         this.state = {
             open: false,
-            election: [],
-            offices: [],
             selected: 'Select',
-            setOpen: false,
-
             tallySheetID: 24,
-
             candidatesList: [],
             candidatesMap: {},
             content: {}
@@ -54,10 +49,8 @@ class PRE41Entry extends Component {
                 "count": null,
                 "countInWords": null
             };
-
             return candidate.candidateId
         })
-
         this.setState({
             candidatesList,
             candidateMap,
@@ -66,15 +59,16 @@ class PRE41Entry extends Component {
     }
 
     handleSubmit = (event) => {
-        console.log(this.state.votes1 + " " + this.state.votesWords1)
         event.preventDefault()
-        if (this.state.votes1 === null || this.state.votes2 === null || this.state.votes3 === null || this.state.votes4 === null) {
-            alert("Please Fill the necessary fields !")
+        if (this.state.content[1].count === null || this.state.content[2].count === null ||
+            this.state.content[3].count === null || this.state.content[4].count === null ||
+            this.state.content[1].countInWords === null || this.state.content[2].countInWords === null ||
+            this.state.content[3].countInWords === null || this.state.content[4].countInWords === null) {
+            alert("Please Enter the necessary fields !")
 
         } else {
-            // alert("new!")
-            axios.post('https://cors-anywhere.herokuapp.com/https://dev.tabulation.ecdev.opensource.lk/tally-sheet/PRE-41/' + this.state.tallySheetID + '/version', {
-                "content": this.state.candidatesList.map((candidateId)=>{
+            axios.post('/tally-sheet/PRE-41/' + this.state.tallySheetID + '/version', {
+                "content": this.state.candidatesList.map((candidateId) => {
                     return {
                         "candidateId": candidateId,
                         "count": parseInt(this.state.content[candidateId].count),
@@ -85,9 +79,8 @@ class PRE41Entry extends Component {
                 .then(res => {
                     console.log(res);
                     console.log("Result Test" + res.data);
-                    alert("Successfully Created the TallySheet")
-
-                    axios.post('https://cors-anywhere.herokuapp.com/https://dev.tabulation.ecdev.opensource.lk/report/5/version')
+                    alert("Successfully Created the TallySheet - PRE41")
+                    axios.post('/report/5/version')
                         .then(res => {
                             console.log(res);
                             console.log("Result NEW " + res.data.reportFile.urlInline);
@@ -99,18 +92,6 @@ class PRE41Entry extends Component {
                 })
         }
     }
-    //
-    // handleInputChange = (event) => {
-    //     console.log("open", event.target.name)
-    //     event.preventDefault()
-    //     this.setState({
-    //         [event.target.name]: event.target.value
-    //     })
-    //     console.log("No of votes 1", this.state.votes1)
-    //     console.log("No of votes 2", this.state.votes2)
-    //     console.log("No of votes Words 1", this.state.votesWords1)
-    //     console.log("No of agent 1", this.state.agent1)
-    // }
 
     handleClickOpen() {
         this.setState({open: true});
@@ -122,7 +103,6 @@ class PRE41Entry extends Component {
 
     // modal controllers
     handleClose() {
-        console.log("close")
         this.setState({open: false});
     }
 
@@ -143,46 +123,44 @@ class PRE41Entry extends Component {
         })
     }
 
-
     componentDidMount() {
         const {name} = this.props.match.params
         console.log("ld", name)
-        axios.get('https://cors-anywhere.herokuapp.com/https://dev.tabulation.ecdev.opensource.lk/election?limit=20&offset=0', {
+        axios.get('/election?limit=20&offset=0', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
                 'Access-Control-Allow-Headers': 'Content-Type',
                 'X-Requested-With': 'XMLHttpRequest'
             }
-        }).then(res => {debugger;
+        }).then(res => {
             console.log("Election" + res.data[0].parties)
             this.setElection(res.data[0])
         }).catch((error) => console.log(error));
     }
-
 
     render() {
         return (
             <div style={{margin: '3%'}}>
                 <div>
                     <div style={{marginBottom: '3%'}}>
-                        <Typography variant="h5" gutterBottom>
-                            Presidential Election 2019 - Party-Wise Count ( PRE-41 ) - Polling Station ID
-                            : {this.props.match.params.name}
+                        <Typography variant="h4" gutterBottom>
+                            Presidential Election 2019
                         </Typography>
-
+                        <Typography variant="h6" gutterBottom>
+                            Party-Wise Count ( PRE-41 ) - Polling Station ID : {this.props.match.params.name}
+                        </Typography>
                     </div>
                     <Paper>
                         <Table>
                             <TableHead>
                                 <TableRow>
-                                    <TableCell style={{fontSize: 13, fontWeight: 'bold'}}>Symbol</TableCell>
-                                    <TableCell style={{fontSize: 13, fontWeight: 'bold'}}>Name of Candidate</TableCell>
-                                    <TableCell style={{fontSize: 13, fontWeight: 'bold'}}>No of votes in
+                                    <TableCell style={{color:'black',fontSize: 13, fontWeight: 'bold'}}>Symbol</TableCell>
+                                    <TableCell style={{color:'black',fontSize: 13, fontWeight: 'bold'}}>Name of Candidate</TableCell>
+                                    <TableCell style={{color:'black',fontSize: 13, fontWeight: 'bold'}}>No of votes in
                                         figures</TableCell>
-                                    <TableCell style={{fontSize: 13, fontWeight: 'bold'}}>No of votes in
+                                    <TableCell style={{color:'black',fontSize: 13, fontWeight: 'bold'}}>No of votes in
                                         words</TableCell>
-                                    <TableCell style={{fontSize: 13, fontWeight: 'bold'}}>Agent</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -196,34 +174,24 @@ class PRE41Entry extends Component {
                                         <TableCell
                                             style={{fontSize: 13}}>{candidate.candidateName}</TableCell>
 
-                                        <TableCell style={{fontSize: 13}}>
+                                        <TableCell style={{width:'30%',fontSize: 13}}>
                                             <TextField
                                                 id="outlined-dense"
                                                 margin="dense"
                                                 variant="outlined"
-                                                placeholder="No of Votes"
+                                                placeholder="No of votes"
                                                 name={'votes' + (idx + 1)}
                                                 onChange={this.handleInputChange(candidateId, "count")}
                                             />
                                         </TableCell>
-                                        <TableCell style={{fontSize: 13}}>
+                                        <TableCell style={{width:'40%',fontSize: 13}}>
                                             <TextField
                                                 id="outlined-dense"
                                                 margin="dense"
                                                 variant="outlined"
-                                                placeholder="No of Votes in words"
+                                                placeholder="No of votes in words"
                                                 name={'votesWords' + (idx + 1)}
                                                 onChange={this.handleInputChange(candidateId, "countInWords")}
-                                            />
-                                        </TableCell>
-                                        <TableCell style={{fontSize: 13}}>
-                                            <TextField
-                                                id="outlined-dense"
-                                                margin="dense"
-                                                variant="outlined"
-                                                placeholder="Agent"
-                                                name={'agent' + (idx + 1)}
-                                                onChange={this.handleInputChange(candidateId, "agent")}
                                             />
                                         </TableCell>
                                     </TableRow>
@@ -266,6 +234,5 @@ class PRE41Entry extends Component {
         )
     }
 }
-
 
 export default PRE41Entry;
