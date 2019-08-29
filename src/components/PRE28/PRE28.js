@@ -1,133 +1,38 @@
 import React, {Component} from 'react'
+import Grid from '@material-ui/core/Grid';
 import axios from 'axios';
 import {
     Typography,
     Button,
-    TextField,
-    Select,
-    Table,
-    TableRow,
-    TableCell,
-    TableHead,
-    TableBody,
-    Paper
+    FormControl,
+    InputLabel,
+    Select
 } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import MenuItem from '@material-ui/core/MenuItem';
 
-class PRE41Entry extends Component {
+class PRE28 extends Component {
     constructor(props, context) {
         super(props, context);
         this.handleClose = this.handleClose.bind(this);
         this.handleClickOpen = this.handleClickOpen.bind(this);
-        this.handleBack = this.handleBack.bind(this);
         this.state = {
             open: false,
-            election: [],
+            allUsers: [],
             offices: [],
             selected: 'Select',
-            setOpen: false,
-
-            votes1:null,
-            votes2:null,
-            votes3:null,
-            votes4:null,
-            votes5:null,
-
-            votesWords1:null,
-            votesWords2:null,
-            votesWords3:null,
-            votesWords4:null,
-            votesWords5:null,
-            agent1:null,
-            agent2:null,
-            agent3:null,
-            agent4:null,
-            agent5:null,
+            setOpen: false
         };
     }
 
-    handleSubmit = (event) => {
-        console.log(this.state.votes1+" "+this.state.votesWords1)
-        event.preventDefault()
-        if (this.state.votes1 === null || this.state.votes2 === 0) {
-            alert("Please Fill the necessary fields !")
-
-
-        } else {
-            // alert("new!")
-            axios.post(`https://cors-anywhere.herokuapp.com/https://dev.tabulation.ecdev.opensource.lk/tally-sheet/PRE-41/24/version`,  {
-
-
-                "content": [
-                {
-                    "candidateId": 1,
-                    "count": 110,
-                    "countInWords": "ksjkjs"
-                },
-                    {
-                        "candidateId": 2,
-                        "count": 110,
-                        "countInWords": "ksjkjs"
-                    }
-                ]
-
-
-                // "content": [
-                //     {
-                //         "candidateId": 1,
-                //         "count": parseInt(this.state.votes1),
-                //         "countInWords": this.state.votesWords1
-                //     },
-                //     {
-                //         "candidateId": 2,
-                //         "count": parseInt(this.state.votes2),
-                //         "countInWords": this.state.votesWords2
-                //     },
-                //     {
-                //         "candidateId": 3,
-                //         "count": parseInt(this.state.votes3),
-                //         "countInWords": this.state.votesWords3
-                //     },
-                //     {
-                //         "candidateId": 4,
-                //         "count": parseInt(this.state.votes4),
-                //         "countInWords": this.state.votesWords4
-                //     }
-                // ]
-
-
-
-            })
-                .then(res => {
-                    console.log(res);
-                    console.log("mmlmkmk"+res.data);
-                })
-        }
-    }
-
-    handleInputChange = (event) => {
-        console.log("open",event.target.name)
-        event.preventDefault()
-        this.setState({
-            [event.target.name]: event.target.value
-        })
-        console.log("No of votes 1",this.state.votes1)
-        console.log("No of votes 2",this.state.votes2)
-        console.log("No of votes Words 1",this.state.votesWords1)
-        console.log("No of agent 1",this.state.agent1)
-    }
-
     handleClickOpen() {
-        console.log("open")
-        this.setState({open: true});
-    }
-
-    handleBack() {
-        this.props.history.replace('/PRE41')
+        this.props.history.replace('/PRE28-Entry')
+        // console.log("open")
+        // this.setState({open: true});
     }
 
     // modal controllers
@@ -141,7 +46,9 @@ class PRE41Entry extends Component {
     };
 
     componentDidMount() {
-        axios.get('https://cors-anywhere.herokuapp.com/https://dev.tabulation.ecdev.opensource.lk/election?limit=20&offset=0', {
+        console.log("Election Result Test")
+        // let token = localStorage.getItem('id_token');
+        axios.get('https://cors-anywhere.herokuapp.com/https://dev.tabulation.ecdev.opensource.lk/office?limit=20&offset=0&electionId=1', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -149,24 +56,12 @@ class PRE41Entry extends Component {
                 'X-Requested-With': 'XMLHttpRequest'
             }
         }).then(res => {
-            console.log("Election" + res.data[0].parties)
+            console.log("Election" + res.data)
             this.setState({
-                election: res.data[0].parties
+                offices: res.data
             })
-        }).catch((error) => console.log(error));
-        // axios.post(`https://cors-anywhere.herokuapp.com/https://dev.tabulation.ecdev.opensource.lk/tally-sheet/PRE-41/10/version`,  {
-        //     "tallySheetContent": [
-        //         {
-        //             "candidateId": 3,
-        //             "count": 100,
-        //             "countInWords": "One Hundreas"
-        //         }
-        //     ]
-        // })
-        //     .then(res => {
-        //         console.log(res);
-        //         console.log(""+res.data);
-        //     })
+        })
+            .catch((error) => console.log(error));
     }
 
 
@@ -176,70 +71,52 @@ class PRE41Entry extends Component {
                 <div>
                     <div style={{marginBottom: '3%'}}>
                         <Typography variant="h5" gutterBottom>
-                            Presidential Election 2019 - Party-Wise Count ( PRE-41 ) - Polling Station : A
+                            Presidential Election 2019 - Box Count ( PRE-28 )
                         </Typography>
-
                     </div>
-                    <Paper>
-                        <Table>
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell style={{fontSize:13,fontWeight:'bold'}}>Symbol</TableCell>
-                                    <TableCell style={{fontSize:13,fontWeight:'bold'}}>Name of Candidate</TableCell>
-                                    <TableCell style={{fontSize:13,fontWeight:'bold'}}>No of votes in words</TableCell>
-                                    <TableCell style={{fontSize:13,fontWeight:'bold'}}>No of votes in figures</TableCell>
-                                    <TableCell style={{fontSize:13,fontWeight:'bold'}}>Agent</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {this.state.election.map((party, idx) => (
-                                    <TableRow>
-                                        <TableCell style={{fontSize: 13}}>{party.partyName}</TableCell>
 
-                                        <TableCell
-                                            style={{fontSize: 13}}>{party.candidates[0].candidateName}</TableCell>
-
-                                        <TableCell style={{fontSize: 13}}>
-                                            <TextField
-                                                id="outlined-dense"
-                                                margin="dense"
-                                                variant="outlined"
-                                                placeholder="No of Votes"
-                                                name={'votes'+(idx+1)}
-                                                onChange={this.handleInputChange}
-                                            />
-                                        </TableCell>
-                                        <TableCell style={{fontSize: 13}}>
-                                            <TextField
-                                                id="outlined-dense"
-                                                margin="dense"
-                                                variant="outlined"
-                                                name={'votesWords'+(idx+1)}
-                                                onChange={this.handleInputChange}
-                                            />
-                                        </TableCell>
-                                        <TableCell style={{fontSize: 13}}>
-                                            <TextField
-                                                id="outlined-dense"
-                                                margin="dense"
-                                                variant="outlined"
-                                                name={'agent'+(idx+1)}
-                                                onChange={this.handleInputChange}
-                                            />
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
-
-                            </TableBody>
-                        </Table>
-                    </Paper>
+                    <Grid container spacing={3} style={{marginBottom: '2%'}}>
+                        <Grid item xs={5} sm={4}>
+                            <FormControl variant="outlined" margin="dense">
+                                <InputLabel>
+                                    District Centre
+                                </InputLabel>
+                                <Select className="width50" value={this.state.selected} onChange={this.handleChange}>
+                                    {this.state.offices.map((office, idx) => (
+                                        <MenuItem value={office.officeName}>{office.officeName}</MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                        </Grid>
+                        <Grid item xs={5} sm={4}>
+                            <FormControl variant="outlined" margin="dense">
+                                <InputLabel>
+                                    Counting Centre
+                                </InputLabel>
+                                <Select className="width50" value={this.state.selected} onChange={this.handleChange}>
+                                    {this.state.offices.map((day1, idx) => (
+                                        <MenuItem value={day1.officeName}>{day1.officeName}</MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                        </Grid>
+                        <Grid item xs={5} sm={4}>
+                            <FormControl variant="outlined" margin="dense">
+                                <InputLabel>
+                                    Polling Station
+                                </InputLabel>
+                                <Select className="width50" value={this.state.selected} onChange={this.handleChange}>
+                                    {this.state.offices.map((day1, idx) => (
+                                        <MenuItem value={day1.officeName}>{day1.officeName}</MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                        </Grid>
+                    </Grid>
                 </div>
 
-                <div style={{marginLeft: '80%', marginTop: '2%'}}>
-                    <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleBack}
-                            className="button">Back</Button>
-                    <Button style={{borderRadius: 18, color: 'white'}} onClick={this.handleSubmit}
-                            className="button">Submit</Button>
+                <div style={{marginLeft:'76%',marginTop:'4%'}}>
+                    <Button style={{borderRadius: 18,color:'white',marginRight: '4%'}} onClick={this.handleClickOpen} className="button">Next</Button>
                 </div>
 
                 <Dialog
@@ -268,4 +145,4 @@ class PRE41Entry extends Component {
     }
 }
 
-export default PRE41Entry;
+export default PRE28;

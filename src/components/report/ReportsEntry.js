@@ -16,7 +16,6 @@ import {
 } from '@material-ui/core';
 import MenuItem from '@material-ui/core/MenuItem';
 
-
 class ReportsEntry extends Component {
     constructor(props, context) {
         super(props, context);
@@ -37,8 +36,6 @@ class ReportsEntry extends Component {
     }
 
     handleClickOpen() {
-        console.log("open")
-
         axios.post('https://cors-anywhere.herokuapp.com/https://dev.tabulation.ecdev.opensource.lk/report/' + this.state.value + '/version')
             .then(res => {
                 console.log(res);
@@ -118,13 +115,12 @@ class ReportsEntry extends Component {
                     <Table >
                         <TableHead>
                             <TableRow>
-                                <TableCell style={{fontSize: 14, color:'black',fontWeight: 'bold'}}>Report Type</TableCell>
-                                <TableCell style={{fontSize: 14,color:'black', fontWeight: 'bold'}}>Office Type</TableCell>
+                                {/*<TableCell style={{fontSize: 14, color:'black',fontWeight: 'bold'}}>Report Type</TableCell>*/}
                             </TableRow>
                         </TableHead>
                         <TableBody>
                             <TableRow>
-                                <TableCell style={{width:'40%',fontSize: 13}}>PRE 41</TableCell>
+                                <TableCell style={{width:'40%',fontSize: 13,fontWeight: 'bold',}}>PRE 41</TableCell>
                                 <TableCell style={{fontSize: 13}}>
                                     <FormControl variant="outlined" margin="dense">
                                         <InputLabel>
@@ -144,7 +140,7 @@ class ReportsEntry extends Component {
 
                             </TableRow>
                             <TableRow>
-                                <TableCell style={{fontSize: 13}}>PRE 30 PD</TableCell>
+                                <TableCell style={{fontSize: 13,fontWeight: 'bold'}}>PRE 30 PD</TableCell>
                                 <TableCell style={{fontSize: 13}}>
                                     <FormControl variant="outlined" margin="dense">
                                         <InputLabel>
@@ -164,7 +160,7 @@ class ReportsEntry extends Component {
 
                             </TableRow>
                             <TableRow>
-                                <TableCell style={{fontSize: 13}}>PRE 30 ED</TableCell>
+                                <TableCell style={{fontSize: 13,fontWeight: 'bold'}}>PRE 30 ED</TableCell>
                                 <TableCell style={{fontSize: 13}}>
                                     <FormControl variant="outlined" margin="dense">
                                         <InputLabel>
