@@ -28,11 +28,12 @@ class PRE41Entry extends Component {
         this.state = {
             open: false,
             selected: 'Select',
-            tallySheetId: 0,
+
             candidatesList: [],
             candidatesMap: {},
             content: {},
 
+            tallySheetId: 0,
             reportId:0,
             officeId:0
         };

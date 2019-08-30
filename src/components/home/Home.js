@@ -63,7 +63,7 @@ class Home extends Component {
                                 Presidential Election 2019
                             </Typography>
                             <Typography variant="h6" gutterBottom>
-                                TallySheets
+                                Tally Sheets
                             </Typography>
                         </div>
                     </div>
@@ -76,8 +76,34 @@ class Home extends Component {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
+
+
                                 <TableRow>
-                                    <TableCell style={{width:'40%',fontSize: 13,fontWeight: 'bold',}}>TallySheet : PRE 41</TableCell>
+                                    <TableCell style={{width:'40%',fontSize: 13,fontWeight: 'bold',}}>Tally Sheet : PRE 28</TableCell>
+                                    <TableCell>
+                                        <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.open5}
+                                                className="button">Open</Button>
+                                    </TableCell>
+
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell style={{fontSize: 13,fontWeight: 'bold'}}>Tally Sheet : PRE 28A</TableCell>
+                                    <TableCell>
+                                        <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.open6}
+                                                className="button">Open</Button>
+                                    </TableCell>
+                                </TableRow>
+
+                                <TableRow>
+                                    <TableCell style={{fontSize: 13,fontWeight: 'bold'}}>Tally Sheet : CE 201</TableCell>
+                                    <TableCell>
+                                        <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.open3}
+                                                className="button">Open</Button>
+                                    </TableCell>
+                                </TableRow>
+
+                                <TableRow>
+                                    <TableCell style={{width:'40%',fontSize: 13,fontWeight: 'bold',}}>Tally Sheet : PRE 41</TableCell>
                                     <TableCell>
                                         <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.open1}
                                                 className="button">Open</Button>
@@ -85,7 +111,7 @@ class Home extends Component {
 
                                 </TableRow>
                                 <TableRow>
-                                    <TableCell style={{fontSize: 13,fontWeight: 'bold'}}>TallySheet : PRE 21</TableCell>
+                                    <TableCell style={{fontSize: 13,fontWeight: 'bold'}}>Tally Sheet : PRE 21</TableCell>
                                     <TableCell>
                                         <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.open2}
                                                 className="button">Open</Button>
@@ -93,13 +119,7 @@ class Home extends Component {
 
                                 </TableRow>
 
-                                <TableRow>
-                                    <TableCell style={{fontSize: 13,fontWeight: 'bold'}}>TallySheet : CE 201</TableCell>
-                                    <TableCell>
-                                        <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.open3}
-                                                className="button">Open</Button>
-                                    </TableCell>
-                                </TableRow>
+
 
                                 <TableRow>
                                     <TableCell style={{fontSize: 13,fontWeight: 'bold'}}>TallySheet : PRE 34 CO</TableCell>
@@ -109,22 +129,7 @@ class Home extends Component {
                                     </TableCell>
                                 </TableRow>
 
-                                <TableRow>
-                                    <TableCell style={{width:'40%',fontSize: 13,fontWeight: 'bold',}}>TallySheet : PRE 28</TableCell>
-                                    <TableCell>
-                                        <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.open5}
-                                                className="button">Open</Button>
-                                    </TableCell>
 
-                                </TableRow>
-                                <TableRow>
-                                    <TableCell style={{fontSize: 13,fontWeight: 'bold'}}>TallySheet : PRE 28A</TableCell>
-                                    <TableCell>
-                                        <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.open6}
-                                                className="button">Open</Button>
-                                    </TableCell>
-
-                                </TableRow>
 
 
 

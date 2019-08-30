@@ -31,7 +31,11 @@ class CE201Entry extends Component {
             allUsers: [],
             offices: [],
             selected: 'Select',
-            setOpen: false
+            setOpen: false,
+
+            tallySheetId: 0,
+            reportId:0,
+            officeId:0
         };
     }
 
@@ -53,10 +57,21 @@ class CE201Entry extends Component {
         this.setState({selected: event.target.value, name: event.target.name});
     };
 
+
     componentDidMount() {
-        console.log("Election Result Test")
-        // let token = localStorage.getItem('id_token');
-        axios.get('/office?limit=20&offset=0&electionId=1', {
+        const {name} = this.props.match.params
+        console.log("TallySheet ID >>> ", name)
+        this.setState({
+            tallySheetId: name
+        })
+        const {name2} = this.props.match.params
+        console.log("Id office >>> ", name2)
+        this.setState({
+            officeId: name2
+        })
+        console.log("Set >>> ", this.state.tallySheetId)
+        console.log("Set >>> ", this.state.officeId)
+        axios.get('/election?limit=20&offset=0', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -64,13 +79,30 @@ class CE201Entry extends Component {
                 'X-Requested-With': 'XMLHttpRequest'
             }
         }).then(res => {
-            console.log("Election" + res.data)
-            this.setState({
-                offices: res.data
-            })
-        })
-            .catch((error) => console.log(error));
+            console.log("Election" + res.data[0].parties)
+            this.setElection(res.data[0])
+        }).catch((error) => console.log(error));
     }
+
+
+    // componentDidMount() {
+    //     console.log("Election Result Test")
+    //     // let token = localStorage.getItem('id_token');
+    //     axios.get('/office?limit=20&offset=0&electionId=1', {
+    //         headers: {
+    //             'Access-Control-Allow-Origin': '*',
+    //             'Access-Control-Allow-Methods': 'GET',
+    //             'Access-Control-Allow-Headers': 'Content-Type',
+    //             'X-Requested-With': 'XMLHttpRequest'
+    //         }
+    //     }).then(res => {
+    //         console.log("Election" + res.data)
+    //         this.setState({
+    //             offices: res.data
+    //         })
+    //     })
+    //         .catch((error) => console.log(error));
+    // }
 
 
     render() {
@@ -78,11 +110,14 @@ class CE201Entry extends Component {
             <div style={{margin: '3%'}}>
                 <div>
                     <div style={{marginBottom: '3%'}}>
-                        <Typography variant="h5" gutterBottom>
-                            Presidential Election 2019 - CE-201
+                        <Typography variant="h4" gutterBottom>
+                            Presidential Election 2019
                         </Typography>
-
+                        <Typography variant="h6" gutterBottom>
+                            CE-201 - TallySheet ID : {this.props.match.params.name}
+                        </Typography>
                     </div>
+
 
                     <Paper>
                         <Table>
@@ -361,7 +396,6 @@ class CE201Entry extends Component {
                                         />
                                     </TableCell>
                                 </TableRow>
-
 
                             </TableBody>
                         </Table>

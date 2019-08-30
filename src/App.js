@@ -52,9 +52,6 @@ function App() {
                 <Route exact path="/PRE28A" component={PRE28A}/>
                 <Route path="/PRE28A-Entry/:name" component={PRE28AEntry} />
 
-                <Route exact path="/PRE28A" component={PRE28A}/>
-                <Route path="/PRE28A-Entry/:name" component={PRE28AEntry} />
-
                 <Route exact path="/PRE21PV" component={PRE21PV}/>
                 <Route exact path="/PRE21PV-Entry" component={PRE21PVEntry}/>
 

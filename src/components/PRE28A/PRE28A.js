@@ -36,6 +36,20 @@ class PRE28A extends Component {
         if (this.state.polling === 0) {
             alert("Please select the necessary fields !")
         } else {
+            // axios.get('https://cors-anywhere.herokuapp.com/https://dev.tabulation.ecdev.opensource.lk/office?limit=20&offset=0&officeType=DistrictCentre', {
+            //     headers: {
+            //         'Access-Control-Allow-Origin': '*',
+            //         'Access-Control-Allow-Methods': 'GET',
+            //         'Access-Control-Allow-Headers': 'Content-Type',
+            //         'X-Requested-With': 'XMLHttpRequest'
+            //     }
+            // }).then(res => {
+            //     console.log("Election" + res.data[0])
+            //     this.setState({
+            //         offices: res.data
+            //     })
+            // })
+            //     .catch((error) => console.log(error));
             this.props.history.replace('/PRE28A-Entry/' + this.state.polling)
         }
     }
@@ -90,7 +104,9 @@ class PRE28A extends Component {
             selectedPollingStation: event.target.value,
             name: event.target.name
         });
+
         this.setState({polling: event.target.value});
+
     };
 
     componentDidMount() {
