@@ -18,7 +18,6 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {TableRowColumn} from "material-ui";
 
 class CE201Entry extends Component {
     constructor(props, context) {
@@ -40,9 +39,10 @@ class CE201Entry extends Component {
     }
 
     handleClickOpen() {
-        console.log("open")
-        this.setState({open: true});
+        alert("Successfully Created the TallySheet - CE201")
+        this.props.history.replace('/Home')
     }
+
     handleBack() {
         this.props.history.replace('/CE201')
     }

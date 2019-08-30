@@ -97,7 +97,8 @@ class PRE21Entry extends Component {
     }
 
     handleClickOpen() {
-        this.setState({open: true});
+        alert("Successfully Created the TallySheet - PRE21")
+        this.props.history.replace('/Home')
     }
 
     handleBack() {
@@ -173,7 +174,7 @@ class PRE21Entry extends Component {
                                 Presidential Election 2019
                             </Typography>
                             <Typography variant="h6" gutterBottom>
-                                Invalid Ballot Count ( PRE-21 ) - TallySheet ID : {this.props.match.params.name}
+                                Invalid Ballot Count ( PRE-21 ) - Tally Sheet ID : {this.props.match.params.name}
                             </Typography>
                         </div>
 

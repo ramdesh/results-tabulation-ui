@@ -70,9 +70,7 @@ class PRE41Entry extends Component {
 
         event.preventDefault()
         if (this.state.content[1].count === null || this.state.content[2].count === null ||
-            this.state.content[3].count === null || this.state.content[4].count === null ||
-            this.state.content[1].countInWords === null || this.state.content[2].countInWords === null ||
-            this.state.content[3].countInWords === null || this.state.content[4].countInWords === null) {
+            this.state.content[1].countInWords === null || this.state.content[2].countInWords === null ) {
             alert("Please Enter the necessary fields !")
 
         } else {
@@ -117,14 +115,8 @@ class PRE41Entry extends Component {
                                     this.props.history.replace('/Home')
                                 })
 
-
-
                         }
-                    })
-                        .catch((error) => console.log(error));
-
-
-
+                    }).catch((error) => console.log(error));
 
 
                     })
@@ -196,7 +188,7 @@ class PRE41Entry extends Component {
                             Presidential Election 2019
                         </Typography>
                         <Typography variant="h6" gutterBottom>
-                            Party-Wise Count ( PRE-41 ) - TallySheet ID : {this.props.match.params.name}
+                            Party-Wise Count ( PRE-41 ) - Tally Sheet ID : {this.props.match.params.name}
                         </Typography>
                     </div>
                     <Paper>

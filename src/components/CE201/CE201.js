@@ -157,7 +157,7 @@ class CE201 extends Component {
                             Presidential Election 2019
                         </Typography>
                         <Typography variant="h6" gutterBottom>
-                           CE -201
+                           CE - 201
                         </Typography>
                     </div>
 

@@ -16,6 +16,7 @@ const NavBar = () => {
             </AppBar>
             <div id="main_nav">
                 <ul>
+
                     <li>
                         <a href="">Election Commission</a>
                         <ul>
@@ -52,12 +53,12 @@ const NavBar = () => {
                                     <li>
                                         <a href="">Votes</a>
                                         <ul>
-                                            <li><a href="/PRE21">PRE-21</a></li>
-                                            <li><a href="/PRE41">PRE-41</a></li>
-                                            <li><a href="/PRE34CO">PRE-34-CO</a></li>
-                                            <li><a href="/CE201">CE-201</a></li>
-                                            <li><a href="/PRE28A">PRE-28A</a></li>
                                             <li><a href="/PRE28">PRE-28</a></li>
+                                            <li><a href="/PRE28A">PRE-28A</a></li>
+                                            <li><a href="/CE201">CE-201</a></li>
+                                            <li><a href="/PRE41">PRE-41</a></li>
+                                            <li><a href="/PRE21">PRE-21</a></li>
+                                            <li><a href="/PRE34CO">PRE-34-CO</a></li>
                                         </ul>
                                     </li>
                                     <li>
@@ -66,7 +67,6 @@ const NavBar = () => {
                                             <li><a href="/PRE21PV">PRE-21 PV</a></li>
                                             <li><a href="/PRE41PV">PRE-41 PV</a></li>
                                             <li><a href="/PRE34COPV">PRE-34-CO PV</a></li>
-
                                         </ul>
                                     </li>
                                 </ul>
@@ -81,6 +81,7 @@ const NavBar = () => {
 
                         </ul>
                     </li>
+
                 </ul>
             </div>
         </div>
