@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import Grid from '@material-ui/core/Grid';
-import axios from '../../axios-base';
+import axios from 'axios';
 import {
     Button,
     FormControl,
@@ -31,7 +31,7 @@ class Reports extends Component {
     handleClickOpen() {
         console.log("open")
 
-        axios.post('/report/' + this.state.value + '/version')
+        axios.post('https://cors-anywhere.herokuapp.com/https://dev.tabulation.ecdev.opensource.lk/report/' + this.state.value + '/version')
             .then(res => {
                 console.log(res);
                 console.log(res.data.reportFile.urlInline);
@@ -53,7 +53,7 @@ class Reports extends Component {
     handleChange = event => {
         this.setState({selected: event.target.value, name: event.target.name});
 
-        axios.get('/report?limit=20&offset=0&officeId=' + event.target.value, {
+        axios.get('https://cors-anywhere.herokuapp.com/https://dev.tabulation.ecdev.opensource.lk/report?limit=20&offset=0&officeId=' + event.target.value, {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -73,7 +73,7 @@ class Reports extends Component {
 
     componentDidMount() {
         console.log("Election Result Test")
-        axios.get('/office?limit=20&offset=0&electionId=1', {
+        axios.get('https://cors-anywhere.herokuapp.com/https://dev.tabulation.ecdev.opensource.lk/office?limit=20&offset=0&electionId=1', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',

@@ -20,22 +20,63 @@ class ReportsEntry extends Component {
         super(props, context);
         this.handleClose = this.handleClose.bind(this);
         this.handleClickOpen = this.handleClickOpen.bind(this);
+        this.handleClickOpenPoll = this.handleClickOpenPoll.bind(this);
+        this.handleClickOpenElectorate = this.handleClickOpenElectorate.bind(this);
         this.state = {
 
             open: false,
             allUsers: [],
             offices: [],
+            pollingStation: [],
+            electionDivision: [],
             selected: 'Select',
             selected1: 'Select',
+            selected2: 'Select',
+            selected3: 'Select',
             setOpen: false,
             report: [],
+            reportPolling: [],
+            reportDivision: [],
             value: 0
 
         };
     }
 
     handleClickOpen() {
-        axios.post('/report/' + this.state.value + '/version')
+
+        axios.post('/report/' + this.state.report + '/version')
+            .then(res => {
+                console.log(res);
+                console.log(res.data.reportFile.urlInline);
+                window.open(res.data.reportFile.urlInline, "_blank")
+            });
+
+        // window.open('newPageUrl', "https://dev.tabulation.ecdev.opensource.lk")
+
+
+        this.setState({open: true});
+    }
+
+    handleClickOpenPoll() {
+
+        axios.post('/report/' + this.state.reportPolling + '/version')
+            .then(res => {
+                console.log(res);
+                console.log(res.data.reportFile.urlInline);
+                window.open(res.data.reportFile.urlInline, "_blank")
+            });
+
+        // window.open('newPageUrl', "https://dev.tabulation.ecdev.opensource.lk")
+
+
+        this.setState({open: true});
+    }
+
+
+
+    handleClickOpenElectorate() {
+
+        axios.post('/report/' + this.state.reportDivision + '/version')
             .then(res => {
                 console.log(res);
                 console.log(res.data.reportFile.urlInline);
@@ -57,7 +98,8 @@ class ReportsEntry extends Component {
     handleChange = event => {
         this.setState({selected: event.target.value, name: event.target.name});
 
-        axios.get('/report?limit=20&offset=0&officeId=' + event.target.value, {
+
+        axios.get('/report?limit=20&offset=0&officeId='+ event.target.value+'&reportCode=PRE-41' , {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -65,9 +107,51 @@ class ReportsEntry extends Component {
                 'X-Requested-With': 'XMLHttpRequest'
             }
         }).then(res => {
-            console.log("Election" + res.data)
+            console.log("Election" + res.data[0].reportId)
             this.setState({
-                report: res.data
+                report: res.data[0].reportId
+            })
+        })
+            .catch((error) => console.log(error));
+
+    };
+
+    handlePoll = event => {
+        this.setState({selected1: event.target.value, name: event.target.name});
+
+
+        axios.get('/report?limit=20&offset=0&officeId='+ event.target.value+'&reportCode=PRE-30-PD' , {
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET',
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        }).then(res => {
+            console.log("Election" + res.data[0].reportId)
+            this.setState({
+                reportPolling: res.data[0].reportId
+            })
+        })
+            .catch((error) => console.log(error));
+
+    };
+
+    handleDivision = event => {
+        this.setState({selected2: event.target.value, name: event.target.name});
+
+
+        axios.get('/report?limit=20&offset=0&officeId='+ event.target.value+'&reportCode=PRE-30-ED' , {
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET',
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        }).then(res => {
+            console.log("Election" + res.data[0].reportId)
+            this.setState({
+                reportDivision: res.data[0].reportId
             })
         })
             .catch((error) => console.log(error));
@@ -77,7 +161,7 @@ class ReportsEntry extends Component {
 
     componentDidMount() {
         console.log("Election Result Test")
-        axios.get('/office?limit=20&offset=0&electionId=1', {
+        axios.get('/office?limit=20&offset=0&officeType=CountingCentre', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -91,11 +175,41 @@ class ReportsEntry extends Component {
             })
         })
             .catch((error) => console.log(error));
+
+        axios.get('/electorate?limit=20&offset=0&electorateType=PollingDivision', {
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET',
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        }).then(res => {
+            console.log("Election" + res.data)
+            this.setState({
+                pollingStation: res.data
+            })
+        })
+            .catch((error) => console.log(error));
+
+        axios.get('/electorate?limit=20&offset=0&electorateType=ElectoralDistrict', {
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET',
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        }).then(res => {
+            console.log("Election" + res.data)
+            this.setState({
+                electionDivision: res.data
+            })
+        })
+            .catch((error) => console.log(error));
     }
 
     handleReport = event => {
         this.setState({selected1: event.target.value, name: event.target.name});
-        this.setState({value: event.target.value});
+
     };
 
 
@@ -125,15 +239,15 @@ class ReportsEntry extends Component {
                                         <InputLabel>
                                             Counting Center
                                         </InputLabel>
-                                        <Select className="width50" value={this.state.selectedDistrictCentre} onChange={this.handleChange}>
-                                            {this.state.offices.map((districtCentre, idx) => (
-                                                <MenuItem value={districtCentre.officeId}>{districtCentre.officeName}</MenuItem>
+                                        <Select className="width50" value={this.state.selected} onChange={this.handleChange}>
+                                            {this.state.offices.map((CountingCenter, idx) => (
+                                                <MenuItem value={CountingCenter.officeId}>{CountingCenter.officeName}</MenuItem>
                                             ))}
                                         </Select>
                                     </FormControl>
                                 </TableCell>
                                 <TableCell>
-                                    <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleBack}
+                                    <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleClickOpen}
                                             className="button">Generate</Button>
                                 </TableCell>
 
@@ -145,15 +259,15 @@ class ReportsEntry extends Component {
                                         <InputLabel>
                                             Polling Station
                                         </InputLabel>
-                                        <Select className="width50" value={this.state.selectedDistrictCentre} onChange={this.handleChange}>
-                                            {this.state.offices.map((districtCentre, idx) => (
-                                                <MenuItem value={districtCentre.officeId}>{districtCentre.officeName}</MenuItem>
+                                        <Select className="width50" value={this.state.selected1} onChange={this.handlePoll}>
+                                            {this.state.pollingStation.map((districtCentre, idx) => (
+                                                <MenuItem value={districtCentre.electorateId}>{districtCentre.electorateName}</MenuItem>
                                             ))}
                                         </Select>
                                     </FormControl>
                                 </TableCell>
                                 <TableCell>
-                                    <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleBack}
+                                    <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleClickOpenPoll}
                                             className="button">Generate</Button>
                                 </TableCell>
 
@@ -165,15 +279,15 @@ class ReportsEntry extends Component {
                                         <InputLabel>
                                             Electoral District
                                         </InputLabel>
-                                        <Select className="width50" value={this.state.selectedDistrictCentre} onChange={this.handleChange}>
-                                            {this.state.offices.map((districtCentre, idx) => (
-                                                <MenuItem value={districtCentre.officeId}>{districtCentre.officeName}</MenuItem>
+                                        <Select className="width50" value={this.state.selected2} onChange={this.handleDivision}>
+                                            {this.state.electionDivision.map((electralDivision, idx) => (
+                                                <MenuItem value={electralDivision.electorateId}>{electralDivision.electorateName}</MenuItem>
                                             ))}
                                         </Select>
                                     </FormControl>
                                 </TableCell>
                                 <TableCell>
-                                    <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleBack}
+                                    <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleClickOpenElectorate}
                                             className="button">Generate</Button>
                                 </TableCell>
                             </TableRow>
