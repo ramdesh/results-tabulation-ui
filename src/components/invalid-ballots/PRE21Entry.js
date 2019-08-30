@@ -220,7 +220,7 @@ class PRE21Entry extends Component {
                                 })}
                                 <TableRow>
                                     <TableCell style={{fontSize: 13}}></TableCell>
-                                    <TableCell style={{fontSize: 14, color:'black',fontWeight: 'bold'}}>Total Rejected Ballot Count</TableCell>
+                                    <TableCell style={{fontSize: 14, color:'black'}}>Total Rejected Ballot Count</TableCell>
                                 <TableCell style={{width:'30%',fontSize: 13}}>
                                     <TextField
                                         id="outlined-dense"
