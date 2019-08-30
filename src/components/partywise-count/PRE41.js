@@ -29,7 +29,7 @@ class PRE41 extends Component {
             countingCenter: [],
             pollingStation: [],
             polling: 0,
-
+            // url params
             counting:0,
             tallySheetId:0
         };
@@ -57,7 +57,7 @@ class PRE41 extends Component {
                         tallySheetId: res.data[0].tallySheetId
                     })
                     console.log("ID :" + res.data[0].tallySheetId)
-                    this.props.history.replace('/PRE41-Entry/' + this.state.tallySheetId)
+                    this.props.history.replace('/PRE41-Entry/' + this.state.tallySheetId + '/'+ this.state.counting)
                 }
             })
                 .catch((error) => console.log(error));

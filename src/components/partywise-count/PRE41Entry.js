@@ -63,7 +63,9 @@ class PRE41Entry extends Component {
 
     handleSubmit = (event) => {
         const {name} = this.props.match.params
-        console.log("Id URL >>> ", name)
+        const {name2} = this.props.match.params
+        console.log("Id office >>> ", name2)
+
 
         event.preventDefault()
         if (this.state.content[1].count === null || this.state.content[2].count === null ||
@@ -164,7 +166,13 @@ class PRE41Entry extends Component {
         this.setState({
             tallySheetId: name
         })
+        const {name2} = this.props.match.params
+        console.log("Id office >>> ", name2)
+        this.setState({
+            officeId: name2
+        })
         console.log("Set >>> ", this.state.tallySheetId)
+        console.log("Set >>> ", this.state.officeId)
         axios.get('/election?limit=20&offset=0', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
