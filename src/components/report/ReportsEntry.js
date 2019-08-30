@@ -292,6 +292,26 @@ class ReportsEntry extends Component {
                                 </TableCell>
                             </TableRow>
 
+                            <TableRow>
+                                <TableCell style={{fontSize: 13,fontWeight: 'bold'}}>All Island ED</TableCell>
+                                <TableCell style={{fontSize: 13}}>
+                                </TableCell>
+                                <TableCell>
+                                    <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleClickOpenElectorate}
+                                            className="button">Generate</Button>
+                                </TableCell>
+                            </TableRow>
+
+                            <TableRow>
+                                <TableCell style={{fontSize: 13,fontWeight: 'bold'}}>All Island</TableCell>
+                                <TableCell style={{fontSize: 13}}>
+                                </TableCell>
+                                <TableCell>
+                                    <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleClickOpenElectorate}
+                                            className="button">Generate</Button>
+                                </TableCell>
+                            </TableRow>
+
 
 
                         </TableBody>
