@@ -32,6 +32,7 @@ class CE201Entry extends Component {
             selected: 'Select',
             setOpen: false,
 
+            pollingStations : [],
             tallySheetId: 0,
             reportId:0,
             officeId:0
@@ -60,18 +61,17 @@ class CE201Entry extends Component {
 
     componentDidMount() {
         const {name} = this.props.match.params
-        console.log("TallySheet ID >>> ", name)
+        console.log("TallySheet ID : ", name)
         this.setState({
             tallySheetId: name
         })
         const {name2} = this.props.match.params
-        console.log("Id office >>> ", name2)
+        console.log("Id office :", name2)
         this.setState({
             officeId: name2
         })
-        console.log("Set >>> ", this.state.tallySheetId)
-        console.log("Set >>> ", this.state.officeId)
-        axios.get('/election?limit=20&offset=0', {
+
+        axios.get('/office?limit=20&offset=0&parentOfficeId='+name2, {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -79,31 +79,13 @@ class CE201Entry extends Component {
                 'X-Requested-With': 'XMLHttpRequest'
             }
         }).then(res => {
-            console.log("Election" + res.data[0].parties)
-            this.setElection(res.data[0])
+            console.log("Test" + res.data[0])
+            this.setState({
+                pollingStations: res.data
+            })
+            // this.setElection(res.data[0])
         }).catch((error) => console.log(error));
     }
-
-
-    // componentDidMount() {
-    //     console.log("Election Result Test")
-    //     // let token = localStorage.getItem('id_token');
-    //     axios.get('/office?limit=20&offset=0&electionId=1', {
-    //         headers: {
-    //             'Access-Control-Allow-Origin': '*',
-    //             'Access-Control-Allow-Methods': 'GET',
-    //             'Access-Control-Allow-Headers': 'Content-Type',
-    //             'X-Requested-With': 'XMLHttpRequest'
-    //         }
-    //     }).then(res => {
-    //         console.log("Election" + res.data)
-    //         this.setState({
-    //             offices: res.data
-    //         })
-    //     })
-    //         .catch((error) => console.log(error));
-    // }
-
 
     render() {
         return (
@@ -114,7 +96,7 @@ class CE201Entry extends Component {
                             Presidential Election 2019
                         </Typography>
                         <Typography variant="h6" gutterBottom>
-                            CE-201 - TallySheet ID : {this.props.match.params.name}
+                            CE-201 - Tally Sheet ID : {this.props.match.params.name}
                         </Typography>
                     </div>
 
@@ -123,279 +105,96 @@ class CE201Entry extends Component {
                         <Table>
                             <TableHead>
                                 <TableRow>
-                                    <TableCell style={{fontSize: 14, fontWeight: 'bold'}}>Polling Station</TableCell>
-                                    <TableCell style={{fontSize: 14, fontWeight: 'bold'}}>Ballot Box IDs</TableCell>
-                                    <TableCell style={{fontSize: 14, fontWeight: 'bold'}}>Invalid Ballot Paper Count</TableCell>
-                                    <TableCell style={{fontSize: 14, fontWeight: 'bold'}}>Issued Ballot Paper Count</TableCell>
-                                    <TableCell style={{fontSize: 14, fontWeight: 'bold'}}>Received Ballot Paper Count</TableCell>
-                                    <TableCell style={{fontSize: 14, fontWeight: 'bold'}}>Ordinary Ballot Paper Count</TableCell>
-                                    <TableCell style={{fontSize: 14, fontWeight: 'bold'}}>Tender Ballot Paper Count</TableCell>
+                                    <TableCell style={{fontSize: 14, fontWeight: 'bold', color:'black'}}>Polling Station</TableCell>
+                                    <TableCell style={{fontSize: 14, fontWeight: 'bold', color:'black'}}>Ballot Box IDs</TableCell>
+                                    <TableCell style={{fontSize: 14, fontWeight: 'bold', color:'black'}}>Invalid Ballot Paper Count</TableCell>
+                                    <TableCell style={{fontSize: 14, fontWeight: 'bold', color:'black'}}>Issued Ballot Paper Count</TableCell>
+                                    <TableCell style={{fontSize: 14, fontWeight: 'bold', color:'black'}}>Received Ballot P.C.</TableCell>
+                                    <TableCell style={{fontSize: 14, fontWeight: 'bold', color:'black'}}>Ordinary Ballot Paper Count</TableCell>
+                                    <TableCell style={{fontSize: 14, fontWeight: 'bold', color:'black'}}>Tender Ballot Paper Count</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                <TableRow>
+                                {this.state.pollingStations.map((station, idx) => (
+                                    <TableRow>
                                     <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
+                                        {station.officeName}
                                     </TableCell>
-                                    <TableCell style={{fontSize: 13 ,width: '150px'}}>
+                                    <TableCell style={{fontSize: 13 ,width: '13%'}}>
                                         <TextField
                                             id="outlined-dense"
                                             margin="dense"
                                             variant="outlined"
-                                            placeholder="Box ID"
+                                            placeholder="Box Id"
                                             placeholderTextSize = "8px"
                                         />
                                         <TextField
                                             id="outlined-dense"
                                             margin="dense"
                                             variant="outlined"
-                                            placeholder="Box ID"
+                                            placeholder="Box Id"
                                         />
                                         <TextField
                                             id="outlined-dense"
                                             margin="dense"
                                             variant="outlined"
-                                            placeholder="Box ID"
-                                        />
-                                    </TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
+                                            placeholder="Box Id"
                                         />
                                     </TableCell>
-                                    <TableCell style={{fontSize: 13}}>
+                                        <TableCell style={{fontSize: 13 ,width: '11%'}}>
                                         <TextField
                                             id="outlined-dense"
                                             margin="dense"
                                             variant="outlined"
+                                            placeholder="Count"
                                         />
                                     </TableCell>
-                                    <TableCell style={{fontSize: 13}}>
+                                        <TableCell style={{fontSize: 13 ,width: '11%'}}>
                                         <TextField
                                             id="outlined-dense"
                                             margin="dense"
                                             variant="outlined"
+                                            placeholder="Count"
                                         />
                                     </TableCell>
-                                    <TableCell style={{fontSize: 13}}>
+                                        <TableCell style={{fontSize: 13 ,width: '11%'}}>
                                         <TextField
                                             id="outlined-dense"
                                             margin="dense"
                                             variant="outlined"
+                                            placeholder="Count"
                                         />
                                     </TableCell>
-                                    <TableCell style={{fontSize: 13}}>
+                                        <TableCell style={{fontSize: 13 ,width: '18%'}}>
                                         <TextField
                                             id="outlined-dense"
                                             margin="dense"
                                             variant="outlined"
+                                            placeholder="Ballot Paper Account"
+                                        />
+                                        <TextField
+                                            id="outlined-dense"
+                                            margin="dense"
+                                            variant="outlined"
+                                            placeholder="Box Count"
                                         />
                                     </TableCell>
-                                </TableRow>
-
-                                <TableRow>
-                                    <TableCell style={{fontSize: 13}}>
+                                        <TableCell style={{fontSize: 13 ,width: '18%'}}>
                                         <TextField
                                             id="outlined-dense"
                                             margin="dense"
                                             variant="outlined"
-                                        />
-                                    </TableCell>
-                                    <TableCell style={{fontSize: 13 ,width: '150px'}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                            placeholder="Box ID"
-                                            placeholderTextSize = "8px"
+                                            placeholder="Ballot Paper Account"
                                         />
                                         <TextField
                                             id="outlined-dense"
                                             margin="dense"
                                             variant="outlined"
-                                            placeholder="Box ID"
-                                        />
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                            placeholder="Box ID"
-                                        />
-                                    </TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
+                                            placeholder="Box Count"
                                         />
                                     </TableCell>
                                 </TableRow>
-
-                                <TableRow>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
-                                    <TableCell style={{fontSize: 13 ,width: '150px'}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                            placeholder="Box ID"
-                                            placeholderTextSize = "8px"
-                                        />
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                            placeholder="Box ID"
-                                        />
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                            placeholder="Box ID"
-                                        />
-                                    </TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
-                                </TableRow>
-
-                                <TableRow>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
-                                    <TableCell style={{fontSize: 13 ,width: '150px'}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                            placeholder="Box ID"
-                                            placeholderTextSize = "8px"
-                                        />
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                            placeholder="Box ID"
-                                        />
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                            placeholder="Box ID"
-                                        />
-                                    </TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
-                                </TableRow>
+                                ))}
 
                             </TableBody>
                         </Table>
