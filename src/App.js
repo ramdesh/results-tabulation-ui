@@ -23,6 +23,7 @@ import CE201Entry from "./components/CE201/CE201Entry";
 import PRE28Entry from "./components/PRE28/PRE28Entry";
 import PRE28 from "./components/PRE28/PRE28";
 import ReportsEntry from "./components/report/ReportsEntry";
+import Home from "./components/home/Home";
 
 function App() {
     return (
@@ -59,7 +60,7 @@ function App() {
                 <Route exact path="/PRE41PV" component={PRE41PV}/>
                 <Route exact path="/PRE41PV-Entry" component={PRE41PVEntry}/>
 
-
+                <Route exact path="/Home" component={Home}/>
 
                 <Route exact path="/PRE34COPV" component={PRE34COPV}/>
                 <Route exact path="/PRE34COPV-Entry" component={PRE34COPVEntry}/>

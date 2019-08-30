@@ -15,7 +15,7 @@ class Login extends Component {
     }
 
     handleClickOpen() {
-        this.props.history.replace('/Main')
+        this.props.history.replace('/Home')
     }
 
     componentDidMount() {

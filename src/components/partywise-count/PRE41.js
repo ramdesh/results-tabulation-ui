@@ -28,7 +28,10 @@ class PRE41 extends Component {
             selectedPollingStation: '',
             countingCenter: [],
             pollingStation: [],
-            polling: 0
+            polling: 0,
+
+            counting:0,
+            tallySheetId:0
         };
     }
 
@@ -36,21 +39,29 @@ class PRE41 extends Component {
         if (this.state.selectedCountingCenter === '') {
             alert("Please select the necessary fields !")
         } else {
-            // axios.get('https://cors-anywhere.herokuapp.com/https://dev.tabulation.ecdev.opensource.lk/office?limit=20&offset=0&officeType=DistrictCentre', {
-            //     headers: {
-            //         'Access-Control-Allow-Origin': '*',
-            //         'Access-Control-Allow-Methods': 'GET',
-            //         'Access-Control-Allow-Headers': 'Content-Type',
-            //         'X-Requested-With': 'XMLHttpRequest'
-            //     }
-            // }).then(res => {
-            //     console.log("Election" + res.data[0])
-            //     this.setState({
-            //         offices: res.data
-            //     })
-            // })
-            //     .catch((error) => console.log(error));
-            this.props.history.replace('/PRE41-Entry/' + this.state.polling)
+            axios.get('/tally-sheet?limit=20&offset=0&officeId='+this.state.counting+'&tallySheetCode=PRE-41', {
+                headers: {
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'GET',
+                    'Access-Control-Allow-Headers': 'Content-Type',
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            }).then(res => {
+                // console.log("Election ID :" + res.data[0])
+
+                // console.log("ID :" + res.data[0].tallySheetID)
+                if (res.data.length === 0) {
+                    alert("No TallySheets Allocated for here !")
+                } else {
+                    this.setState({
+                        tallySheetId: res.data[0].tallySheetId
+                    })
+                    console.log("ID :" + res.data[0].tallySheetId)
+                    this.props.history.replace('/PRE41-Entry/' + this.state.tallySheetId)
+                }
+            })
+                .catch((error) => console.log(error));
+
         }
     }
 
@@ -80,7 +91,17 @@ class PRE41 extends Component {
 
     };
 
+
     handleCounting = event => {
+        this.setState({
+            selectedCountingCenter: event.target.value,
+            name: event.target.name
+        });
+
+        this.setState({counting: event.target.value});
+    };
+
+    handleCounting1 = event => {
         this.setState({selectedCountingCenter: event.target.value, name: event.target.name});
         axios.get('/office?limit=20&offset=0&parentOfficeId=' + event.target.value + '&officeType=PollingStation', {
             headers: {
@@ -167,19 +188,19 @@ class PRE41 extends Component {
                                 </Select>
                             </FormControl>
                         </Grid>
-                        <Grid item xs={5} sm={4}>
-                            <FormControl variant="outlined" margin="dense">
-                                <InputLabel>
-                                    Polling Station
-                                </InputLabel>
-                                <Select className="width50" value={this.state.selectedPollingStation}
-                                        onChange={this.handlePolling}>
-                                    {this.state.pollingStation.map((pollingStation, idx) => (
-                                        <MenuItem value={pollingStation.officeId}>{pollingStation.officeName}</MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                        </Grid>
+                        {/*<Grid item xs={5} sm={4}>*/}
+                            {/*<FormControl variant="outlined" margin="dense">*/}
+                                {/*<InputLabel>*/}
+                                    {/*Polling Station*/}
+                                {/*</InputLabel>*/}
+                                {/*<Select className="width50" value={this.state.selectedPollingStation}*/}
+                                        {/*onChange={this.handlePolling}>*/}
+                                    {/*{this.state.pollingStation.map((pollingStation, idx) => (*/}
+                                        {/*<MenuItem value={pollingStation.officeId}>{pollingStation.officeName}</MenuItem>*/}
+                                    {/*))}*/}
+                                {/*</Select>*/}
+                            {/*</FormControl>*/}
+                        {/*</Grid>*/}
                     </Grid>
                 </div>
 

@@ -64,6 +64,7 @@ class PRE34CO extends Component {
         })
             .catch((error) => console.log(error));
 
+
     };
 
     handleCounting = event => {
@@ -82,6 +83,7 @@ class PRE34CO extends Component {
             })
         })
             .catch((error) => console.log(error));
+
 
     };
 

@@ -28,10 +28,13 @@ class PRE41Entry extends Component {
         this.state = {
             open: false,
             selected: 'Select',
-            tallySheetID: 24,
+            tallySheetId: 0,
             candidatesList: [],
             candidatesMap: {},
-            content: {}
+            content: {},
+
+            reportId:0,
+            officeId:0
         };
     }
 
@@ -59,6 +62,9 @@ class PRE41Entry extends Component {
     }
 
     handleSubmit = (event) => {
+        const {name} = this.props.match.params
+        console.log("Id URL >>> ", name)
+
         event.preventDefault()
         if (this.state.content[1].count === null || this.state.content[2].count === null ||
             this.state.content[3].count === null || this.state.content[4].count === null ||
@@ -67,7 +73,7 @@ class PRE41Entry extends Component {
             alert("Please Enter the necessary fields !")
 
         } else {
-            axios.post('/tally-sheet/PRE-41/' + this.state.tallySheetID + '/version', {
+            axios.post('/tally-sheet/PRE-41/' + name + '/version', {
                 "content": this.state.candidatesList.map((candidateId) => {
                     return {
                         "candidateId": candidateId,
@@ -80,16 +86,45 @@ class PRE41Entry extends Component {
                     console.log(res);
                     console.log("Result Test" + res.data);
                     alert("Successfully Created the TallySheet - PRE41")
-                    axios.post('/report/5/version')
-                        .then(res => {
-                            console.log(res);
-                            console.log("Result NEW " + res.data.reportFile.urlInline);
-                            const link = res.data.reportFile.urlInline
-                            window.open(res.data.reportFile.urlInline, "_blank")
-                            // this.props.history.replace('/Main')
-                        })
 
-                })
+                    // To get the report ID using office ID and Code
+
+                    axios.get('/report?limit=20&offset=0&officeId='+this.state.officeId+'&reportCode=PRE-41', {
+                        headers: {
+                            'Access-Control-Allow-Origin': '*',
+                            'Access-Control-Allow-Methods': 'GET',
+                            'Access-Control-Allow-Headers': 'Content-Type',
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    }).then(res => {
+                        if (res.data.length === 0) {
+                            alert("No Report Generation Allowed !")
+                        } else {
+                            this.setState({
+                                reportId: res.data[0].reportId
+                            })
+                            console.log("Report ID :" + res.data[0].reportId)
+
+                            axios.post('/report/'+res.data[0].reportId+'/version')
+                                .then(res => {
+                                    console.log(res);
+                                    console.log("Result NEW " + res.data.reportFile.urlInline);
+                                    const link = res.data.reportFile.urlInline
+                                    window.open(res.data.reportFile.urlInline, "_blank")
+                                    this.props.history.replace('/Home')
+                                })
+
+
+
+                        }
+                    })
+                        .catch((error) => console.log(error));
+
+
+
+
+
+                    })
         }
     }
 
@@ -125,7 +160,11 @@ class PRE41Entry extends Component {
 
     componentDidMount() {
         const {name} = this.props.match.params
-        console.log("ld", name)
+        console.log("Id URL >>> ", name)
+        this.setState({
+            tallySheetId: name
+        })
+        console.log("Set >>> ", this.state.tallySheetId)
         axios.get('/election?limit=20&offset=0', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
@@ -148,7 +187,7 @@ class PRE41Entry extends Component {
                             Presidential Election 2019
                         </Typography>
                         <Typography variant="h6" gutterBottom>
-                            Party-Wise Count ( PRE-41 ) - Polling Station ID : {this.props.match.params.name}
+                            Party-Wise Count ( PRE-41 ) - TallySheet ID : {this.props.match.params.name}
                         </Typography>
                     </div>
                     <Paper>
