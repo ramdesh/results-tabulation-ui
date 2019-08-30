@@ -22,6 +22,8 @@ class ReportsEntry extends Component {
         this.handleClickOpen = this.handleClickOpen.bind(this);
         this.handleClickOpenPoll = this.handleClickOpenPoll.bind(this);
         this.handleClickOpenElectorate = this.handleClickOpenElectorate.bind(this);
+        this.handleClickAllIsland = this.handleClickAllIsland.bind(this);
+
         this.state = {
 
             open: false,
@@ -37,6 +39,7 @@ class ReportsEntry extends Component {
             report: [],
             reportPolling: [],
             reportDivision: [],
+            reportAllisland: [],
             value: 0
 
         };
@@ -88,6 +91,44 @@ class ReportsEntry extends Component {
 
         this.setState({open: true});
     }
+
+    handleClickAllIsland() {
+        axios.get('/report?limit=20&offset=0&reportCode=PRE-AllIslandReport' , {
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET',
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        }).then(res => {
+            console.log("Election" + res.data[0].reportId)
+            this.setState({
+                reportAllisland: res.data[0].reportId
+            })
+        })
+            .catch((error) => console.log(error));
+
+
+
+
+        axios.post('/report/' + this.state.reportAllisland + '/version',{timeout:4000})
+            .then(res => {
+                console.log(res);
+                console.log(res.data.reportFile.urlInline);
+                window.open(res.data.reportFile.urlInline, "_blank")
+            });
+
+
+
+
+        this.setState({open: true});
+    }
+
+
+
+
+
+
 
     // modal controllers
     handleClose() {
@@ -213,6 +254,8 @@ class ReportsEntry extends Component {
     };
 
 
+
+
     render() {
         return (
             <div style={{margin: '3%',marginRight:'8%'}}>
@@ -297,8 +340,8 @@ class ReportsEntry extends Component {
                                 <TableCell style={{fontSize: 13}}>
                                 </TableCell>
                                 <TableCell>
-                                    <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleClickOpenElectorate}
-                                            className="button">Generate</Button>
+                                    <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}}
+                                            className="button1">Generate</Button>
                                 </TableCell>
                             </TableRow>
 
@@ -307,7 +350,7 @@ class ReportsEntry extends Component {
                                 <TableCell style={{fontSize: 13}}>
                                 </TableCell>
                                 <TableCell>
-                                    <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleClickOpenElectorate}
+                                    <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleClickAllIsland}
                                             className="button">Generate</Button>
                                 </TableCell>
                             </TableRow>
