@@ -33,11 +33,12 @@ function App() {
                 <Route exact path="/" component={Login}/>
                 <Route exact path="/report" component={Reports}/>
                 <Route exact path="/ReportsEntry" component={ReportsEntry}/>
+
                 <Route exact path="/CE201" component={CE201}/>
-                <Route exact path="/CE201-Entry" component={CE201Entry}/>
+                <Route exact path="/CE201-Entry/:name/:name2" component={CE201Entry}/>
 
                 <Route exact path="/PRE21" component={PRE21}/>
-                <Route exact path="/PRE21-Entry/:name" component={PRE21Entry}/>
+                <Route exact path="/PRE21-Entry/:name/:name2" component={PRE21Entry}/>
 
                 <Route exact path="/PRE34CO" component={PRE34CO}/>
                 <Route exact path="/PRE34CO-Entry/:name" component={PRE34COEntry}/>

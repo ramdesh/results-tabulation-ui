@@ -38,6 +38,10 @@ class PRE21Entry extends Component {
             invalidTypesList : [],
             invalidTypesMap : {},
 
+            tallySheetId: 0,
+            reportId:0,
+            officeId:0
+
         };
     }
 
@@ -109,7 +113,21 @@ class PRE21Entry extends Component {
         this.setState({selected: event.target.value, name: event.target.name});
     };
 
+
     componentDidMount() {
+        const {name} = this.props.match.params
+        console.log("Id URL >>> ", name)
+        this.setState({
+            tallySheetId: name
+        })
+        const {name2} = this.props.match.params
+        console.log("Id office >>> ", name2)
+        this.setState({
+            officeId: name2
+        })
+        console.log("Set >>> ", this.state.tallySheetId)
+        console.log("Set >>> ", this.state.officeId)
+
         axios.get('/election?limit=20&offset=0', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
@@ -155,7 +173,7 @@ class PRE21Entry extends Component {
                                 Presidential Election 2019
                             </Typography>
                             <Typography variant="h6" gutterBottom>
-                                Invalid Ballot Count ( PRE-21 ) - Polling Station ID : {this.props.match.params.name}
+                                Invalid Ballot Count ( PRE-21 ) - TallySheet ID : {this.props.match.params.name}
                             </Typography>
                         </div>
 
