@@ -84,7 +84,13 @@ class CE201 extends Component {
         }).then(res => {
             console.log("Election" + res.data[0])
             this.setState({
-                countingCenter: res.data
+                countingCenter: res.data.sort(function (a,b) {
+                    if (parseInt(a.officeName) > parseInt(b.officeName)) {
+                        return 1;
+                    } else {
+                        return -1;
+                    }
+                })
             })
         })
             .catch((error) => console.log(error));

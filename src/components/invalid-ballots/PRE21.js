@@ -75,7 +75,7 @@ class PRE21 extends Component {
     handleChange = event => {
         this.setState({selectedDistrictCentre: event.target.value, name: event.target.name});
         console.log(event.target.value)
-        axios.get('/office?limit=20&offset=0&parentOfficeId=' + event.target.value + '&officeType=CountingCentre', {
+        axios.get('/office?limit=1000&offset=0&parentOfficeId=' + event.target.value + '&officeType=CountingCentre', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -85,7 +85,13 @@ class PRE21 extends Component {
         }).then(res => {
             console.log("Election" + res.data[0])
             this.setState({
-                countingCenter: res.data
+                countingCenter: res.data.sort(function (a,b) {
+                    if (parseInt(a.officeName) > parseInt(b.officeName)) {
+                        return 1;
+                    } else {
+                        return -1;
+                    }
+                })
             })
         })
             .catch((error) => console.log(error));

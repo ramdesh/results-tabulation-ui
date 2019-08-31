@@ -93,7 +93,7 @@ class ReportsEntry extends Component {
     }
 
     handleClickAllIsland() {
-        axios.get('/report?limit=20&offset=0&reportCode=PRE-AllIslandReport' , {
+        axios.get('/report?limit=1000&offset=0&reportCode=PRE-AllIslandReport' , {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -140,7 +140,7 @@ class ReportsEntry extends Component {
         this.setState({selected: event.target.value, name: event.target.name});
 
 
-        axios.get('/report?limit=20&offset=0&officeId='+ event.target.value+'&reportCode=PRE-41' , {
+        axios.get('/report?limit=1000&offset=0&officeId='+ event.target.value+'&reportCode=PRE-41' , {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -161,7 +161,7 @@ class ReportsEntry extends Component {
         this.setState({selected1: event.target.value, name: event.target.name});
 
 
-        axios.get('/report?limit=20&offset=0&officeId='+ event.target.value+'&reportCode=PRE-30-PD' , {
+        axios.get('/report?limit=1000&offset=0&officeId='+ event.target.value+'&reportCode=PRE-30-PD' , {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -182,7 +182,7 @@ class ReportsEntry extends Component {
         this.setState({selected2: event.target.value, name: event.target.name});
 
 
-        axios.get('/report?limit=20&offset=0&officeId='+ event.target.value+'&reportCode=PRE-30-ED' , {
+        axios.get('/report?limit=1000&offset=0&officeId='+ event.target.value+'&reportCode=PRE-30-ED' , {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -202,7 +202,7 @@ class ReportsEntry extends Component {
 
     componentDidMount() {
         console.log("Election Result Test")
-        axios.get('/office?limit=20&offset=0&officeType=CountingCentre', {
+        axios.get('/office?limit=1000&offset=0&officeType=CountingCentre', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -212,12 +212,18 @@ class ReportsEntry extends Component {
         }).then(res => {
             console.log("Election" + res.data)
             this.setState({
-                offices: res.data
+                offices: res.data.sort(function (a,b) {
+                    if (parseInt(a.officeName) > parseInt(b.officeName)) {
+                        return 1;
+                    } else {
+                        return -1;
+                    }
+                })
             })
         })
             .catch((error) => console.log(error));
 
-        axios.get('/electorate?limit=20&offset=0&electorateType=PollingDivision', {
+        axios.get('/electorate?limit=1000&offset=0&electorateType=PollingDivision', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -232,7 +238,7 @@ class ReportsEntry extends Component {
         })
             .catch((error) => console.log(error));
 
-        axios.get('/electorate?limit=20&offset=0&electorateType=ElectoralDistrict', {
+        axios.get('/electorate?limit=1000&offset=0&electorateType=ElectoralDistrict', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -300,7 +306,7 @@ class ReportsEntry extends Component {
                                 <TableCell style={{fontSize: 13}}>
                                     <FormControl variant="outlined" margin="dense">
                                         <InputLabel>
-                                            Polling Station
+                                            Polling Division
                                         </InputLabel>
                                         <Select className="width50" value={this.state.selected1} onChange={this.handlePoll}>
                                             {this.state.pollingStation.map((districtCentre, idx) => (
