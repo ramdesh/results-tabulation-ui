@@ -39,7 +39,7 @@ class PRE41 extends Component {
         if (this.state.selectedCountingCenter === '') {
             alert("Please select the necessary fields !")
         } else {
-            axios.get('/tally-sheet?limit=20&offset=0&officeId='+this.state.counting+'&tallySheetCode=PRE-41', {
+            axios.get('/tally-sheet?limit=1000&offset=0&officeId='+this.state.counting+'&tallySheetCode=PRE-41', {
                 headers: {
                     'Access-Control-Allow-Origin': '*',
                     'Access-Control-Allow-Methods': 'GET',
@@ -74,7 +74,7 @@ class PRE41 extends Component {
     handleChange = event => {
         this.setState({selectedDistrictCentre: event.target.value, name: event.target.name});
         console.log(event.target.value)
-        axios.get('/office?limit=20&offset=0&parentOfficeId=' + event.target.value + '&officeType=CountingCentre', {
+        axios.get('/office?limit=1000&offset=0&parentOfficeId=' + event.target.value + '&officeType=CountingCentre', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -103,7 +103,7 @@ class PRE41 extends Component {
 
     handleCounting1 = event => {
         this.setState({selectedCountingCenter: event.target.value, name: event.target.name});
-        axios.get('/office?limit=20&offset=0&parentOfficeId=' + event.target.value + '&officeType=PollingStation', {
+        axios.get('/office?limit=1000&offset=0&parentOfficeId=' + event.target.value + '&officeType=PollingStation', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -131,7 +131,7 @@ class PRE41 extends Component {
     };
 
     componentDidMount() {
-        axios.get('/office?limit=20&offset=0&officeType=DistrictCentre', {
+        axios.get('/office?limit=1000&offset=0&officeType=DistrictCentre', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',

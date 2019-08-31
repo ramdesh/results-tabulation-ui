@@ -71,7 +71,7 @@ class CE201Entry extends Component {
             officeId: name2
         })
 
-        axios.get('/office?limit=20&offset=0&parentOfficeId='+name2, {
+        axios.get('/office?limit=1000&offset=0&parentOfficeId='+name2, {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',

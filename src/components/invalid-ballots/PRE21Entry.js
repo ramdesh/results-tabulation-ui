@@ -129,7 +129,7 @@ class PRE21Entry extends Component {
         console.log("Set >>> ", this.state.tallySheetId)
         console.log("Set >>> ", this.state.officeId)
 
-        axios.get('/election?limit=20&offset=0', {
+        axios.get('/election?limit=1000&offset=0', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',

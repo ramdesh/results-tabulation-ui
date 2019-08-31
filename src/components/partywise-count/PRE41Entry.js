@@ -90,7 +90,7 @@ class PRE41Entry extends Component {
 
                     // To get the report ID using office ID and Code
 
-                    axios.get('/report?limit=20&offset=0&officeId='+this.state.officeId+'&reportCode=PRE-41', {
+                    axios.get('/report?limit=1000&offset=0&officeId='+this.state.officeId+'&reportCode=PRE-41', {
                         headers: {
                             'Access-Control-Allow-Origin': '*',
                             'Access-Control-Allow-Methods': 'GET',
@@ -166,7 +166,7 @@ class PRE41Entry extends Component {
         })
         console.log("Set >>> ", this.state.tallySheetId)
         console.log("Set >>> ", this.state.officeId)
-        axios.get('/election?limit=20&offset=0', {
+        axios.get('/election?limit=1000&offset=0', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
