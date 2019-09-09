@@ -47,9 +47,6 @@ class CE201 extends Component {
                     'X-Requested-With': 'XMLHttpRequest'
                 }
             }).then(res => {
-                // console.log("Election ID :" + res.data[0])
-
-                // console.log("ID :" + res.data[0].tallySheetID)
                 if (res.data.length === 0) {
                     alert("No TallySheets Allocated for here !")
                 } else {

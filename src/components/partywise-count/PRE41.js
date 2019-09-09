@@ -5,6 +5,8 @@ import {
     Typography,
     Button,
     FormControl,
+    Breadcrumbs,
+    Link,
     InputLabel,
     Select,
 } from '@material-ui/core';
@@ -30,8 +32,8 @@ class PRE41 extends Component {
             pollingStation: [],
             polling: 0,
             // url params
-            counting:0,
-            tallySheetId:0
+            counting: 0,
+            tallySheetId: 0
         };
     }
 
@@ -39,7 +41,7 @@ class PRE41 extends Component {
         if (this.state.selectedCountingCenter === '') {
             alert("Please select the necessary fields !")
         } else {
-            axios.get('/tally-sheet?limit=1000&offset=0&officeId='+this.state.counting+'&tallySheetCode=PRE-41', {
+            axios.get('/tally-sheet?limit=1000&offset=0&officeId=' + this.state.counting + '&tallySheetCode=PRE-41', {
                 headers: {
                     'Access-Control-Allow-Origin': '*',
                     'Access-Control-Allow-Methods': 'GET',
@@ -47,8 +49,6 @@ class PRE41 extends Component {
                     'X-Requested-With': 'XMLHttpRequest'
                 }
             }).then(res => {
-                // console.log("Election ID :" + res.data[0])
-
                 // console.log("ID :" + res.data[0].tallySheetID)
                 if (res.data.length === 0) {
                     alert("No TallySheets Allocated for here !")
@@ -57,7 +57,7 @@ class PRE41 extends Component {
                         tallySheetId: res.data[0].tallySheetId
                     })
                     console.log("ID :" + res.data[0].tallySheetId)
-                    this.props.history.replace('/PRE41-Entry/' + this.state.tallySheetId + '/'+ this.state.counting)
+                    this.props.history.replace('/PRE41-Entry/' + this.state.tallySheetId + '/' + this.state.counting)
                 }
             })
                 .catch((error) => console.log(error));
@@ -84,7 +84,7 @@ class PRE41 extends Component {
         }).then(res => {
             console.log("Election" + res.data[0])
             this.setState({
-                countingCenter: res.data.sort(function (a,b) {
+                countingCenter: res.data.sort(function (a, b) {
                     if (parseInt(a.officeName) > parseInt(b.officeName)) {
                         return 1;
                     } else {
@@ -153,12 +153,28 @@ class PRE41 extends Component {
             .catch((error) => console.log(error));
     }
 
-
     render() {
         return (
             <div style={{margin: '3%'}}>
                 <div>
+
                     <div style={{marginBottom: '3%'}}>
+
+                        <Breadcrumbs  style={{marginLeft:'0.2%',marginBottom: '2%',fontSize:'14px'}} separator="/" aria-label="breadcrumb">
+                            <Link color="inherit" href="/Home" >
+                                Home
+                            </Link>
+                            <Link color="inherit" href="/Home" >
+                                Counting Centre
+                            </Link>
+                            <Link color="inherit" href="/PRE41">
+                                Data Entry
+                            </Link>
+                            <Link color="inherit" href="/PRE41">
+                                Votes - PRE 41
+                            </Link>
+                            {/*<Typography color="textPrimary"></Typography>*/}
+                        </Breadcrumbs>
                         <Typography variant="h4" gutterBottom>
                             Presidential Election 2019
                         </Typography>
@@ -195,17 +211,17 @@ class PRE41 extends Component {
                             </FormControl>
                         </Grid>
                         {/*<Grid item xs={5} sm={4}>*/}
-                            {/*<FormControl variant="outlined" margin="dense">*/}
-                                {/*<InputLabel>*/}
-                                    {/*Polling Station*/}
-                                {/*</InputLabel>*/}
-                                {/*<Select className="width50" value={this.state.selectedPollingStation}*/}
-                                        {/*onChange={this.handlePolling}>*/}
-                                    {/*{this.state.pollingStation.map((pollingStation, idx) => (*/}
-                                        {/*<MenuItem value={pollingStation.officeId}>{pollingStation.officeName}</MenuItem>*/}
-                                    {/*))}*/}
-                                {/*</Select>*/}
-                            {/*</FormControl>*/}
+                        {/*<FormControl variant="outlined" margin="dense">*/}
+                        {/*<InputLabel>*/}
+                        {/*Polling Station*/}
+                        {/*</InputLabel>*/}
+                        {/*<Select className="width50" value={this.state.selectedPollingStation}*/}
+                        {/*onChange={this.handlePolling}>*/}
+                        {/*{this.state.pollingStation.map((pollingStation, idx) => (*/}
+                        {/*<MenuItem value={pollingStation.officeId}>{pollingStation.officeName}</MenuItem>*/}
+                        {/*))}*/}
+                        {/*</Select>*/}
+                        {/*</FormControl>*/}
                         {/*</Grid>*/}
                     </Grid>
                 </div>

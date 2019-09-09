@@ -71,3 +71,10 @@
 #root {
     padding: 0px;
 }
+
+.header {
+    background-color: #222323;
+    color: white;
+    position: sticky;
+    top: 0;
+}

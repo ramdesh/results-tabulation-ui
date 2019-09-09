@@ -10,7 +10,9 @@ import {
     TableCell,
     TableHead,
     TableBody,
-    Paper
+    Paper,
+    Breadcrumbs,
+    Link
 } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -32,10 +34,9 @@ class PRE41Entry extends Component {
             candidatesList: [],
             candidatesMap: {},
             content: {},
-
             tallySheetId: 0,
-            reportId:0,
-            officeId:0
+            reportId: 0,
+            officeId: 0
         };
     }
 
@@ -70,7 +71,7 @@ class PRE41Entry extends Component {
 
         event.preventDefault()
         if (this.state.content[1].count === null || this.state.content[2].count === null ||
-            this.state.content[1].countInWords === null || this.state.content[2].countInWords === null ) {
+            this.state.content[1].countInWords === null || this.state.content[2].countInWords === null) {
             alert("Please Enter the necessary fields !")
 
         } else {
@@ -90,7 +91,7 @@ class PRE41Entry extends Component {
 
                     // To get the report ID using office ID and Code
 
-                    axios.get('/report?limit=1000&offset=0&officeId='+this.state.officeId+'&reportCode=PRE-41', {
+                    axios.get('/report?limit=1000&offset=0&officeId=' + this.state.officeId + '&reportCode=PRE-41', {
                         headers: {
                             'Access-Control-Allow-Origin': '*',
                             'Access-Control-Allow-Methods': 'GET',
@@ -106,7 +107,7 @@ class PRE41Entry extends Component {
                             })
                             console.log("Report ID :" + res.data[0].reportId)
 
-                            axios.post('/report/'+res.data[0].reportId+'/version')
+                            axios.post('/report/' + res.data[0].reportId + '/version')
                                 .then(res => {
                                     console.log(res);
                                     console.log("Result NEW " + res.data.reportFile.urlInline);
@@ -118,8 +119,7 @@ class PRE41Entry extends Component {
                         }
                     }).catch((error) => console.log(error));
 
-
-                    })
+                })
         }
     }
 
@@ -184,22 +184,51 @@ class PRE41Entry extends Component {
             <div style={{margin: '3%'}}>
                 <div>
                     <div style={{marginBottom: '3%'}}>
+
+                        <Breadcrumbs style={{marginLeft: '0.2%', marginBottom: '2%', fontSize: '14px'}} separator="/"
+                                     aria-label="breadcrumb">
+                            <Link color="inherit" href="/Home">
+                                Home
+                            </Link>
+                            <Link color="inherit" href="/Home">
+                                Counting Centre
+                            </Link>
+                            <Link color="inherit">
+                                Data Entry
+                            </Link>
+                            <Link color="inherit" href="/PRE41">
+                                Votes - PRE 41
+                            </Link>
+                            <Link color="inherit">
+                                Tally Sheet
+                            </Link>
+                            {/*<Typography color="textPrimary"></Typography>*/}
+                        </Breadcrumbs>
+
                         <Typography variant="h4" gutterBottom>
                             Presidential Election 2019
                         </Typography>
                         <Typography variant="h6" gutterBottom>
-                            Party-Wise Count ( PRE-41 ) - Tally Sheet ID : {this.props.match.params.name}
+                            PRE-41 - Tally Sheet ID : {this.props.match.params.name}
                         </Typography>
                     </div>
                     <Paper>
                         <Table>
                             <TableHead>
                                 <TableRow>
-                                    <TableCell style={{color:'black',fontSize: 13, fontWeight: 'bold'}}>Symbol</TableCell>
-                                    <TableCell style={{color:'black',fontSize: 13, fontWeight: 'bold'}}>Name of Candidate</TableCell>
-                                    <TableCell style={{color:'black',fontSize: 13, fontWeight: 'bold'}}>No of votes in
+                                    <TableCell className="header" style={{
+                                        color: 'white',
+                                        fontSize: 13,
+                                        fontWeight: 'bold'
+                                    }}>Symbol</TableCell>
+                                    <TableCell className="header"
+                                               style={{color: 'white', fontSize: 13, fontWeight: 'bold'}}>Name of
+                                        Candidate</TableCell>
+                                    <TableCell className="header"
+                                               style={{color: 'white', fontSize: 13, fontWeight: 'bold'}}>No of votes in
                                         figures</TableCell>
-                                    <TableCell style={{color:'black',fontSize: 13, fontWeight: 'bold'}}>No of votes in
+                                    <TableCell className="header"
+                                               style={{color: 'white', fontSize: 13, fontWeight: 'bold'}}>No of votes in
                                         words</TableCell>
                                 </TableRow>
                             </TableHead>
@@ -207,14 +236,14 @@ class PRE41Entry extends Component {
                                 {this.state.candidatesList.map((candidateId, idx) => {
 
                                     var candidate = this.state.candidateMap[candidateId];
-
                                     return <TableRow>
-                                        <TableCell style={{fontSize: 13}}>{candidate.partyName}</TableCell>
+                                        <TableCell
+                                            style={{width: '20%', fontSize: 13}}>{candidate.partyName}</TableCell>
 
                                         <TableCell
-                                            style={{fontSize: 13}}>{candidate.candidateName}</TableCell>
+                                            style={{width: '30%', fontSize: 13}}>{candidate.candidateName}</TableCell>
 
-                                        <TableCell style={{width:'30%',fontSize: 13}}>
+                                        <TableCell style={{width: '25%', fontSize: 13}}>
                                             <TextField
                                                 id="outlined-dense"
                                                 margin="dense"
@@ -224,7 +253,7 @@ class PRE41Entry extends Component {
                                                 onChange={this.handleInputChange(candidateId, "count")}
                                             />
                                         </TableCell>
-                                        <TableCell style={{width:'40%',fontSize: 13}}>
+                                        <TableCell style={{width: '30%', fontSize: 13}}>
                                             <TextField
                                                 id="outlined-dense"
                                                 margin="dense"
