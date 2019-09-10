@@ -216,6 +216,9 @@ class PRE41Entry extends Component {
                         <Table>
                             <TableHead>
                                 <TableRow>
+                                    <TableCell className="header"
+                                               style={{color: 'white', fontSize: 13, fontWeight: 'bold'}}>
+                                        No</TableCell>
                                     <TableCell className="header" style={{
                                         color: 'white',
                                         fontSize: 13,
@@ -237,6 +240,9 @@ class PRE41Entry extends Component {
 
                                     var candidate = this.state.candidateMap[candidateId];
                                     return <TableRow>
+                                        <TableCell
+                                            style={{width: '4%', fontSize: 13}}>{idx+1}</TableCell>
+
                                         <TableCell
                                             style={{width: '20%', fontSize: 13}}>{candidate.partyName}</TableCell>
 

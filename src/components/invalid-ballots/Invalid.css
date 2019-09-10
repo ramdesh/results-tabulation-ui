@@ -78,3 +78,8 @@
     position: sticky;
     top: 0;
 }
+
+.input {
+    font-style: italic;
+
+}

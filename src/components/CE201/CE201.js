@@ -7,6 +7,8 @@ import {
     FormControl,
     InputLabel,
     Select,
+    Breadcrumbs,
+    Link
 } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -155,6 +157,21 @@ class CE201 extends Component {
         return (
             <div style={{margin: '3%'}}>
                 <div>
+                    <Breadcrumbs  style={{marginLeft:'0.2%',marginBottom: '2%',fontSize:'14px'}} separator="/" aria-label="breadcrumb">
+                        <Link color="inherit" href="/Home" >
+                            Home
+                        </Link>
+                        <Link color="inherit" href="/Home" >
+                            Counting Centre
+                        </Link>
+                        <Link color="inherit" href="/CE201">
+                            Data Entry
+                        </Link>
+                        <Link color="inherit" href="/CE201">
+                            Votes - CE 201
+                        </Link>
+                        {/*<Typography color="textPrimary"></Typography>*/}
+                    </Breadcrumbs>
                     <div style={{marginBottom: '3%'}}>
                         <Typography variant="h4" gutterBottom>
                             Presidential Election 2019

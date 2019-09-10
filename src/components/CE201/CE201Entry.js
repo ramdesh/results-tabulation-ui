@@ -1,5 +1,4 @@
 import React, {Component} from 'react'
-import Grid from '@material-ui/core/Grid';
 import axios from '../../axios-base';
 import {
     Typography,
@@ -11,6 +10,8 @@ import {
     TableCell,
     TableHead,
     TableBody,
+    Breadcrumbs,
+    Link,
     Paper
 } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
@@ -91,6 +92,21 @@ class CE201Entry extends Component {
         return (
             <div style={{margin: '3%'}}>
                 <div>
+                    <Breadcrumbs  style={{marginLeft:'0.2%',marginBottom: '2%',fontSize:'14px'}} separator="/" aria-label="breadcrumb">
+                        <Link color="inherit" href="/Home" >
+                            Home
+                        </Link>
+                        <Link color="inherit" href="/Home" >
+                            Counting Centre
+                        </Link>
+                        <Link color="inherit" href="/CE201">
+                            Data Entry
+                        </Link>
+                        <Link color="inherit" href="/CE201">
+                            Votes - CE 201
+                        </Link>
+                        {/*<Typography color="textPrimary"></Typography>*/}
+                    </Breadcrumbs>
                     <div style={{marginBottom: '3%'}}>
                         <Typography variant="h4" gutterBottom>
                             Presidential Election 2019
@@ -105,19 +121,24 @@ class CE201Entry extends Component {
                         <Table>
                             <TableHead>
                                 <TableRow>
-                                    <TableCell style={{fontSize: 14, fontWeight: 'bold', color:'black'}}>Polling Station</TableCell>
-                                    <TableCell style={{fontSize: 14, fontWeight: 'bold', color:'black'}}>Ballot Box IDs</TableCell>
-                                    <TableCell style={{fontSize: 14, fontWeight: 'bold', color:'black'}}>Invalid Ballot Paper Count</TableCell>
-                                    <TableCell style={{fontSize: 14, fontWeight: 'bold', color:'black'}}>Issued Ballot Paper Count</TableCell>
-                                    <TableCell style={{fontSize: 14, fontWeight: 'bold', color:'black'}}>Received Ballot P.C.</TableCell>
-                                    <TableCell style={{fontSize: 14, fontWeight: 'bold', color:'black'}}>Ordinary Ballot Paper Count</TableCell>
-                                    <TableCell style={{fontSize: 14, fontWeight: 'bold', color:'black'}}>Tender Ballot Paper Count</TableCell>
+                                    <TableCell className="header" style={{fontSize: 14, fontWeight: 'bold', color:'white'}}>Polling District No</TableCell>
+                                    <TableCell className="header" style={{fontSize: 14, fontWeight: 'bold', color:'white'}}>Polling Station</TableCell>
+                                    <TableCell className="header" style={{fontSize: 14, fontWeight: 'bold', color:'white'}}>Ballot Box IDs</TableCell>
+                                    <TableCell className="header" style={{fontSize: 14, fontWeight: 'bold', color:'white'}}>No of Ballot Papers Received</TableCell>
+                                    <TableCell className="header" style={{fontSize: 14, fontWeight: 'bold', color:'white'}}>No of Spoilt Ballots </TableCell>
+                                    <TableCell className="header" style={{fontSize: 14, fontWeight: 'bold', color:'white'}}>No of Issued Ballots</TableCell>
+                                    <TableCell className="header" style={{fontSize: 14, fontWeight: 'bold', color:'white'}}>No of Unused Ballots</TableCell>
+                                    <TableCell className="header" style={{fontSize: 14, fontWeight: 'bold', color:'white'}}>Ordinary Ballot Paper Count</TableCell>
+                                    <TableCell className="header" style={{fontSize: 14, fontWeight: 'bold', color:'white'}}>Tender Ballot Paper Count</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
                                 {this.state.pollingStations.map((station, idx) => (
                                     <TableRow>
-                                    <TableCell style={{fontSize: 13}}>
+                                        <TableCell style={{fontSize: 13,width: '1%'}}>
+                                            {idx}
+                                        </TableCell>
+                                    <TableCell style={{fontSize: 13,width: '5%'}}>
                                         {station.officeName}
                                     </TableCell>
                                     <TableCell style={{fontSize: 13 ,width: '13%'}}>
@@ -126,7 +147,6 @@ class CE201Entry extends Component {
                                             margin="dense"
                                             variant="outlined"
                                             placeholder="Box Id"
-                                            placeholderTextSize = "8px"
                                         />
                                         <TextField
                                             id="outlined-dense"
@@ -150,6 +170,14 @@ class CE201Entry extends Component {
                                         />
                                     </TableCell>
                                         <TableCell style={{fontSize: 13 ,width: '11%'}}>
+                                            <TextField
+                                                id="outlined-dense"
+                                                margin="dense"
+                                                variant="outlined"
+                                                placeholder="Count"
+                                            />
+                                        </TableCell>
+                                        <TableCell style={{fontSize: 13 ,width: '11%'}}>
                                         <TextField
                                             id="outlined-dense"
                                             margin="dense"
@@ -165,12 +193,12 @@ class CE201Entry extends Component {
                                             placeholder="Count"
                                         />
                                     </TableCell>
-                                        <TableCell style={{fontSize: 13 ,width: '18%'}}>
+                                        <TableCell style={{fontSize: 13,width: '19%'}}>
                                         <TextField
                                             id="outlined-dense"
                                             margin="dense"
                                             variant="outlined"
-                                            placeholder="Ballot Paper Account"
+                                            placeholder="Ballot Paper A."
                                         />
                                         <TextField
                                             id="outlined-dense"
@@ -178,13 +206,19 @@ class CE201Entry extends Component {
                                             variant="outlined"
                                             placeholder="Box Count"
                                         />
+                                            <TextField
+                                                id="outlined-dense"
+                                                margin="dense"
+                                                variant="outlined"
+                                                placeholder="Difference"
+                                            />
                                     </TableCell>
-                                        <TableCell style={{fontSize: 13 ,width: '18%'}}>
+                                        <TableCell style={{fontSize: 13,width: '20%'}}>
                                         <TextField
                                             id="outlined-dense"
                                             margin="dense"
                                             variant="outlined"
-                                            placeholder="Ballot Paper Account"
+                                            placeholder="Ballot Paper A."
                                         />
                                         <TextField
                                             id="outlined-dense"
@@ -192,6 +226,12 @@ class CE201Entry extends Component {
                                             variant="outlined"
                                             placeholder="Box Count"
                                         />
+                                            <TextField
+                                                id="outlined-dense"
+                                                margin="dense"
+                                                variant="outlined"
+                                                placeholder="Difference"
+                                            />
                                     </TableCell>
                                 </TableRow>
                                 ))}
