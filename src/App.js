@@ -35,7 +35,7 @@ function App() {
                 <Route exact path="/ReportsEntry" component={ReportsEntry}/>
 
                 <Route exact path="/CE201" component={CE201}/>
-                <Route exact path="/CE201-Entry/:name/:name2" component={CE201Entry}/>
+                <Route exact path="/CE201-Entry/:name/:name2/:countingId" component={CE201Entry}/>
 
                 <Route exact path="/PRE21" component={PRE21}/>
                 <Route exact path="/PRE21-Entry/:name/:name2" component={PRE21Entry}/>

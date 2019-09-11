@@ -22,6 +22,7 @@ class CE201 extends Component {
         super(props);
         this.handleClose = this.handleClose.bind(this);
         this.handleClickOpen = this.handleClickOpen.bind(this);
+        this.handleBack = this.handleBack.bind(this);
         this.state = {
             open: false,
             offices: [],
@@ -32,16 +33,21 @@ class CE201 extends Component {
             pollingStation: [],
             polling: 0,
             // url params
-            counting:0,
+            countingId: 0,
+            countingName: 0,
             tallySheetId:0
         };
+    }
+
+    handleBack() {
+        this.props.history.replace('/Home')
     }
 
     handleClickOpen() {
         if (this.state.selectedCountingCenter === '') {
             alert("Please select the necessary fields !")
         } else {
-            axios.get('/tally-sheet?limit=1000&offset=0&officeId='+this.state.counting+'&tallySheetCode=CE-201', {
+            axios.get('/tally-sheet?limit=1000&offset=0&officeId='+this.state.countingId+'&tallySheetCode=CE-201', {
                 headers: {
                     'Access-Control-Allow-Origin': '*',
                     'Access-Control-Allow-Methods': 'GET',
@@ -56,7 +62,7 @@ class CE201 extends Component {
                         tallySheetId: res.data[0].tallySheetId
                     })
                     console.log("ID :" + res.data[0].tallySheetId)
-                    this.props.history.replace('/CE201-Entry/' + this.state.tallySheetId + '/'+ this.state.counting)
+                    this.props.history.replace('/CE201-Entry/' + this.state.tallySheetId + '/'+ this.state.countingName+ '/'+ this.state.countingId)
                 }
             })
                 .catch((error) => console.log(error));
@@ -98,12 +104,30 @@ class CE201 extends Component {
 
 
     handleCounting = event => {
+        // set the counting center name
         this.setState({
             selectedCountingCenter: event.target.value,
             name: event.target.name
         });
 
-        this.setState({counting: event.target.value});
+        this.setState({countingName: event.target.value});
+
+        console.log("Counting Name" + event.target.value)
+        // get the officeId by officeName
+        axios.get('/office?limit=20&offset=0&officeName=' + event.target.value + '&officeType=CountingCentre', {
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET',
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        }).then(res => {
+            console.log("Counting Center Id" + res.data[0].officeId)
+            this.setState({
+                countingId: res.data[0].officeId
+            })
+        })
+            .catch((error) => console.log(error));
     };
 
     handleCounting1 = event => {
@@ -203,7 +227,7 @@ class CE201 extends Component {
                                 <Select className="width50" value={this.state.selectedCountingCenter}
                                         onChange={this.handleCounting}>
                                     {this.state.countingCenter.map((countingCenter, idx) => (
-                                        <MenuItem value={countingCenter.officeId}>{countingCenter.officeName}</MenuItem>
+                                        <MenuItem value={countingCenter.officeName}>{countingCenter.officeName}</MenuItem>
                                     ))}
                                 </Select>
                             </FormControl>
@@ -225,6 +249,8 @@ class CE201 extends Component {
                 </div>
 
                 <div style={{marginLeft: '76%', marginTop: '4%'}}>
+                    <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleBack}
+                            className="button">Back</Button>
                     <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleClickOpen}
                             className="button">Next</Button>
                 </div>
