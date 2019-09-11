@@ -20,6 +20,7 @@ class PRE21 extends Component {
     constructor(props) {
         super(props);
         this.handleClose = this.handleClose.bind(this);
+        this.handleBack = this.handleBack.bind(this);
         this.handleClickOpen = this.handleClickOpen.bind(this);
         this.state = {
             open: false,
@@ -34,6 +35,10 @@ class PRE21 extends Component {
             counting:0,
             tallySheetId:0
         };
+    }
+
+    handleBack() {
+        this.props.history.replace('/Home')
     }
 
     handleClickOpen() {
@@ -212,6 +217,8 @@ class PRE21 extends Component {
                 </div>
 
                 <div style={{marginLeft: '76%', marginTop: '4%'}}>
+                    <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleBack}
+                            className="button">Back</Button>
                     <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleClickOpen}
                             className="button">Next</Button>
                 </div>

@@ -63,6 +63,7 @@ class PRE41Entry extends Component {
         })
     }
 
+    // submit the form data
     handleSubmit = (event) => {
         const {name} = this.props.match.params
         const {name2} = this.props.match.params
@@ -86,40 +87,15 @@ class PRE41Entry extends Component {
             })
                 .then(res => {
                     console.log(res);
-                    console.log("Result Test" + res.data);
+                    console.log("Result Test" + res.data.htmlUrl);
+                    console.log("Result Test1" + res.data[0]);
                     alert("Successfully Created the TallySheet - PRE41")
 
-                    // To get the report ID using office ID and Code
+                    const htmlURL = res.data.htmlUrl
+                    window.open(htmlURL, "_blank")
+                    this.props.history.replace('/Home')
 
-                    axios.get('/report?limit=1000&offset=0&officeId=' + this.state.officeId + '&reportCode=PRE-41', {
-                        headers: {
-                            'Access-Control-Allow-Origin': '*',
-                            'Access-Control-Allow-Methods': 'GET',
-                            'Access-Control-Allow-Headers': 'Content-Type',
-                            'X-Requested-With': 'XMLHttpRequest'
-                        }
-                    }).then(res => {
-                        if (res.data.length === 0) {
-                            alert("No Report Generation Allowed !")
-                        } else {
-                            this.setState({
-                                reportId: res.data[0].reportId
-                            })
-                            console.log("Report ID :" + res.data[0].reportId)
-
-                            axios.post('/report/' + res.data[0].reportId + '/version')
-                                .then(res => {
-                                    console.log(res);
-                                    console.log("Result NEW " + res.data.reportFile.urlInline);
-                                    const link = res.data.reportFile.urlInline
-                                    window.open(res.data.reportFile.urlInline, "_blank")
-                                    this.props.history.replace('/Home')
-                                })
-
-                        }
-                    }).catch((error) => console.log(error));
-
-                })
+                }).catch((error) => console.log(error));
         }
     }
 
@@ -155,12 +131,12 @@ class PRE41Entry extends Component {
 
     componentDidMount() {
         const {name} = this.props.match.params
-        console.log("Id URL >>> ", name)
+        console.log("tally sheet Id ", name)
         this.setState({
             tallySheetId: name
         })
         const {name2} = this.props.match.params
-        console.log("Id office >>> ", name2)
+        console.log("Counting Hall No (Name) ", name2)
         this.setState({
             officeId: name2
         })
@@ -209,7 +185,8 @@ class PRE41Entry extends Component {
                             Presidential Election 2019
                         </Typography>
                         <Typography variant="h6" gutterBottom>
-                            PRE-41 - Tally Sheet ID : {this.props.match.params.name}
+                            PRE-41 - Counting Hall No : {this.props.match.params.name2}
+                            {/*PRE-41 - Tally Sheet ID : {this.props.match.params.name}*/}
                         </Typography>
                     </div>
                     <Paper>
@@ -242,13 +219,10 @@ class PRE41Entry extends Component {
                                     return <TableRow>
                                         <TableCell
                                             style={{width: '4%', fontSize: 13}}>{idx+1}</TableCell>
-
                                         <TableCell
                                             style={{width: '20%', fontSize: 13}}>{candidate.partyName}</TableCell>
-
                                         <TableCell
                                             style={{width: '30%', fontSize: 13}}>{candidate.candidateName}</TableCell>
-
                                         <TableCell style={{width: '25%', fontSize: 13}}>
                                             <TextField
                                                 id="outlined-dense"
