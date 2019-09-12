@@ -69,7 +69,6 @@ class PRE41Entry extends Component {
         const {name2} = this.props.match.params
         console.log("Id office >>> ", name2)
 
-
         event.preventDefault()
         if (this.state.content[1].count === null || this.state.content[2].count === null ||
             this.state.content[1].countInWords === null || this.state.content[2].countInWords === null) {

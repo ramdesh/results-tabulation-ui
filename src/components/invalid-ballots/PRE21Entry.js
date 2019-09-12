@@ -10,7 +10,9 @@ import {
     TableCell,
     TableHead,
     TableBody,
-    Paper
+    Paper,
+    Breadcrumbs,
+    Link
 } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -31,40 +33,49 @@ class PRE21Entry extends Component {
             selected: 'Select',
             setOpen: false,
 
-            candidatesList: [],
-            candidatesMap: {},
-            content: {},
+            // pollingStationsList: [],
+            // pollingStationsMap: {},
+            // content: {},
 
             invalidTypesList : [],
             invalidTypesMap : {},
+            content: {},
 
             tallySheetId: 0,
             reportId:0,
             officeId:0
-
         };
     }
 
-    setElection1(election) {
-        var parties = election.parties;
-        var candidateMap = {};
+    setElection1(pollingStations) {
+        var pollingStationsMap = {};
         var content = {};
-        var candidatesList = parties.map((party) => {
-            var candidate = party.candidates[0];
-            candidate.partyName = party.partyName;
+        console.log("List : ", pollingStations)
+        var pollingStationsList = pollingStations.map((pollingStation) => {
 
-            candidateMap[candidate.candidateId] = candidate;
-            content[candidate.candidateId] = {
-                "candidateId": candidate.candidateId,
-                "count": null,
-                "countInWords": null
+            pollingStationsMap[pollingStation.officeId] = pollingStation;
+            content[pollingStation.officeId] = {
+                "areaId": pollingStation.officeId,
+                "ballotBoxesIssued": [
+                    "string"
+                ],
+                "ballotBoxesReceived": [
+                    "string"
+                ],
+                "ballotsIssued": null,
+                "ballotsReceived": null,
+                "ballotsSpoilt": null,
+                "ballotsUnused": null,
+                "ordinaryBallotCountFromBallotPaperAccount": null,
+                "ordinaryBallotCountFromBoxCount": null,
+                "tenderedBallotCountFromBallotPaperAccount": null,
+                "tenderedBallotCountFromBoxCount": null
             };
-            return candidate.candidateId
+            return pollingStation.officeId
         })
-
         this.setState({
-            candidatesList,
-            candidateMap,
+            pollingStationsList,
+            pollingStationsMap,
             content
         })
     }
@@ -82,12 +93,11 @@ class PRE21Entry extends Component {
 
             invalidTypesMap[invalidType.invalidVoteCategoryId] = invalidType;
             content[invalidTypes.invalidVoteCategoryId] = {
+                "count" : null,
                 "invalidVoteCategoryId":  invalidType.invalidVoteCategoryId,
-                "count" : null
             };
             return invalidType.invalidVoteCategoryId
         })
-
 
         this.setState({
             invalidTypesList,
@@ -137,30 +147,54 @@ class PRE21Entry extends Component {
                 'X-Requested-With': 'XMLHttpRequest'
             }
         }).then(res => {
-            console.log("Election" + res.data[0].invalidVoteCategories)
+            console.log("Election NEW" + res.data[0].invalidVoteCategories)
             this.setElection(res.data[0])
         }).catch((error) => console.log(error));
     }
 
+    /** submit the form data **/
+    handleSubmit = (event) => {
+        const {name} = this.props.match.params
+        const {name2} = this.props.match.params
+        console.log("Id office >>> ", name2)
+        console.log("TALLY SHEET >>> ", name)
+        event.preventDefault()
 
-    // componentDidMount() {
-    //     console.log("Election Result Test")
-    //     // let token = localStorage.getItem('id_token');
-    //     axios.get('/office?limit=20&offset=0&electionId=1', {
-    //         headers: {
-    //             'Access-Control-Allow-Origin': '*',
-    //             'Access-Control-Allow-Methods': 'GET',
-    //             'Access-Control-Allow-Headers': 'Content-Type',
-    //             'X-Requested-With': 'XMLHttpRequest'
-    //         }
-    //     }).then(res => {
-    //         console.log("Election" + res.data)
-    //         this.setState({
-    //             offices: res.data
-    //         })
-    //     })
-    //         .catch((error) => console.log(error));
-    // }
+
+        axios.post('/tally-sheet/PRE-21/' + name + '/version', {
+            "content": this.state.invalidTypesList.map((invalidTypeId) => {
+                return {
+                    "count": parseInt(this.state.content[invalidTypeId].count),
+                    "invalidVoteCategoryId": invalidTypeId,
+                }
+            })
+        })
+
+
+            .then(res => {
+                console.log("URL" + res.data.htmlUrl);
+                console.log("Result" + res.data[0]);
+                alert("Successfully Created the TallySheet - PRE 21")
+                const htmlURL = res.data.htmlUrl
+                window.open(htmlURL, "_blank")
+                this.props.history.replace('/Home')
+
+            }).catch((error) => console.log(error));
+
+    }
+
+    handleInputChange = (invalidTypeId, property) => (event) => {
+        this.setState({
+            ...this.state,
+            content: {
+                ...this.state.content,
+                [invalidTypeId]: {
+                    ...this.state.content[invalidTypeId],
+                    [property]: event.target.value
+                }
+            }
+        })
+    }
 
     render() {
         const {name} = this.props.match.params
@@ -168,27 +202,45 @@ class PRE21Entry extends Component {
         return (
             <div style={{margin: '3%',marginRight:'8%'}}>
                 <div>
-                    <div style={{marginBottom: '3%'}}>
+
                         <div style={{marginBottom: '3%'}}>
+                            <Breadcrumbs style={{marginLeft: '0.2%', marginBottom: '2%', fontSize: '14px'}} separator="/"
+                                         aria-label="breadcrumb">
+                                <Link color="inherit" href="/Home">
+                                    Home
+                                </Link>
+                                <Link color="inherit" href="/Home">
+                                    Counting Centre
+                                </Link>
+                                <Link color="inherit" href="/PRE21">
+                                    Data Entry
+                                </Link>
+                                <Link color="inherit" href="/PRE21">
+                                    Votes - PRE 21
+                                </Link>
+                                <Link color="inherit">
+                                    Tally Sheet
+                                </Link>
+                                {/*<Typography color="textPrimary"></Typography>*/}
+                            </Breadcrumbs>
+
                             <Typography variant="h4" gutterBottom>
                                 Presidential Election 2019
                             </Typography>
                             <Typography variant="h6" gutterBottom>
-                                Invalid Ballot Count ( PRE-21 ) - Tally Sheet ID : {this.props.match.params.name}
+                                Invalid Ballot Count ( PRE-21 ) - Counting Hall No : {this.props.match.params.name2}
                             </Typography>
                         </div>
-
-                    </div>
 
 
                     <Paper style={{margin: '3%'}}>
                         <Table >
                             <TableHead>
                                 <TableRow>
-                                    <TableCell style={{fontSize: 14, color:'black',fontWeight: 'bold'}}>No</TableCell>
-                                    <TableCell style={{fontSize: 14, color:'black',fontWeight: 'bold'}}>Ground For
+                                    <TableCell className="header" style={{fontSize: 14, color:'white',fontWeight: 'bold'}}>No</TableCell>
+                                    <TableCell className="header" style={{fontSize: 14, color:'white',fontWeight: 'bold'}}>Ground For
                                         Rejection</TableCell>
-                                    <TableCell style={{fontSize: 14,color:'black', fontWeight: 'bold'}}>No of Ballot Papers
+                                    <TableCell className="header" style={{fontSize: 14,color:'white', fontWeight: 'bold'}}>No of Ballot Papers
                                         Rejected</TableCell>
                                 </TableRow>
                             </TableHead>
@@ -199,21 +251,21 @@ class PRE21Entry extends Component {
                                     // var candidate = this.state.candidateMap[candidateId];
 
                                     return <TableRow>
-                                        <TableCell style={{fontSize: 13}}>{invalid.invalidVoteCategoryId}</TableCell>
-
+                                        <TableCell style={{fontSize: 13}}>{idx+1}
+                                            {/*{invalid.invalidVoteCategoryId}*/}
+                                            </TableCell>
                                         <TableCell
                                             style={{fontSize: 13}}>{invalid.categoryDescription}</TableCell>
 
                                         <TableCell style={{width:'30%',fontSize: 13}}>
                                             <TextField
-                                                id="outlined-dense"
+                                                id="count"
                                                 margin="dense"
                                                 variant="outlined"
-                                                placeholder="No of papers"
-                                                name={'votes' + (idx + 1)}
-                                                // onChange={this.handleInputChange(invalidType, "count")}
-
+                                                placeholder="Count"
+                                                onChange={this.handleInputChange(invalid.invalidVoteCategoryId, "count")}
                                             />
+
                                         </TableCell>
 
                                     </TableRow>
@@ -318,7 +370,7 @@ class PRE21Entry extends Component {
                 <div style={{marginLeft: '69%', marginTop: '2%'}}>
                     <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleBack}
                             className="button">Back</Button>
-                    <Button style={{borderRadius: 18, color: 'white'}} onClick={this.handleClickOpen}
+                    <Button style={{borderRadius: 18, color: 'white'}} onClick={this.handleSubmit}
                             className="button">Submit</Button>
                 </div>
 

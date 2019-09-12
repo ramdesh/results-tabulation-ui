@@ -7,6 +7,8 @@ import {
     FormControl,
     InputLabel,
     Select,
+    Breadcrumbs,
+    Link
 } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -32,7 +34,8 @@ class PRE21 extends Component {
             pollingStation: [],
             polling: 0,
             // url params
-            counting:0,
+            countingId: 0,
+            countingName: 0,
             tallySheetId:0
         };
     }
@@ -45,7 +48,7 @@ class PRE21 extends Component {
         if (this.state.selectedCountingCenter === '') {
             alert("Please select the necessary fields !")
         } else {
-            axios.get('/tally-sheet?limit=1000&offset=0&officeId='+this.state.counting+'&tallySheetCode=PRE-21', {
+            axios.get('/tally-sheet?limit=1000&offset=0&officeId='+this.state.countingId+'&tallySheetCode=PRE-21', {
                 headers: {
                     'Access-Control-Allow-Origin': '*',
                     'Access-Control-Allow-Methods': 'GET',
@@ -63,7 +66,7 @@ class PRE21 extends Component {
                         tallySheetId: res.data[0].tallySheetId
                     })
                     console.log("ID :" + res.data[0].tallySheetId)
-                    this.props.history.replace('/PRE21-Entry/' + this.state.tallySheetId + '/'+ this.state.counting)
+                    this.props.history.replace('/PRE21-Entry/' + this.state.tallySheetId + '/'+ this.state.countingName)
                 }
             })
                 .catch((error) => console.log(error));
@@ -105,12 +108,31 @@ class PRE21 extends Component {
 
 
     handleCounting = event => {
+        // set the counting center name
         this.setState({
             selectedCountingCenter: event.target.value,
             name: event.target.name
         });
 
-        this.setState({counting: event.target.value});
+        this.setState({countingName: event.target.value});
+        console.log("Counting Name" + event.target.value)
+
+        // get the officeId by officeName
+        axios.get('/office?limit=20&offset=0&officeName=' + event.target.value + '&officeType=CountingCentre', {
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET',
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        }).then(res => {
+            console.log("Counting Center Id" + res.data[0].officeId)
+            this.setState({
+                countingId: res.data[0].officeId
+            })
+        })
+            .catch((error) => console.log(error));
+
     };
 
     handleCounting1 = event => {
@@ -142,6 +164,7 @@ class PRE21 extends Component {
 
     };
 
+
     componentDidMount() {
         axios.get('/office?limit=1000&offset=0&officeType=DistrictCentre', {
             headers: {
@@ -165,6 +188,22 @@ class PRE21 extends Component {
             <div style={{margin: '3%'}}>
                 <div>
                     <div style={{marginBottom: '3%'}}>
+                        <Breadcrumbs style={{marginLeft: '0.2%', marginBottom: '2%', fontSize: '14px'}} separator="/"
+                                     aria-label="breadcrumb">
+                            <Link color="inherit" href="/Home">
+                                Home
+                            </Link>
+                            <Link color="inherit" href="/Home">
+                                Counting Centre
+                            </Link>
+                            <Link color="inherit" href="/PRE21">
+                                Data Entry
+                            </Link>
+                            <Link color="inherit" href="/PRE21">
+                                Votes - PRE 21
+                            </Link>
+                            {/*<Typography color="textPrimary"></Typography>*/}
+                        </Breadcrumbs>
                         <Typography variant="h4" gutterBottom>
                             Presidential Election 2019
                         </Typography>
@@ -195,7 +234,7 @@ class PRE21 extends Component {
                                 <Select className="width50" value={this.state.selectedCountingCenter}
                                         onChange={this.handleCounting}>
                                     {this.state.countingCenter.map((countingCenter, idx) => (
-                                        <MenuItem value={countingCenter.officeId}>{countingCenter.officeName}</MenuItem>
+                                        <MenuItem value={countingCenter.officeName}>{countingCenter.officeName}</MenuItem>
                                     ))}
                                 </Select>
                             </FormControl>

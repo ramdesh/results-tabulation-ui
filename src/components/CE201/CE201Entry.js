@@ -44,7 +44,6 @@ class CE201Entry extends Component {
         var pollingStationsMap = {};
         var content = {};
         console.log("List : ", pollingStations)
-
         var pollingStationsList = pollingStations.map((pollingStation) => {
 
             pollingStationsMap[pollingStation.officeId] = pollingStation;
@@ -210,7 +209,6 @@ class CE201Entry extends Component {
                             {/*CE-201 - Tally Sheet ID : {this.props.match.params.name}*/}
                         </Typography>
                     </div>
-
 
                     <Paper>
                         <Table>
