@@ -36,7 +36,8 @@ class ReportsEntry extends Component {
             selected2: 'Select',
             selected3: 'Select',
             setOpen: false,
-            report: [],
+            reportId:0,
+            reportversion: null,
             reportPolling: [],
             reportDivision: [],
             reportAllisland: [],
@@ -47,12 +48,22 @@ class ReportsEntry extends Component {
 
     handleClickOpen() {
 
-        axios.post('/report/' + this.state.report + '/version')
-            .then(res => {
-                console.log(res);
-                console.log(res.data.reportFile.urlInline);
-                window.open(res.data.reportFile.urlInline, "_blank")
-            });
+        axios.get('/tally-sheet/'+this.state.reportId+'/version/'+this.state.reportversion+'/html' , {
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET',
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        }).then(res => {
+            console.log("Election" + res)
+            // this.setState({
+            //     report: res.data[0].reportId
+            // })
+        })
+            .catch((error) => console.log(error));
+
+
 
         // window.open('newPageUrl', "https://dev.tabulation.ecdev.opensource.lk")
 
@@ -62,11 +73,11 @@ class ReportsEntry extends Component {
 
     handleClickOpenPoll() {
 
-        axios.post('/report/' + this.state.reportPolling + '/version')
+        axios.post('/tally-sheet/PRE-30-PD/'+this.state.reportPolling+'/version')
             .then(res => {
                 console.log(res);
-                console.log(res.data.reportFile.urlInline);
-                window.open(res.data.reportFile.urlInline, "_blank")
+                console.log(res.data.htmlUrl);
+                window.open(res.data.htmlUrl, "_blank")
             });
 
         // window.open('newPageUrl', "https://dev.tabulation.ecdev.opensource.lk")
@@ -136,11 +147,15 @@ class ReportsEntry extends Component {
         this.setState({open: false});
     }
 
+    // Report handling for PRE 41
     handleChange = event => {
         this.setState({selected: event.target.value, name: event.target.name});
 
+        this.setState({
+            reportId: event.target.value
+        })
 
-        axios.get('/report?limit=1000&offset=0&officeId='+ event.target.value+'&reportCode=PRE-41' , {
+        axios.get('/tally-sheet?limit=1000&offset=0&officeId='+event.target.value+'&tallySheetCode=PRE-41' , {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -148,20 +163,22 @@ class ReportsEntry extends Component {
                 'X-Requested-With': 'XMLHttpRequest'
             }
         }).then(res => {
-            console.log("Election" + res.data[0].reportId)
+            console.log(res.data[0].latestVersionId)
             this.setState({
-                report: res.data[0].reportId
+                reportversion: res.data[0].latestVersionId
             })
         })
             .catch((error) => console.log(error));
 
-    };
 
+
+    };
+   // PRD 30 PD
     handlePoll = event => {
         this.setState({selected1: event.target.value, name: event.target.name});
 
 
-        axios.get('/report?limit=1000&offset=0&officeId='+ event.target.value+'&reportCode=PRE-30-PD' , {
+        axios.get('/tally-sheet?limit=1000&offset=0&officeId='+event.target.value+'&tallySheetCode=PRE-30-PD' , {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -169,9 +186,9 @@ class ReportsEntry extends Component {
                 'X-Requested-With': 'XMLHttpRequest'
             }
         }).then(res => {
-            console.log("Election" + res.data[0].reportId)
+            console.log("Election" + res.data[0].tallySheetId)
             this.setState({
-                reportPolling: res.data[0].reportId
+                reportPolling: res.data[0].tallySheetId
             })
         })
             .catch((error) => console.log(error));
@@ -202,7 +219,7 @@ class ReportsEntry extends Component {
 
     componentDidMount() {
         console.log("Election Result Test")
-        axios.get('/office?limit=1000&offset=0&officeType=CountingCentre', {
+        axios.get('/area?limit=1000&offset=0&areaType=CountingCentre', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -213,7 +230,7 @@ class ReportsEntry extends Component {
             console.log("Election" + res.data)
             this.setState({
                 offices: res.data.sort(function (a,b) {
-                    if (parseInt(a.officeName) > parseInt(b.officeName)) {
+                    if (parseInt(a.areaName) > parseInt(b.areaName)) {
                         return 1;
                     } else {
                         return -1;
@@ -223,7 +240,7 @@ class ReportsEntry extends Component {
         })
             .catch((error) => console.log(error));
 
-        axios.get('/electorate?limit=1000&offset=0&electorateType=PollingDivision', {
+        axios.get('/area?limit=1000&offset=0&areaType=PollingDivision', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -290,7 +307,7 @@ class ReportsEntry extends Component {
                                         </InputLabel>
                                         <Select className="width50" value={this.state.selected} onChange={this.handleChange}>
                                             {this.state.offices.map((CountingCenter, idx) => (
-                                                <MenuItem value={CountingCenter.officeId}>{CountingCenter.officeName}</MenuItem>
+                                                <MenuItem value={CountingCenter.areaId}>{CountingCenter.areaName}</MenuItem>
                                             ))}
                                         </Select>
                                     </FormControl>
@@ -310,7 +327,7 @@ class ReportsEntry extends Component {
                                         </InputLabel>
                                         <Select className="width50" value={this.state.selected1} onChange={this.handlePoll}>
                                             {this.state.pollingStation.map((districtCentre, idx) => (
-                                                <MenuItem value={districtCentre.electorateId}>{districtCentre.electorateName}</MenuItem>
+                                                <MenuItem value={districtCentre.areaId}>{districtCentre.areaName}</MenuItem>
                                             ))}
                                         </Select>
                                     </FormControl>
