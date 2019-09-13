@@ -48,24 +48,32 @@ class ReportsEntry extends Component {
 
     handleClickOpen() {
 
-        axios.get('/tally-sheet/'+this.state.reportId+'/version/'+this.state.reportversion+'/html' , {
-            headers: {
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': 'GET',
-                'Access-Control-Allow-Headers': 'Content-Type',
-                'X-Requested-With': 'XMLHttpRequest'
-            }
-        }).then(res => {
-            console.log("Election" + res)
-            // this.setState({
-            //     report: res.data[0].reportId
-            // })
-        })
-            .catch((error) => console.log(error));
+        if (this.state.reportversion == null) {
+
+            alert('Report not Avialable')
+
+        }else{
+            axios.get('/tally-sheet/'+this.state.reportId+'/version/'+this.state.reportversion+'/html' , {
+                headers: {
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'GET',
+                    'Access-Control-Allow-Headers': 'Content-Type',
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            }).then(res => {
+                console.log("Election" + res)
+                // this.setState({
+                //     report: res.data[0].reportId
+                // })
+            })
+                .catch((error) => console.log(error));
 
 
 
-        window.open('https://dev.tabulation.ecdev.opensource.lk/tally-sheet/'+this.state.reportId+'/version/'+this.state.reportversion+'/html', "_blank");
+            window.open('https://dev.tabulation.ecdev.opensource.lk/tally-sheet/'+this.state.reportId+'/version/'+this.state.reportversion+'/html', "_blank");
+        }
+
+
 
 
         this.setState({open: true});
@@ -125,20 +133,33 @@ class ReportsEntry extends Component {
 
 
 
-
-
-
-
-
-
         this.setState({open: true});
     }
 
+    handleClickAllIslandED() {
+        axios.get('/tally-sheet?limit=20&offset=0&tallySheetCode=PRE_ALL_ISLAND_RESULTS_BY_ELECTORAL_DISTRICTS' , {
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET',
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        }).then(res => {
+            console.log("Election" + res.data[0].tallySheetId)
+
+            axios.post('/tally-sheet/PRE_ALL_ISLAND_RESULTS_BY_ELECTORAL_DISTRICTS/'+res.data[0].tallySheetId+'/version',{timeout:4000})
+                .then(res => {
+                    console.log(res);
+                    console.log(res.data.htmlUrl);
+                    window.open(res.data.htmlUrl, "_blank")
+                });
+        })
+            .catch((error) => console.log(error));
 
 
 
-
-
+        // this.setState({open: true});
+    }
 
     // modal controllers
     handleClose() {
@@ -362,7 +383,7 @@ class ReportsEntry extends Component {
                                 <TableCell style={{fontSize: 13}}>
                                 </TableCell>
                                 <TableCell>
-                                    <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}}
+                                    <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleClickAllIslandED}
                                             className="button1">Generate</Button>
                                 </TableCell>
                             </TableRow>
