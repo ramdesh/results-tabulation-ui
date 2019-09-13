@@ -90,11 +90,11 @@ class ReportsEntry extends Component {
 
     handleClickOpenElectorate() {
 
-        axios.post('/report/' + this.state.reportDivision + '/version')
+        axios.post('/tally-sheet/PRE-30-ED/'+this.state.reportDivision+'/version')
             .then(res => {
                 console.log(res);
-                console.log(res.data.reportFile.urlInline);
-                window.open(res.data.reportFile.urlInline, "_blank")
+                console.log(res.data.htmlUrl);
+                window.open(res.data.htmlUrl, "_blank")
             });
 
         // window.open('newPageUrl', "https://dev.tabulation.ecdev.opensource.lk")
@@ -104,7 +104,7 @@ class ReportsEntry extends Component {
     }
 
     handleClickAllIsland() {
-        axios.get('/report?limit=1000&offset=0&reportCode=PRE-AllIslandReport' , {
+        axios.get('/tally-sheet?limit=20&offset=0&tallySheetCode=PRE_ALL_ISLAND_RESULTS' , {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -112,22 +112,21 @@ class ReportsEntry extends Component {
                 'X-Requested-With': 'XMLHttpRequest'
             }
         }).then(res => {
-            console.log("Election" + res.data[0].reportId)
-            this.setState({
-                reportAllisland: res.data[0].reportId
-            })
+            console.log("Election" + res.data[0].tallySheetId)
+
+            axios.post('/tally-sheet/PRE_ALL_ISLAND_RESULTS/'+res.data[0].tallySheetId+'/version',{timeout:4000})
+                .then(res => {
+                    console.log(res);
+                    console.log(res.data.htmlUrl);
+                    window.open(res.data.htmlUrl, "_blank")
+                });
         })
             .catch((error) => console.log(error));
 
 
 
 
-        axios.post('/report/' + this.state.reportAllisland + '/version',{timeout:4000})
-            .then(res => {
-                console.log(res);
-                console.log(res.data.reportFile.urlInline);
-                window.open(res.data.reportFile.urlInline, "_blank")
-            });
+
 
 
 
@@ -199,7 +198,7 @@ class ReportsEntry extends Component {
         this.setState({selected2: event.target.value, name: event.target.name});
 
 
-        axios.get('/report?limit=1000&offset=0&officeId='+ event.target.value+'&reportCode=PRE-30-ED' , {
+        axios.get('/tally-sheet?limit=1000&offset=0&officeId='+event.target.value+'&tallySheetCode=PRE-30-ED' , {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -207,9 +206,9 @@ class ReportsEntry extends Component {
                 'X-Requested-With': 'XMLHttpRequest'
             }
         }).then(res => {
-            console.log("Election" + res.data[0].reportId)
+            console.log("Election" + res.data[0].tallySheetId)
             this.setState({
-                reportDivision: res.data[0].reportId
+                reportDivision: res.data[0].tallySheetId
             })
         })
             .catch((error) => console.log(error));
@@ -255,7 +254,7 @@ class ReportsEntry extends Component {
         })
             .catch((error) => console.log(error));
 
-        axios.get('/electorate?limit=1000&offset=0&electorateType=ElectoralDistrict', {
+        axios.get('/area?limit=1000&offset=0&areaType=ElectoralDistrict', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -347,7 +346,7 @@ class ReportsEntry extends Component {
                                         </InputLabel>
                                         <Select className="width50" value={this.state.selected2} onChange={this.handleDivision}>
                                             {this.state.electionDivision.map((electralDivision, idx) => (
-                                                <MenuItem value={electralDivision.electorateId}>{electralDivision.electorateName}</MenuItem>
+                                                <MenuItem value={electralDivision.areaId}>{electralDivision.areaName}</MenuItem>
                                             ))}
                                         </Select>
                                     </FormControl>
