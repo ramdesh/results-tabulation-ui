@@ -65,7 +65,7 @@ class ReportsEntry extends Component {
 
 
 
-        // window.open('newPageUrl', "https://dev.tabulation.ecdev.opensource.lk")
+        window.open('https://dev.tabulation.ecdev.opensource.lk/tally-sheet/'+this.state.reportId+'/version/'+this.state.reportversion+'/html', "_blank");
 
 
         this.setState({open: true});
