@@ -37,64 +37,30 @@ class PRE21Entry extends Component {
             // pollingStationsMap: {},
             // content: {},
 
-            invalidTypesList : [],
-            invalidTypesMap : {},
+            invalidTypesList: [],
+            invalidTypesMap: {},
             content: {},
-
             tallySheetId: 0,
-            reportId:0,
-            officeId:0
+            reportId: 0,
+            officeId: 0
         };
-    }
-
-    setElection1(pollingStations) {
-        var pollingStationsMap = {};
-        var content = {};
-        console.log("List : ", pollingStations)
-        var pollingStationsList = pollingStations.map((pollingStation) => {
-
-            pollingStationsMap[pollingStation.officeId] = pollingStation;
-            content[pollingStation.officeId] = {
-                "areaId": pollingStation.officeId,
-                "ballotBoxesIssued": [
-                    "string"
-                ],
-                "ballotBoxesReceived": [
-                    "string"
-                ],
-                "ballotsIssued": null,
-                "ballotsReceived": null,
-                "ballotsSpoilt": null,
-                "ballotsUnused": null,
-                "ordinaryBallotCountFromBallotPaperAccount": null,
-                "ordinaryBallotCountFromBoxCount": null,
-                "tenderedBallotCountFromBallotPaperAccount": null,
-                "tenderedBallotCountFromBoxCount": null
-            };
-            return pollingStation.officeId
-        })
-        this.setState({
-            pollingStationsList,
-            pollingStationsMap,
-            content
-        })
     }
 
     setElection(election) {
         var invalidTypes = election.invalidVoteCategories;
         var invalidTypesMap = {};
         var content = {};
-        console.log("Check",invalidTypes)
+        console.log("Check", invalidTypes)
 
         var invalidTypesList = invalidTypes.map((invalidType) => {
             // var invalidType = invalidType.candidates[0];
             // candidate.partyName = invalidType.partyName;
-            console.log("Loop",invalidType)
+            console.log("Loop", invalidType)
 
             invalidTypesMap[invalidType.invalidVoteCategoryId] = invalidType;
             content[invalidTypes.invalidVoteCategoryId] = {
-                "count" : null,
-                "invalidVoteCategoryId":  invalidType.invalidVoteCategoryId,
+                "count": null,
+                "invalidVoteCategoryId": invalidType.invalidVoteCategoryId,
             };
             return invalidType.invalidVoteCategoryId
         })
@@ -198,49 +164,53 @@ class PRE21Entry extends Component {
 
     render() {
         const {name} = this.props.match.params
-        console.log("ff",this.state.invalidTypesMap)
+        console.log("ff", this.state.invalidTypesMap)
         return (
-            <div style={{margin: '3%',marginRight:'8%'}}>
+            <div style={{margin: '3%', marginRight: '8%'}}>
                 <div>
 
-                        <div style={{marginBottom: '3%'}}>
-                            <Breadcrumbs style={{marginLeft: '0.2%', marginBottom: '2%', fontSize: '14px'}} separator="/"
-                                         aria-label="breadcrumb">
-                                <Link color="inherit" href="/Home">
-                                    Home
-                                </Link>
-                                <Link color="inherit" href="/Home">
-                                    Counting Centre
-                                </Link>
-                                <Link color="inherit" href="/PRE21">
-                                    Data Entry
-                                </Link>
-                                <Link color="inherit" href="/PRE21">
-                                    Votes - PRE 21
-                                </Link>
-                                <Link color="inherit">
-                                    Tally Sheet
-                                </Link>
-                                {/*<Typography color="textPrimary"></Typography>*/}
-                            </Breadcrumbs>
+                    <div style={{marginBottom: '3%'}}>
+                        <Breadcrumbs style={{marginLeft: '0.2%', marginBottom: '2%', fontSize: '14px'}} separator="/"
+                                     aria-label="breadcrumb">
+                            <Link color="inherit" href="/Home">
+                                Home
+                            </Link>
+                            <Link color="inherit" href="/Home">
+                                Counting Centre
+                            </Link>
+                            <Link color="inherit" href="/PRE21">
+                                Data Entry
+                            </Link>
+                            <Link color="inherit" href="/PRE21">
+                                Votes - PRE 21
+                            </Link>
+                            <Link color="inherit">
+                                Tally Sheet
+                            </Link>
+                            {/*<Typography color="textPrimary"></Typography>*/}
+                        </Breadcrumbs>
 
-                            <Typography variant="h4" gutterBottom>
-                                Presidential Election 2019
-                            </Typography>
-                            <Typography variant="h6" gutterBottom>
-                                Invalid Ballot Count ( PRE-21 ) - Counting Hall No : {this.props.match.params.name2}
-                            </Typography>
-                        </div>
+                        <Typography variant="h4" gutterBottom>
+                            Presidential Election 2019
+                        </Typography>
+                        <Typography variant="h6" gutterBottom>
+                            Invalid Ballot Count ( PRE-21 ) - Counting Hall No : {this.props.match.params.name2}
+                        </Typography>
+                    </div>
 
 
                     <Paper style={{margin: '3%'}}>
-                        <Table >
+                        <Table>
                             <TableHead>
                                 <TableRow>
-                                    <TableCell className="header" style={{fontSize: 14, color:'white',fontWeight: 'bold'}}>No</TableCell>
-                                    <TableCell className="header" style={{fontSize: 14, color:'white',fontWeight: 'bold'}}>Ground For
+                                    <TableCell className="header"
+                                               style={{fontSize: 14, color: 'white', fontWeight: 'bold'}}>No</TableCell>
+                                    <TableCell className="header"
+                                               style={{fontSize: 14, color: 'white', fontWeight: 'bold'}}>Ground For
                                         Rejection</TableCell>
-                                    <TableCell className="header" style={{fontSize: 14,color:'white', fontWeight: 'bold'}}>No of Ballot Papers
+                                    <TableCell className="header"
+                                               style={{fontSize: 14, color: 'white', fontWeight: 'bold'}}>No of Ballot
+                                        Papers
                                         Rejected</TableCell>
                                 </TableRow>
                             </TableHead>
@@ -251,13 +221,13 @@ class PRE21Entry extends Component {
                                     // var candidate = this.state.candidateMap[candidateId];
 
                                     return <TableRow>
-                                        <TableCell style={{fontSize: 13}}>{idx+1}
+                                        <TableCell style={{fontSize: 13}}>{idx + 1}
                                             {/*{invalid.invalidVoteCategoryId}*/}
-                                            </TableCell>
+                                        </TableCell>
                                         <TableCell
                                             style={{fontSize: 13}}>{invalid.categoryDescription}</TableCell>
 
-                                        <TableCell style={{width:'30%',fontSize: 13}}>
+                                        <TableCell style={{width: '30%', fontSize: 13}}>
                                             <TextField
                                                 id="count"
                                                 margin="dense"
@@ -272,97 +242,20 @@ class PRE21Entry extends Component {
                                 })}
                                 <TableRow>
                                     <TableCell style={{fontSize: 13}}></TableCell>
-                                    <TableCell style={{fontSize: 14, color:'black'}}>Total Rejected Ballot Count</TableCell>
-                                <TableCell style={{width:'30%',fontSize: 13}}>
-                                    <TextField
-                                        id="outlined-dense"
-                                        margin="dense"
-                                        variant="outlined"
-                                        placeholder="Total"
+                                    <TableCell style={{fontSize: 14, color: 'black'}}>Total Rejected Ballot
+                                        Count</TableCell>
+                                    <TableCell style={{width: '30%', fontSize: 13}}>
+                                        <TextField
+                                            id="outlined-dense"
+                                            margin="dense"
+                                            variant="outlined"
+                                            placeholder="Total"
 
-                                    />
-                                </TableCell>
+                                        />
+                                    </TableCell>
                                 </TableRow>
 
                             </TableBody>
-
-                            {/*<TableBody>*/}
-                                {/*<TableRow>*/}
-                                    {/*<TableCell style={{width:'70%',fontSize: 13}}>Does not bear the official mark</TableCell>*/}
-                                    {/*<TableCell style={{fontSize: 13}}>*/}
-                                        {/*<TextField*/}
-                                            {/*id="outlined-dense"*/}
-                                            {/*margin="dense"*/}
-                                            {/*variant="outlined"*/}
-                                        {/*/>*/}
-                                    {/*</TableCell>*/}
-
-                                {/*</TableRow>*/}
-                                {/*<TableRow>*/}
-                                    {/*<TableCell style={{fontSize: 13}}>Voted for more than one candidate</TableCell>*/}
-                                    {/*<TableCell style={{fontSize: 13}}>*/}
-                                        {/*<TextField*/}
-                                            {/*id="outlined-dense"*/}
-                                            {/*margin="dense"*/}
-                                            {/*variant="outlined"*/}
-                                        {/*/>*/}
-                                    {/*</TableCell>*/}
-
-                                {/*</TableRow>*/}
-                                {/*<TableRow>*/}
-                                    {/*<TableCell style={{fontSize: 13}}>Specified a second preference or a third*/}
-                                        {/*preference only both such preference only</TableCell>*/}
-                                    {/*<TableCell style={{fontSize: 13}}>*/}
-                                        {/*<TextField*/}
-                                            {/*id="outlined-dense"*/}
-                                            {/*margin="dense"*/}
-                                            {/*variant="outlined"*/}
-                                        {/*/>*/}
-                                    {/*</TableCell>*/}
-                                {/*</TableRow>*/}
-                                {/*<TableRow>*/}
-                                    {/*<TableCell style={{fontSize: 13}}>Something is written or marked by which the voter*/}
-                                        {/*can be identified</TableCell>*/}
-                                    {/*<TableCell style={{fontSize: 13}}>*/}
-                                        {/*<TextField*/}
-                                            {/*id="outlined-dense"*/}
-                                            {/*margin="dense"*/}
-                                            {/*variant="outlined"*/}
-                                        {/*/>*/}
-                                    {/*</TableCell>*/}
-                                {/*</TableRow>*/}
-
-                                {/*<TableRow>*/}
-                                    {/*<TableCell style={{fontSize: 13}}>Unmarked</TableCell>*/}
-                                    {/*<TableCell style={{fontSize: 13}}>*/}
-                                        {/*<TextField*/}
-                                            {/*id="outlined-dense"*/}
-                                            {/*margin="dense"*/}
-                                            {/*variant="outlined"*/}
-                                        {/*/>*/}
-                                    {/*</TableCell>*/}
-                                {/*</TableRow>*/}
-                                {/*<TableRow>*/}
-                                    {/*<TableCell style={{fontSize: 13}}>Void for Uncertainty</TableCell>*/}
-                                    {/*<TableCell style={{fontSize: 13}}>*/}
-                                        {/*<TextField*/}
-                                            {/*id="outlined-dense"*/}
-                                            {/*margin="dense"*/}
-                                            {/*variant="outlined"*/}
-                                        {/*/>*/}
-                                    {/*</TableCell>*/}
-                                {/*</TableRow>*/}
-                                {/*<TableRow>*/}
-                                    {/*<TableCell style={{fontWeight:'bold',fontSize: 14}}>Total Rejected Ballot Count :</TableCell>*/}
-                                    {/*<TableCell style={{fontSize: 13}}>*/}
-                                        {/*<TextField*/}
-                                            {/*id="outlined-dense"*/}
-                                            {/*margin="dense"*/}
-                                            {/*variant="outlined"*/}
-                                        {/*/>*/}
-                                    {/*</TableCell>*/}
-                                {/*</TableRow>*/}
-                            {/*</TableBody>*/}
                         </Table>
                     </Paper>
                 </div>
