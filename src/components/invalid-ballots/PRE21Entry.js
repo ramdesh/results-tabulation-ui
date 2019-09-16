@@ -42,8 +42,11 @@ class PRE21Entry extends Component {
             content: {},
             tallySheetId: 0,
             reportId: 0,
-            officeId: 0
+            officeId: 0,
+
         };
+        this.calculation =[];
+
     }
 
     setElection(election) {
@@ -150,6 +153,11 @@ class PRE21Entry extends Component {
     }
 
     handleInputChange = (invalidTypeId, property) => (event) => {
+        // console.log(event.target.value)
+        console.log(invalidTypeId)
+        this.calculation[invalidTypeId] = event.target.value;
+        console.log( this.calculation);
+        console.log( this.calculation.length);
         this.setState({
             ...this.state,
             content: {
@@ -160,11 +168,13 @@ class PRE21Entry extends Component {
                 }
             }
         })
+        // console.log("doen")
+
     }
 
     render() {
         const {name} = this.props.match.params
-        console.log("ff", this.state.invalidTypesMap)
+        // console.log("ff", this.state.invalidTypesMap)
         return (
             <div style={{margin: '3%', marginRight: '8%'}}>
                 <div>
