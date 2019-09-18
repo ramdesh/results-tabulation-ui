@@ -32,6 +32,7 @@ class PRE41 extends Component {
             countingName: 0,
             tallySheetId: 0
         };
+        this.calculation = [0];
     }
 
     handleBack() {

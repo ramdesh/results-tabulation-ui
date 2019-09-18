@@ -37,7 +37,10 @@ class PRE41Entry extends Component {
             tallySheetId: 0,
             reportId: 0,
             officeId: 0
+
+            ,sum:0
         };
+        this.calculation = [0];
     }
 
     setElection(election) {
@@ -115,7 +118,36 @@ class PRE41Entry extends Component {
         this.setState({selected: event.target.value, name: event.target.name});
     };
 
+    // handleInputChange = (invalidTypeId, property) => (event) => {
+    //     this.calculation[invalidTypeId] = parseInt(event.target.value);
+    //     console.log(this.calculation);
+    //
+    //     this.setState({
+    //         ...this.state,
+    //         content: {
+    //             ...this.state.content,
+    //             [invalidTypeId]: {
+    //                 ...this.state.content[invalidTypeId],
+    //                 [property]: event.target.value
+    //             }
+    //         }
+    //     })
+    //
+    //     this.setState({
+    //         sum: this.calculation.reduce((total, amount) => total + amount)
+    //     })
+    // }
     handleInputChange = (candidateId, property) => (event) => {
+        const name = event.target.name
+        console.log("NN",event.target.name);
+        if ((name) === "votes"+candidateId){
+            this.calculation[candidateId] = parseInt(event.target.value);
+            console.log(this.calculation);
+
+        }else{
+            console.log("NaN");
+        }
+
         this.setState({
             ...this.state,
             content: {
@@ -125,6 +157,10 @@ class PRE41Entry extends Component {
                     [property]: event.target.value
                 }
             }
+        })
+
+        this.setState({
+            sum: this.calculation.reduce((total, amount) => total + amount)
         })
     }
 
@@ -245,6 +281,48 @@ class PRE41Entry extends Component {
                                     </TableRow>
                                 })}
 
+                                <TableRow>
+                                    <TableCell
+                                        style={{width: '4%', fontSize: 13}}></TableCell>
+                                    <TableCell
+                                        style={{width: '20%', fontSize: 13}}></TableCell>
+                                    <TableCell
+                                        style={{width: '30%', fontSize: 13}}></TableCell>
+                                    <TableCell style={{fontSize: 14, color: 'black', fontWeight: 'bold'}}>Rejected
+                                        Votes :</TableCell>
+                                    <TableCell
+                                        style={{ fontSize: 14,}}>
+                                    <TextField
+                                        id="outlined-dense"
+                                        margin="dense"
+                                        variant="outlined"
+                                        placeholder="Rejected Votes"
+                                    /></TableCell>
+                                    {/*<TableCell style={{paddingLeft:'2%',width: '30%', fontSize: 16,fontWeight: 'bold'}}>*/}
+                                    {/*{this.state.sum}*/}
+                                    {/*</TableCell>*/}
+                                </TableRow>
+
+                                <TableRow>
+                                    <TableCell
+                                        style={{width: '4%', fontSize: 13}}></TableCell>
+                                    <TableCell
+                                        style={{width: '20%', fontSize: 13}}></TableCell>
+                                    <TableCell
+                                        style={{width: '30%', fontSize: 13}}></TableCell>
+                                    <TableCell style={{fontSize: 14, color: 'black', fontWeight: 'bold'}}>Total
+                                        Votes :</TableCell>
+
+
+                                    {this.state.sum > 0 && <TableCell
+                                        style={{paddingLeft: '2%', width: '30%', fontSize: 16, fontWeight: 'bold'}}>
+                                        {this.state.sum}
+                                    </TableCell>}
+
+                                    {/*<TableCell style={{paddingLeft:'2%',width: '30%', fontSize: 16,fontWeight: 'bold'}}>*/}
+                                    {/*{this.state.sum}*/}
+                                    {/*</TableCell>*/}
+                                </TableRow>
                             </TableBody>
                         </Table>
                     </Paper>

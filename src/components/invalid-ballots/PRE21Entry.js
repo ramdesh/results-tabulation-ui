@@ -33,19 +33,16 @@ class PRE21Entry extends Component {
             selected: 'Select',
             setOpen: false,
 
-            // pollingStationsList: [],
-            // pollingStationsMap: {},
-            // content: {},
-
             invalidTypesList: [],
             invalidTypesMap: {},
             content: {},
             tallySheetId: 0,
             reportId: 0,
             officeId: 0,
+            sum: 0
 
         };
-        this.calculation =[];
+        this.calculation = [0];
 
     }
 
@@ -139,7 +136,6 @@ class PRE21Entry extends Component {
             })
         })
 
-
             .then(res => {
                 console.log("URL" + res.data.htmlUrl);
                 console.log("Result" + res.data[0]);
@@ -153,11 +149,9 @@ class PRE21Entry extends Component {
     }
 
     handleInputChange = (invalidTypeId, property) => (event) => {
-        // console.log(event.target.value)
-        console.log(invalidTypeId)
-        this.calculation[invalidTypeId] = event.target.value;
-        console.log( this.calculation);
-        console.log( this.calculation.length);
+        this.calculation[invalidTypeId] = parseInt(event.target.value);
+        console.log(this.calculation);
+
         this.setState({
             ...this.state,
             content: {
@@ -168,13 +162,14 @@ class PRE21Entry extends Component {
                 }
             }
         })
-        // console.log("doen")
 
+        this.setState({
+            sum: this.calculation.reduce((total, amount) => total + amount)
+        })
     }
 
     render() {
         const {name} = this.props.match.params
-        // console.log("ff", this.state.invalidTypesMap)
         return (
             <div style={{margin: '3%', marginRight: '8%'}}>
                 <div>
@@ -252,17 +247,16 @@ class PRE21Entry extends Component {
                                 })}
                                 <TableRow>
                                     <TableCell style={{fontSize: 13}}></TableCell>
-                                    <TableCell style={{fontSize: 14, color: 'black'}}>Total Rejected Ballot
+                                    <TableCell style={{fontSize: 14, color: 'black', fontWeight: 'bold'}}>Total Rejected
+                                        Ballot
                                         Count</TableCell>
-                                    <TableCell style={{width: '30%', fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                            placeholder="Total"
-
-                                        />
-                                    </TableCell>
+                                    {this.state.sum > 0 && <TableCell
+                                        style={{paddingLeft: '2%', width: '30%', fontSize: 16, fontWeight: 'bold'}}>
+                                        {this.state.sum}
+                                    </TableCell>}
+                                    {/*<TableCell style={{paddingLeft:'2%',width: '30%', fontSize: 16,fontWeight: 'bold'}}>*/}
+                                    {/*{this.state.sum}*/}
+                                    {/*</TableCell>*/}
                                 </TableRow>
 
                             </TableBody>
