@@ -265,6 +265,7 @@ class PRE41Entry extends Component {
                                                 variant="outlined"
                                                 placeholder="No of votes"
                                                 name={'votes' + (idx + 1)}
+                                                autoComplete='off'
                                                 onChange={this.handleInputChange(candidateId, "count")}
                                             />
                                         </TableCell>
@@ -275,6 +276,7 @@ class PRE41Entry extends Component {
                                                 variant="outlined"
                                                 placeholder="No of votes in words"
                                                 name={'votesWords' + (idx + 1)}
+                                                autoComplete='off'
                                                 onChange={this.handleInputChange(candidateId, "countInWords")}
                                             />
                                         </TableCell>
@@ -297,6 +299,7 @@ class PRE41Entry extends Component {
                                         margin="dense"
                                         variant="outlined"
                                         placeholder="Rejected Votes"
+                                        autoComplete='off'
                                     /></TableCell>
                                     {/*<TableCell style={{paddingLeft:'2%',width: '30%', fontSize: 16,fontWeight: 'bold'}}>*/}
                                     {/*{this.state.sum}*/}

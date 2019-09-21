@@ -39,7 +39,8 @@ class PRE21Entry extends Component {
             tallySheetId: 0,
             reportId: 0,
             officeId: 0,
-            sum: 0
+            sum: 0,
+            errorText:''
 
         };
         this.calculation = [0];
@@ -151,6 +152,12 @@ class PRE21Entry extends Component {
     handleInputChange = (invalidTypeId, property) => (event) => {
         this.calculation[invalidTypeId] = parseInt(event.target.value);
         console.log(this.calculation);
+
+        if (isNaN(event.target.value)) {
+            console.log('Please Check the value for INT')
+            this.setState({ errorText: 'Invalid format: ###-###-####' })
+            alert('Value Allows only Numericals')
+        }
 
         this.setState({
             ...this.state,
