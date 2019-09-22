@@ -96,7 +96,7 @@ class PRE21PV extends Component {
     handlePollingDivision = event => {
         this.setState({selectedPollingDivision: event.target.value, name: event.target.name});
         console.log(event.target.value)
-        axios.get('/area?limit=20&offset=0&associatedAreaId='+event.target.value+'&areaType=CountingCentre', {
+        axios.get('/area?limit=1000&offset=0&associatedAreaId='+event.target.value+'&areaType=PostalVoteCountingCentre', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -229,7 +229,7 @@ class PRE21PV extends Component {
                         <Grid item xs={5} sm={4}>
                             <FormControl variant="outlined" margin="dense">
                                 <InputLabel style={{marginLeft: '-5%'}}>
-                                    Counting Centre
+                                    Postal Vote Counting Centre
                                 </InputLabel>
                                 <Select className="width50" value={this.state.selectedCountingCenter}
                                         onChange={this.handleCounting}>
