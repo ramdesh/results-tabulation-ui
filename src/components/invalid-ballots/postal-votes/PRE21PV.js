@@ -229,7 +229,7 @@ class PRE21PV extends Component {
                         <Grid item xs={5} sm={4}>
                             <FormControl variant="outlined" margin="dense">
                                 <InputLabel style={{marginLeft: '-5%'}}>
-                                    Postal Vote Counting Centre
+                                    PV Counting Centre
                                 </InputLabel>
                                 <Select className="width50" value={this.state.selectedCountingCenter}
                                         onChange={this.handleCounting}>

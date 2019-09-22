@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import axios from 'axios';
+import axios from '../../../axios-base';
 import {
     Typography,
     Button,
@@ -10,7 +10,9 @@ import {
     TableCell,
     TableHead,
     TableBody,
-    Paper
+    Paper,
+    Breadcrumbs,
+    Link
 } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -29,13 +31,51 @@ class PRE21PVEntry extends Component {
             allUsers: [],
             offices: [],
             selected: 'Select',
-            setOpen: false
+            setOpen: false,
+
+            invalidTypesList: [],
+            invalidTypesMap: {},
+            content: {},
+            tallySheetId: 0,
+            reportId: 0,
+            officeId: 0,
+            sum: 0,
+            errorText:''
+
         };
+        this.calculation = [0];
+
+    }
+
+    setElection(election) {
+        var invalidTypes = election.invalidVoteCategories;
+        var invalidTypesMap = {};
+        var content = {};
+        console.log("Check", invalidTypes)
+
+        var invalidTypesList = invalidTypes.map((invalidType) => {
+            // var invalidType = invalidType.candidates[0];
+            // candidate.partyName = invalidType.partyName;
+            console.log("Loop", invalidType)
+
+            invalidTypesMap[invalidType.invalidVoteCategoryId] = invalidType;
+            content[invalidTypes.invalidVoteCategoryId] = {
+                "count": null,
+                "invalidVoteCategoryId": invalidType.invalidVoteCategoryId,
+            };
+            return invalidType.invalidVoteCategoryId
+        })
+
+        this.setState({
+            invalidTypesList,
+            invalidTypesMap,
+            content
+        })
     }
 
     handleClickOpen() {
-        console.log("open")
-        this.setState({open: true});
+        alert("Successfully Created the TallySheet - PRE21PV")
+        this.props.history.replace('/Home')
     }
 
     handleBack() {
@@ -44,7 +84,6 @@ class PRE21PVEntry extends Component {
 
     // modal controllers
     handleClose() {
-        console.log("close")
         this.setState({open: false});
     }
 
@@ -52,10 +91,22 @@ class PRE21PVEntry extends Component {
         this.setState({selected: event.target.value, name: event.target.name});
     };
 
+
     componentDidMount() {
-        console.log("Election Result Test")
-        // let token = localStorage.getItem('id_token');
-        axios.get('https://cors-anywhere.herokuapp.com/https://dev.tabulation.ecdev.opensource.lk/office?limit=20&offset=0&electionId=1', {
+        const {name} = this.props.match.params
+        console.log("Id URL >>> ", name)
+        this.setState({
+            tallySheetId: name
+        })
+        const {name2} = this.props.match.params
+        console.log("Id office >>> ", name2)
+        this.setState({
+            officeId: name2
+        })
+        console.log("Set >>> ", this.state.tallySheetId)
+        console.log("Set >>> ", this.state.officeId)
+
+        axios.get('/election?limit=1000&offset=0', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -63,110 +114,167 @@ class PRE21PVEntry extends Component {
                 'X-Requested-With': 'XMLHttpRequest'
             }
         }).then(res => {
-            console.log("Election" + res.data)
-            this.setState({
-                offices: res.data
-            })
-        })
-            .catch((error) => console.log(error));
+            console.log("Election NEW" + res.data[0].invalidVoteCategories)
+            this.setElection(res.data[0])
+        }).catch((error) => console.log(error));
     }
 
+    /** submit the form data **/
+    handleSubmit = (event) => {
+        const {name} = this.props.match.params
+        const {name2} = this.props.match.params
+        console.log("Id office >>> ", name2)
+        console.log("TALLY SHEET >>> ", name)
+        event.preventDefault()
+
+
+        axios.post('/tally-sheet/PRE-21/' + name + '/version', {
+            "content": this.state.invalidTypesList.map((invalidTypeId) => {
+                return {
+                    "count": parseInt(this.state.content[invalidTypeId].count),
+                    "invalidVoteCategoryId": invalidTypeId,
+                }
+            })
+        })
+
+            .then(res => {
+                console.log("URL" + res.data.htmlUrl);
+                console.log("Result" + res.data[0]);
+                alert("Successfully Created the TallySheet - PRE 21")
+                const htmlURL = res.data.htmlUrl
+                window.open(htmlURL, "_blank")
+                this.props.history.replace('/Home')
+
+            }).catch((error) => console.log(error));
+
+    }
+
+    handleInputChange = (invalidTypeId, property) => (event) => {
+        this.calculation[invalidTypeId] = parseInt(event.target.value);
+        console.log(this.calculation);
+
+        if (isNaN(event.target.value)) {
+            console.log('Please Check the value for INT')
+            this.setState({ errorText: 'Invalid format: ###-###-####' })
+            alert('Value Allows only Numericals')
+        }
+
+        this.setState({
+            ...this.state,
+            content: {
+                ...this.state.content,
+                [invalidTypeId]: {
+                    ...this.state.content[invalidTypeId],
+                    [property]: event.target.value
+                }
+            }
+        })
+
+        this.setState({
+            sum: this.calculation.reduce((total, amount) => total + amount)
+        })
+    }
 
     render() {
+        const {name} = this.props.match.params
         return (
-            <div style={{margin: '3%'}}>
+            <div style={{margin: '3%', marginRight: '8%'}}>
                 <div>
+
                     <div style={{marginBottom: '3%'}}>
-                        <Typography variant="h5" gutterBottom>
-                            Presidential Election 2019 - Invalid Ballot Count ( PRE-21 ) : Postal Votes - Polling Station : A
+                        <Breadcrumbs style={{marginLeft: '0.2%', marginBottom: '2%', fontSize: '14px'}} separator="/"
+                                     aria-label="breadcrumb">
+                            <Link color="inherit" href="/Home">
+                                Home
+                            </Link>
+                            <Link color="inherit" href="/Home">
+                                Counting Centre
+                            </Link>
+                            <Link color="inherit" href="/PRE21">
+                                Data Entry
+                            </Link>
+                            <Link color="inherit" href="/PRE21">
+                                Votes - PRE 21
+                            </Link>
+                            <Link color="inherit">
+                                Tally Sheet
+                            </Link>
+                            {/*<Typography color="textPrimary"></Typography>*/}
+                        </Breadcrumbs>
+
+                        <Typography variant="h4" gutterBottom>
+                            Presidential Election 2019
+                        </Typography>
+                        <Typography variant="h6" gutterBottom>
+                            Invalid Ballot Count ( PRE-21 ) : Postal Votes - Counting Hall No : {this.props.match.params.name2}
                         </Typography>
                     </div>
 
-                    <Paper>
+
+                    <Paper style={{margin: '3%'}}>
                         <Table>
                             <TableHead>
                                 <TableRow>
-                                    <TableCell style={{fontSize: 13, fontWeight: 'bold'}}>Ground For
+                                    <TableCell className="header"
+                                               style={{fontSize: 14, color: 'white', fontWeight: 'bold'}}>No</TableCell>
+                                    <TableCell className="header"
+                                               style={{fontSize: 14, color: 'white', fontWeight: 'bold'}}>Ground For
                                         Rejection</TableCell>
-                                    <TableCell style={{fontSize: 13, fontWeight: 'bold'}}>No of Ballot Papers
+                                    <TableCell className="header"
+                                               style={{fontSize: 14, color: 'white', fontWeight: 'bold'}}>No of Ballot
+                                        Papers
                                         Rejected</TableCell>
                                 </TableRow>
                             </TableHead>
-                            <TableBody>
-                                <TableRow>
-                                    <TableCell style={{fontSize: 13}}>Does not bear the official mark</TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
 
-                                </TableRow>
-                                <TableRow>
-                                    <TableCell style={{fontSize: 13}}>Voted for more than one candidate</TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
+                            < TableBody>
+                                {this.state.invalidTypesList.map((invalidType, idx) => {
+                                    var invalid = this.state.invalidTypesMap[invalidType];
+                                    // var candidate = this.state.candidateMap[candidateId];
 
-                                </TableRow>
+                                    return <TableRow>
+                                        <TableCell style={{fontSize: 13}}>{idx + 1}
+                                            {/*{invalid.invalidVoteCategoryId}*/}
+                                        </TableCell>
+                                        <TableCell
+                                            style={{fontSize: 13}}>{invalid.categoryDescription}</TableCell>
+
+                                        <TableCell style={{width: '30%', fontSize: 13}}>
+                                            <TextField
+                                                id="count"
+                                                margin="dense"
+                                                variant="outlined"
+                                                placeholder="Count"
+                                                onChange={this.handleInputChange(invalid.invalidVoteCategoryId, "count")}
+                                            />
+
+                                        </TableCell>
+
+                                    </TableRow>
+                                })}
                                 <TableRow>
-                                    <TableCell style={{fontSize: 13}}>Specified a second preference or a third
-                                        preference only both such preference only</TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
-                                </TableRow>
-                                <TableRow>
-                                    <TableCell style={{fontSize: 13}}>Something is written or marked by which the voter
-                                        can be identified</TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
+                                    <TableCell style={{fontSize: 13}}></TableCell>
+                                    <TableCell style={{fontSize: 14, color: 'black', fontWeight: 'bold'}}>Total Rejected
+                                        Ballot
+                                        Count</TableCell>
+                                    {this.state.sum > 0 && <TableCell
+                                        style={{paddingLeft: '2%', width: '30%', fontSize: 16, fontWeight: 'bold'}}>
+                                        {this.state.sum}
+                                    </TableCell>}
+                                    {/*<TableCell style={{paddingLeft:'2%',width: '30%', fontSize: 16,fontWeight: 'bold'}}>*/}
+                                    {/*{this.state.sum}*/}
+                                    {/*</TableCell>*/}
                                 </TableRow>
 
-                                <TableRow>
-                                    <TableCell style={{fontSize: 13}}>Unmarked</TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
-                                </TableRow>
-                                <TableRow>
-                                    <TableCell style={{fontSize: 13}}>Void for Uncertainty</TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
-                                </TableRow>
                             </TableBody>
                         </Table>
                     </Paper>
                 </div>
 
-                <div style={{marginLeft: '80%', marginTop: '2%'}}>
+                <div style={{marginLeft: '69%', marginTop: '2%'}}>
                     <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleBack}
                             className="button">Back</Button>
-                    <Button style={{borderRadius: 18, color: 'white'}} onClick={this.handleClickOpen}
+                    <Button style={{borderRadius: 18, color: 'white'}} onClick={this.handleSubmit}
                             className="button">Submit</Button>
                 </div>
 
