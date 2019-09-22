@@ -30,8 +30,10 @@ class PRE21 extends Component {
             selectedDistrictCentre: '',
             selectedCountingCenter: '',
             selectedPollingStation: '',
+            selectedPollingDivisons: '',
             countingCenter: [],
             pollingStation: [],
+            PollingDivision:[],
             polling: 0,
             // url params
             countingId: 0,
@@ -83,7 +85,28 @@ class PRE21 extends Component {
     handleChange = event => {
         this.setState({selectedDistrictCentre: event.target.value, name: event.target.name});
         console.log(event.target.value)
-        axios.get('/office?limit=1000&offset=0&parentOfficeId=' + event.target.value + '&officeType=CountingCentre', {
+        axios.get('/area?limit=20&offset=0&associatedAreaId='+event.target.value+'&areaType=PollingDivision', {
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET',
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        }).then(res => {
+            console.log("Election" + res.data[0])
+            this.setState({
+                PollingDivision: res.data
+            })
+
+        })
+            .catch((error) => console.log(error));
+
+    };
+
+    handlePollingDivision = event => {
+        this.setState({selectedPollingDivisons: event.target.value, name: event.target.name});
+        console.log(event.target.value)
+        axios.get('/area?limit=20&offset=0&associatedAreaId='+event.target.value+'&areaType=CountingCentre', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -94,7 +117,7 @@ class PRE21 extends Component {
             console.log("Election" + res.data[0])
             this.setState({
                 countingCenter: res.data.sort(function (a,b) {
-                    if (parseInt(a.officeName) > parseInt(b.officeName)) {
+                    if (parseInt(a.areaName) > parseInt(b.areaName)) {
                         return 1;
                     } else {
                         return -1;
@@ -118,7 +141,7 @@ class PRE21 extends Component {
         console.log("Counting Name" + event.target.value)
 
         // get the officeId by officeName
-        axios.get('/office?limit=20&offset=0&officeName=' + event.target.value + '&officeType=CountingCentre', {
+        axios.get('/office?limit=1000&offset=0&officeName=' + event.target.value + '&officeType=CountingCentre', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -166,7 +189,7 @@ class PRE21 extends Component {
 
 
     componentDidMount() {
-        axios.get('/office?limit=1000&offset=0&officeType=DistrictCentre', {
+        axios.get('/area?limit=1000&offset=0&areaType=DistrictCentre', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -221,7 +244,20 @@ class PRE21 extends Component {
                                 <Select className="width50" value={this.state.selectedDistrictCentre}
                                         onChange={this.handleChange}>
                                     {this.state.offices.map((districtCentre, idx) => (
-                                        <MenuItem value={districtCentre.officeId}>{districtCentre.officeName}</MenuItem>
+                                        <MenuItem value={districtCentre.areaId}>{districtCentre.areaName}</MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                        </Grid>
+                        <Grid item xs={5} sm={4}>
+                            <FormControl variant="outlined" margin="dense">
+                                <InputLabel>
+                                    Polling Division
+                                </InputLabel>
+                                <Select className="width50" value={this.state.selectedPollingDivisons}
+                                        onChange={this.handlePollingDivision}>
+                                    {this.state.PollingDivision.map((pollingDivision, idx) => (
+                                        <MenuItem value={pollingDivision.areaId}>{pollingDivision.areaName}</MenuItem>
                                     ))}
                                 </Select>
                             </FormControl>
@@ -234,7 +270,7 @@ class PRE21 extends Component {
                                 <Select className="width50" value={this.state.selectedCountingCenter}
                                         onChange={this.handleCounting}>
                                     {this.state.countingCenter.map((countingCenter, idx) => (
-                                        <MenuItem value={countingCenter.officeName}>{countingCenter.officeName}</MenuItem>
+                                        <MenuItem value={countingCenter.areaName}>{countingCenter.areaName}</MenuItem>
                                     ))}
                                 </Select>
                             </FormControl>
