@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import axios from 'axios';
+import axios from '../../../axios-base';
 import {
     Typography,
     Button,
@@ -10,7 +10,9 @@ import {
     TableCell,
     TableHead,
     TableBody,
-    Paper
+    Paper,
+    Breadcrumbs,
+    Link
 } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -19,22 +21,87 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
 class PRE41PVEntry extends Component {
-    constructor(props, context) {
-        super(props, context);
+    constructor(props) {
+        super(props);
         this.handleClose = this.handleClose.bind(this);
         this.handleClickOpen = this.handleClickOpen.bind(this);
         this.handleBack = this.handleBack.bind(this);
+        this.setElection = this.setElection.bind(this);
         this.state = {
             open: false,
-            election: [],
-            offices: [],
             selected: 'Select',
-            setOpen: false
+
+            candidatesList: [],
+            candidatesMap: {},
+            content: {},
+            tallySheetId: 0,
+            reportId: 0,
+            officeId: 0
+
+            ,sum:0
         };
+        this.calculation = [0];
+    }
+
+    setElection(election) {
+        var parties = election.parties;
+        var candidateMap = {};
+        var content = {};
+        var candidatesList = parties.map((party) => {
+            var candidate = party.candidates[0];
+            candidate.partyName = party.partyName;
+
+            candidateMap[candidate.candidateId] = candidate;
+            content[candidate.candidateId] = {
+                "candidateId": candidate.candidateId,
+                "count": null,
+                "countInWords": null
+            };
+            return candidate.candidateId
+        })
+        this.setState({
+            candidatesList,
+            candidateMap,
+            content
+        })
+    }
+
+    // submit the form data
+    handleSubmit = (event) => {
+        const {name} = this.props.match.params
+        const {name2} = this.props.match.params
+        console.log("Id office >>> ", name2)
+
+        event.preventDefault()
+        if (this.state.content[1].count === null || this.state.content[2].count === null ||
+            this.state.content[1].countInWords === null || this.state.content[2].countInWords === null) {
+            alert("Please Enter the necessary fields !")
+
+        } else {
+            axios.post('/tally-sheet/PRE-41PV/' + name + '/version', {
+                "content": this.state.candidatesList.map((candidateId) => {
+                    return {
+                        "candidateId": candidateId,
+                        "count": parseInt(this.state.content[candidateId].count),
+                        "countInWords": this.state.content[candidateId].countInWords
+                    }
+                })
+            })
+                .then(res => {
+                    console.log(res);
+                    console.log("Result Test" + res.data.htmlUrl);
+                    console.log("Result Test1" + res.data[0]);
+                    alert("Successfully Created the TallySheet - PRE41")
+
+                    const htmlURL = res.data.htmlUrl
+                    window.open(htmlURL, "_blank")
+                    this.props.history.replace('/Home')
+
+                }).catch((error) => console.log(error));
+        }
     }
 
     handleClickOpen() {
-        console.log("open")
         this.setState({open: true});
     }
 
@@ -44,7 +111,6 @@ class PRE41PVEntry extends Component {
 
     // modal controllers
     handleClose() {
-        console.log("close")
         this.setState({open: false});
     }
 
@@ -52,8 +118,66 @@ class PRE41PVEntry extends Component {
         this.setState({selected: event.target.value, name: event.target.name});
     };
 
+    // handleInputChange = (invalidTypeId, property) => (event) => {
+    //     this.calculation[invalidTypeId] = parseInt(event.target.value);
+    //     console.log(this.calculation);
+    //
+    //     this.setState({
+    //         ...this.state,
+    //         content: {
+    //             ...this.state.content,
+    //             [invalidTypeId]: {
+    //                 ...this.state.content[invalidTypeId],
+    //                 [property]: event.target.value
+    //             }
+    //         }
+    //     })
+    //
+    //     this.setState({
+    //         sum: this.calculation.reduce((total, amount) => total + amount)
+    //     })
+    // }
+    handleInputChange = (candidateId, property) => (event) => {
+        const name = event.target.name
+        console.log("NN",event.target.name);
+        if ((name) === "votes"+candidateId){
+            this.calculation[candidateId] = parseInt(event.target.value);
+            console.log(this.calculation);
+
+        }else{
+            console.log("NaN");
+        }
+
+        this.setState({
+            ...this.state,
+            content: {
+                ...this.state.content,
+                [candidateId]: {
+                    ...this.state.content[candidateId],
+                    [property]: event.target.value
+                }
+            }
+        })
+
+        this.setState({
+            sum: this.calculation.reduce((total, amount) => total + amount)
+        })
+    }
+
     componentDidMount() {
-        axios.get('https://cors-anywhere.herokuapp.com/https://dev.tabulation.ecdev.opensource.lk/election?limit=20&offset=0', {
+        const {name} = this.props.match.params
+        console.log("tally sheet Id ", name)
+        this.setState({
+            tallySheetId: name
+        })
+        const {name2} = this.props.match.params
+        console.log("Counting Hall No (Name) ", name2)
+        this.setState({
+            officeId: name2
+        })
+        console.log("Set >>> ", this.state.tallySheetId)
+        console.log("Set >>> ", this.state.officeId)
+        axios.get('/election?limit=1000&offset=0', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -61,71 +185,148 @@ class PRE41PVEntry extends Component {
                 'X-Requested-With': 'XMLHttpRequest'
             }
         }).then(res => {
-            console.log("Election Parties" + res.data[0].parties)
-            this.setState({
-                election: res.data[0].parties
-            })
+            console.log("Election" + res.data[0].parties)
+            this.setElection(res.data[0])
         }).catch((error) => console.log(error));
     }
-
 
     render() {
         return (
             <div style={{margin: '3%'}}>
                 <div>
                     <div style={{marginBottom: '3%'}}>
-                        <Typography variant="h5" gutterBottom>
-                            Presidential Election 2019 - Party-Wise Count ( PRE-41 ) : Postal Votes - Polling Station : A
-                        </Typography>
 
+                        <Breadcrumbs style={{marginLeft: '0.2%', marginBottom: '2%', fontSize: '14px'}} separator="/"
+                                     aria-label="breadcrumb">
+                            <Link color="inherit" href="/Home">
+                                Home
+                            </Link>
+                            <Link color="inherit" href="/Home">
+                                Counting Centre
+                            </Link>
+                            <Link color="inherit">
+                                Data Entry
+                            </Link>
+                            <Link color="inherit" href="/PRE41">
+                                Votes - PRE 41
+                            </Link>
+                            <Link color="inherit">
+                                Tally Sheet
+                            </Link>
+                            {/*<Typography color="textPrimary"></Typography>*/}
+                        </Breadcrumbs>
+
+                        <Typography variant="h4" gutterBottom>
+                            Presidential Election 2019
+                        </Typography>
+                        <Typography variant="h6" gutterBottom>
+                            PRE-41 - Counting Hall No : {this.props.match.params.name2}
+                            {/*PRE-41 - Tally Sheet ID : {this.props.match.params.name}*/}
+                        </Typography>
                     </div>
                     <Paper>
                         <Table>
                             <TableHead>
                                 <TableRow>
-                                    <TableCell style={{fontSize:13,fontWeight:'bold'}}>Symbol</TableCell>
-                                    <TableCell style={{fontSize:13,fontWeight:'bold'}}>Name of Candidate</TableCell>
-                                    <TableCell style={{fontSize:13,fontWeight:'bold'}}>No of votes in words</TableCell>
-                                    <TableCell style={{fontSize:13,fontWeight:'bold'}}>No of votes in figures</TableCell>
-                                    <TableCell style={{fontSize:13,fontWeight:'bold'}}>Agent</TableCell>
+                                    <TableCell className="header"
+                                               style={{color: 'white', fontSize: 13, fontWeight: 'bold'}}>
+                                        No</TableCell>
+                                    <TableCell className="header" style={{
+                                        color: 'white',
+                                        fontSize: 13,
+                                        fontWeight: 'bold'
+                                    }}>Symbol</TableCell>
+                                    <TableCell className="header"
+                                               style={{color: 'white', fontSize: 13, fontWeight: 'bold'}}>Name of
+                                        Candidate</TableCell>
+                                    <TableCell className="header"
+                                               style={{color: 'white', fontSize: 13, fontWeight: 'bold'}}>No of votes in
+                                        figures</TableCell>
+                                    <TableCell className="header"
+                                               style={{color: 'white', fontSize: 13, fontWeight: 'bold'}}>No of votes in
+                                        words</TableCell>
                                 </TableRow>
                             </TableHead>
-
                             <TableBody>
-                                {this.state.election.map((party, idx) => (
-                                    <TableRow>
-                                        <TableCell style={{fontSize: 13}}>{party.partyName}</TableCell>
+                                {this.state.candidatesList.map((candidateId, idx) => {
 
+                                    var candidate = this.state.candidateMap[candidateId];
+                                    return <TableRow>
                                         <TableCell
-                                            style={{fontSize: 13}}>{party.candidates[0].candidateName}</TableCell>
-
-                                        <TableCell style={{fontSize: 13}}>
+                                            style={{width: '4%', fontSize: 13}}>{idx+1}</TableCell>
+                                        <TableCell
+                                            style={{width: '20%', fontSize: 13}}>{candidate.partyName}</TableCell>
+                                        <TableCell
+                                            style={{width: '30%', fontSize: 13}}>{candidate.candidateName}</TableCell>
+                                        <TableCell style={{width: '25%', fontSize: 13}}>
                                             <TextField
                                                 id="outlined-dense"
                                                 margin="dense"
                                                 variant="outlined"
+                                                placeholder="No of votes"
+                                                name={'votes' + (idx + 1)}
+                                                autoComplete='off'
+                                                onChange={this.handleInputChange(candidateId, "count")}
                                             />
                                         </TableCell>
-                                        <TableCell style={{fontSize: 13}}>
+                                        <TableCell style={{width: '30%', fontSize: 13}}>
                                             <TextField
                                                 id="outlined-dense"
                                                 margin="dense"
                                                 variant="outlined"
-                                            />
-                                        </TableCell>
-                                        <TableCell style={{fontSize: 13}}>
-                                            <TextField
-                                                id="outlined-dense"
-                                                margin="dense"
-                                                variant="outlined"
+                                                placeholder="No of votes in words"
+                                                name={'votesWords' + (idx + 1)}
+                                                autoComplete='off'
+                                                onChange={this.handleInputChange(candidateId, "countInWords")}
                                             />
                                         </TableCell>
                                     </TableRow>
-                                ))}
+                                })}
 
+                                <TableRow>
+                                    <TableCell
+                                        style={{width: '4%', fontSize: 13}}></TableCell>
+                                    <TableCell
+                                        style={{width: '20%', fontSize: 13}}></TableCell>
+                                    <TableCell
+                                        style={{width: '30%', fontSize: 13}}></TableCell>
+                                    <TableCell style={{fontSize: 14, color: 'black', fontWeight: 'bold'}}>Rejected
+                                        Votes :</TableCell>
+                                    <TableCell
+                                        style={{ fontSize: 14,}}>
+                                        <TextField
+                                            id="outlined-dense"
+                                            margin="dense"
+                                            variant="outlined"
+                                            placeholder="Rejected Votes"
+                                            autoComplete='off'
+                                        /></TableCell>
+                                    {/*<TableCell style={{paddingLeft:'2%',width: '30%', fontSize: 16,fontWeight: 'bold'}}>*/}
+                                    {/*{this.state.sum}*/}
+                                    {/*</TableCell>*/}
+                                </TableRow>
+
+                                <TableRow>
+                                    <TableCell
+                                        style={{width: '4%', fontSize: 13}}></TableCell>
+                                    <TableCell
+                                        style={{width: '20%', fontSize: 13}}></TableCell>
+                                    <TableCell
+                                        style={{width: '30%', fontSize: 13}}></TableCell>
+                                    <TableCell style={{fontSize: 14, color: 'black', fontWeight: 'bold'}}>Total
+                                        Votes :</TableCell>
+
+
+                                    {this.state.sum > 0 && <TableCell
+                                        style={{paddingLeft: '2%', width: '30%', fontSize: 16, fontWeight: 'bold'}}>
+                                        {this.state.sum}
+                                    </TableCell>}
+
+                                    {/*<TableCell style={{paddingLeft:'2%',width: '30%', fontSize: 16,fontWeight: 'bold'}}>*/}
+                                    {/*{this.state.sum}*/}
+                                    {/*</TableCell>*/}
+                                </TableRow>
                             </TableBody>
-
-
                         </Table>
                     </Paper>
                 </div>
@@ -133,7 +334,7 @@ class PRE41PVEntry extends Component {
                 <div style={{marginLeft: '80%', marginTop: '2%'}}>
                     <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleBack}
                             className="button">Back</Button>
-                    <Button style={{borderRadius: 18, color: 'white'}} onClick={this.handleClickOpen}
+                    <Button style={{borderRadius: 18, color: 'white'}} onClick={this.handleSubmit}
                             className="button">Submit</Button>
                 </div>
 

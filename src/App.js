@@ -53,10 +53,10 @@ function App() {
                 <Route path="/PRE28A-Entry/:name" component={PRE28AEntry} />
 
                 <Route exact path="/PRE21PV" component={PRE21PV}/>
-                <Route exact path="/PRE21PV-Entry" component={PRE21PVEntry}/>
+                <Route exact path="/PRE21PV-Entry/:name/:name2" component={PRE21PVEntry}/>
 
                 <Route exact path="/PRE41PV" component={PRE41PV}/>
-                <Route exact path="/PRE41PV-Entry" component={PRE41PVEntry}/>
+                <Route exact path="/PRE41PV-Entry/:name/:name2" component={PRE41PVEntry}/>
 
                 <Route exact path="/Home" component={Home}/>
 

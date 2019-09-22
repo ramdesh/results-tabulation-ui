@@ -46,7 +46,7 @@ class PRE21Entry extends Component {
         this.calculation = [0];
 
     }
-
+    
     setElection(election) {
         var invalidTypes = election.invalidVoteCategories;
         var invalidTypesMap = {};
@@ -126,27 +126,33 @@ class PRE21Entry extends Component {
         console.log("Id office >>> ", name2)
         console.log("TALLY SHEET >>> ", name)
         event.preventDefault()
+        // console.log("Content1" ,this.state.content[1])
+        // console.log("Content2" ,this.state.content[2])
 
-
-        axios.post('/tally-sheet/PRE-21/' + name + '/version', {
-            "content": this.state.invalidTypesList.map((invalidTypeId) => {
-                return {
-                    "count": parseInt(this.state.content[invalidTypeId].count),
-                    "invalidVoteCategoryId": invalidTypeId,
-                }
+        if ( this.state.content[1] === undefined || this.state.content[2] === undefined ||
+            this.state.content[4] === undefined || this.state.content[5] === undefined || this.state.content[6] === undefined )
+        {
+            alert("Please Enter the necessary fields !")
+        } else {
+            axios.post('/tally-sheet/PRE-21/' + name + '/version', {
+                "content": this.state.invalidTypesList.map((invalidTypeId) => {
+                    return {
+                        "count": parseInt(this.state.content[invalidTypeId].count),
+                        "invalidVoteCategoryId": invalidTypeId,
+                    }
+                })
             })
-        })
+                .then(res => {
+                    console.log("URL" + res.data.htmlUrl);
+                    console.log("Result" + res.data[0]);
+                    alert("Successfully Created the TallySheet - PRE 21")
+                    const htmlURL = res.data.htmlUrl
+                    window.open(htmlURL, "_blank")
+                    // this.props.history.replace('/Home')
 
-            .then(res => {
-                console.log("URL" + res.data.htmlUrl);
-                console.log("Result" + res.data[0]);
-                alert("Successfully Created the TallySheet - PRE 21")
-                const htmlURL = res.data.htmlUrl
-                window.open(htmlURL, "_blank")
-                this.props.history.replace('/Home')
+                }).catch((error) => console.log(error));
 
-            }).catch((error) => console.log(error));
-
+        }
     }
 
     handleInputChange = (invalidTypeId, property) => (event) => {
@@ -241,7 +247,7 @@ class PRE21Entry extends Component {
 
                                         <TableCell style={{width: '30%', fontSize: 13}}>
                                             <TextField
-                                                id="count"
+                                                id="invalidCategoryCount"
                                                 margin="dense"
                                                 variant="outlined"
                                                 placeholder="Count"
