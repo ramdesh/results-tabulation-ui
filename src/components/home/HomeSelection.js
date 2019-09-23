@@ -10,7 +10,7 @@ import {
     Button
 } from '@material-ui/core';
 
-class Home extends Component {
+class HomeSelection extends Component {
     constructor(props, context) {
         super(props, context);
         this.handleClose = this.handleClose.bind(this);
@@ -196,13 +196,9 @@ class Home extends Component {
                         </Table>
                     </Paper>
                 </div>
-
             </div>
-
-
-
         )
     }
 }
 
-export default Home;
+export default HomeSelection;
