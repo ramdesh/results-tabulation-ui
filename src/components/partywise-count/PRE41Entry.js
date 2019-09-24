@@ -198,16 +198,16 @@ class PRE41Entry extends Component {
 
                         <Breadcrumbs style={{marginLeft: '0.2%', marginBottom: '2%', fontSize: '14px'}} separator="/"
                                      aria-label="breadcrumb">
-                            <Link color="inherit" href="/Home">
+                            <Link color="inherit" href="/">
                                 Home
                             </Link>
-                            <Link color="inherit" href="/Home">
-                                Counting Centre
+                            <Link color="inherit" href="/Main">
+                                Presidential Election
                             </Link>
-                            <Link color="inherit">
+                            <Link color="inherit" href="/Home">
                                 Data Entry
                             </Link>
-                            <Link color="inherit" href="/PRE41">
+                            <Link color="inherit">
                                 Votes - PRE 41
                             </Link>
                             <Link color="inherit">
@@ -215,7 +215,6 @@ class PRE41Entry extends Component {
                             </Link>
                             {/*<Typography color="textPrimary"></Typography>*/}
                         </Breadcrumbs>
-
                         <Typography variant="h4" gutterBottom>
                             Presidential Election 2019
                         </Typography>
