@@ -21,8 +21,8 @@ class ReportsEntry extends Component {
     constructor(props, context) {
         super(props, context);
         this.handleClose = this.handleClose.bind(this);
-        this.handleClickOpen = this.handleClickOpen.bind(this);
-        this.handleClickOpenPoll = this.handleClickOpenPoll.bind(this);
+        this.handleClickOpenPRE41 = this.handleClickOpenPRE41.bind(this);
+        this.handleClickPD30 = this.handleClickPD30.bind(this);
         this.handleClickOpenElectorate = this.handleClickOpenElectorate.bind(this);
         this.handleClickAllIsland = this.handleClickAllIsland.bind(this);
 
@@ -48,7 +48,8 @@ class ReportsEntry extends Component {
         };
     }
 
-    handleClickOpen() {
+    // Handle click for PRE 41 Non Postal votes
+    handleClickOpenPRE41() {
 
         if (this.state.reportversion == null) {
 
@@ -81,7 +82,8 @@ class ReportsEntry extends Component {
         this.setState({open: true});
     }
 
-    handleClickOpenPoll() {
+    // handle click for PRE 30 PD Non-postal votes
+    handleClickPD30() {
 
         axios.post('/tally-sheet/PRE-30-PD/'+this.state.reportPolling+'/version')
             .then(res => {
@@ -169,15 +171,17 @@ class ReportsEntry extends Component {
         this.setState({open: false});
     }
 
-    // Report handling for PRE 41
-    handleChange = event => {
+    // Report handling for PRE 41  Non postal votel
+    handleChangePRE41 = event => {
         this.setState({selected: event.target.value, name: event.target.name});
+
+        console.log("PRE41 Counting "+event.target.value)
 
         this.setState({
             reportId: event.target.value
         })
 
-        axios.get('/tally-sheet?limit=1000&offset=0&officeId='+event.target.value+'&tallySheetCode=PRE-41' , {
+        axios.get('/tally-sheet?limit=20&offset=0&electionId='+localStorage.getItem('electionType_NonPostal_Id')+'&officeId='+event.target.value+'&tallySheetCode=PRE-41' , {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -195,8 +199,8 @@ class ReportsEntry extends Component {
 
 
     };
-   // PRD 30 PD
-    handlePoll = event => {
+   // Event for PRE 30 PD
+    PD30 = event => {
         this.setState({selected1: event.target.value, name: event.target.name});
 
 
@@ -241,7 +245,7 @@ class ReportsEntry extends Component {
 
     componentDidMount() {
         console.log("Election Result Test")
-        axios.get('/area?limit=1000&offset=0&areaType=CountingCentre', {
+        axios.get('/area?limit=1000&offset=0&electionId='+localStorage.getItem('electionType_NonPostal_Id')+'&areaType=CountingCentre', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -362,7 +366,7 @@ class ReportsEntry extends Component {
                                         <InputLabel>
                                             Counting Center
                                         </InputLabel>
-                                        <Select className="width50" value={this.state.selected} onChange={this.handleChange}>
+                                        <Select className="width50" value={this.state.selected} onChange={this.handleChangePRE41}>
                                             {this.state.offices.map((CountingCenter, idx) => (
                                                 <MenuItem value={CountingCenter.areaId}>{CountingCenter.areaName}</MenuItem>
                                             ))}
@@ -370,7 +374,7 @@ class ReportsEntry extends Component {
                                     </FormControl>
                                 </TableCell>
                                 <TableCell>
-                                    <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleClickOpen}
+                                    <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleClickOpenPRE41}
                                             className="button">Generate</Button>
                                 </TableCell>
 
@@ -383,7 +387,7 @@ class ReportsEntry extends Component {
                                         <InputLabel>
                                             Polling Division
                                         </InputLabel>
-                                        <Select className="width50" value={this.state.selected1} onChange={this.handlePoll}>
+                                        <Select className="width50" value={this.state.selected1} onChange={this.PD30}>
                                             {this.state.pollingStation.map((districtCentre, idx) => (
                                                 <MenuItem value={districtCentre.areaId}>{districtCentre.areaName}</MenuItem>
                                             ))}
@@ -391,7 +395,7 @@ class ReportsEntry extends Component {
                                     </FormControl>
                                 </TableCell>
                                 <TableCell>
-                                    <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleClickOpenPoll}
+                                    <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleClickPD30}
                                             className="button">Generate</Button>
                                 </TableCell>
 
@@ -424,169 +428,169 @@ class ReportsEntry extends Component {
 
 
 
-                <div>
-                    <div style={{marginBottom: '3%'}}>
-                        <Typography variant="h5" gutterBottom>
-                            Postal Votes Reports
-                        </Typography>
+                {/*<div>*/}
+                    {/*<div style={{marginBottom: '3%'}}>*/}
+                        {/*<Typography variant="h5" gutterBottom>*/}
+                            {/*Postal Votes Reports*/}
+                        {/*</Typography>*/}
 
-                    </div>
+                    {/*</div>*/}
 
-                    <Paper style={{margin: '3%'}}>
-                        <Table >
-                            <TableHead>
-                                <TableRow>
-                                    {/*<TableCell style={{fontSize: 14, color:'black',fontWeight: 'bold'}}>Report Type</TableCell>*/}
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
+                    {/*<Paper style={{margin: '3%'}}>*/}
+                        {/*<Table >*/}
+                            {/*<TableHead>*/}
+                                {/*<TableRow>*/}
+                                    {/*/!*<TableCell style={{fontSize: 14, color:'black',fontWeight: 'bold'}}>Report Type</TableCell>*!/*/}
+                                {/*</TableRow>*/}
+                            {/*</TableHead>*/}
+                            {/*<TableBody>*/}
 
-                                <TableRow>
-                                    <TableCell style={{fontSize: 13,fontWeight: 'bold'}}>CE 201 PV</TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <FormControl variant="outlined" margin="dense">
-                                            <InputLabel>
-                                                Polling Division
-                                            </InputLabel>
-                                            <Select className="width50" value={this.state.selected1} onChange={this.handlePoll}>
-                                                {this.state.pollingStation.map((districtCentre, idx) => (
-                                                    <MenuItem value={districtCentre.areaId}>{districtCentre.areaName}</MenuItem>
-                                                ))}
-                                            </Select>
-                                        </FormControl>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleClickOpenPoll}
-                                                className="button">Generate</Button>
-                                    </TableCell>
+                                {/*<TableRow>*/}
+                                    {/*<TableCell style={{fontSize: 13,fontWeight: 'bold'}}>CE 201 PV</TableCell>*/}
+                                    {/*<TableCell style={{fontSize: 13}}>*/}
+                                        {/*<FormControl variant="outlined" margin="dense">*/}
+                                            {/*<InputLabel>*/}
+                                                {/*Polling Division*/}
+                                            {/*</InputLabel>*/}
+                                            {/*<Select className="width50" value={this.state.selected1} onChange={this.handlePoll}>*/}
+                                                {/*{this.state.pollingStation.map((districtCentre, idx) => (*/}
+                                                    {/*<MenuItem value={districtCentre.areaId}>{districtCentre.areaName}</MenuItem>*/}
+                                                {/*))}*/}
+                                            {/*</Select>*/}
+                                        {/*</FormControl>*/}
+                                    {/*</TableCell>*/}
+                                    {/*<TableCell>*/}
+                                        {/*<Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleClickOpenPoll}*/}
+                                                {/*className="button">Generate</Button>*/}
+                                    {/*</TableCell>*/}
 
-                                </TableRow>
-                                <TableRow>
-                                    <TableCell style={{width:'40%',fontSize: 13,fontWeight: 'bold',}}>PRE 41 PV</TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <FormControl variant="outlined" margin="dense">
-                                            <InputLabel>
-                                                Counting Center
-                                            </InputLabel>
-                                            <Select className="width50" value={this.state.selected} onChange={this.handleChange}>
-                                                {this.state.offices.map((CountingCenter, idx) => (
-                                                    <MenuItem value={CountingCenter.areaId}>{CountingCenter.areaName}</MenuItem>
-                                                ))}
-                                            </Select>
-                                        </FormControl>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleClickOpen}
-                                                className="button">Generate</Button>
-                                    </TableCell>
+                                {/*</TableRow>*/}
+                                {/*<TableRow>*/}
+                                    {/*<TableCell style={{width:'40%',fontSize: 13,fontWeight: 'bold',}}>PRE 41 PV</TableCell>*/}
+                                    {/*<TableCell style={{fontSize: 13}}>*/}
+                                        {/*<FormControl variant="outlined" margin="dense">*/}
+                                            {/*<InputLabel>*/}
+                                                {/*Counting Center*/}
+                                            {/*</InputLabel>*/}
+                                            {/*<Select className="width50" value={this.state.selected} onChange={this.handleChange}>*/}
+                                                {/*{this.state.offices.map((CountingCenter, idx) => (*/}
+                                                    {/*<MenuItem value={CountingCenter.areaId}>{CountingCenter.areaName}</MenuItem>*/}
+                                                {/*))}*/}
+                                            {/*</Select>*/}
+                                        {/*</FormControl>*/}
+                                    {/*</TableCell>*/}
+                                    {/*<TableCell>*/}
+                                        {/*<Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleClickOpen}*/}
+                                                {/*className="button">Generate</Button>*/}
+                                    {/*</TableCell>*/}
 
-                                </TableRow>
-                                <TableRow>
-                                    <TableCell style={{fontSize: 13,fontWeight: 'bold'}}>PRE 21 PV</TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <FormControl variant="outlined" margin="dense">
-                                            <InputLabel>
-                                                Polling Division
-                                            </InputLabel>
-                                            <Select className="width50" value={this.state.selected1} onChange={this.handlePoll}>
-                                                {this.state.pollingStation.map((districtCentre, idx) => (
-                                                    <MenuItem value={districtCentre.areaId}>{districtCentre.areaName}</MenuItem>
-                                                ))}
-                                            </Select>
-                                        </FormControl>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleClickOpenPoll}
-                                                className="button">Generate</Button>
-                                    </TableCell>
-                                </TableRow>
-                                <TableRow>
-                                    <TableCell style={{fontSize: 13,fontWeight: 'bold'}}>PRE 30 PV</TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <FormControl variant="outlined" margin="dense">
-                                            <InputLabel>
-                                                Electoral District
-                                            </InputLabel>
-                                            <Select className="width50" value={this.state.selected2} onChange={this.handleDivision}>
-                                                {this.state.electionDivision.map((electralDivision, idx) => (
-                                                    <MenuItem value={electralDivision.areaId}>{electralDivision.areaName}</MenuItem>
-                                                ))}
-                                            </Select>
-                                        </FormControl>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleClickOpenElectorate}
-                                                className="button">Generate</Button>
-                                    </TableCell>
-                                </TableRow>
+                                {/*</TableRow>*/}
+                                {/*<TableRow>*/}
+                                    {/*<TableCell style={{fontSize: 13,fontWeight: 'bold'}}>PRE 21 PV</TableCell>*/}
+                                    {/*<TableCell style={{fontSize: 13}}>*/}
+                                        {/*<FormControl variant="outlined" margin="dense">*/}
+                                            {/*<InputLabel>*/}
+                                                {/*Polling Division*/}
+                                            {/*</InputLabel>*/}
+                                            {/*<Select className="width50" value={this.state.selected1} onChange={this.handlePoll}>*/}
+                                                {/*{this.state.pollingStation.map((districtCentre, idx) => (*/}
+                                                    {/*<MenuItem value={districtCentre.areaId}>{districtCentre.areaName}</MenuItem>*/}
+                                                {/*))}*/}
+                                            {/*</Select>*/}
+                                        {/*</FormControl>*/}
+                                    {/*</TableCell>*/}
+                                    {/*<TableCell>*/}
+                                        {/*<Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleClickOpenPoll}*/}
+                                                {/*className="button">Generate</Button>*/}
+                                    {/*</TableCell>*/}
+                                {/*</TableRow>*/}
+                                {/*<TableRow>*/}
+                                    {/*<TableCell style={{fontSize: 13,fontWeight: 'bold'}}>PRE 30 PV</TableCell>*/}
+                                    {/*<TableCell style={{fontSize: 13}}>*/}
+                                        {/*<FormControl variant="outlined" margin="dense">*/}
+                                            {/*<InputLabel>*/}
+                                                {/*Electoral District*/}
+                                            {/*</InputLabel>*/}
+                                            {/*<Select className="width50" value={this.state.selected2} onChange={this.handleDivision}>*/}
+                                                {/*{this.state.electionDivision.map((electralDivision, idx) => (*/}
+                                                    {/*<MenuItem value={electralDivision.areaId}>{electralDivision.areaName}</MenuItem>*/}
+                                                {/*))}*/}
+                                            {/*</Select>*/}
+                                        {/*</FormControl>*/}
+                                    {/*</TableCell>*/}
+                                    {/*<TableCell>*/}
+                                        {/*<Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleClickOpenElectorate}*/}
+                                                {/*className="button">Generate</Button>*/}
+                                    {/*</TableCell>*/}
+                                {/*</TableRow>*/}
 
-                            </TableBody>
-                        </Table>
-                    </Paper>
-                </div>
+                            {/*</TableBody>*/}
+                        {/*</Table>*/}
+                    {/*</Paper>*/}
+                {/*</div>*/}
 
 
-                <div>
-                    <div style={{marginBottom: '3%'}}>
-                        <Typography variant="h5" gutterBottom>
-                            Overall Reports
-                        </Typography>
+                {/*<div>*/}
+                    {/*<div style={{marginBottom: '3%'}}>*/}
+                        {/*<Typography variant="h5" gutterBottom>*/}
+                            {/*Overall Reports*/}
+                        {/*</Typography>*/}
 
-                    </div>
+                    {/*</div>*/}
 
-                    <Paper style={{margin: '3%'}}>
-                        <Table >
-                            <TableHead>
-                                <TableRow>
-                                    {/*<TableCell style={{fontSize: 14, color:'black',fontWeight: 'bold'}}>Report Type</TableCell>*/}
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
+                    {/*<Paper style={{margin: '3%'}}>*/}
+                        {/*<Table >*/}
+                            {/*<TableHead>*/}
+                                {/*<TableRow>*/}
+                                    {/*/!*<TableCell style={{fontSize: 14, color:'black',fontWeight: 'bold'}}>Report Type</TableCell>*!/*/}
+                                {/*</TableRow>*/}
+                            {/*</TableHead>*/}
+                            {/*<TableBody>*/}
 
-                                <TableRow>
-                                    <TableCell style={{fontSize: 13,fontWeight: 'bold'}}>All Island</TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleClickAllIsland}
-                                                className="button">Generate</Button>
-                                    </TableCell>
-                                </TableRow>
+                                {/*<TableRow>*/}
+                                    {/*<TableCell style={{fontSize: 13,fontWeight: 'bold'}}>All Island</TableCell>*/}
+                                    {/*<TableCell style={{fontSize: 13}}>*/}
+                                    {/*</TableCell>*/}
+                                    {/*<TableCell>*/}
+                                        {/*<Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleClickAllIsland}*/}
+                                                {/*className="button">Generate</Button>*/}
+                                    {/*</TableCell>*/}
+                                {/*</TableRow>*/}
 
-                                <TableRow>
-                                    <TableCell style={{fontSize: 13,fontWeight: 'bold'}}>All Island ED</TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleClickAllIslandED}
-                                                className="button1">Generate</Button>
-                                    </TableCell>
-                                </TableRow>
+                                {/*<TableRow>*/}
+                                    {/*<TableCell style={{fontSize: 13,fontWeight: 'bold'}}>All Island ED</TableCell>*/}
+                                    {/*<TableCell style={{fontSize: 13}}>*/}
+                                    {/*</TableCell>*/}
+                                    {/*<TableCell>*/}
+                                        {/*<Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleClickAllIslandED}*/}
+                                                {/*className="button1">Generate</Button>*/}
+                                    {/*</TableCell>*/}
+                                {/*</TableRow>*/}
 
-                                <TableRow>
-                                    <TableCell style={{fontSize: 13,fontWeight: 'bold'}}>PRE 30 ED</TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <FormControl variant="outlined" margin="dense">
-                                            <InputLabel>
-                                                Electoral District
-                                            </InputLabel>
-                                            <Select className="width50" value={this.state.selected2} onChange={this.handleDivision}>
-                                                {this.state.electionDivision.map((electralDivision, idx) => (
-                                                    <MenuItem value={electralDivision.areaId}>{electralDivision.areaName}</MenuItem>
-                                                ))}
-                                            </Select>
-                                        </FormControl>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleClickOpenElectorate}
-                                                className="button">Generate</Button>
-                                    </TableCell>
-                                </TableRow>
+                                {/*<TableRow>*/}
+                                    {/*<TableCell style={{fontSize: 13,fontWeight: 'bold'}}>PRE 30 ED</TableCell>*/}
+                                    {/*<TableCell style={{fontSize: 13}}>*/}
+                                        {/*<FormControl variant="outlined" margin="dense">*/}
+                                            {/*<InputLabel>*/}
+                                                {/*Electoral District*/}
+                                            {/*</InputLabel>*/}
+                                            {/*<Select className="width50" value={this.state.selected2} onChange={this.handleDivision}>*/}
+                                                {/*{this.state.electionDivision.map((electralDivision, idx) => (*/}
+                                                    {/*<MenuItem value={electralDivision.areaId}>{electralDivision.areaName}</MenuItem>*/}
+                                                {/*))}*/}
+                                            {/*</Select>*/}
+                                        {/*</FormControl>*/}
+                                    {/*</TableCell>*/}
+                                    {/*<TableCell>*/}
+                                        {/*<Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleClickOpenElectorate}*/}
+                                                {/*className="button">Generate</Button>*/}
+                                    {/*</TableCell>*/}
+                                {/*</TableRow>*/}
 
-                            </TableBody>
-                        </Table>
-                    </Paper>
-                </div>
+                            {/*</TableBody>*/}
+                        {/*</Table>*/}
+                    {/*</Paper>*/}
+                {/*</div>*/}
 
 
             </div>
