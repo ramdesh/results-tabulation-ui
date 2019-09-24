@@ -129,7 +129,7 @@ class PRE41PV extends Component {
         console.log("Counting Name" + event.target.value)
 
         // get the officeId by officeName
-        axios.get('/office?limit=1000&offset=0&officeName=' + event.target.value + '&officeType=CountingCentre', {
+        axios.get('/office?limit=1000&offset=0&electionId='+localStorage.getItem('electionType_Postal_Id')+'&officeName=' + event.target.value + '&officeType=CountingCentre', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',

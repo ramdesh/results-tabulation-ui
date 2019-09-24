@@ -78,7 +78,7 @@ class PRE41PVEntry extends Component {
             alert("Please Enter the necessary fields !")
 
         } else {
-            axios.post('/tally-sheet/PRE-41PV/' + name + '/version', {
+            axios.post('/tally-sheet/PRE-41/' + name + '/version', {
                 "content": this.state.candidatesList.map((candidateId) => {
                     return {
                         "candidateId": candidateId,
@@ -198,17 +198,17 @@ class PRE41PVEntry extends Component {
 
                         <Breadcrumbs style={{marginLeft: '0.2%', marginBottom: '2%', fontSize: '14px'}} separator="/"
                                      aria-label="breadcrumb">
-                            <Link color="inherit" href="/Home">
+                            <Link color="inherit" href="/">
                                 Home
                             </Link>
-                            <Link color="inherit" href="/Home">
-                                Counting Centre
+                            <Link color="inherit" href="/Main">
+                                Presidential Election
                             </Link>
-                            <Link color="inherit">
+                            <Link color="inherit" href="/Home">
                                 Data Entry
                             </Link>
-                            <Link color="inherit" href="/PRE41">
-                                Votes - PRE 41
+                            <Link color="inherit" href="/PRE41PV">
+                                Postal Votes - PRE 41
                             </Link>
                             <Link color="inherit">
                                 Tally Sheet
