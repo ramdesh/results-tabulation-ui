@@ -26,6 +26,7 @@ import ReportsEntry from "./components/report/ReportsEntry";
 import Home from "./components/home/Home";
 import HomeSelection from "./components/home/HomeSelection";
 import HomeElection from "./components/home/HomeElection";
+import ReportsNew from "./components/report/ReportsNew";
 
 function App() {
     return (
@@ -36,6 +37,7 @@ function App() {
                 <Route exact path="/" component={HomeElection}/>
                 <Route exact path="/report" component={Reports}/>
                 <Route exact path="/ReportsEntry" component={ReportsEntry}/>
+                <Route exact path="/ReportsNew" component={ReportsNew}/>
 
                 <Route exact path="/CE201" component={CE201}/>
                 <Route exact path="/CE201-Entry/:name/:name2/:countingId" component={CE201Entry}/>
@@ -66,6 +68,7 @@ function App() {
 
                 <Route exact path="/PRE34COPV" component={PRE34COPV}/>
                 <Route exact path="/PRE34COPV-Entry" component={PRE34COPVEntry}/>
+
 
             </div>
         </Router>
