@@ -11,7 +11,9 @@ import {
     FormControl,
     InputLabel,
     Select,
-    Button
+    Button,
+    Breadcrumbs,
+    Link
 } from '@material-ui/core';
 import MenuItem from '@material-ui/core/MenuItem';
 
@@ -305,6 +307,20 @@ class ReportsEntry extends Component {
 
              <div>
                 <div style={{marginBottom: '3%'}}>
+                    <Breadcrumbs style={{marginLeft: '0.2%', marginBottom: '2%', fontSize: '14px'}} separator="/"
+                                 aria-label="breadcrumb">
+                        <Link color="inherit" href="/">
+                            Home
+                        </Link>
+                        <Link color="inherit" href="/Main">
+                            Presidential Election
+                        </Link>
+                        <Link color="inherit" >
+                            Reports
+                        </Link>
+
+                        {/*<Typography color="textPrimary"></Typography>*/}
+                    </Breadcrumbs>
                     <Typography variant="h5" gutterBottom>
                        Ordinary Votes Reports
                     </Typography>

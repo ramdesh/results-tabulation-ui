@@ -7,13 +7,17 @@ import {
     TableHead,
     TableBody,
     Paper,
-    Button
+    Button,
+    Breadcrumbs,
+    Link
 } from '@material-ui/core';
 
 class HomeSelection extends Component {
     constructor(props, context) {
         super(props, context);
         this.handleClose = this.handleClose.bind(this);
+        this.handleClickOpen = this.handleClickOpen.bind(this);
+        this.handleClickOpen1 = this.handleClickOpen1.bind(this);
         this.open1 = this.open1.bind(this);
         this.open2 = this.open2.bind(this);
         this.open3 = this.open3.bind(this);
@@ -67,135 +71,49 @@ class HomeSelection extends Component {
         this.setState({open: false});
     }
 
+    handleClickOpen (){
+        this.props.history.replace('/Home')
+    }
+
+    handleClickOpen1 (){
+        this.props.history.replace('/ReportsEntry')
+    }
+
+
     render() {
         return (
-            <div style={{margin: '3%', marginRight:'16%'}}>
+            <div style={{margin: '3%'}}>
                 <div>
                     <div style={{marginBottom: '3%'}}>
-                        <div style={{marginBottom: '3%'}}>
-                            <Typography variant="h4" gutterBottom>
-                                Presidential Election 2019
-                            </Typography>
-                            <Typography variant="h6" gutterBottom>
-                                Votes - Tally Sheets
-                            </Typography>
-                        </div>
+                        <Breadcrumbs style={{marginLeft: '0.2%', marginBottom: '2%', fontSize: '14px'}} separator="/"
+                                     aria-label="breadcrumb">
+                            <Link color="inherit" href="/">
+                                Home
+                            </Link>
+                            <Link color="inherit">
+                                Presidential Election
+                            </Link>
+
+
+                            {/*<Typography color="textPrimary"></Typography>*/}
+                        </Breadcrumbs>
+                        <Typography align={"center"} variant="h4" gutterBottom>
+                            Presidential Election 2019
+                        </Typography>
+
                     </div>
-                    <Paper style={{margin: '3%',marginLeft: '5%'}}>
+                    <div style={{marginLeft: '33%', marginRight: '33%'}}>
+                        <Button align={"center"}
+                                style={{borderRadius: 18, color: 'white', width: '100%', marginTop: '6%'}}
+                                onClick={this.handleClickOpen} className="button">Data Entry</Button>
+                        <Button align={"center"}
+                                style={{borderRadius: 18, color: 'white', width: '100%', marginTop: '6%'}}
+                                onClick={this.handleClickOpen1} className="button">Reports</Button>
+                    </div>
 
-                        <Table >
-                            <TableHead>
-                                <TableRow>
-                                    {/*<TableCell style={{fontSize: 14, color:'black',fontWeight: 'bold'}}>Report Type</TableCell>*/}
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                <TableRow>
-                                    <TableCell style={{width:'40%',fontSize: 13,fontWeight: 'bold',}}>Tally Sheet : PRE 28</TableCell>
-                                    <TableCell>
-                                        <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.open5}
-                                                className="button">Open</Button>
-                                    </TableCell>
-                                </TableRow>
-
-                                <TableRow>
-                                    <TableCell style={{fontSize: 13,fontWeight: 'bold'}}>Tally Sheet : PRE 28A</TableCell>
-                                    <TableCell>
-                                        <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.open6}
-                                                className="button">Open</Button>
-                                    </TableCell>
-                                </TableRow>
-
-                                <TableRow>
-                                    <TableCell style={{fontSize: 13,fontWeight: 'bold'}}>Tally Sheet : CE 201</TableCell>
-                                    <TableCell>
-                                        <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.open3}
-                                                className="button">Open</Button>
-                                    </TableCell>
-                                </TableRow>
-
-                                <TableRow>
-                                    <TableCell style={{width:'40%',fontSize: 13,fontWeight: 'bold',}}>Tally Sheet : PRE 41</TableCell>
-                                    <TableCell>
-                                        <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.open1}
-                                                className="button">Open</Button>
-                                    </TableCell>
-
-                                </TableRow>
-                                <TableRow>
-                                    <TableCell style={{fontSize: 13,fontWeight: 'bold'}}>Tally Sheet : PRE 21</TableCell>
-                                    <TableCell>
-                                        <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.open2}
-                                                className="button">Open</Button>
-                                    </TableCell>
-
-                                </TableRow>
-
-                                <TableRow>
-                                    <TableCell style={{fontSize: 13,fontWeight: 'bold'}}>TallySheet : PRE 34 CO</TableCell>
-                                    <TableCell>
-                                        <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.open4}
-                                                className="button">Open</Button>
-                                    </TableCell>
-                                </TableRow>
-                            </TableBody>
-                        </Table>
-                    </Paper>
                 </div>
 
-                <div>
-                    <div style={{marginTop:'5%',marginBottom: '3%'}}>
-                        <div style={{marginBottom: '3%'}}>
-                            <Typography variant="h6" gutterBottom>
-                                Postal Votes - Tally Sheets
-                            </Typography>
-                        </div>
-                    </div>
-                    <Paper style={{margin: '3%',marginLeft: '5%'}}>
-                        <Table >
-                            <TableHead>
-                                <TableRow>
-                                    {/*<TableCell style={{fontSize: 14, color:'black',fontWeight: 'bold'}}>Report Type</TableCell>*/}
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
 
-                                <TableRow>
-                                    <TableCell style={{fontSize: 13,fontWeight: 'bold'}}>Tally Sheet : CE 201 PV</TableCell>
-                                    <TableCell>
-                                        <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.open7}
-                                                className="button">Open</Button>
-                                    </TableCell>
-                                </TableRow>
-
-                                <TableRow>
-                                    <TableCell style={{width:'40%',fontSize: 13,fontWeight: 'bold',}}>Tally Sheet : PRE 41 PV</TableCell>
-                                    <TableCell>
-                                        <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.open8}
-                                                className="button">Open</Button>
-                                    </TableCell>
-
-                                </TableRow>
-                                <TableRow>
-                                    <TableCell style={{fontSize: 13,fontWeight: 'bold'}}>Tally Sheet : PRE 21 PV</TableCell>
-                                    <TableCell>
-                                        <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.open9}
-                                                className="button">Open</Button>
-                                    </TableCell>
-                                </TableRow>
-
-                                <TableRow>
-                                    <TableCell style={{fontSize: 13,fontWeight: 'bold'}}>TallySheet : PRE 34 CO PV</TableCell>
-                                    <TableCell>
-                                        <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.open10}
-                                                className="button">Open</Button>
-                                    </TableCell>
-                                </TableRow>
-
-                            </TableBody>
-                        </Table>
-                    </Paper>
-                </div>
             </div>
         )
     }

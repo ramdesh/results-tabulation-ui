@@ -48,7 +48,7 @@ class PRE41 extends Component {
         if (this.state.selectedCountingCenter === '') {
             alert("Please select the necessary fields !")
         } else {
-            axios.get('/tally-sheet?limit=1000&offset=0&officeId='+this.state.countingId+'&tallySheetCode=PRE-21', {
+            axios.get('/tally-sheet?limit=1000&offset=0&officeId='+this.state.countingId+'&tallySheetCode=PRE-41', {
                 headers: {
                     'Access-Control-Allow-Origin': '*',
                     'Access-Control-Allow-Methods': 'GET',

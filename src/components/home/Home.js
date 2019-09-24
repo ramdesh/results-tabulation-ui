@@ -7,7 +7,9 @@ import {
     TableHead,
     TableBody,
     Paper,
-    Button
+    Button,
+    Breadcrumbs,
+    Link
 } from '@material-ui/core';
 
 class Home extends Component {
@@ -73,6 +75,20 @@ class Home extends Component {
                 <div>
                     <div style={{marginBottom: '3%'}}>
                         <div style={{marginBottom: '3%'}}>
+                            <Breadcrumbs style={{marginLeft: '0.2%', marginBottom: '2%', fontSize: '14px'}} separator="/"
+                                         aria-label="breadcrumb">
+                                <Link color="inherit" href="/">
+                                    Home
+                                </Link>
+                                <Link color="inherit" href="/Main">
+                                    Presidential Election
+                                </Link>
+                                <Link color="inherit" >
+                                    Data Entry
+                                </Link>
+
+                                {/*<Typography color="textPrimary"></Typography>*/}
+                            </Breadcrumbs>
                             <Typography variant="h4" gutterBottom>
                                 Presidential Election 2019
                             </Typography>
@@ -90,21 +106,21 @@ class Home extends Component {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                <TableRow>
-                                    <TableCell style={{width:'40%',fontSize: 13,fontWeight: 'bold',}}>Tally Sheet : PRE 28</TableCell>
-                                    <TableCell>
-                                        <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.open5}
-                                                className="button">Open</Button>
-                                    </TableCell>
-                                </TableRow>
+                                {/*<TableRow>*/}
+                                    {/*<TableCell style={{width:'40%',fontSize: 13,fontWeight: 'bold',}}>Tally Sheet : PRE 28</TableCell>*/}
+                                    {/*<TableCell>*/}
+                                        {/*<Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.open5}*/}
+                                                {/*className="button">Open</Button>*/}
+                                    {/*</TableCell>*/}
+                                {/*</TableRow>*/}
 
-                                <TableRow>
-                                    <TableCell style={{fontSize: 13,fontWeight: 'bold'}}>Tally Sheet : PRE 28A</TableCell>
-                                    <TableCell>
-                                        <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.open6}
-                                                className="button">Open</Button>
-                                    </TableCell>
-                                </TableRow>
+                                {/*<TableRow>*/}
+                                    {/*<TableCell style={{fontSize: 13,fontWeight: 'bold'}}>Tally Sheet : PRE 28A</TableCell>*/}
+                                    {/*<TableCell>*/}
+                                        {/*<Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.open6}*/}
+                                                {/*className="button">Open</Button>*/}
+                                    {/*</TableCell>*/}
+                                {/*</TableRow>*/}
 
                                 <TableRow>
                                     <TableCell style={{fontSize: 13,fontWeight: 'bold'}}>Tally Sheet : CE 201</TableCell>
@@ -131,13 +147,13 @@ class Home extends Component {
 
                                 </TableRow>
 
-                                <TableRow>
-                                    <TableCell style={{fontSize: 13,fontWeight: 'bold'}}>TallySheet : PRE 34 CO</TableCell>
-                                    <TableCell>
-                                        <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.open4}
-                                                className="button">Open</Button>
-                                    </TableCell>
-                                </TableRow>
+                                {/*<TableRow>*/}
+                                    {/*<TableCell style={{fontSize: 13,fontWeight: 'bold'}}>TallySheet : PRE 34 CO</TableCell>*/}
+                                    {/*<TableCell>*/}
+                                        {/*<Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.open4}*/}
+                                                {/*className="button">Open</Button>*/}
+                                    {/*</TableCell>*/}
+                                {/*</TableRow>*/}
                             </TableBody>
                         </Table>
                     </Paper>
@@ -184,13 +200,13 @@ class Home extends Component {
                                     </TableCell>
                                 </TableRow>
 
-                                <TableRow>
-                                    <TableCell style={{fontSize: 13,fontWeight: 'bold'}}>TallySheet : PRE 34 CO PV</TableCell>
-                                    <TableCell>
-                                        <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.open10}
-                                                className="button">Open</Button>
-                                    </TableCell>
-                                </TableRow>
+                                {/*<TableRow>*/}
+                                    {/*<TableCell style={{fontSize: 13,fontWeight: 'bold'}}>TallySheet : PRE 34 CO PV</TableCell>*/}
+                                    {/*<TableCell>*/}
+                                        {/*<Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.open10}*/}
+                                                {/*className="button">Open</Button>*/}
+                                    {/*</TableCell>*/}
+                                {/*</TableRow>*/}
 
                             </TableBody>
                         </Table>
