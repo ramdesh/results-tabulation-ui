@@ -37,10 +37,12 @@ class ReportsEntry extends Component {
             selected3: 'Select',
             setOpen: false,
             reportId:0,
+            CE201:0,
             reportversion: null,
             reportPolling: [],
             reportDivision: [],
             reportAllisland: [],
+            reportCE201:[],
             value: 0
 
         };
@@ -161,6 +163,34 @@ class ReportsEntry extends Component {
         // this.setState({open: true});
     }
 
+    handleclickCE201() {
+        if (this.state.reportCE201 === undefined) {
+
+            alert('Report not Avialable')
+
+        }else{
+            axios.get('/tally-sheet/'+this.state.CE201+'/version/'+this.state.reportCE201+'/html' , {
+                headers: {
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'GET',
+                    'Access-Control-Allow-Headers': 'Content-Type',
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            }).then(res => {
+                console.log("Election" + res)
+                // this.setState({
+                //     report: res.data[0].reportId
+                // })
+            })
+                .catch((error) => console.log(error));
+
+
+
+            window.open('https://dev.tabulation.ecdev.opensource.lk/tally-sheet/'+this.state.reportId+'/version/'+this.state.reportversion+'/html', "_blank");
+        }
+    }
+
+
     // modal controllers
     handleClose() {
         console.log("close")
@@ -215,6 +245,31 @@ class ReportsEntry extends Component {
 
     };
 
+    // PRE 201
+    Pre201 = event => {
+        this.setState({selected1: event.target.value, name: event.target.name});
+
+        this.setState({
+            CE201: event.target.value
+        })
+
+        axios.get('/tally-sheet?limit=1000&offset=0&officeId='+event.target.value+'&tallySheetCode=PRE-30-PD' , {
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET',
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        }).then(res => {
+            console.log("Election" + res.data[0].latestVersionId)
+            this.setState({
+                reportCE201: res.data[0].latestVersionId
+            })
+        })
+            .catch((error) => console.log(error));
+
+    };
+
     handleDivision = event => {
         this.setState({selected2: event.target.value, name: event.target.name});
 
@@ -239,7 +294,7 @@ class ReportsEntry extends Component {
 
     componentDidMount() {
         console.log("Election Result Test")
-        axios.get('/area?limit=1000&offset=0&areaType=CountingCentre', {
+        axios.get('/area?limit=1000&offset=0&electionId=3&areaType=CountingCentre', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -324,17 +379,17 @@ class ReportsEntry extends Component {
                                 <TableCell style={{fontSize: 13}}>
                                     <FormControl variant="outlined" margin="dense">
                                         <InputLabel>
-                                            Polling Division
+                                            Counting Center
                                         </InputLabel>
-                                        <Select className="width50" value={this.state.selected1} onChange={this.handlePoll}>
-                                            {this.state.pollingStation.map((districtCentre, idx) => (
-                                                <MenuItem value={districtCentre.areaId}>{districtCentre.areaName}</MenuItem>
+                                        <Select className="width50" value={this.state.selected1} onChange={this.Pre201}>
+                                            {this.state.offices.map((CE201, idx) => (
+                                                <MenuItem value={CE201.areaId}>{CE201.areaName}</MenuItem>
                                             ))}
                                         </Select>
                                     </FormControl>
                                 </TableCell>
                                 <TableCell>
-                                    <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleClickOpenPoll}
+                                    <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleclickCE201}
                                             className="button">Generate</Button>
                                 </TableCell>
                             </TableRow>
