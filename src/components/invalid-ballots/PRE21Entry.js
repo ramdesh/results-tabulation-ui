@@ -46,7 +46,7 @@ class PRE21Entry extends Component {
         this.calculation = [0];
 
     }
-    
+
     setElection(election) {
         var invalidTypes = election.invalidVoteCategories;
         var invalidTypesMap = {};
@@ -148,7 +148,7 @@ class PRE21Entry extends Component {
                     alert("Successfully Created the TallySheet - PRE 21")
                     const htmlURL = res.data.htmlUrl
                     window.open(htmlURL, "_blank")
-                    // this.props.history.replace('/Home')
+                    this.props.history.replace('/Home')
 
                 }).catch((error) => console.log(error));
 
@@ -188,22 +188,23 @@ class PRE21Entry extends Component {
                 <div>
 
                     <div style={{marginBottom: '3%'}}>
+
                         <Breadcrumbs style={{marginLeft: '0.2%', marginBottom: '2%', fontSize: '14px'}} separator="/"
                                      aria-label="breadcrumb">
-                            <Link color="inherit" href="/Home">
+                            <Link color="inherit" href="/">
                                 Home
                             </Link>
-                            <Link color="inherit" href="/Home">
-                                Counting Centre
+                            <Link color="inherit" href="/Main">
+                                Presidential Election
                             </Link>
-                            <Link color="inherit" href="/PRE21">
+                            <Link color="inherit" href="/Home">
                                 Data Entry
                             </Link>
-                            <Link color="inherit" href="/PRE21">
+                            <Link color="inherit">
                                 Votes - PRE 21
                             </Link>
                             <Link color="inherit">
-                                Tally Sheet
+                            Tally Sheet
                             </Link>
                             {/*<Typography color="textPrimary"></Typography>*/}
                         </Breadcrumbs>
