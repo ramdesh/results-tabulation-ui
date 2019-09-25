@@ -201,6 +201,10 @@ class CE201Entry extends Component {
     }
 
     handleInputChange = (pollingId, property) => (event) => {
+
+        console.log("Polling ID",pollingId)
+        console.log("value",property)
+
         this.setState({
             ...this.state,
             content: {
