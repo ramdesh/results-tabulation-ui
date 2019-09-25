@@ -41,7 +41,7 @@ class CE201Entry extends Component {
             countingName: 0,
             countingId: 0,
 
-            ballotBoxes:[]
+            // ballotBoxes:[]
         };
     }
 
@@ -114,7 +114,7 @@ class CE201Entry extends Component {
         })
 
         const {countingId} = this.props.match.params
-        console.log("TallySheet ID : ", countingId)
+        console.log("counting Id : ", countingId)
         this.setState({
             countingId: countingId
         })
@@ -172,10 +172,10 @@ class CE201Entry extends Component {
                 return {
                     "areaId": pollingId,
                     "ballotBoxesIssued": [
-                        1
+                        ""
                     ],
                     "ballotBoxesReceived": [
-                        1
+                        ""
                     ],
                     "ballotsIssued": parseInt(this.state.content[pollingId].ballotsIssued),
                     "ballotsReceived": parseInt(this.state.content[pollingId].ballotsReceived),
@@ -291,38 +291,41 @@ class CE201Entry extends Component {
                                         </TableCell>
                                         <TableCell style={{fontSize: 13, width: '13%'}}>
 
-                                            <FormControl variant="outlined" margin="dense">
+                                            {/*<FormControl variant="outlined" margin="dense">*/}
 
-                                                <InputLabel style={{fontSize:'12px',marginLeft: '-5%'}}>
-                                                    Box ID
-                                                </InputLabel>
+                                                {/*<InputLabel style={{fontSize:'12px',marginLeft: '-5%'}}>*/}
+                                                    {/*Box ID*/}
+                                                {/*</InputLabel>*/}
 
-                                                <Select className="width40" value={this.state.selectedbox1}
-                                                        onChange={this.handleBoxes} >
-                                                    {this.state.ballotBoxes.map((ballotbox, idx) => (
-                                                        <MenuItem value={ballotbox.ballotBoxId}>{ballotbox.ballotBoxId}</MenuItem>
-                                                    ))}
-                                                </Select>
-                                            </FormControl>
+                                                {/*<Select className="width40" value={this.state.selectedbox1}*/}
+                                                        {/*onChange={this.handleBoxes} >*/}
+                                                    {/*{this.state.ballotBoxes.map((ballotbox, idx) => (*/}
+                                                        {/*<MenuItem value={ballotbox.ballotBoxId}>{ballotbox.ballotBoxId}</MenuItem>*/}
+                                                    {/*))}*/}
+                                                {/*</Select>*/}
+                                            {/*</FormControl>*/}
 
                                             <TextField
                                                 id="box-id1"
                                                 margin="dense"
                                                 variant="outlined"
                                                 placeholder="Box Id"
+                                                // onChange={this.handleInputChange(pollingStation.officeId, "ballotBoxesReceived")}
                                             />
-                                            {/*<TextField*/}
-                                                {/*id="box-id2"*/}
-                                                {/*margin="dense"*/}
-                                                {/*variant="outlined"*/}
-                                                {/*placeholder="Box Id"*/}
-                                            {/*/>*/}
-                                            {/*<TextField*/}
-                                                {/*id="box-id3"*/}
-                                                {/*margin="dense"*/}
-                                                {/*variant="outlined"*/}
-                                                {/*placeholder="Box Id"*/}
-                                            {/*/>*/}
+                                            <TextField
+                                                id="box-id2"
+                                                margin="dense"
+                                                variant="outlined"
+                                                placeholder="Box Id"
+                                                // onChange={this.handleInputChange(pollingStation.officeId, "ballotBoxesReceived")}
+                                            />
+                                            <TextField
+                                                id="box-id3"
+                                                margin="dense"
+                                                variant="outlined"
+                                                placeholder="Box Id"
+                                                // onChange={this.handleInputChange(pollingStation.officeId, "ballotBoxesReceived")}
+                                            />
                                         </TableCell>
                                         <TableCell style={{fontSize: 13, width: '11%'}}>
                                             <TextField
