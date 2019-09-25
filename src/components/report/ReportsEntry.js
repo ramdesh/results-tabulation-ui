@@ -28,6 +28,7 @@ class ReportsEntry extends Component {
         this.handleClickOpenElectorate = this.handleClickOpenElectorate.bind(this);
         this.handleClickOpenPRE30Pv = this.handleClickOpenPRE30Pv.bind(this);
         this.handleClickOpenPRE21pv = this.handleClickOpenPRE21pv.bind(this);
+        this.handleClickOpenPRE41Pv = this.handleClickOpenPRE41Pv.bind(this);
         this.handleClickAllIsland = this.handleClickAllIsland.bind(this);
 
         this.state = {
@@ -45,6 +46,7 @@ class ReportsEntry extends Component {
             selectedPRE21: 'Select',
             selectedPRE30PV: 'Select',
             selectedPRE21PV: 'Select',
+            selectedPRE41PV: 'Select',
             selected2: 'Select',
             selected3: 'Select',
             setOpen: false,
@@ -53,10 +55,12 @@ class ReportsEntry extends Component {
             reportIdPRE21:0,
             reportIdPRE21Pv:0,
             report30pdpv:0,
+            reportIdPRE41Pv:0,
             reportversion: null,
             reportversionCE201: null,
             reportversionPRE21: null,
             reportversionPRE21Pv: null,
+            reportversionPRE41Pv: null,
             reportPolling: [],
             reportDivision: [],
             reportDivisionPV: [],
@@ -101,6 +105,39 @@ class ReportsEntry extends Component {
         this.setState({open: true});
     }
 
+    // Handle click for PRE 41  Postal votes
+    handleClickOpenPRE41Pv() {
+
+        if (this.state.reportversionPRE41Pv == null) {
+
+            alert('Report not Avialable')
+
+        }else{
+            axios.get('/tally-sheet/'+this.state.reportIdPRE41Pv+'/version/'+this.state.reportversionPRE41Pv+'/html' , {
+                headers: {
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'GET',
+                    'Access-Control-Allow-Headers': 'Content-Type',
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            }).then(res => {
+                console.log("Election" + res)
+                // this.setState({
+                //     report: res.data[0].reportId
+                // })
+            })
+                .catch((error) => console.log(error));
+
+
+
+            window.open('https://dev.tabulation.ecdev.opensource.lk/tally-sheet/'+this.state.reportId+'/version/'+this.state.reportversion+'/html', "_blank");
+        }
+
+
+
+
+        this.setState({open: true});
+    }
 
     // Handle click for CE 201 Non Postal votes
     handleClickOpenCE201() {
@@ -338,6 +375,33 @@ class ReportsEntry extends Component {
             .catch((error) => console.log(error));
 
 
+
+    };
+
+    // Report handling for PRE 41pv   postal votel
+    handleChangePRE41pv = event => {
+        this.setState({selectedPRE41PV: event.target.value, name: event.target.name});
+
+        console.log("PRE41 Counting "+event.target.value)
+
+        this.setState({
+            reportIdPRE41Pv: event.target.value
+        })
+
+        axios.get('/tally-sheet?limit=1000&offset=0&electionId='+localStorage.getItem('electionType_Postal_Id')+'&officeId='+event.target.value+'&tallySheetCode=PRE-41' , {
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET',
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        }).then(res => {
+            console.log(res.data[0].latestVersionId)
+            this.setState({
+                reportversionPRE41Pv: res.data[0].latestVersionId
+            })
+        })
+            .catch((error) => console.log(error));
 
     };
 
@@ -768,15 +832,15 @@ class ReportsEntry extends Component {
                                             <InputLabel>
                                                 Counting Center
                                             </InputLabel>
-                                            <Select className="width50" value={this.state.selected} onChange={this.handleChange}>
-                                                {this.state.offices.map((CountingCenter, idx) => (
+                                            <Select className="width50" value={this.state.selectedPRE41PV} onChange={this.handleChangePRE41pv}>
+                                                {this.state.officespv.map((CountingCenter, idx) => (
                                                     <MenuItem value={CountingCenter.areaId}>{CountingCenter.areaName}</MenuItem>
                                                 ))}
                                             </Select>
                                         </FormControl>
                                     </TableCell>
                                     <TableCell>
-                                        <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleClickOpen}
+                                        <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleClickOpenPRE41Pv}
                                                 className="button">Generate</Button>
                                     </TableCell>
 
