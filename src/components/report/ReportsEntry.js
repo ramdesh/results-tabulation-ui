@@ -280,11 +280,11 @@ class ReportsEntry extends Component {
     //
     handleClickOpenPRE30Pv() {
 
-        axios.get('/tally-sheet/'+this.state.report30pdpv+'/version/'+this.state.reportDivisionPV+'/html')
+        axios.post('/tally-sheet/PRE-30-PD/'+this.state.reportDivisionPV+'/version')
             .then(res => {
                 console.log(res);
                 console.log(res.data.htmlUrl);
-                window.open('https://dev.tabulation.ecdev.opensource.lk/tally-sheet/'+this.state.report30pdpv+'/version/'+this.state.reportDivisionPV+'/html', "_blank")
+                window.open(res.data.htmlUrl, "_blank")
             });
 
         // window.open('newPageUrl', "https://dev.tabulation.ecdev.opensource.lk")
@@ -534,7 +534,7 @@ class ReportsEntry extends Component {
             .catch((error) => console.log(error));
 
     };
-     //PRE 30-PD
+     //PRE 30-Pv
     handleDivisionPv = event => {
         this.setState({selectedPRE30PV: event.target.value, name: event.target.name});
 
@@ -546,13 +546,11 @@ class ReportsEntry extends Component {
                 'X-Requested-With': 'XMLHttpRequest'
             }
         }).then(res => {
-            console.log("Election" + res.data[0].latestVersionId)
+            console.log("Election" + res.data[0].tallySheetId)
             this.setState({
-                reportDivisionPV: res.data[0].latestVersionId
+                reportDivisionPV: res.data[0].tallySheetId
             })
-            this.setState({
-                report30pdpv:  res.data[0].tallySheetId
-            })
+
         })
             .catch((error) => console.log(error));
 
@@ -923,7 +921,7 @@ class ReportsEntry extends Component {
                                     </TableCell>
                                     <TableCell>
                                         <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleClickAllIslandED}
-                                                className="button1">Generate</Button>
+                                                className="button">Generate</Button>
                                     </TableCell>
                                 </TableRow>
 
