@@ -24,15 +24,20 @@ import PRE28Entry from "./components/PRE28/PRE28Entry";
 import PRE28 from "./components/PRE28/PRE28";
 import ReportsEntry from "./components/report/ReportsEntry";
 import Home from "./components/home/Home";
+import HomeSelection from "./components/home/HomeSelection";
+import HomeElection from "./components/home/HomeElection";
+import ReportsNew from "./components/report/ReportsNew";
 
 function App() {
     return (
         <Router>
             <div>
                 <NavBar/>
-                <Route exact path="/" component={Login}/>
+
+                <Route exact path="/" component={HomeElection}/>
                 <Route exact path="/report" component={Reports}/>
                 <Route exact path="/ReportsEntry" component={ReportsEntry}/>
+                <Route exact path="/ReportsNew" component={ReportsNew}/>
 
                 <Route exact path="/CE201" component={CE201}/>
                 <Route exact path="/CE201-Entry/:name/:name2/:countingId" component={CE201Entry}/>
@@ -59,9 +64,11 @@ function App() {
                 <Route exact path="/PRE41PV-Entry/:name/:name2" component={PRE41PVEntry}/>
 
                 <Route exact path="/Home" component={Home}/>
+                <Route exact path="/Main" component={HomeSelection}/>
 
                 <Route exact path="/PRE34COPV" component={PRE34COPV}/>
                 <Route exact path="/PRE34COPV-Entry" component={PRE34COPVEntry}/>
+
 
             </div>
         </Router>

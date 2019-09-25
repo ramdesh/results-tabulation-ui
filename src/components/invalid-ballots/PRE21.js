@@ -49,7 +49,8 @@ class PRE21 extends Component {
         if (this.state.selectedCountingCenter === '') {
             alert("Please select the necessary fields !")
         } else {
-            axios.get('/tally-sheet?limit=1000&offset=0&officeId='+this.state.countingId+'&tallySheetCode=PRE-21', {
+            axios.get('/tally-sheet?limit=1000&offset=0&electionId='+localStorage.getItem('electionType_NonPostal_Id')+'&officeId='+this.state.countingId+'&tallySheetCode=PRE-21', {
+
                 headers: {
                     'Access-Control-Allow-Origin': '*',
                     'Access-Control-Allow-Methods': 'GET',
@@ -76,7 +77,7 @@ class PRE21 extends Component {
     handleChange = event => {
         this.setState({selectedDistrictCentre: event.target.value, name: event.target.name});
         console.log("District Centre :"+event.target.value)
-        axios.get('/area?limit=20&offset=0&associatedAreaId='+event.target.value+'&areaType=PollingDivision', {
+        axios.get('/area?limit=20&offset=0&electionId='+localStorage.getItem('electionType_NonPostal_Id')+'&associatedAreaId='+event.target.value+'&areaType=PollingDivision', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -97,7 +98,7 @@ class PRE21 extends Component {
     handlePollingDivision = event => {
         this.setState({selectedPollingDivision: event.target.value, name: event.target.name});
         console.log(event.target.value)
-        axios.get('/area?limit=20&offset=0&associatedAreaId='+event.target.value+'&areaType=CountingCentre', {
+        axios.get('/area?limit=20&offset=0&electionId='+localStorage.getItem('electionType_NonPostal_Id')+'&associatedAreaId='+event.target.value+'&areaType=CountingCentre', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -130,8 +131,8 @@ class PRE21 extends Component {
         this.setState({countingName: event.target.value});
         console.log("Counting Name" + event.target.value)
 
-        // get the officeId by officeName
-        axios.get('/office?limit=1000&offset=0&officeName=' + event.target.value + '&officeType=CountingCentre', {
+        /** get the officeId by officeName **/
+        axios.get('/office?limit=1000&offset=0&electionId='+localStorage.getItem('electionType_NonPostal_Id')+'&officeName=' + event.target.value + '&officeType=CountingCentre', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -155,7 +156,7 @@ class PRE21 extends Component {
     }
 
     componentDidMount() {
-        axios.get('/area?limit=1000&offset=0&areaType=DistrictCentre', {
+        axios.get('/area?limit=1000&offset=0&electionId='+localStorage.getItem('electionType_NonPostal_Id')+'&areaType=DistrictCentre', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -176,22 +177,25 @@ class PRE21 extends Component {
             <div style={{margin: '3%'}}>
                 <div>
                     <div style={{marginBottom: '4%'}}>
+
                         <Breadcrumbs style={{marginLeft: '0.2%', marginBottom: '2%', fontSize: '14px'}} separator="/"
                                      aria-label="breadcrumb">
-                            <Link color="inherit" href="/Home">
+                            <Link color="inherit" href="/">
                                 Home
                             </Link>
-                            <Link color="inherit" href="/Home">
-                                Counting Centre
+                            <Link color="inherit" href="/Main">
+                                Presidential Election
                             </Link>
-                            <Link color="inherit" href="/PRE21">
+                            <Link color="inherit" href="/Home">
                                 Data Entry
                             </Link>
-                            <Link color="inherit" href="/PRE21">
+                            <Link color="inherit">
                                 Votes - PRE 21
                             </Link>
                             {/*<Typography color="textPrimary"></Typography>*/}
                         </Breadcrumbs>
+
+
                         <Typography variant="h4" gutterBottom>
                             Presidential Election 2019
                         </Typography>
