@@ -69,6 +69,12 @@
     width:230px;
     padding-left: 1%;
 }
+
+.width40 {
+    width:150px;
+    padding-top: 3%;
+    padding-left: 1%;
+}
 #root {
     padding: 0px;
 }
