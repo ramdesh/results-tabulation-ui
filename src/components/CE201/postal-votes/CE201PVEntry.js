@@ -10,7 +10,9 @@ import {
     TableCell,
     TableHead,
     TableBody,
-    Paper
+    Paper,
+    Breadcrumbs,
+    Link
 } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -39,6 +41,15 @@ class CE201PVEntry extends Component {
     handleBack() {
         this.props.history.replace('/CE201PV')
     }
+
+    // submit the form data
+    handleSubmit = (event) => {
+                    alert("Successfully Created the TallySheet - CE 201 PV")
+
+                    this.props.history.replace('/Home')
+
+    }
+
 
     // modal controllers
     handleClose() {
@@ -71,12 +82,42 @@ class CE201PVEntry extends Component {
         return (
             <div style={{margin: '3%'}}>
                 <div>
+
+                    <Breadcrumbs style={{marginLeft: '0.2%', marginBottom: '2%', fontSize: '14px'}} separator="/"
+                                 aria-label="breadcrumb">
+                        <Link color="inherit" href="/">
+                            Home
+                        </Link>
+                        <Link color="inherit" href="/Main">
+                            Presidential Election
+                        </Link>
+                        <Link color="inherit" href="/Home">
+                            Data Entry
+                        </Link>
+                        <Link color="inherit">
+                            Postal Votes - CE 201
+                        </Link>
+                        <Link color="inherit">
+                            Tally Sheet
+                        </Link>
+                        {/*<Typography color="textPrimary"></Typography>*/}
+                    </Breadcrumbs>
+
+                    {/*<div style={{marginBottom: '3%'}}>*/}
+                        {/*<Typography variant="h4" gutterBottom>*/}
+                            {/*Presidential Election 2019*/}
+                        {/*</Typography>*/}
+                        {/*<Typography variant="h6" gutterBottom>*/}
+                            {/*CE-201 - Counting Hall No : {this.props.match.params.name2}*/}
+                            {/*/!*CE-201 - Tally Sheet ID : {this.props.match.params.name}*!/*/}
+                        {/*</Typography>*/}
+                    {/*</div>*/}
                     <div style={{marginBottom: '3%'}}>
                         <Typography variant="h4" gutterBottom>
                             Presidential Election 2019
                         </Typography>
                         <Typography variant="h6" gutterBottom>
-                            Box Count ( PRE-28A ) - Polling Station : {this.props.match.params.name}
+                            CE 201 - Postal Votes : {this.props.match.params.name}
                         </Typography>
 
                     </div>
@@ -86,10 +127,9 @@ class CE201PVEntry extends Component {
                         <Table>
                             <TableHead>
                                 <TableRow>
-                                    <TableCell style={{fontSize: 13, fontWeight: 'bold'}}>Ballot Box ID</TableCell>
-                                    <TableCell style={{fontSize: 13, fontWeight: 'bold'}}>Ordinary Ballot Paper Count</TableCell>
-                                    <TableCell style={{fontSize: 13, fontWeight: 'bold'}}>Tender Ballot Paper Count</TableCell>
-                                    <TableCell style={{fontSize: 13, fontWeight: 'bold'}}>Box Count</TableCell>
+                                    <TableCell style={{fontSize: 13, color : 'black',fontWeight: 'bold'}}>Serial No of Postal Votes Ballot Box</TableCell>
+                                    <TableCell style={{fontSize: 13, color : 'black',fontWeight: 'bold'}}>No of Packets inserted by the Returning Officer</TableCell>
+                                    <TableCell style={{fontSize: 13, color : 'black',fontWeight: 'bold'}}>No of Packets inserted by the Returning Officer</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -115,13 +155,6 @@ class CE201PVEntry extends Component {
                                             variant="outlined"
                                         />
                                     </TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
                                 </TableRow>
                                 <TableRow>
                                     <TableCell style={{fontSize: 13}}>
@@ -145,14 +178,9 @@ class CE201PVEntry extends Component {
                                             variant="outlined"
                                         />
                                     </TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
+
                                 </TableRow>
+
                                 <TableRow>
                                     <TableCell style={{fontSize: 13}}>
                                         <TextField
@@ -175,49 +203,20 @@ class CE201PVEntry extends Component {
                                             variant="outlined"
                                         />
                                     </TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
-                                </TableRow>
-                                <TableRow>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
-                                    </TableCell>
+
                                 </TableRow>
 
                                 <TableRow>
                                     <TableCell style={{fontWeight: 'bold',fontSize: 14}}>
 
-                                        Total Ballot Counts :
+                                        Total No of PV-A packets found in the boxes :
+                                    </TableCell>
+                                    <TableCell style={{fontSize: 13}}>
+                                        {/*<TextField*/}
+                                            {/*id="outlined-dense"*/}
+                                            {/*margin="dense"*/}
+                                            {/*variant="outlined"*/}
+                                        {/*/>*/}
                                     </TableCell>
                                     <TableCell style={{fontSize: 13}}>
                                         <TextField
@@ -226,12 +225,20 @@ class CE201PVEntry extends Component {
                                             variant="outlined"
                                         />
                                     </TableCell>
+
+                                </TableRow>
+
+                                <TableRow>
+                                    <TableCell style={{fontWeight: 'bold',fontSize: 14}}>
+
+                                        Total No packets rejected on various grounds after opening A covers :
+                                    </TableCell>
                                     <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                        />
+                                        {/*<TextField*/}
+                                        {/*id="outlined-dense"*/}
+                                        {/*margin="dense"*/}
+                                        {/*variant="outlined"*/}
+                                        {/*/>*/}
                                     </TableCell>
                                     <TableCell style={{fontSize: 13}}>
                                         <TextField
@@ -240,6 +247,30 @@ class CE201PVEntry extends Component {
                                             variant="outlined"
                                         />
                                     </TableCell>
+
+                                </TableRow>
+
+                                <TableRow>
+                                    <TableCell style={{fontWeight: 'bold',fontSize: 14}}>
+
+                                        Total No packets rejected on various grounds after opening B covers in accepted ballot papers
+                                        receptacle :
+                                    </TableCell>
+                                    <TableCell style={{fontSize: 13}}>
+                                        {/*<TextField*/}
+                                        {/*id="outlined-dense"*/}
+                                        {/*margin="dense"*/}
+                                        {/*variant="outlined"*/}
+                                        {/*/>*/}
+                                    </TableCell>
+                                    <TableCell style={{fontSize: 13}}>
+                                        <TextField
+                                            id="outlined-dense"
+                                            margin="dense"
+                                            variant="outlined"
+                                        />
+                                    </TableCell>
+
                                 </TableRow>
 
                             </TableBody>
@@ -255,7 +286,8 @@ class CE201PVEntry extends Component {
                 <div style={{marginLeft:'80%',marginTop:'2%'}}>
 
                     <Button style={{borderRadius: 18,color:'white',marginRight: '4%'}}   onClick={this.handleBack} className="button">Back</Button>
-                    <Button style={{borderRadius: 18,color:'white'}}  onClick={this.handleClickOpen} className="button">Submit</Button>
+                    <Button style={{borderRadius: 18, color: 'white'}} onClick={this.handleSubmit}
+                            className="button">Submit</Button>
                 </div>
                 {/*<Button variant="outlined" color="primary" onClick={this.handleClickOpen}>*/}
                 {/*Open alert dialog*/}
