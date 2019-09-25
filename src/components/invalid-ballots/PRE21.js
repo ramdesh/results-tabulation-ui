@@ -33,6 +33,7 @@ class PRE21 extends Component {
             countingCenter: [],
             PollingDivision:[],
             polling: 0,
+            latestVersionIdCC:null,
 
             /** url params **/
             countingId: 0,
@@ -46,9 +47,11 @@ class PRE21 extends Component {
     }
 
     handleClickOpen() {
+
         if (this.state.selectedCountingCenter === '') {
             alert("Please select the necessary fields !")
         } else {
+
             axios.get('/tally-sheet?limit=1000&offset=0&electionId='+localStorage.getItem('electionType_NonPostal_Id')+'&officeId='+this.state.countingId+'&tallySheetCode=PRE-21', {
 
                 headers: {
@@ -65,6 +68,11 @@ class PRE21 extends Component {
                     this.setState({
                         tallySheetId: res.data[0].tallySheetId
                     })
+                    if ( res.data[0].latestVersionId !== null) {
+
+                        alert('All ready filled tally sheet')
+
+                    }
                     console.log("ID :" + res.data[0].tallySheetId)
                     this.props.history.replace('/PRE21-Entry/' + this.state.tallySheetId + '/'+ this.state.countingName)
                 }
