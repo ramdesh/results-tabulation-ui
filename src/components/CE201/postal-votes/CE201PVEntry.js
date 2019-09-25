@@ -10,7 +10,9 @@ import {
     TableCell,
     TableHead,
     TableBody,
-    Paper
+    Paper,
+    Breadcrumbs,
+    Link
 } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -71,12 +73,42 @@ class CE201PVEntry extends Component {
         return (
             <div style={{margin: '3%'}}>
                 <div>
+
+                    <Breadcrumbs style={{marginLeft: '0.2%', marginBottom: '2%', fontSize: '14px'}} separator="/"
+                                 aria-label="breadcrumb">
+                        <Link color="inherit" href="/">
+                            Home
+                        </Link>
+                        <Link color="inherit" href="/Main">
+                            Presidential Election
+                        </Link>
+                        <Link color="inherit" href="/Home">
+                            Data Entry
+                        </Link>
+                        <Link color="inherit">
+                            Postal Votes - CE 201
+                        </Link>
+                        <Link color="inherit">
+                            Tally Sheet
+                        </Link>
+                        {/*<Typography color="textPrimary"></Typography>*/}
+                    </Breadcrumbs>
+
+                    {/*<div style={{marginBottom: '3%'}}>*/}
+                        {/*<Typography variant="h4" gutterBottom>*/}
+                            {/*Presidential Election 2019*/}
+                        {/*</Typography>*/}
+                        {/*<Typography variant="h6" gutterBottom>*/}
+                            {/*CE-201 - Counting Hall No : {this.props.match.params.name2}*/}
+                            {/*/!*CE-201 - Tally Sheet ID : {this.props.match.params.name}*!/*/}
+                        {/*</Typography>*/}
+                    {/*</div>*/}
                     <div style={{marginBottom: '3%'}}>
                         <Typography variant="h4" gutterBottom>
                             Presidential Election 2019
                         </Typography>
                         <Typography variant="h6" gutterBottom>
-                            Box Count ( PRE-28A ) - Polling Station : {this.props.match.params.name}
+                            CE 201 - Postal Votes : {this.props.match.params.name}
                         </Typography>
 
                     </div>

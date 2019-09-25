@@ -27,6 +27,8 @@ import Home from "./components/home/Home";
 import HomeSelection from "./components/home/HomeSelection";
 import HomeElection from "./components/home/HomeElection";
 import ReportsNew from "./components/report/ReportsNew";
+import CE201PV from "./components/CE201/postal-votes/CE201PV";
+import CE201PVEntry from "./components/CE201/postal-votes/CE201PVEntry";
 
 function App() {
     return (
@@ -63,6 +65,10 @@ function App() {
                 <Route exact path="/PRE41PV" component={PRE41PV}/>
                 <Route exact path="/PRE41PV-Entry/:name/:name2" component={PRE41PVEntry}/>
 
+                <Route exact path="/CE201PV" component={CE201PV}/>
+                <Route exact path="/CE201PV-Entry/:name/:name2/:countingId" component={CE201PVEntry}/>
+
+                {/*Route exact path="/CE201PV-Entry/:name/:name2" component={PRE41PVEntry}/>*/}
                 <Route exact path="/Home" component={Home}/>
                 <Route exact path="/Main" component={HomeSelection}/>
 
