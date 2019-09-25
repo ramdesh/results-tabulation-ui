@@ -36,9 +36,12 @@ class PRE41Entry extends Component {
             content: {},
             tallySheetId: 0,
             reportId: 0,
-            officeId: 0
+            officeId: 0,
 
-            ,sum:0
+            rejected:0,
+            rejectedVotes:0,
+            grandTotal :0,
+            sum:0
         };
         this.calculation = [0];
     }
@@ -137,6 +140,18 @@ class PRE41Entry extends Component {
     //         sum: this.calculation.reduce((total, amount) => total + amount)
     //     })
     // }
+
+    /** Rejected **/
+    handleRejected = event => {
+        this.setState({rejected: event.target.value, name: event.target.name});
+        console.log("Rejected:" + event.target.value)
+
+        // this.setState({rejectedVotes: event.target.value});
+        //
+        // console.log("Rejected state new:" + this.state.rejectedVotes)
+    }
+
+
     handleInputChange = (candidateId, property) => (event) => {
         const name = event.target.name
         console.log("NN",event.target.name);
@@ -238,12 +253,14 @@ class PRE41Entry extends Component {
                                     <TableCell className="header"
                                                style={{color: 'white', fontSize: 13, fontWeight: 'bold'}}>Name of
                                         Candidate</TableCell>
-                                    <TableCell className="header"
-                                               style={{color: 'white', fontSize: 13, fontWeight: 'bold'}}>No of votes in
-                                        figures</TableCell>
+
                                     <TableCell className="header"
                                                style={{color: 'white', fontSize: 13, fontWeight: 'bold'}}>No of votes in
                                         words</TableCell>
+                                    <TableCell className="header"
+                                               style={{color: 'white', fontSize: 13, fontWeight: 'bold'}}>No of votes in
+                                        figures</TableCell>
+
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -257,17 +274,7 @@ class PRE41Entry extends Component {
                                             style={{width: '20%', fontSize: 13}}>{candidate.partyName}</TableCell>
                                         <TableCell
                                             style={{width: '30%', fontSize: 13}}>{candidate.candidateName}</TableCell>
-                                        <TableCell style={{width: '25%', fontSize: 13}}>
-                                            <TextField
-                                                id="outlined-dense"
-                                                margin="dense"
-                                                variant="outlined"
-                                                placeholder="No of votes"
-                                                name={'votes' + (idx + 1)}
-                                                autoComplete='off'
-                                                onChange={this.handleInputChange(candidateId, "count")}
-                                            />
-                                        </TableCell>
+
                                         <TableCell style={{width: '30%', fontSize: 13}}>
                                             <TextField
                                                 id="outlined-dense"
@@ -279,8 +286,41 @@ class PRE41Entry extends Component {
                                                 onChange={this.handleInputChange(candidateId, "countInWords")}
                                             />
                                         </TableCell>
+                                        <TableCell style={{width: '25%', fontSize: 13}}>
+                                            <TextField
+                                                id="outlined-dense"
+                                                margin="dense"
+                                                variant="outlined"
+                                                placeholder="No of votes"
+                                                name={'votes' + (idx + 1)}
+                                                autoComplete='off'
+                                                onChange={this.handleInputChange(candidateId, "count")}
+                                            />
+                                        </TableCell>
+
                                     </TableRow>
                                 })}
+
+
+                                <TableRow>
+                                    <TableCell
+                                        style={{width: '4%', fontSize: 13}}></TableCell>
+                                    <TableCell
+                                        style={{width: '20%', fontSize: 13}}></TableCell>
+                                    <TableCell
+                                        style={{width: '30%', fontSize: 13}}></TableCell>
+                                    <TableCell style={{fontSize: 14, color: 'black', fontWeight: 'bold'}}>Total
+                                        Votes :</TableCell>
+
+                                    {this.state.sum > 0 && <TableCell
+                                        style={{paddingLeft: '2%', width: '30%', fontSize: 16, fontWeight: 'bold'}}>
+                                        {this.state.sum}
+                                    </TableCell>}
+
+                                    {/*<TableCell style={{paddingLeft:'2%',width: '30%', fontSize: 16,fontWeight: 'bold'}}>*/}
+                                    {/*{this.state.sum}*/}
+                                    {/*</TableCell>*/}
+                                </TableRow>
 
                                 <TableRow>
                                     <TableCell
@@ -293,13 +333,14 @@ class PRE41Entry extends Component {
                                         Votes :</TableCell>
                                     <TableCell
                                         style={{ fontSize: 14,}}>
-                                    <TextField
-                                        id="outlined-dense"
-                                        margin="dense"
-                                        variant="outlined"
-                                        placeholder="Rejected Votes"
-                                        autoComplete='off'
-                                    /></TableCell>
+                                        <TextField
+                                            id="outlined-dense"
+                                            margin="dense"
+                                            variant="outlined"
+                                            placeholder="Rejected Votes"
+                                            autoComplete='off'
+                                            onChange={this.handleRejected}
+                                        /></TableCell>
                                     {/*<TableCell style={{paddingLeft:'2%',width: '30%', fontSize: 16,fontWeight: 'bold'}}>*/}
                                     {/*{this.state.sum}*/}
                                     {/*</TableCell>*/}
@@ -312,19 +353,19 @@ class PRE41Entry extends Component {
                                         style={{width: '20%', fontSize: 13}}></TableCell>
                                     <TableCell
                                         style={{width: '30%', fontSize: 13}}></TableCell>
-                                    <TableCell style={{fontSize: 14, color: 'black', fontWeight: 'bold'}}>Total
-                                        Votes :</TableCell>
+                                    <TableCell style={{fontSize: 14, color: 'black', fontWeight: 'bold'}}>Grand Total :</TableCell>
 
 
-                                    {this.state.sum > 0 && <TableCell
+                                    {(this.state.sum + parseInt(this.state.rejected))> 0 && <TableCell
                                         style={{paddingLeft: '2%', width: '30%', fontSize: 16, fontWeight: 'bold'}}>
-                                        {this.state.sum}
+                                        { (this.state.sum + parseInt(this.state.rejected)) }
                                     </TableCell>}
 
                                     {/*<TableCell style={{paddingLeft:'2%',width: '30%', fontSize: 16,fontWeight: 'bold'}}>*/}
                                     {/*{this.state.sum}*/}
                                     {/*</TableCell>*/}
                                 </TableRow>
+
                             </TableBody>
                         </Table>
                     </Paper>
