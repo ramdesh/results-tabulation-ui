@@ -175,7 +175,7 @@ class CE201Entry extends Component {
                         ""
                     ],
                     "ballotBoxesReceived": [
-                        ""
+                        (this.state.content[pollingId].ballotBoxesReceived)
                     ],
                     "ballotsIssued": parseInt(this.state.content[pollingId].ballotsIssued),
                     "ballotsReceived": parseInt(this.state.content[pollingId].ballotsReceived),
@@ -211,6 +211,16 @@ class CE201Entry extends Component {
                 }
             }
         })
+    }
+
+    /** Rejected **/
+    handleBoxes = event => {
+        // this.setState({rejected: event.target.value, name: event.target.name});
+        console.log("Box :" + event.target.value)
+
+        // this.setState({rejectedVotes: event.target.value});
+        //
+        // console.log("Rejected state new:" + this.state.rejectedVotes)
     }
 
     render() {
@@ -310,21 +320,21 @@ class CE201Entry extends Component {
                                                 margin="dense"
                                                 variant="outlined"
                                                 placeholder="Box Id"
-                                                // onChange={this.handleInputChange(pollingStation.officeId, "ballotBoxesReceived")}
+                                                onChange={this.handleInputChange(pollingStation.officeId, "ballotBoxesReceived")}
                                             />
                                             <TextField
                                                 id="box-id2"
                                                 margin="dense"
                                                 variant="outlined"
                                                 placeholder="Box Id"
-                                                // onChange={this.handleInputChange(pollingStation.officeId, "ballotBoxesReceived")}
+                                                onChange={this.handleInputChange(pollingStation.officeId, "ballotBoxesReceived")}
                                             />
                                             <TextField
                                                 id="box-id3"
                                                 margin="dense"
                                                 variant="outlined"
                                                 placeholder="Box Id"
-                                                // onChange={this.handleInputChange(pollingStation.officeId, "ballotBoxesReceived")}
+                                                onChange={this.handleInputChange(pollingStation.officeId, "ballotBoxesReceived")}
                                             />
                                         </TableCell>
                                         <TableCell style={{fontSize: 13, width: '11%'}}>
