@@ -130,7 +130,7 @@ class ReportsEntry extends Component {
 
 
 
-            window.open('https://dev.tabulation.ecdev.opensource.lk/tally-sheet/'+this.state.reportId+'/version/'+this.state.reportversion+'/html', "_blank");
+            window.open('https://dev.tabulation.ecdev.opensource.lk/tally-sheet/'+this.state.reportIdPRE41Pv+'/version/'+this.state.reportversionPRE41Pv+'/html', "_blank");
         }
 
 
