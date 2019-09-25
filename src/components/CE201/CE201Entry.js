@@ -41,7 +41,7 @@ class CE201Entry extends Component {
             countingName: 0,
             countingId: 0,
 
-            ballotBoxes:[]
+            // ballotBoxes:[]
         };
     }
 
@@ -291,19 +291,19 @@ class CE201Entry extends Component {
                                         </TableCell>
                                         <TableCell style={{fontSize: 13, width: '13%'}}>
 
-                                            <FormControl variant="outlined" margin="dense">
+                                            {/*<FormControl variant="outlined" margin="dense">*/}
 
-                                                <InputLabel style={{fontSize:'12px',marginLeft: '-5%'}}>
-                                                    Box ID
-                                                </InputLabel>
+                                                {/*<InputLabel style={{fontSize:'12px',marginLeft: '-5%'}}>*/}
+                                                    {/*Box ID*/}
+                                                {/*</InputLabel>*/}
 
-                                                <Select className="width40" value={this.state.selectedbox1}
-                                                        onChange={this.handleBoxes} >
-                                                    {this.state.ballotBoxes.map((ballotbox, idx) => (
-                                                        <MenuItem value={ballotbox.ballotBoxId}>{ballotbox.ballotBoxId}</MenuItem>
-                                                    ))}
-                                                </Select>
-                                            </FormControl>
+                                                {/*<Select className="width40" value={this.state.selectedbox1}*/}
+                                                        {/*onChange={this.handleBoxes} >*/}
+                                                    {/*{this.state.ballotBoxes.map((ballotbox, idx) => (*/}
+                                                        {/*<MenuItem value={ballotbox.ballotBoxId}>{ballotbox.ballotBoxId}</MenuItem>*/}
+                                                    {/*))}*/}
+                                                {/*</Select>*/}
+                                            {/*</FormControl>*/}
 
                                             <TextField
                                                 id="box-id1"
@@ -311,18 +311,18 @@ class CE201Entry extends Component {
                                                 variant="outlined"
                                                 placeholder="Box Id"
                                             />
-                                            {/*<TextField*/}
-                                                {/*id="box-id2"*/}
-                                                {/*margin="dense"*/}
-                                                {/*variant="outlined"*/}
-                                                {/*placeholder="Box Id"*/}
-                                            {/*/>*/}
-                                            {/*<TextField*/}
-                                                {/*id="box-id3"*/}
-                                                {/*margin="dense"*/}
-                                                {/*variant="outlined"*/}
-                                                {/*placeholder="Box Id"*/}
-                                            {/*/>*/}
+                                            <TextField
+                                                id="box-id2"
+                                                margin="dense"
+                                                variant="outlined"
+                                                placeholder="Box Id"
+                                            />
+                                            <TextField
+                                                id="box-id3"
+                                                margin="dense"
+                                                variant="outlined"
+                                                placeholder="Box Id"
+                                            />
                                         </TableCell>
                                         <TableCell style={{fontSize: 13, width: '11%'}}>
                                             <TextField
