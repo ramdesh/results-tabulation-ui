@@ -195,7 +195,6 @@ class PRE21 extends Component {
                             {/*<Typography color="textPrimary"></Typography>*/}
                         </Breadcrumbs>
 
-
                         <Typography variant="h4" gutterBottom>
                             Presidential Election 2019
                         </Typography>

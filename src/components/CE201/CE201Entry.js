@@ -12,7 +12,7 @@ import {
     TableBody,
     Breadcrumbs,
     Link,
-    Paper
+    Paper,FormControl,MenuItem,InputLabel
 } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -28,6 +28,9 @@ class CE201Entry extends Component {
         this.state = {
             open: false,
             selected: 'Select',
+
+            // selectedbox1: 'Select',
+
             pollingStationsList: [],
             pollingStationsMap: {},
             content: {},
@@ -36,7 +39,9 @@ class CE201Entry extends Component {
             tallySheetId: 0,
             reportId: 0,
             countingName: 0,
-            countingId: 0
+            countingId: 0,
+
+            ballotBoxes:[]
         };
     }
 
@@ -87,8 +92,16 @@ class CE201Entry extends Component {
         this.setState({selected: event.target.value, name: event.target.name});
     };
 
+    handleBoxes = event => {
+
+        this.setState({selectedbox1: event.target.value, name: event.target.name});
+        console.log("Boxes"+ event.target.value)
+    };
+
+
 
     componentDidMount() {
+        console.log("NEW Test : ")
         const {name} = this.props.match.params
         console.log("TallySheet ID : ", name)
         this.setState({
@@ -121,6 +134,26 @@ class CE201Entry extends Component {
             this.setElection(res.data)
             // this.setElection(res.data[0])
         }).catch((error) => console.log(error));
+
+        /** get box data **/
+
+        axios.get('/ballot-box?limit=1000&offset=0&electionId='+localStorage.getItem('electionType') , {
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET',
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        }).then(res => {
+            console.log("Boxes >>" + res.data)
+            this.setState({
+               ballotBoxes: res.data
+            })
+            // this.setElection(res.data)
+            // this.setElection(res.data[0])
+        }).catch((error) => console.log(error));
+
+
     }
 
     /** submit the form data **/
@@ -139,10 +172,10 @@ class CE201Entry extends Component {
                 return {
                     "areaId": pollingId,
                     "ballotBoxesIssued": [
-                        "string"
+                        1
                     ],
                     "ballotBoxesReceived": [
-                        "string"
+                        1
                     ],
                     "ballotsIssued": parseInt(this.state.content[pollingId].ballotsIssued),
                     "ballotsReceived": parseInt(this.state.content[pollingId].ballotsReceived),
@@ -186,20 +219,24 @@ class CE201Entry extends Component {
                 <div>
                     <Breadcrumbs style={{marginLeft: '0.2%', marginBottom: '2%', fontSize: '14px'}} separator="/"
                                  aria-label="breadcrumb">
-                        <Link color="inherit" href="/Home">
+                        <Link color="inherit" href="/">
                             Home
                         </Link>
-                        <Link color="inherit" href="/Home">
-                            Counting Centre
+                        <Link color="inherit" href="/Main">
+                            Presidential Election
                         </Link>
-                        <Link color="inherit" href="/CE201">
+                        <Link color="inherit" href="/Home">
                             Data Entry
                         </Link>
-                        <Link color="inherit" href="/CE201">
+                        <Link color="inherit">
                             Votes - CE 201
+                        </Link>
+                        <Link color="inherit">
+                            Tally Sheet
                         </Link>
                         {/*<Typography color="textPrimary"></Typography>*/}
                     </Breadcrumbs>
+
                     <div style={{marginBottom: '3%'}}>
                         <Typography variant="h4" gutterBottom>
                             Presidential Election 2019
@@ -253,24 +290,39 @@ class CE201Entry extends Component {
                                             {pollingStation.officeName}
                                         </TableCell>
                                         <TableCell style={{fontSize: 13, width: '13%'}}>
+
+                                            <FormControl variant="outlined" margin="dense">
+
+                                                <InputLabel style={{fontSize:'12px',marginLeft: '-5%'}}>
+                                                    Box ID
+                                                </InputLabel>
+
+                                                <Select className="width40" value={this.state.selectedbox1}
+                                                        onChange={this.handleBoxes} >
+                                                    {this.state.ballotBoxes.map((ballotbox, idx) => (
+                                                        <MenuItem value={ballotbox.ballotBoxId}>{ballotbox.ballotBoxId}</MenuItem>
+                                                    ))}
+                                                </Select>
+                                            </FormControl>
+
                                             <TextField
                                                 id="box-id1"
                                                 margin="dense"
                                                 variant="outlined"
                                                 placeholder="Box Id"
                                             />
-                                            <TextField
-                                                id="box-id2"
-                                                margin="dense"
-                                                variant="outlined"
-                                                placeholder="Box Id"
-                                            />
-                                            <TextField
-                                                id="box-id3"
-                                                margin="dense"
-                                                variant="outlined"
-                                                placeholder="Box Id"
-                                            />
+                                            {/*<TextField*/}
+                                                {/*id="box-id2"*/}
+                                                {/*margin="dense"*/}
+                                                {/*variant="outlined"*/}
+                                                {/*placeholder="Box Id"*/}
+                                            {/*/>*/}
+                                            {/*<TextField*/}
+                                                {/*id="box-id3"*/}
+                                                {/*margin="dense"*/}
+                                                {/*variant="outlined"*/}
+                                                {/*placeholder="Box Id"*/}
+                                            {/*/>*/}
                                         </TableCell>
                                         <TableCell style={{fontSize: 13, width: '11%'}}>
                                             <TextField
@@ -323,13 +375,13 @@ class CE201Entry extends Component {
                                                 placeholder="Box Count"
                                                 onChange={this.handleInputChange(pollingStation.officeId, "ordinaryBallotCountFromBoxCount")}
                                             />
-                                            <TextField
-                                                id="outlined-dense"
-                                                margin="dense"
-                                                variant="outlined"
-                                                placeholder="Difference"
+                                            {/*<TextField*/}
+                                                {/*id="outlined-dense"*/}
+                                                {/*margin="dense"*/}
+                                                {/*variant="outlined"*/}
+                                                {/*placeholder="Difference"*/}
 
-                                            />
+                                            {/*/>*/}
                                         </TableCell>
                                         <TableCell style={{fontSize: 13, width: '20%'}}>
                                             <TextField
@@ -346,12 +398,12 @@ class CE201Entry extends Component {
                                                 placeholder="Box Count"
                                                 onChange={this.handleInputChange(pollingStation.officeId, "tenderedBallotCountFromBoxCount")}
                                             />
-                                            <TextField
-                                                id="outlined-dense"
-                                                margin="dense"
-                                                variant="outlined"
-                                                placeholder="Difference"
-                                            />
+                                            {/*<TextField*/}
+                                                {/*id="outlined-dense"*/}
+                                                {/*margin="dense"*/}
+                                                {/*variant="outlined"*/}
+                                                {/*placeholder="Difference"*/}
+                                            {/*/>*/}
                                         </TableCell>
                                     </TableRow>
                                 ))}

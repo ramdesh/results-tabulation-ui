@@ -52,7 +52,7 @@ class Home extends Component {
     }
 
     open7() {
-        this.props.history.replace('/PRE21PV')
+        this.props.history.replace('/CE201PV')
     }
     open8() {
         this.props.history.replace('/PRE41PV')

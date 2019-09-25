@@ -21,18 +21,19 @@ class CE201 extends Component {
     constructor(props) {
         super(props);
         this.handleClose = this.handleClose.bind(this);
-        this.handleClickOpen = this.handleClickOpen.bind(this);
         this.handleBack = this.handleBack.bind(this);
+        this.handleClickOpen = this.handleClickOpen.bind(this);
         this.state = {
             open: false,
-            offices: [],
             selectedDistrictCentre: '',
+            selectedPollingDivision: '',
             selectedCountingCenter: '',
-            selectedPollingStation: '',
+            districtCentres: [],
             countingCenter: [],
-            pollingStation: [],
+            PollingDivision:[],
             polling: 0,
-            // url params
+
+            /** url params **/
             countingId: 0,
             countingName: 0,
             tallySheetId:0
@@ -48,6 +49,7 @@ class CE201 extends Component {
             alert("Please select the necessary fields !")
         } else {
             axios.get('/tally-sheet?limit=1000&offset=0&electionId='+localStorage.getItem('electionType_NonPostal_Id')+'&officeId='+this.state.countingId+'&tallySheetCode=CE-201', {
+
                 headers: {
                     'Access-Control-Allow-Origin': '*',
                     'Access-Control-Allow-Methods': 'GET',
@@ -55,6 +57,7 @@ class CE201 extends Component {
                     'X-Requested-With': 'XMLHttpRequest'
                 }
             }).then(res => {
+                // console.log("Election ID :" + res.data[0])
                 if (res.data.length === 0) {
                     alert("No TallySheets Allocated for here !")
                 } else {
@@ -66,20 +69,35 @@ class CE201 extends Component {
                 }
             })
                 .catch((error) => console.log(error));
-
         }
     }
 
-    // modal controllers
-    handleClose() {
-        console.log("close")
-        this.setState({open: false});
-    }
-
+    /** District Centre **/
     handleChange = event => {
         this.setState({selectedDistrictCentre: event.target.value, name: event.target.name});
+        console.log("District Centre :"+event.target.value)
+        axios.get('/area?limit=20&offset=0&electionId='+localStorage.getItem('electionType_NonPostal_Id')+'&associatedAreaId='+event.target.value+'&areaType=PollingDivision', {
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET',
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        }).then(res => {
+            console.log("Election" + res.data[0])
+            this.setState({
+                PollingDivision: res.data
+            })
+
+        })
+            .catch((error) => console.log(error));
+    };
+
+    /** Polling Division **/
+    handlePollingDivision = event => {
+        this.setState({selectedPollingDivision: event.target.value, name: event.target.name});
         console.log(event.target.value)
-        axios.get('/office?limit=1000&offset=0&parentOfficeId=' + event.target.value + '&officeType=CountingCentre', {
+        axios.get('/area?limit=20&offset=0&electionId='+localStorage.getItem('electionType_NonPostal_Id')+'&associatedAreaId='+event.target.value+'&areaType=CountingCentre', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -90,7 +108,7 @@ class CE201 extends Component {
             console.log("Election" + res.data[0])
             this.setState({
                 countingCenter: res.data.sort(function (a,b) {
-                    if (parseInt(a.officeName) > parseInt(b.officeName)) {
+                    if (parseInt(a.areaName) > parseInt(b.areaName)) {
                         return 1;
                     } else {
                         return -1;
@@ -99,10 +117,9 @@ class CE201 extends Component {
             })
         })
             .catch((error) => console.log(error));
-
     };
 
-
+    /** Counting Centre **/
     handleCounting = event => {
         // set the counting center name
         this.setState({
@@ -111,10 +128,10 @@ class CE201 extends Component {
         });
 
         this.setState({countingName: event.target.value});
-
         console.log("Counting Name" + event.target.value)
-        // get the officeId by officeName
-        axios.get('/office?limit=20&offset=0&officeName=' + event.target.value + '&officeType=CountingCentre', {
+
+        /** get the officeId by officeName **/
+        axios.get('/office?limit=1000&offset=0&officeName=' + event.target.value + '&officeType=CountingCentre', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -128,39 +145,17 @@ class CE201 extends Component {
             })
         })
             .catch((error) => console.log(error));
-    };
-
-    handleCounting1 = event => {
-        this.setState({selectedCountingCenter: event.target.value, name: event.target.name});
-        axios.get('/office?limit=1000&offset=0&parentOfficeId=' + event.target.value + '&officeType=PollingStation', {
-            headers: {
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': 'GET',
-                'Access-Control-Allow-Headers': 'Content-Type',
-                'X-Requested-With': 'XMLHttpRequest'
-            }
-        }).then(res => {
-            console.log("Election" + res.data[0])
-            this.setState({
-                pollingStation: res.data
-            })
-        })
-            .catch((error) => console.log(error));
 
     };
 
-    handlePolling = event => {
-        this.setState({
-            selectedPollingStation: event.target.value,
-            name: event.target.name
-        });
-
-        this.setState({polling: event.target.value});
-
-    };
+    // modal controllers
+    handleClose() {
+        console.log("close")
+        this.setState({open: false});
+    }
 
     componentDidMount() {
-        axios.get('/office?limit=1000&offset=0&officeType=DistrictCentre', {
+        axios.get('/area?limit=1000&offset=0&electionId='+localStorage.getItem('electionType_NonPostal_Id')+'&areaType=DistrictCentre', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -170,81 +165,85 @@ class CE201 extends Component {
         }).then(res => {
             console.log("Election" + res.data[0])
             this.setState({
-                offices: res.data
+                districtCentres: res.data
             })
         })
             .catch((error) => console.log(error));
     }
 
-
     render() {
         return (
             <div style={{margin: '3%'}}>
                 <div>
-                    <Breadcrumbs  style={{marginLeft:'0.2%',marginBottom: '2%',fontSize:'14px'}} separator="/" aria-label="breadcrumb">
-                        <Link color="inherit" href="/Home" >
-                            Home
-                        </Link>
-                        <Link color="inherit" href="/Home" >
-                            Counting Centre
-                        </Link>
-                        <Link color="inherit" href="/CE201">
-                            Data Entry
-                        </Link>
-                        <Link color="inherit" href="/CE201">
-                            Votes - CE 201
-                        </Link>
-                        {/*<Typography color="textPrimary"></Typography>*/}
-                    </Breadcrumbs>
-                    <div style={{marginBottom: '3%'}}>
+                    <div style={{marginBottom: '4%'}}>
+
+                        <Breadcrumbs style={{marginLeft: '0.2%', marginBottom: '2%', fontSize: '14px'}} separator="/"
+                                     aria-label="breadcrumb">
+                            <Link color="inherit" href="/">
+                                Home
+                            </Link>
+                            <Link color="inherit" href="/Main">
+                                Presidential Election
+                            </Link>
+                            <Link color="inherit" href="/Home">
+                                Data Entry
+                            </Link>
+                            <Link color="inherit">
+                                Votes - CE 201
+                            </Link>
+                            {/*<Typography color="textPrimary"></Typography>*/}
+                        </Breadcrumbs>
+
+
                         <Typography variant="h4" gutterBottom>
                             Presidential Election 2019
                         </Typography>
                         <Typography variant="h6" gutterBottom>
-                           CE - 201
+                          CE - 201
                         </Typography>
                     </div>
 
                     <Grid container spacing={3} style={{marginBottom: '2%'}}>
                         <Grid item xs={5} sm={4}>
                             <FormControl variant="outlined" margin="dense">
-                                <InputLabel>
+                                <InputLabel style={{marginLeft: '-5%'}}>
                                     District Centre
                                 </InputLabel>
                                 <Select className="width50" value={this.state.selectedDistrictCentre}
                                         onChange={this.handleChange}>
-                                    {this.state.offices.map((districtCentre, idx) => (
-                                        <MenuItem value={districtCentre.officeId}>{districtCentre.officeName}</MenuItem>
+                                    {this.state.districtCentres.map((districtCentre, idx) => (
+                                        <MenuItem value={districtCentre.areaId}>{districtCentre.areaName}</MenuItem>
                                     ))}
                                 </Select>
                             </FormControl>
                         </Grid>
                         <Grid item xs={5} sm={4}>
                             <FormControl variant="outlined" margin="dense">
-                                <InputLabel>
+                                <InputLabel style={{marginLeft: '-5%'}}>
+                                    Polling Division
+                                </InputLabel>
+                                <Select className="width50" value={this.state.selectedPollingDivision}
+                                        onChange={this.handlePollingDivision}>
+                                    {this.state.PollingDivision.map((pollingDivision, idx) => (
+                                        <MenuItem value={pollingDivision.areaId}>{pollingDivision.areaName}</MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                        </Grid>
+                        <Grid item xs={5} sm={4}>
+                            <FormControl variant="outlined" margin="dense">
+                                <InputLabel style={{marginLeft: '-5%'}}>
                                     Counting Centre
                                 </InputLabel>
                                 <Select className="width50" value={this.state.selectedCountingCenter}
                                         onChange={this.handleCounting}>
                                     {this.state.countingCenter.map((countingCenter, idx) => (
-                                        <MenuItem value={countingCenter.officeName}>{countingCenter.officeName}</MenuItem>
+                                        <MenuItem value={countingCenter.areaName}>{countingCenter.areaName}</MenuItem>
                                     ))}
                                 </Select>
                             </FormControl>
                         </Grid>
-                        {/*<Grid item xs={5} sm={4}>*/}
-                        {/*<FormControl variant="outlined" margin="dense">*/}
-                        {/*<InputLabel>*/}
-                        {/*Polling Station*/}
-                        {/*</InputLabel>*/}
-                        {/*<Select className="width50" value={this.state.selectedPollingStation}*/}
-                        {/*onChange={this.handlePolling}>*/}
-                        {/*{this.state.pollingStation.map((pollingStation, idx) => (*/}
-                        {/*<MenuItem value={pollingStation.officeId}>{pollingStation.officeName}</MenuItem>*/}
-                        {/*))}*/}
-                        {/*</Select>*/}
-                        {/*</FormControl>*/}
-                        {/*</Grid>*/}
+
                     </Grid>
                 </div>
 
