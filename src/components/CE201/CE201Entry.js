@@ -114,7 +114,7 @@ class CE201Entry extends Component {
         })
 
         const {countingId} = this.props.match.params
-        console.log("TallySheet ID : ", countingId)
+        console.log("counting Id : ", countingId)
         this.setState({
             countingId: countingId
         })
@@ -172,10 +172,10 @@ class CE201Entry extends Component {
                 return {
                     "areaId": pollingId,
                     "ballotBoxesIssued": [
-                        1
+                        ""
                     ],
                     "ballotBoxesReceived": [
-                        1
+                        ""
                     ],
                     "ballotsIssued": parseInt(this.state.content[pollingId].ballotsIssued),
                     "ballotsReceived": parseInt(this.state.content[pollingId].ballotsReceived),
@@ -310,18 +310,21 @@ class CE201Entry extends Component {
                                                 margin="dense"
                                                 variant="outlined"
                                                 placeholder="Box Id"
+                                                // onChange={this.handleInputChange(pollingStation.officeId, "ballotBoxesReceived")}
                                             />
                                             <TextField
                                                 id="box-id2"
                                                 margin="dense"
                                                 variant="outlined"
                                                 placeholder="Box Id"
+                                                // onChange={this.handleInputChange(pollingStation.officeId, "ballotBoxesReceived")}
                                             />
                                             <TextField
                                                 id="box-id3"
                                                 margin="dense"
                                                 variant="outlined"
                                                 placeholder="Box Id"
+                                                // onChange={this.handleInputChange(pollingStation.officeId, "ballotBoxesReceived")}
                                             />
                                         </TableCell>
                                         <TableCell style={{fontSize: 13, width: '11%'}}>
