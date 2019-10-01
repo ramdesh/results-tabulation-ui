@@ -324,21 +324,21 @@ class CE201Entry extends Component {
                                                 id="box-id1"
                                                 margin="dense"
                                                 variant="outlined"
-                                                placeholder="Box Id"
+                                                label="Box Id"
                                                 onChange={this.handleInputChange(pollingStation.officeId, "ballotBoxesReceived")}
                                             />
                                             <TextField
                                                 id="box-id2"
                                                 margin="dense"
                                                 variant="outlined"
-                                                placeholder="Box Id"
+                                                label="Box Id"
                                                 onChange={this.handleInputChange(pollingStation.officeId, "ballotBoxesReceived")}
                                             />
                                             <TextField
                                                 id="box-id3"
                                                 margin="dense"
                                                 variant="outlined"
-                                                placeholder="Box Id"
+                                                label="Box Id"
                                                 onChange={this.handleInputChange(pollingStation.officeId, "ballotBoxesReceived")}
                                             />
                                         </TableCell>
@@ -347,7 +347,7 @@ class CE201Entry extends Component {
                                                 id="ballots-received"
                                                 margin="dense"
                                                 variant="outlined"
-                                                placeholder="Count"
+                                                label="Count"
                                                 onChange={this.handleInputChange(pollingStation.officeId, "ballotsReceived")}
                                             />
                                         </TableCell>
@@ -356,7 +356,7 @@ class CE201Entry extends Component {
                                                 id="ballots-spoilt"
                                                 margin="dense"
                                                 variant="outlined"
-                                                placeholder="Count"
+                                                label="Count"
                                                 onChange={this.handleInputChange(pollingStation.officeId, "ballotsSpoilt")}
                                             />
                                         </TableCell>
@@ -365,7 +365,7 @@ class CE201Entry extends Component {
                                                 id="ballots-issued"
                                                 margin="dense"
                                                 variant="outlined"
-                                                placeholder="Count"
+                                                label="Count"
                                                 onChange={this.handleInputChange(pollingStation.officeId, "ballotsIssued")}
                                             />
                                         </TableCell>
@@ -374,7 +374,7 @@ class CE201Entry extends Component {
                                                 id="ballots-unused"
                                                 margin="dense"
                                                 variant="outlined"
-                                                placeholder="Count"
+                                                label="Count"
                                                 onChange={this.handleInputChange(pollingStation.officeId, "ballotsUnused")}
                                             />
                                         </TableCell>
@@ -383,45 +383,45 @@ class CE201Entry extends Component {
                                                 id="ordinaryBallotCountFromBallotPaperAccount"
                                                 margin="dense"
                                                 variant="outlined"
-                                                placeholder="Ballot Paper A."
+                                                label="Ballot Paper A."
                                                 onChange={this.handleInputChange(pollingStation.officeId, "ordinaryBallotCountFromBallotPaperAccount")}
                                             />
                                             <TextField
                                                 id="ordinaryBallotCountFromBoxCount"
                                                 margin="dense"
                                                 variant="outlined"
-                                                placeholder="Box Count"
+                                                label="Box Count"
                                                 onChange={this.handleInputChange(pollingStation.officeId, "ordinaryBallotCountFromBoxCount")}
                                             />
-                                            {/*<TextField*/}
-                                                {/*id="outlined-dense"*/}
-                                                {/*margin="dense"*/}
-                                                {/*variant="outlined"*/}
-                                                {/*placeholder="Difference"*/}
+                                            <TextField
+                                                label="Difference"
+                                                id="outlined-dense"
+                                                margin="dense"
+                                                variant="outlined"
 
-                                            {/*/>*/}
+                                            />
                                         </TableCell>
                                         <TableCell style={{fontSize: 13, width: '20%'}}>
                                             <TextField
                                                 id="tenderedBallotCountFromBallotPaperAccount"
                                                 margin="dense"
                                                 variant="outlined"
-                                                placeholder="Ballot Paper A."
+                                                label="Ballot Paper A."
                                                 onChange={this.handleInputChange(pollingStation.officeId, "tenderedBallotCountFromBallotPaperAccount")}
                                             />
                                             <TextField
                                                 id="tenderedBallotCountFromBoxCount"
                                                 margin="dense"
                                                 variant="outlined"
-                                                placeholder="Box Count"
+                                                label="Box Count"
                                                 onChange={this.handleInputChange(pollingStation.officeId, "tenderedBallotCountFromBoxCount")}
                                             />
-                                            {/*<TextField*/}
-                                                {/*id="outlined-dense"*/}
-                                                {/*margin="dense"*/}
-                                                {/*variant="outlined"*/}
-                                                {/*placeholder="Difference"*/}
-                                            {/*/>*/}
+                                            <TextField
+                                                id="outlined-dense"
+                                                margin="dense"
+                                                variant="outlined"
+                                                label="Difference"
+                                            />
                                         </TableCell>
                                     </TableRow>
                                 ))}
