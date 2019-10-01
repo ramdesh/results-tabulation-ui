@@ -255,7 +255,7 @@ class CE201Entry extends Component {
                         <Typography variant="h4" gutterBottom>
                             Presidential Election 2019
                         </Typography>
-                        <Typography variant="h6" gutterBottom>
+                        <Typography variant="h5" gutterBottom>
                             CE-201 - Counting Hall No : {this.props.match.params.name2}
                             {/*CE-201 - Tally Sheet ID : {this.props.match.params.name}*/}
                         </Typography>
@@ -303,7 +303,8 @@ class CE201Entry extends Component {
                                         <TableCell style={{fontSize: 13, width: '5%'}}>
                                             {pollingStation.officeName}
                                         </TableCell>
-                                        <TableCell style={{fontSize: 13, width: '13%'}}>
+
+                                        <TableCell style={{fontSize: 13, width: '14%'}}>
 
                                             {/*<FormControl variant="outlined" margin="dense">*/}
 
