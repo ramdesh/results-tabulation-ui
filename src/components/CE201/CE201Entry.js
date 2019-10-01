@@ -229,7 +229,7 @@ class CE201Entry extends Component {
 
     render() {
         return (
-            <div style={{margin: '3%'}}>
+            <div style={{backgroundColor:'#e4e2f4', padding: '3%'}}>
                 <div>
                     <Breadcrumbs style={{marginLeft: '0.2%', marginBottom: '2%', fontSize: '14px'}} separator="/"
                                  aria-label="breadcrumb">
@@ -298,7 +298,7 @@ class CE201Entry extends Component {
                                 {this.state.pollingStations.map((pollingStation, idx) => (
                                     <TableRow>
                                         <TableCell style={{fontSize: 13, width: '1%'}}>
-                                            {idx}
+                                            {idx+1}
                                         </TableCell>
                                         <TableCell style={{fontSize: 13, width: '5%'}}>
                                             {pollingStation.officeName}
@@ -324,21 +324,24 @@ class CE201Entry extends Component {
                                                 id="box-id1"
                                                 margin="dense"
                                                 variant="outlined"
-                                                placeholder="Box Id"
+                                                label="Box Id"
+                                                autoComplete='off'
                                                 onChange={this.handleInputChange(pollingStation.officeId, "ballotBoxesReceived")}
                                             />
                                             <TextField
                                                 id="box-id2"
                                                 margin="dense"
                                                 variant="outlined"
-                                                placeholder="Box Id"
+                                                label="Box Id"
+                                                autoComplete='off'
                                                 onChange={this.handleInputChange(pollingStation.officeId, "ballotBoxesReceived")}
                                             />
                                             <TextField
                                                 id="box-id3"
                                                 margin="dense"
                                                 variant="outlined"
-                                                placeholder="Box Id"
+                                                label="Box Id"
+                                                autoComplete='off'
                                                 onChange={this.handleInputChange(pollingStation.officeId, "ballotBoxesReceived")}
                                             />
                                         </TableCell>
@@ -347,7 +350,8 @@ class CE201Entry extends Component {
                                                 id="ballots-received"
                                                 margin="dense"
                                                 variant="outlined"
-                                                placeholder="Count"
+                                                label="Count"
+                                                autoComplete='off'
                                                 onChange={this.handleInputChange(pollingStation.officeId, "ballotsReceived")}
                                             />
                                         </TableCell>
@@ -356,7 +360,8 @@ class CE201Entry extends Component {
                                                 id="ballots-spoilt"
                                                 margin="dense"
                                                 variant="outlined"
-                                                placeholder="Count"
+                                                label="Count"
+                                                autoComplete='off'
                                                 onChange={this.handleInputChange(pollingStation.officeId, "ballotsSpoilt")}
                                             />
                                         </TableCell>
@@ -365,7 +370,8 @@ class CE201Entry extends Component {
                                                 id="ballots-issued"
                                                 margin="dense"
                                                 variant="outlined"
-                                                placeholder="Count"
+                                                label="Count"
+                                                autoComplete='off'
                                                 onChange={this.handleInputChange(pollingStation.officeId, "ballotsIssued")}
                                             />
                                         </TableCell>
@@ -374,7 +380,8 @@ class CE201Entry extends Component {
                                                 id="ballots-unused"
                                                 margin="dense"
                                                 variant="outlined"
-                                                placeholder="Count"
+                                                label="Count"
+                                                autoComplete='off'
                                                 onChange={this.handleInputChange(pollingStation.officeId, "ballotsUnused")}
                                             />
                                         </TableCell>
@@ -383,45 +390,51 @@ class CE201Entry extends Component {
                                                 id="ordinaryBallotCountFromBallotPaperAccount"
                                                 margin="dense"
                                                 variant="outlined"
-                                                placeholder="Ballot Paper A."
+                                                label="Ballot Paper A."
+                                                autoComplete='off'
                                                 onChange={this.handleInputChange(pollingStation.officeId, "ordinaryBallotCountFromBallotPaperAccount")}
                                             />
                                             <TextField
                                                 id="ordinaryBallotCountFromBoxCount"
                                                 margin="dense"
                                                 variant="outlined"
-                                                placeholder="Box Count"
+                                                label="Box Count"
+                                                autoComplete='off'
                                                 onChange={this.handleInputChange(pollingStation.officeId, "ordinaryBallotCountFromBoxCount")}
                                             />
-                                            {/*<TextField*/}
-                                                {/*id="outlined-dense"*/}
-                                                {/*margin="dense"*/}
-                                                {/*variant="outlined"*/}
-                                                {/*placeholder="Difference"*/}
+                                            <TextField
+                                                label="Difference"
+                                                id="outlined-dense"
+                                                margin="dense"
+                                                variant="outlined"
+                                                autoComplete='off'
 
-                                            {/*/>*/}
+                                            />
                                         </TableCell>
                                         <TableCell style={{fontSize: 13, width: '20%'}}>
                                             <TextField
                                                 id="tenderedBallotCountFromBallotPaperAccount"
                                                 margin="dense"
                                                 variant="outlined"
-                                                placeholder="Ballot Paper A."
+                                                label="Ballot Paper A."
+                                                autoComplete='off'
                                                 onChange={this.handleInputChange(pollingStation.officeId, "tenderedBallotCountFromBallotPaperAccount")}
                                             />
                                             <TextField
                                                 id="tenderedBallotCountFromBoxCount"
                                                 margin="dense"
                                                 variant="outlined"
-                                                placeholder="Box Count"
+                                                label="Box Count"
+                                                autoComplete='off'
                                                 onChange={this.handleInputChange(pollingStation.officeId, "tenderedBallotCountFromBoxCount")}
                                             />
-                                            {/*<TextField*/}
-                                                {/*id="outlined-dense"*/}
-                                                {/*margin="dense"*/}
-                                                {/*variant="outlined"*/}
-                                                {/*placeholder="Difference"*/}
-                                            {/*/>*/}
+                                            <TextField
+                                                id="outlined-dense"
+                                                margin="dense"
+                                                variant="outlined"
+                                                label="Difference"
+                                                autoComplete='off'
+                                            />
                                         </TableCell>
                                     </TableRow>
                                 ))}
