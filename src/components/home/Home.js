@@ -138,14 +138,14 @@ class Home extends Component {
                                     </TableCell>
 
                                 </TableRow>
-                                <TableRow>
-                                    <TableCell style={{fontSize: 13,fontWeight: 'bold'}}>Tally Sheet : PRE 21</TableCell>
-                                    <TableCell>
-                                        <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.open2}
-                                                className="button">Open</Button>
-                                    </TableCell>
+                                {/*<TableRow>*/}
+                                    {/*<TableCell style={{fontSize: 13,fontWeight: 'bold'}}>Tally Sheet : PRE 21</TableCell>*/}
+                                    {/*<TableCell>*/}
+                                        {/*<Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.open2}*/}
+                                                {/*className="button">Open</Button>*/}
+                                    {/*</TableCell>*/}
 
-                                </TableRow>
+                                {/*</TableRow>*/}
 
                                 {/*<TableRow>*/}
                                     {/*<TableCell style={{fontSize: 13,fontWeight: 'bold'}}>TallySheet : PRE 34 CO</TableCell>*/}
