@@ -229,7 +229,7 @@ class CE201Entry extends Component {
 
     render() {
         return (
-            <div style={{margin: '3%'}}>
+            <div style={{backgroundColor:'#e4e2f4', padding: '3%'}}>
                 <div>
                     <Breadcrumbs style={{marginLeft: '0.2%', marginBottom: '2%', fontSize: '14px'}} separator="/"
                                  aria-label="breadcrumb">
@@ -298,7 +298,7 @@ class CE201Entry extends Component {
                                 {this.state.pollingStations.map((pollingStation, idx) => (
                                     <TableRow>
                                         <TableCell style={{fontSize: 13, width: '1%'}}>
-                                            {idx}
+                                            {idx+1}
                                         </TableCell>
                                         <TableCell style={{fontSize: 13, width: '5%'}}>
                                             {pollingStation.officeName}
