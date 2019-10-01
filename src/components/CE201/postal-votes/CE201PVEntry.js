@@ -129,7 +129,7 @@ class CE201PVEntry extends Component {
                                 <TableRow>
                                     <TableCell style={{fontSize: 13, color : 'black',fontWeight: 'bold'}}>Serial No of Postal Votes Ballot Box</TableCell>
                                     <TableCell style={{fontSize: 13, color : 'black',fontWeight: 'bold'}}>No of Packets inserted by the Returning Officer</TableCell>
-                                    <TableCell style={{fontSize: 13, color : 'black',fontWeight: 'bold'}}>No of Packets inserted by the Returning Officer</TableCell>
+                                    <TableCell style={{fontSize: 13, color : 'black',fontWeight: 'bold'}}>No of PV-A Packets found inside the Ballot Box after the count</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>

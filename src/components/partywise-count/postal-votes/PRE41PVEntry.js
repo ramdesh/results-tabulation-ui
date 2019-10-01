@@ -172,7 +172,7 @@ class PRE41PVEntry extends Component {
     handleRejected = event => {
         this.setState({rejected: event.target.value, name: event.target.name});
         console.log("Rejected:" + event.target.value)
-        
+
     }
 
 

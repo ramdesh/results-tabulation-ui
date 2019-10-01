@@ -21,6 +21,7 @@ class ReportsEntry extends Component {
     constructor(props, context) {
         super(props, context);
         this.handleClose = this.handleClose.bind(this);
+        this.handleBack = this.handleBack.bind(this);
         this.handleClickOpenPRE41 = this.handleClickOpenPRE41.bind(this);
         this.handleClickPD30 = this.handleClickPD30.bind(this);
         this.handleClickOpenPRE21 = this.handleClickOpenPRE21.bind(this);
@@ -69,6 +70,10 @@ class ReportsEntry extends Component {
             value: 0
 
         };
+    }
+
+    handleBack() {
+        this.props.history.replace('/Main')
     }
 
     // Handle click for PRE 41 Non Postal votes
@@ -950,7 +955,11 @@ class ReportsEntry extends Component {
                     </Paper>
                 </div>
 
+                <div style={{marginLeft: '76%', marginTop: '4%'}}>
+                    <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleBack}
+                            className="button">Back</Button>
 
+                </div>
             </div>
 
 
