@@ -41,7 +41,8 @@ class PRE41Entry extends Component {
             rejected:0,
             rejectedVotes:0,
             grandTotal :0,
-            sum:0
+            sum:0,
+            vals:0
         };
         this.calculation = [0];
     }
@@ -294,6 +295,7 @@ class PRE41Entry extends Component {
                                                 placeholder="No of votes"
                                                 name={'votes' + (idx + 1)}
                                                 autoComplete='off'
+                                                defaultValue={this.state.vals}
                                                 onChange={this.handleInputChange(candidateId, "count")}
                                             />
                                         </TableCell>
