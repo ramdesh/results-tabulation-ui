@@ -245,6 +245,7 @@ class PRE21PVEntry extends Component {
                                                 margin="dense"
                                                 variant="outlined"
                                                 placeholder="Count"
+                                                autoComplete='off'
                                                 onChange={this.handleInputChange(invalid.invalidVoteCategoryId, "count")}
                                             />
 
