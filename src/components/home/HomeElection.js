@@ -1,12 +1,6 @@
 import React, {Component} from 'react'
 import {
     Typography,
-    Table,
-    TableRow,
-    TableCell,
-    TableHead,
-    TableBody,
-    Paper,
     Button
 } from '@material-ui/core';
 import axios from "../../axios-base";
@@ -80,7 +74,6 @@ class HomeElection extends Component {
                         <Typography align={"center"} variant="h4" gutterBottom>
                             Election Result Tabulation
                         </Typography>
-
                     </div>
                     <div style={{marginLeft: '33%', marginRight: '33%'}}>
 
@@ -96,10 +89,7 @@ class HomeElection extends Component {
                                  className="button">{election.electionName}</Button>
                         ))}
                     </div>
-
                 </div>
-
-
             </div>
         )
     }

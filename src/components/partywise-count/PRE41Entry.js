@@ -208,7 +208,7 @@ class PRE41Entry extends Component {
 
     render() {
         return (
-            <div style={{margin: '3%'}}>
+            <div style={{backgroundColor:'#fff8e8',padding: '3%'}}>
                 <div>
                     <div style={{marginBottom: '3%'}}>
 
@@ -281,7 +281,7 @@ class PRE41Entry extends Component {
                                                 id="outlined-dense"
                                                 margin="dense"
                                                 variant="outlined"
-                                                placeholder="No of votes in words"
+                                                label="No of votes in words"
                                                 name={'votesWords' + (idx + 1)}
                                                 autoComplete='off'
                                                 onChange={this.handleInputChange(candidateId, "countInWords")}
@@ -292,7 +292,7 @@ class PRE41Entry extends Component {
                                                 id="outlined-dense"
                                                 margin="dense"
                                                 variant="outlined"
-                                                placeholder="No of votes"
+                                                label="No of votes"
                                                 name={'votes' + (idx + 1)}
                                                 autoComplete='off'
                                                 defaultValue={this.state.vals}
@@ -339,7 +339,7 @@ class PRE41Entry extends Component {
                                             id="outlined-dense"
                                             margin="dense"
                                             variant="outlined"
-                                            placeholder="Rejected Votes"
+                                            label="Rejected Votes"
                                             autoComplete='off'
                                             onChange={this.handleRejected}
                                         /></TableCell>

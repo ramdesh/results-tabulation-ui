@@ -86,8 +86,6 @@ class Home extends Component {
                                 <Link color="inherit" >
                                     Data Entry
                                 </Link>
-
-                                {/*<Typography color="textPrimary"></Typography>*/}
                             </Breadcrumbs>
                             <Typography variant="h4" gutterBottom>
                                 Presidential Election 2019
@@ -147,13 +145,6 @@ class Home extends Component {
 
                                 {/*</TableRow>*/}
 
-                                {/*<TableRow>*/}
-                                    {/*<TableCell style={{fontSize: 13,fontWeight: 'bold'}}>TallySheet : PRE 34 CO</TableCell>*/}
-                                    {/*<TableCell>*/}
-                                        {/*<Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.open4}*/}
-                                                {/*className="button">Open</Button>*/}
-                                    {/*</TableCell>*/}
-                                {/*</TableRow>*/}
                             </TableBody>
                         </Table>
                     </Paper>
@@ -192,18 +183,10 @@ class Home extends Component {
                                     </TableCell>
 
                                 </TableRow>
-                                <TableRow>
-                                    <TableCell style={{fontSize: 13,fontWeight: 'bold'}}>Tally Sheet : PRE 21 PV</TableCell>
-                                    <TableCell>
-                                        <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.open9}
-                                                className="button">Open</Button>
-                                    </TableCell>
-                                </TableRow>
-
                                 {/*<TableRow>*/}
-                                    {/*<TableCell style={{fontSize: 13,fontWeight: 'bold'}}>TallySheet : PRE 34 CO PV</TableCell>*/}
+                                    {/*<TableCell style={{fontSize: 13,fontWeight: 'bold'}}>Tally Sheet : PRE 21 PV</TableCell>*/}
                                     {/*<TableCell>*/}
-                                        {/*<Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.open10}*/}
+                                        {/*<Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.open9}*/}
                                                 {/*className="button">Open</Button>*/}
                                     {/*</TableCell>*/}
                                 {/*</TableRow>*/}
@@ -212,10 +195,7 @@ class Home extends Component {
                         </Table>
                     </Paper>
                 </div>
-
             </div>
-
-
 
         )
     }
