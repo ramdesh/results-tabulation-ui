@@ -51,6 +51,7 @@ class CE201 extends Component {
             axios.get('/tally-sheet?limit=1000&offset=0&electionId='+localStorage.getItem('electionType_NonPostal_Id')+'&officeId='+this.state.countingId+'&tallySheetCode=CE-201', {
 
                 headers: {
+                    'Authorization': "Bearer "+localStorage.getItem('token'),
                     'Access-Control-Allow-Origin': '*',
                     'Access-Control-Allow-Methods': 'GET',
                     'Access-Control-Allow-Headers': 'Content-Type',
@@ -78,6 +79,7 @@ class CE201 extends Component {
         console.log("District Centre :"+event.target.value)
         axios.get('/area?limit=20&offset=0&electionId='+localStorage.getItem('electionType_NonPostal_Id')+'&associatedAreaId='+event.target.value+'&areaType=PollingDivision', {
             headers: {
+                'Authorization': "Bearer "+localStorage.getItem('token'),
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
                 'Access-Control-Allow-Headers': 'Content-Type',
@@ -99,6 +101,7 @@ class CE201 extends Component {
         console.log(event.target.value)
         axios.get('/area?limit=20&offset=0&electionId='+localStorage.getItem('electionType_NonPostal_Id')+'&associatedAreaId='+event.target.value+'&areaType=CountingCentre', {
             headers: {
+                'Authorization': "Bearer "+localStorage.getItem('token'),
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
                 'Access-Control-Allow-Headers': 'Content-Type',
@@ -133,6 +136,7 @@ class CE201 extends Component {
         /** get the officeId by officeName **/
         axios.get('/office?limit=1000&offset=0&officeName=' + event.target.value + '&officeType=CountingCentre', {
             headers: {
+                'Authorization': "Bearer "+localStorage.getItem('token'),
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
                 'Access-Control-Allow-Headers': 'Content-Type',
@@ -157,6 +161,7 @@ class CE201 extends Component {
     componentDidMount() {
         axios.get('/area?limit=1000&offset=0&electionId='+localStorage.getItem('electionType_NonPostal_Id')+'&areaType=DistrictCentre', {
             headers: {
+                'Authorization': "Bearer "+localStorage.getItem('token'),
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
                 'Access-Control-Allow-Headers': 'Content-Type',

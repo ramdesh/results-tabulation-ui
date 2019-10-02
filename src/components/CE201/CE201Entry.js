@@ -12,7 +12,7 @@ import {
     TableBody,
     Breadcrumbs,
     Link,
-    Paper,FormControl,MenuItem,InputLabel
+    Paper
 } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -40,7 +40,6 @@ class CE201Entry extends Component {
             reportId: 0,
             countingName: 0,
             countingId: 0,
-
             // ballotBoxes:[]
         };
     }
@@ -121,6 +120,7 @@ class CE201Entry extends Component {
 
         axios.get('/office?limit=1000&offset=0&parentOfficeId=' + countingId, {
             headers: {
+                'Authorization': "Bearer "+localStorage.getItem('token'),
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
                 'Access-Control-Allow-Headers': 'Content-Type',
@@ -139,6 +139,7 @@ class CE201Entry extends Component {
 
         axios.get('/ballot-box?limit=1000&offset=0&electionId='+localStorage.getItem('electionType') , {
             headers: {
+                'Authorization': "Bearer "+localStorage.getItem('token'),
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
                 'Access-Control-Allow-Headers': 'Content-Type',
