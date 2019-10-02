@@ -50,13 +50,13 @@ class PRE41 extends Component {
         } else {
             axios.get('/tally-sheet?limit=1000&offset=0&electionId='+localStorage.getItem('electionType_NonPostal_Id')+'&officeId='+this.state.countingId+'&tallySheetCode=PRE-41', {
                 headers: {
+                    'Authorization': "Bearer "+localStorage.getItem('token'),
                     'Access-Control-Allow-Origin': '*',
                     'Access-Control-Allow-Methods': 'GET',
                     'Access-Control-Allow-Headers': 'Content-Type',
                     'X-Requested-With': 'XMLHttpRequest'
                 }
             }).then(res => {
-                // console.log("Election ID :" + res.data[0])
                 if (res.data.length === 0) {
                     alert("No TallySheets Allocated for here !")
                 } else {
@@ -77,6 +77,7 @@ class PRE41 extends Component {
         console.log("District Centre :"+event.target.value)
         axios.get('/area?limit=1000&offset=0&electionId='+localStorage.getItem('electionType_NonPostal_Id')+'&associatedAreaId='+event.target.value+'&areaType=PollingDivision', {
             headers: {
+                'Authorization': "Bearer "+localStorage.getItem('token'),
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
                 'Access-Control-Allow-Headers': 'Content-Type',
@@ -97,6 +98,7 @@ class PRE41 extends Component {
         console.log(event.target.value)
         axios.get('/area?limit=1000&offset=0&electionId='+localStorage.getItem('electionType_NonPostal_Id')+'&associatedAreaId='+event.target.value+'&areaType=CountingCentre', {
             headers: {
+                'Authorization': "Bearer "+localStorage.getItem('token'),
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
                 'Access-Control-Allow-Headers': 'Content-Type',
@@ -131,6 +133,7 @@ class PRE41 extends Component {
         // get the officeId by officeName
         axios.get('/office?limit=1000&offset=0&officeName=' + event.target.value + '&officeType=CountingCentre', {
             headers: {
+                'Authorization': "Bearer "+localStorage.getItem('token'),
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
                 'Access-Control-Allow-Headers': 'Content-Type',
@@ -155,6 +158,7 @@ class PRE41 extends Component {
     componentDidMount() {
         axios.get('/area?limit=1000&offset=0&electionId='+localStorage.getItem('electionType_NonPostal_Id')+'&areaType=DistrictCentre', {
             headers: {
+                'Authorization': "Bearer "+localStorage.getItem('token'),
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
                 'Access-Control-Allow-Headers': 'Content-Type',

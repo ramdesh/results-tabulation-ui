@@ -89,8 +89,18 @@ class PRE41Entry extends Component {
                         "count": parseInt(this.state.content[candidateId].count),
                         "countInWords": this.state.content[candidateId].countInWords
                     }
-                })
-            })
+                }),
+                    "summary": {
+                        "rejectedVoteCount": parseInt(this.state.rejected)
+                    }
+            },
+                {
+                    headers: {
+                        'authorization': "Bearer "+localStorage.getItem('token'),
+                    }
+                }
+
+            )
                 .then(res => {
                     console.log(res);
                     console.log("Result Test" + res.data.htmlUrl);
@@ -146,10 +156,6 @@ class PRE41Entry extends Component {
     handleRejected = event => {
         this.setState({rejected: event.target.value, name: event.target.name});
         console.log("Rejected:" + event.target.value)
-
-        // this.setState({rejectedVotes: event.target.value});
-        //
-        // console.log("Rejected state new:" + this.state.rejectedVotes)
     }
 
 
@@ -159,11 +165,9 @@ class PRE41Entry extends Component {
         if ((name) === "votes"+candidateId){
             this.calculation[candidateId] = parseInt(event.target.value);
             console.log(this.calculation);
-
         }else{
             console.log("NaN");
         }
-
         this.setState({
             ...this.state,
             content: {
@@ -193,8 +197,10 @@ class PRE41Entry extends Component {
         })
         console.log("Set >>> ", this.state.tallySheetId)
         console.log("Set >>> ", this.state.officeId)
+        console.log("Token added")
         axios.get('/election?limit=1000&offset=0', {
             headers: {
+                'Authorization': "Bearer "+localStorage.getItem('token'),
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
                 'Access-Control-Allow-Headers': 'Content-Type',

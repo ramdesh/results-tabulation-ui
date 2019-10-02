@@ -50,7 +50,6 @@ class Home extends Component {
     open6() {
         this.props.history.replace('/PRE28A')
     }
-
     open7() {
         this.props.history.replace('/CE201PV')
     }
