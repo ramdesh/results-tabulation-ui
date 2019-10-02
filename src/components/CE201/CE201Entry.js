@@ -229,7 +229,7 @@ class CE201Entry extends Component {
 
     render() {
         return (
-            <div style={{backgroundColor:'#e4e2f4', padding: '3%'}}>
+            <div style={{backgroundColor:'#EAF4F8', padding: '3%'}}>
                 <div>
                     <Breadcrumbs style={{marginLeft: '0.2%', marginBottom: '2%', fontSize: '14px'}} separator="/"
                                  aria-label="breadcrumb">
