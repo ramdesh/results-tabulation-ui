@@ -29,6 +29,7 @@ import HomeElection from "./components/home/HomeElection";
 import ReportsNew from "./components/report/ReportsNew";
 import CE201PV from "./components/CE201/postal-votes/CE201PV";
 import CE201PVEntry from "./components/CE201/postal-votes/CE201PVEntry";
+import PRE41Report from "./components/partywise-count/PRE41Report";
 
 function App() {
     return (
@@ -55,6 +56,7 @@ function App() {
 
                 <Route exact path="/PRE41" component={PRE41}/>
                 <Route path="/PRE41-Entry/:name/:name2" component={PRE41Entry} />
+                <Route exact path="/PRE41Report" component={PRE41Report}/>
 
                 <Route exact path="/PRE28A" component={PRE28A}/>
                 <Route path="/PRE28A-Entry/:name" component={PRE28AEntry} />
