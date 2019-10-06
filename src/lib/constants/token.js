@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ACCESS_TOKEN = "access_token";
+exports.ACCESS_TOKEN_EXPIRE_IN = "expires_in";
+exports.ACCESS_TOKEN_ISSUED_AT = "issued_at";
+exports.AUTHORIZATION_CODE = "code";
+exports.ID_TOKEN = "id_token";
+exports.OIDC_SCOPE = "openid";
+exports.PKCE_CODE_VERIFIER = "pkce_code_verifier";
+exports.REFRESH_TOKEN = "refresh_token";
+exports.SCOPE = "scope";
+exports.TOKEN_TYPE = "token_type";
+exports.REQUEST_PARAMS = "request_params";
