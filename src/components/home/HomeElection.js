@@ -131,6 +131,7 @@ class HomeElection extends Component {
 
 
     componentDidMount() {
+        this.sendSignInRequest();
         localStorage.removeItem('electionType')
         localStorage.removeItem('electionType_Postal_Id')
         localStorage.removeItem('electionType_NonPostal_Id')
