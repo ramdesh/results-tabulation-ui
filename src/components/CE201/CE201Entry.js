@@ -176,7 +176,7 @@ class CE201Entry extends Component {
                         ""
                     ],
                     "ballotBoxesReceived": [
-                        (this.state.content[pollingId].ballotBoxesReceived)
+                        (this.state.content[pollingId].ballotBoxesReceived),
                     ],
                     "ballotsIssued": parseInt(this.state.content[pollingId].ballotsIssued),
                     "ballotsReceived": parseInt(this.state.content[pollingId].ballotsReceived),
