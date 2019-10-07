@@ -38,6 +38,7 @@ function App() {
                 <NavBar/>
 
                 <Route exact path="/" component={HomeElection}/>
+
                 <Route exact path="/report" component={Reports}/>
                 <Route exact path="/ReportsEntry" component={ReportsEntry}/>
                 <Route exact path="/ReportsNew" component={ReportsNew}/>
@@ -56,7 +57,7 @@ function App() {
 
                 <Route exact path="/PRE41" component={PRE41}/>
                 <Route path="/PRE41-Entry/:name/:name2" component={PRE41Entry} />
-                <Route exact path="/PRE41Report" component={PRE41Report}/>
+                <Route exact path="/PRE41Report/:tallySheetId/:tallySheetVersionId" component={PRE41Report}/>
 
                 <Route exact path="/PRE28A" component={PRE28A}/>
                 <Route path="/PRE28A-Entry/:name" component={PRE28AEntry} />
@@ -76,7 +77,6 @@ function App() {
 
                 <Route exact path="/PRE34COPV" component={PRE34COPV}/>
                 <Route exact path="/PRE34COPV-Entry" component={PRE34COPVEntry}/>
-
 
             </div>
         </Router>

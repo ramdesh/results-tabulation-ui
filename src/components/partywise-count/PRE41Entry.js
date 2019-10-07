@@ -42,7 +42,8 @@ class PRE41Entry extends Component {
             rejectedVotes:0,
             grandTotal :0,
             sum:0,
-            vals:0
+            vals:0,
+            tallySheetVersionId: 1,
         };
         this.calculation = [0];
     }
@@ -99,17 +100,16 @@ class PRE41Entry extends Component {
                         'authorization': "Bearer "+localStorage.getItem('token'),
                     }
                 }
-
             )
                 .then(res => {
                     console.log(res);
                     console.log("Result Test" + res.data.htmlUrl);
                     console.log("Result Test1" + res.data[0]);
-                    alert("Successfully Created the TallySheet - PRE41")
+                    // alert("Successfully Created the TallySheet - PRE41")
+                    // const htmlURL = res.data.htmlUrl
+                    // window.open(htmlURL, "_blank")
+                    this.props.history.replace('/PRE41Report/'+this.state.tallySheetId+'/'+ this.state.tallySheetVersionId)
 
-                    const htmlURL = res.data.htmlUrl
-                    window.open(htmlURL, "_blank")
-                    this.props.history.replace('/Home')
 
                 }).catch((error) => console.log(error));
         }
@@ -283,6 +283,7 @@ class PRE41Entry extends Component {
                                             style={{width: '30%', fontSize: 13}}>{candidate.candidateName}</TableCell>
 
                                         <TableCell style={{width: '30%', fontSize: 13}}>
+
                                             <TextField
                                                 id="outlined-dense"
                                                 margin="dense"
@@ -383,7 +384,7 @@ class PRE41Entry extends Component {
                     <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleBack}
                             className="button">Back</Button>
                     <Button style={{borderRadius: 18, color: 'white'}} onClick={this.handleSubmit}
-                            className="button">Submit</Button>
+                            className="button">Next</Button>
                 </div>
 
                 <Dialog
