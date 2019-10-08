@@ -30,6 +30,7 @@ import ReportsNew from "./components/report/ReportsNew";
 import CE201PV from "./components/CE201/postal-votes/CE201PV";
 import CE201PVEntry from "./components/CE201/postal-votes/CE201PVEntry";
 import PRE41Report from "./components/partywise-count/PRE41Report";
+import ReportView from "./components/report/ReportView";
 
 function App() {
     return (
@@ -42,6 +43,7 @@ function App() {
                 <Route exact path="/report" component={Reports}/>
                 <Route exact path="/ReportsEntry" component={ReportsEntry}/>
                 <Route exact path="/ReportsNew" component={ReportsNew}/>
+                <Route exact path="/ReportView/:tallySheetId/:tallySheetVersionId" component={ReportView}/>
 
                 <Route exact path="/CE201" component={CE201}/>
                 <Route exact path="/CE201-Entry/:name/:name2/:countingId" component={CE201Entry}/>
