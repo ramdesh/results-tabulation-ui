@@ -5,6 +5,20 @@ import {
 } from '@material-ui/core';
 import axios from "../../axios-base";
 
+import {
+    AuthenticateSessionUtil,
+    AuthenticateTokenKeys,
+    OPConfigurationUtil,
+    SignInUtil,
+    SignOutUtil
+} from "../../lib";
+// import { setSignIn, setSignOut } from "../actions";
+import { AppConfig, RESOURCE_ENDPOINTS } from "../../configs";
+import { getAuthenticationCallbackUrl, history } from "../../utils";
+// import { SEND_SIGN_IN_REQUEST, SEND_SIGN_OUT_REQUEST } from "../actions/types";
+
+const appConfig = new AppConfig();
+
 class HomeElection extends Component {
     constructor(props, context) {
         super(props, context);
@@ -23,6 +37,47 @@ class HomeElection extends Component {
         console.log("close")
         this.setState({open: false});
     }
+
+
+    /** loginSuccessRedirect  **/
+    loginSuccessRedirect () {
+        const AuthenticationCallbackUrl = getAuthenticationCallbackUrl();
+        const location = ((!AuthenticationCallbackUrl)
+            || (AuthenticationCallbackUrl === appConfig.loginPath)) ? appConfig.homePath : AuthenticationCallbackUrl;
+
+        history.push(location);
+    };
+
+
+    /** sendSignInRequest**/
+    sendSignInRequest(){
+        const requestParams = {
+            clientHost: appConfig.clientHost,
+            clientId: appConfig.clientID,
+            clientSecret: null,
+            enablePKCE: true,
+            redirectUri: appConfig.loginCallbackURL,
+            scope: null,
+        };
+
+        if (SignInUtil.hasAuthorizationCode()) {
+            SignInUtil.sendTokenRequest(requestParams)
+                .then((response) => {
+                    AuthenticateSessionUtil.initUserSession(response,
+                        SignInUtil.getAuthenticatedUser(response.idToken));
+                    // dispatch(setSignIn());
+                    this.loginSuccessRedirect();
+                }).catch((error) => {
+                throw error;
+            });
+        } else {
+            SignInUtil.sendAuthorizationRequest(requestParams);
+        }
+    }
+
+
+
+
 
     handleClickOpen(type, subElection) {
         // Saves user token to localStorage
@@ -76,6 +131,7 @@ class HomeElection extends Component {
 
 
     componentDidMount() {
+        // this.sendSignInRequest()
         localStorage.removeItem('electionType')
         localStorage.removeItem('electionType_Postal_Id')
         localStorage.removeItem('electionType_NonPostal_Id')

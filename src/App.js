@@ -30,6 +30,10 @@ import ReportsNew from "./components/report/ReportsNew";
 import CE201PV from "./components/CE201/postal-votes/CE201PV";
 import CE201PVEntry from "./components/CE201/postal-votes/CE201PVEntry";
 import PRE41Report from "./components/partywise-count/PRE41Report";
+import ReportView from "./components/report/ReportView";
+import CE201Report from "./components/CE201/CE201Report";
+import PRE41Edit from "./components/partywise-count/PRE41Edit";
+
 
 function App() {
     return (
@@ -38,12 +42,15 @@ function App() {
                 <NavBar/>
 
                 <Route exact path="/" component={HomeElection}/>
+
                 <Route exact path="/report" component={Reports}/>
                 <Route exact path="/ReportsEntry" component={ReportsEntry}/>
                 <Route exact path="/ReportsNew" component={ReportsNew}/>
+                <Route exact path="/ReportView/:tallySheetId/:tallySheetVersionId" component={ReportView}/>
 
                 <Route exact path="/CE201" component={CE201}/>
                 <Route exact path="/CE201-Entry/:name/:name2/:countingId" component={CE201Entry}/>
+                <Route exact path="/CE201Report/:tallySheetId/:tallySheetVersionId" component={CE201Report}/>
 
                 <Route exact path="/PRE21" component={PRE21}/>
                 <Route exact path="/PRE21-Entry/:name/:name2" component={PRE21Entry}/>
@@ -55,8 +62,12 @@ function App() {
                 <Route path="/PRE28-Entry/:name" component={PRE28Entry} />
 
                 <Route exact path="/PRE41" component={PRE41}/>
+
                 <Route path="/PRE41-Entry/:name/:name2" component={PRE41Entry} />
-                <Route exact path="/PRE41Report" component={PRE41Report}/>
+
+                <Route exact path="/PRE41Report/:tallySheetId/:tallySheetVersionId/:countingId" component={PRE41Report}/>
+
+                <Route exact path="/PRE41Edit/:tallySheetId/:tallySheetVersionId/:countingId" component={PRE41Edit}/>
 
                 <Route exact path="/PRE28A" component={PRE28A}/>
                 <Route path="/PRE28A-Entry/:name" component={PRE28AEntry} />
@@ -76,7 +87,6 @@ function App() {
 
                 <Route exact path="/PRE34COPV" component={PRE34COPV}/>
                 <Route exact path="/PRE34COPV-Entry" component={PRE34COPVEntry}/>
-
 
             </div>
         </Router>

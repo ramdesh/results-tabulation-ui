@@ -14,13 +14,8 @@ import {
     Breadcrumbs,
     Link
 } from '@material-ui/core';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
 
-class PRE41Entry extends Component {
+class PRE41Edit extends Component {
     constructor(props) {
         super(props);
         this.handleClose = this.handleClose.bind(this);
@@ -43,7 +38,10 @@ class PRE41Entry extends Component {
             grandTotal :0,
             sum:0,
             vals:0,
-            tallySheetVersionId: 1,
+            tallySheetVersionId: 0,
+
+            filledData:[]
+
         };
         this.calculation = [0];
     }
@@ -73,9 +71,12 @@ class PRE41Entry extends Component {
 
     // submit the form data
     handleSubmit = (event) => {
-        const {name} = this.props.match.params
-        const {name2} = this.props.match.params
-        console.log("Id office >>> ", name2)
+        const {tallySheetId} = this.props.match.params
+        const {countingId} = this.props.match.params
+        // const {name} = this.props.match.params
+        // const {name2} = this.props.match.params
+        // console.log("tallysheetID >>> ", name2)
+        console.log("tally>>> ",tallySheetId)
 
         event.preventDefault()
         if (this.state.content[1].count === null || this.state.content[2].count === null ||
@@ -83,18 +84,18 @@ class PRE41Entry extends Component {
             alert("Please Enter the necessary fields !")
 
         } else {
-            axios.post('/tally-sheet/PRE-41/' + name + '/version', {
-                "content": this.state.candidatesList.map((candidateId) => {
-                    return {
-                        "candidateId": candidateId,
-                        "count": parseInt(this.state.content[candidateId].count),
-                        "countInWords": this.state.content[candidateId].countInWords
-                    }
-                }),
+            axios.post('/tally-sheet/PRE-41/' + tallySheetId + '/version', {
+                    "content": this.state.candidatesList.map((candidateId) => {
+                        return {
+                            "candidateId": candidateId,
+                            "count": parseInt(this.state.content[candidateId].count),
+                            "countInWords": this.state.content[candidateId].countInWords
+                        }
+                    }),
                     "summary": {
                         "rejectedVoteCount": parseInt(this.state.rejected)
                     }
-            },
+                },
                 {
                     headers: {
                         'authorization': "Bearer "+localStorage.getItem('token'),
@@ -102,13 +103,13 @@ class PRE41Entry extends Component {
                 }
             )
                 .then(res => {
-                    console.log(res);
-                    console.log("Result Test" + res.data.htmlUrl);
-                    console.log("Result Test1" + res.data[0]);
+                    console.log( "Result"+res.data.latestVersionId);
+                    console.log("Result Edit" + res.data.htmlUrl);
+                    console.log("Result Edit" + res.data[0]);
                     // alert("Successfully Created the TallySheet - PRE41")
                     // const htmlURL = res.data.htmlUrl
                     // window.open(htmlURL, "_blank")
-                    this.props.history.replace('/PRE41Report/'+this.state.tallySheetId+'/'+ this.state.tallySheetVersionId+'/'+name2)
+                    this.props.history.replace('/PRE41Report/'+this.state.tallySheetId+'/'+ this.state.tallySheetVersionId+'/'+countingId)
 
 
                 }).catch((error) => console.log(error));
@@ -185,19 +186,34 @@ class PRE41Entry extends Component {
     }
 
     componentDidMount() {
-        const {name} = this.props.match.params
-        console.log("tally sheet Id ", name)
+
+
+
+
+        const {tallySheetId} = this.props.match.params
+        console.log("tally sheet Id ", tallySheetId)
         this.setState({
-            tallySheetId: name
+            tallySheetId: tallySheetId
         })
-        const {name2} = this.props.match.params
-        console.log("Counting Hall No (Name) ", name2)
+
+        const {tallySheetVersionId} = this.props.match.params
+        console.log("tally sheet version Id ", tallySheetVersionId)
         this.setState({
-            officeId: name2
+            tallySheetVersionId: tallySheetVersionId
         })
+        const {countingId} = this.props.match.params
+        console.log("Counting Hall No (Name) ", countingId)
+        this.setState({
+            officeId: countingId
+        })
+
+
         console.log("Set >>> ", this.state.tallySheetId)
         console.log("Set >>> ", this.state.officeId)
         console.log("Token added")
+
+
+
         axios.get('/election?limit=1000&offset=0', {
             headers: {
                 'Authorization': "Bearer "+localStorage.getItem('token'),
@@ -210,6 +226,26 @@ class PRE41Entry extends Component {
             console.log("Election" + res.data[0].parties)
             this.setElection(res.data[0])
         }).catch((error) => console.log(error));
+
+
+        axios.get('/tally-sheet/PRE-41/'+tallySheetId+'/version/'+tallySheetVersionId, {
+            headers: {
+                'Authorization': "Bearer "+localStorage.getItem('token'),
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET',
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        }).then(res => {
+            console.log("get PRE 41 > >" + res.data.htmlUrl)
+            console.log("get PRE 41 nndd > >" + res.data.content)
+            this.setState({
+                filledData: res.data.content
+            })
+            console.log("filled data> >" + this.state.filledData)
+        }).catch((error) => console.log(error));
+
+
     }
 
     render() {
@@ -288,8 +324,10 @@ class PRE41Entry extends Component {
                                                 id="outlined-dense"
                                                 margin="dense"
                                                 variant="outlined"
-                                                label="No of votes in words"
+                                                // label={this.state.filledData[idx].count}
                                                 name={'votesWords' + (idx + 1)}
+                                                defaultValue={this.state.filledData[idx].countInWords}
+                                                // placeholder={this.state.filledData[idx].countInWords}
                                                 autoComplete='off'
                                                 onChange={this.handleInputChange(candidateId, "countInWords")}
                                             />
@@ -302,6 +340,7 @@ class PRE41Entry extends Component {
                                                 label="No of votes"
                                                 name={'votes' + (idx + 1)}
                                                 autoComplete='off'
+                                                defaultValue={this.state.filledData[idx].count}
                                                 // defaultValue={this.state.vals}
                                                 onChange={this.handleInputChange(candidateId, "count")}
                                             />
@@ -387,30 +426,9 @@ class PRE41Entry extends Component {
                             className="button">Next</Button>
                 </div>
 
-                <Dialog
-                    open={this.state.open}
-                    onClose={this.handleClose}
-                    aria-labelledby="alert-dialog-title"
-                    aria-describedby="alert-dialog-description"
-                >
-                    <DialogTitle id="alert-dialog-title">{"Invalid Ballot Count Confirmation "}</DialogTitle>
-                    <DialogContent>
-                        <DialogContentText id="alert-dialog-description">
-                            Are you sure you that all the necessary data entered correctly ?
-                        </DialogContentText>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button color="primary">
-                            Confirm
-                        </Button>
-                        <Button onClick={this.handleClose} color="primary" autoFocus>
-                            Cancel
-                        </Button>
-                    </DialogActions>
-                </Dialog>
             </div>
         )
     }
 }
 
-export default PRE41Entry;
+export default PRE41Edit;
