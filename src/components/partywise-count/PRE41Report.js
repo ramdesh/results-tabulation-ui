@@ -10,7 +10,7 @@ class PRE41Report extends Component {
         this.handleReport = this.handleReport.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleBack = this.handleBack.bind(this);
-
+        this.handleUnlock = this.handleUnlock.bind(this);
         this.handleBackToPRE41 = this.handleBackToPRE41.bind(this);
         this.state = {
             open: "Test",
@@ -55,8 +55,7 @@ class PRE41Report extends Component {
 
 
             if (res.data[0].locked){
-                alert("Already Locked Tally Sheet !")
-
+                // alert("Already Locked Tally Sheet !")
                 this.setState({
                     isLocked: true
                 })
@@ -81,7 +80,6 @@ class PRE41Report extends Component {
 
     // submit the form data
     handleSubmit() {
-
         const {tallySheetId} = this.props.match.params
         const {tallySheetVersionId} = this.props.match.params
         const {countingId} = this.props.match.params
@@ -103,6 +101,28 @@ class PRE41Report extends Component {
 
             }).catch((error) => console.log(error));
 
+
+    }
+
+    // submit the form data
+    handleUnlock() {
+        console.log("unlock");
+        const {tallySheetId} = this.props.match.params
+        const {tallySheetVersionId} = this.props.match.params
+        const {countingId} = this.props.match.params
+        /** UnLock Report **/
+        axios.put('/tally-sheet/' + tallySheetId + '/unlock',
+            {
+                headers: {
+                    'authorization': "Bearer " + localStorage.getItem('token'),
+                }
+            })
+            .then(res => {
+                console.log("UnLock API " + res);
+                alert("Successfully Unlocked the TallySheet - PRE 41")
+                this.props.history.replace('/PRE41Edit/' + tallySheetId + '/'+tallySheetVersionId+'/'+countingId)
+
+            }).catch((error) => console.log(error));
 
     }
 
@@ -138,10 +158,9 @@ class PRE41Report extends Component {
                 {this.state.isLocked===true && <div style={{margin: '4%', marginLeft: '56%'}}>
                     <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleBackToPRE41}
                             className="button">Back</Button>
-                    <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleSubmit}
+                    <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleUnlock}
                             className="button">Unlock</Button>
                 </div>}
-
             </div>
         )
     }

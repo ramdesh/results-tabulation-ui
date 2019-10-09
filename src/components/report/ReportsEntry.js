@@ -68,6 +68,7 @@ class ReportsEntry extends Component {
             reportversionPRE21Pv: null,
             reportversionPRE41Pv: null,
             reportversionPD30: null,
+            reportversionPD30PV: null,
             reportPolling: [],
             reportDivision: [],
             reportDivisionPV: [],
@@ -133,7 +134,8 @@ class ReportsEntry extends Component {
             })
                 .catch((error) => console.log(error));
 
-            window.open('https://dev.tabulation.ecdev.opensource.lk/tally-sheet/' + this.state.reportIdPRE41Pv + '/version/' + this.state.reportversionPRE41Pv + '/html', "_blank");
+            this.props.history.replace('/ReportView/'+this.state.reportIdPRE41Pv+'/'+ this.state.reportversionPRE41Pv)
+            // window.open('https://dev.tabulation.ecdev.opensource.lk/tally-sheet/' + this.state.reportIdPRE41Pv + '/version/' + this.state.reportversionPRE41Pv + '/html', "_blank");
         }
         this.setState({open: true});
     }
@@ -279,13 +281,18 @@ class ReportsEntry extends Component {
 
     //
     handleClickOpenPRE30Pv() {
+        if (this.state.reportversionPD30PV == null) {
+            alert('Report not Avialable')
+        } else {
+            axios.post('/tally-sheet/PRE-30-PD/' + this.state.reportversionPD30PV + '/version')
+                .then(res => {
+                    console.log(res);
+                    console.log(res.data.htmlUrl);
+                    window.open(res.data.htmlUrl, "_blank")
+                });
 
-        axios.post('/tally-sheet/PRE-30-PD/' + this.state.reportDivisionPV + '/version')
-            .then(res => {
-                console.log(res);
-                console.log(res.data.htmlUrl);
-                window.open(res.data.htmlUrl, "_blank")
-            });
+            this.props.history.replace('/ReportView/' + this.state.report30pdpv + '/' + this.state.reportversionPD30PV)
+        }
 
         // window.open('newPageUrl', "https://dev.tabulation.ecdev.opensource.lk")
         this.setState({open: true});
@@ -382,6 +389,7 @@ class ReportsEntry extends Component {
 
         axios.get('/tally-sheet?limit=1000&offset=0&electionId=' + localStorage.getItem('electionType_Postal_Id') + '&officeId=' + event.target.value + '&tallySheetCode=PRE-41', {
             headers: {
+                'Authorization': "Bearer " + localStorage.getItem('token'),
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
                 'Access-Control-Allow-Headers': 'Content-Type',
@@ -550,6 +558,10 @@ class ReportsEntry extends Component {
     handleDivisionPv = event => {
         this.setState({selectedPRE30PV: event.target.value, name: event.target.name});
 
+        this.setState({
+            report30pdpv: event.target.value
+        })
+
         axios.get('/tally-sheet?limit=20&offset=0&electionId=' + localStorage.getItem('electionType_Postal_Id') + '&officeId=' + event.target.value + '&tallySheetCode=PRE-30-PD', {
             headers: {
                 'Authorization': "Bearer " + localStorage.getItem('token'),
@@ -559,9 +571,9 @@ class ReportsEntry extends Component {
                 'X-Requested-With': 'XMLHttpRequest'
             }
         }).then(res => {
-            console.log("Election" + res.data[0].tallySheetId)
+            console.log("Election" + res.data[0].latestVersionId)
             this.setState({
-                reportDivisionPV: res.data[0].tallySheetId
+                reportversionPD30PV: res.data[0].latestVersionId
             })
 
         })

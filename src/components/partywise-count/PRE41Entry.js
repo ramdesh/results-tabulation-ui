@@ -43,7 +43,8 @@ class PRE41Entry extends Component {
             grandTotal :0,
             sum:0,
             vals:0,
-            tallySheetVersionId: 1,
+
+            // tallySheetVersionId: 1,
         };
         this.calculation = [0];
     }
@@ -104,11 +105,13 @@ class PRE41Entry extends Component {
                 .then(res => {
                     console.log(res);
                     console.log("Result Test" + res.data.htmlUrl);
+
+                    console.log("Version" + res.data.tallySheetVersionId);
                     console.log("Result Test1" + res.data[0]);
                     // alert("Successfully Created the TallySheet - PRE41")
                     // const htmlURL = res.data.htmlUrl
                     // window.open(htmlURL, "_blank")
-                    this.props.history.replace('/PRE41Report/'+this.state.tallySheetId+'/'+ this.state.tallySheetVersionId+'/'+name2)
+                    this.props.history.replace('/PRE41Report/'+this.state.tallySheetId+'/'+ res.data.tallySheetVersionId+'/'+name2)
 
 
                 }).catch((error) => console.log(error));

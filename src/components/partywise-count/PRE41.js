@@ -63,7 +63,7 @@ class PRE41 extends Component {
                     alert("No TallySheets Allocated for here !")
                 } else if (res.data[0].locked){
                     // window.confirm('Are you sure you want to save this thing into the database?')
-                    alert("Already Locked Tally Sheet !")
+                    // alert("Already Locked Tally Sheet !")
                     console.log("locked - passed the lockedVersionId")
 
                     this.setState({
@@ -139,6 +139,7 @@ class PRE41 extends Component {
         // set the counting center name
         this.setState({
             selectedCountingCenter: event.target.value,
+            countingId: event.target.value,
             name: event.target.name
         });
 
@@ -146,21 +147,21 @@ class PRE41 extends Component {
         console.log("Counting Name" + event.target.value)
 
         // get the officeId by officeName
-        axios.get('/office?limit=1000&offset=0&officeName=' + event.target.value + '&officeType=CountingCentre', {
-            headers: {
-                'Authorization': "Bearer "+localStorage.getItem('token'),
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': 'GET',
-                'Access-Control-Allow-Headers': 'Content-Type',
-                'X-Requested-With': 'XMLHttpRequest'
-            }
-        }).then(res => {
-            console.log("Counting Center Id >>>" + res.data[0].officeId)
-            this.setState({
-                countingId: res.data[0].officeId
-            })
-        })
-            .catch((error) => console.log(error));
+        // axios.get('/area?limit=1000&offset=0&areaId=' + event.target.value + '&areaType=CountingCentre', {
+        //     headers: {
+        //         'Authorization': "Bearer "+localStorage.getItem('token'),
+        //         'Access-Control-Allow-Origin': '*',
+        //         'Access-Control-Allow-Methods': 'GET',
+        //         'Access-Control-Allow-Headers': 'Content-Type',
+        //         'X-Requested-With': 'XMLHttpRequest'
+        //     }
+        // }).then(res => {
+        //     console.log("Counting Center Id >>>" + res.data[0].officeId)
+        //     this.setState({
+        //         countingId: res.data[0].officeId
+        //     })
+        // })
+        //     .catch((error) => console.log(error));
 
     };
 
@@ -252,7 +253,7 @@ class PRE41 extends Component {
                                 <Select className="width50" value={this.state.selectedCountingCenter}
                                         onChange={this.handleCounting}>
                                     {this.state.countingCenter.map((countingCenter, idx) => (
-                                        <MenuItem value={countingCenter.areaName}>{countingCenter.areaName}</MenuItem>
+                                        <MenuItem value={countingCenter.areaId}>{countingCenter.areaName}</MenuItem>
                                     ))}
                                 </Select>
                             </FormControl>
