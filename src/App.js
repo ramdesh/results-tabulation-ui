@@ -32,6 +32,7 @@ import CE201PVEntry from "./components/CE201/postal-votes/CE201PVEntry";
 import PRE41Report from "./components/partywise-count/PRE41Report";
 import ReportView from "./components/report/ReportView";
 import CE201Report from "./components/CE201/CE201Report";
+import PRE41Edit from "./components/partywise-count/PRE41Edit";
 
 
 function App() {
@@ -61,8 +62,12 @@ function App() {
                 <Route path="/PRE28-Entry/:name" component={PRE28Entry} />
 
                 <Route exact path="/PRE41" component={PRE41}/>
+
                 <Route path="/PRE41-Entry/:name/:name2" component={PRE41Entry} />
-                <Route exact path="/PRE41Report/:tallySheetId/:tallySheetVersionId" component={PRE41Report}/>
+
+                <Route exact path="/PRE41Report/:tallySheetId/:tallySheetVersionId/:countingId" component={PRE41Report}/>
+
+                <Route exact path="/PRE41Edit/:tallySheetId/:tallySheetVersionId/:countingId" component={PRE41Edit}/>
 
                 <Route exact path="/PRE28A" component={PRE28A}/>
                 <Route path="/PRE28A-Entry/:name" component={PRE28AEntry} />
