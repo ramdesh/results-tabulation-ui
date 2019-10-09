@@ -26,6 +26,7 @@ class ReportsEntry extends Component {
         this.handleClickPD30 = this.handleClickPD30.bind(this);
         this.handleClickOpenPRE21 = this.handleClickOpenPRE21.bind(this);
         this.handleClickOpenCE201 = this.handleClickOpenCE201.bind(this);
+        this.handleClickOpenCE201pv = this.handleClickOpenCE201pv.bind(this);
         this.handleClickOpenElectorate = this.handleClickOpenElectorate.bind(this);
         this.handleClickOpenPRE30Pv = this.handleClickOpenPRE30Pv.bind(this);
         this.handleClickOpenPRE21pv = this.handleClickOpenPRE21pv.bind(this);
@@ -54,6 +55,7 @@ class ReportsEntry extends Component {
             setOpen: false,
             reportId: 0,
             reportIdCE201: 0,
+            reportIdCE201pv: 0,
             reportIdPRE21: 0,
             reportIdPRE21Pv: 0,
             report30PD: 0,
@@ -61,6 +63,7 @@ class ReportsEntry extends Component {
             reportIdPRE41Pv: 0,
             reportversion: null,
             reportversionCE201: null,
+            reportversionCE201pv: null,
             reportversionPRE21: null,
             reportversionPRE21Pv: null,
             reportversionPRE41Pv: null,
@@ -157,6 +160,35 @@ class ReportsEntry extends Component {
                 .catch((error) => console.log(error));
 
             this.props.history.replace('/ReportView/'+this.state.reportIdCE201+'/'+ this.state.reportversionCE201)
+            // window.open('https://dev.tabulation.ecdev.opensource.lk/tally-sheet/' + this.state.reportId + '/version/' + this.state.reportversion + '/html', "_blank");
+        }
+
+        this.setState({open: true});
+    }
+
+
+    // Handle click for CE 201  Postal votes
+    handleClickOpenCE201pv() {
+
+        if (this.state.reportversionCE201 == null) {
+            alert('Report not Avialable')
+        } else {
+            axios.get('/tally-sheet/' + this.state.reportIdCE201pv + '/version/' + this.state.reportversionCE201pv + '/html', {
+                headers: {
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'GET',
+                    'Access-Control-Allow-Headers': 'Content-Type',
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            }).then(res => {
+                console.log("Election" + res)
+                // this.setState({
+                //     report: res.data[0].reportId
+                // })
+            })
+                .catch((error) => console.log(error));
+
+            this.props.history.replace('/ReportView/'+this.state.reportIdCE201pv+'/'+ this.state.reportversionCE201pv)
             // window.open('https://dev.tabulation.ecdev.opensource.lk/tally-sheet/' + this.state.reportId + '/version/' + this.state.reportversion + '/html', "_blank");
         }
 
@@ -386,6 +418,32 @@ class ReportsEntry extends Component {
             console.log(res.data[0].latestVersionId)
             this.setState({
                 reportversionCE201: res.data[0].latestVersionId
+            })
+        })
+            .catch((error) => console.log(error));
+    };
+
+    // Report handling for CE 201   postal votel
+    handleChangeCE201pv = event => {
+        this.setState({selectedCE201PV: event.target.value, name: event.target.name});
+        console.log("PRE41 Counting " + event.target.value)
+
+        this.setState({
+            reportIdCE201pv: event.target.value
+        })
+
+        axios.get('/tally-sheet?limit=1000&offset=0&electionId=' + localStorage.getItem('electionType_NonPostal_Id') + '&officeId=' + event.target.value + '&tallySheetCode=CE-201-PV', {
+            headers: {
+                'Authorization': "Bearer " + localStorage.getItem('token'),
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET',
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        }).then(res => {
+            console.log(res.data[0].latestVersionId)
+            this.setState({
+                reportversionCE201pv: res.data[0].latestVersionId
             })
         })
             .catch((error) => console.log(error));
@@ -775,8 +833,8 @@ class ReportsEntry extends Component {
                                                 Polling Division
                                             </InputLabel>
                                             <Select className="width50" value={this.state.selectedCE201PV}
-                                                    onChange={this.handlePoll}>
-                                                {this.state.pollingStation.map((districtCentre, idx) => (
+                                                    onChange={this.handleChangeCE201pv}>
+                                                {this.state.pollingStationpv.map((districtCentre, idx) => (
                                                     <MenuItem
                                                         value={districtCentre.areaId}>{districtCentre.areaName}</MenuItem>
                                                 ))}
@@ -785,7 +843,7 @@ class ReportsEntry extends Component {
                                     </TableCell>
                                     <TableCell>
                                         <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}}
-                                                onClick={this.handleClickOpenPoll}
+                                                onClick={this.handleClickOpenCE201pv}
                                                 className="button">Generate</Button>
                                     </TableCell>
 
