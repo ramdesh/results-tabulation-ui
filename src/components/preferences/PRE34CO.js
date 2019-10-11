@@ -22,7 +22,7 @@ class PRE34CO extends Component {
         this.handleClickOpen = this.handleClickOpen.bind(this);
         this.state = {
             open: false,
-            offices: [],
+            areas: [],
             selectedDistrictCentre: '',
             selectedCountingCenter: '',
             selectedPollingStation: '',
@@ -49,7 +49,7 @@ class PRE34CO extends Component {
     handleChange = event => {
         this.setState({selectedDistrictCentre: event.target.value, name: event.target.name});
         console.log(event.target.value)
-        axios.get('/office?limit=20&offset=0&parentOfficeId=' + event.target.value + '&officeType=CountingCentre', {
+        axios.get('/area?limit=20&offset=0&parentareaId=' + event.target.value + '&areaType=CountingCentre', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -69,7 +69,7 @@ class PRE34CO extends Component {
 
     handleCounting = event => {
         this.setState({selectedCountingCenter: event.target.value, name: event.target.name});
-        axios.get('/office?limit=20&offset=0&parentOfficeId=' + event.target.value + '&officeType=PollingStation', {
+        axios.get('/area?limit=20&offset=0&parentareaId=' + event.target.value + '&areaType=PollingStation', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -96,7 +96,7 @@ class PRE34CO extends Component {
     };
 
     componentDidMount() {
-        axios.get('/office?limit=20&offset=0&officeType=DistrictCentre', {
+        axios.get('/area?limit=20&offset=0&areaType=DistrictCentre', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -106,7 +106,7 @@ class PRE34CO extends Component {
         }).then(res => {
             console.log("Election" + res.data[0])
             this.setState({
-                offices: res.data
+                areas: res.data
             })
         })
             .catch((error) => console.log(error));
@@ -134,8 +134,8 @@ class PRE34CO extends Component {
                                 </InputLabel>
                                 <Select className="width50" value={this.state.selectedDistrictCentre}
                                         onChange={this.handleChange}>
-                                    {this.state.offices.map((districtCentre, idx) => (
-                                        <MenuItem value={districtCentre.officeId}>{districtCentre.officeName}</MenuItem>
+                                    {this.state.areas.map((districtCentre, idx) => (
+                                        <MenuItem value={districtCentre.areaId}>{districtCentre.areaName}</MenuItem>
                                     ))}
                                 </Select>
                             </FormControl>
@@ -148,7 +148,7 @@ class PRE34CO extends Component {
                                 <Select className="width50" value={this.state.selectedCountingCenter}
                                         onChange={this.handleCounting}>
                                     {this.state.countingCenter.map((countingCenter, idx) => (
-                                        <MenuItem value={countingCenter.officeId}>{countingCenter.officeName}</MenuItem>
+                                        <MenuItem value={countingCenter.areaId}>{countingCenter.areaName}</MenuItem>
                                     ))}
                                 </Select>
                             </FormControl>
@@ -161,7 +161,7 @@ class PRE34CO extends Component {
                                 <Select className="width50" value={this.state.selectedPollingStation}
                                         onChange={this.handlePolling}>
                                     {this.state.pollingStation.map((pollingStation, idx) => (
-                                        <MenuItem value={pollingStation.officeId}>{pollingStation.officeName}</MenuItem>
+                                        <MenuItem value={pollingStation.areaId}>{pollingStation.areaName}</MenuItem>
                                     ))}
                                 </Select>
                             </FormControl>

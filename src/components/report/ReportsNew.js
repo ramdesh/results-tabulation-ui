@@ -47,7 +47,7 @@ class ReportsNew extends Component {
         }).then(res => {
             console.log("Election" + res.data)
             this.setState({
-                offices: res.data.sort(function (a,b) {
+                areas: res.data.sort(function (a,b) {
                     if (parseInt(a.areaName) > parseInt(b.areaName)) {
                         return 1;
                     } else {
@@ -152,7 +152,7 @@ class ReportsNew extends Component {
                                                 Counting Center
                                             </InputLabel>
                                             <Select className="width50" value={this.state.selected} onChange={this.handleChange}>
-                                                {this.state.offices.map((CountingCenter, idx) => (
+                                                {this.state.areas.map((CountingCenter, idx) => (
                                                     <MenuItem value={CountingCenter.areaId}>{CountingCenter.areaName}</MenuItem>
                                                 ))}
                                             </Select>

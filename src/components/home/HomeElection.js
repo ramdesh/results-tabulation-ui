@@ -13,8 +13,8 @@ import {
     SignOutUtil
 } from "../../lib";
 // import { setSignIn, setSignOut } from "../actions";
-import { AppConfig, RESOURCE_ENDPOINTS } from "../../configs";
-import { getAuthenticationCallbackUrl, history } from "../../utils";
+import {AppConfig, RESOURCE_ENDPOINTS} from "../../configs";
+import {getAuthenticationCallbackUrl, history} from "../../utils";
 // import { SEND_SIGN_IN_REQUEST, SEND_SIGN_OUT_REQUEST } from "../actions/types";
 
 const appConfig = new AppConfig();
@@ -40,7 +40,7 @@ class HomeElection extends Component {
 
 
     /** loginSuccessRedirect  **/
-    loginSuccessRedirect () {
+    loginSuccessRedirect() {
         const AuthenticationCallbackUrl = getAuthenticationCallbackUrl();
         const location = ((!AuthenticationCallbackUrl)
             || (AuthenticationCallbackUrl === appConfig.loginPath)) ? appConfig.homePath : AuthenticationCallbackUrl;
@@ -50,7 +50,7 @@ class HomeElection extends Component {
 
 
     /** sendSignInRequest**/
-    sendSignInRequest(){
+    sendSignInRequest() {
         const requestParams = {
             clientHost: appConfig.clientHost,
             clientId: appConfig.clientID,
@@ -74,9 +74,6 @@ class HomeElection extends Component {
             SignInUtil.sendAuthorizationRequest(requestParams);
         }
     }
-
-
-
 
 
     handleClickOpen(type, subElection) {
@@ -134,7 +131,6 @@ class HomeElection extends Component {
                             Election Result Tabulation
                         </Typography>
                     </div>
-                    {/*<iframe src="https://dev.tabulation.ecdev.opensource.lk/tally-sheet/6/version/4/html"></iframe>*/}
 
                     <div style={{marginLeft: '33%', marginRight: '33%'}}>
 

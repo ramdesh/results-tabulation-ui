@@ -43,7 +43,7 @@ class PRE41Report extends Component {
             .catch((error) => console.log(error));
 
         /** To confirm the Lock status **/
-        axios.get('/tally-sheet?limit=1000&offset=0&electionId='+localStorage.getItem('electionType_NonPostal_Id')+'&officeId='+countingId+'&tallySheetCode=PRE-41', {
+        axios.get('/tally-sheet?limit=1000&offset=0&electionId='+localStorage.getItem('electionType_NonPostal_Id')+'&areaId='+countingId+'&tallySheetCode=PRE-41', {
             headers: {
                 'Authorization': "Bearer "+localStorage.getItem('token'),
                 'Access-Control-Allow-Origin': '*',

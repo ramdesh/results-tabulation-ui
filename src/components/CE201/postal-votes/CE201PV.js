@@ -48,7 +48,7 @@ class CE201PV extends Component {
         if (this.state.selectedCountingCenter === '') {
             alert("Please select the necessary fields !")
         } else {
-            axios.get('/tally-sheet?limit=1000&offset=0&electionId='+localStorage.getItem('electionType_Postal_Id')+'&officeId='+this.state.countingId+'&tallySheetCode=CE-201-PV', {
+            axios.get('/tally-sheet?limit=1000&offset=0&electionId='+localStorage.getItem('electionType_Postal_Id')+'&areaId='+this.state.countingId+'&tallySheetCode=CE-201-PV', {
 
                 headers: {
                     'Access-Control-Allow-Origin': '*',
@@ -130,8 +130,8 @@ class CE201PV extends Component {
         this.setState({countingName: event.target.value});
         console.log("Counting Name" + event.target.value)
 
-        /** get the officeId by officeName **/
-        axios.get('/office?limit=1000&offset=0&electionId='+localStorage.getItem('electionType_Postal_Id')+'&officeName=' + event.target.value + '&officeType=CountingCentre', {
+        /** get the areaId by areaName **/
+        axios.get('/area?limit=1000&offset=0&electionId='+localStorage.getItem('electionType_Postal_Id')+'&areaName=' + event.target.value + '&areaType=CountingCentre', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -139,9 +139,9 @@ class CE201PV extends Component {
                 'X-Requested-With': 'XMLHttpRequest'
             }
         }).then(res => {
-            console.log("Counting Center Id" + res.data[0].officeId)
+            console.log("Counting Center Id" + res.data[0].areaId)
             this.setState({
-                countingId: res.data[0].officeId
+                countingId: res.data[0].areaId
             })
         })
             .catch((error) => console.log(error));

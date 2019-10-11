@@ -51,9 +51,9 @@ class CE201Entry extends Component {
         console.log("List : ", pollingStations)
         var pollingStationsList = pollingStations.map((pollingStation) => {
 
-            pollingStationsMap[pollingStation.officeId] = pollingStation;
-            content[pollingStation.officeId] = {
-                "areaId": pollingStation.officeId,
+            pollingStationsMap[pollingStation.areaId] = pollingStation;
+            content[pollingStation.areaId] = {
+                "areaId": pollingStation.areaId,
                 "ballotBoxesIssued": [
                     "string"
                 ],
@@ -69,7 +69,7 @@ class CE201Entry extends Component {
                 "tenderedBallotCountFromBallotPaperAccount": null,
                 "tenderedBallotCountFromBoxCount": null
             };
-            return pollingStation.officeId
+            return pollingStation.areaId
         })
         this.setState({
             pollingStationsList,
@@ -108,7 +108,6 @@ class CE201Entry extends Component {
             tallySheetId: name
         })
         const {name2} = this.props.match.params
-        console.log("Id office :", name2)
         this.setState({
             countingName: name2
         })
@@ -119,7 +118,7 @@ class CE201Entry extends Component {
             countingId: countingId
         })
 
-        axios.get('/office?limit=1000&offset=0&parentOfficeId=' + countingId, {
+        axios.get('/area?limit=1000&offset=0&parentareaId=' + countingId, {
             headers: {
                 'Authorization': "Bearer "+localStorage.getItem('token'),
                 'Access-Control-Allow-Origin': '*',
@@ -162,7 +161,6 @@ class CE201Entry extends Component {
     handleSubmit = (event) => {
         const {name} = this.props.match.params
         const {name2} = this.props.match.params
-        console.log("Id office >>> ", name2)
         event.preventDefault()
         // if (this.state.content[1].count === null || this.state.content[2].count === null ||
         //     this.state.content[1].countInWords === null || this.state.content[2].countInWords === null) {
@@ -308,7 +306,7 @@ class CE201Entry extends Component {
                                             {idx+1}
                                         </TableCell>
                                         <TableCell style={{fontSize: 13, width: '5%'}}>
-                                            {pollingStation.officeName}
+                                            {pollingStation.areaName}
                                         </TableCell>
 
                                         <TableCell style={{fontSize: 13, width: '14%'}}>
@@ -333,7 +331,7 @@ class CE201Entry extends Component {
                                                 variant="outlined"
                                                 label="Box Id"
                                                 autoComplete='off'
-                                                onChange={this.handleInputChange(pollingStation.officeId, "ballotBoxesReceived")}
+                                                onChange={this.handleInputChange(pollingStation.areaId, "ballotBoxesReceived")}
                                             />
                                             <TextField
                                                 id="box-id2"
@@ -341,7 +339,7 @@ class CE201Entry extends Component {
                                                 variant="outlined"
                                                 label="Box Id"
                                                 autoComplete='off'
-                                                onChange={this.handleInputChange(pollingStation.officeId, "ballotBoxesReceived")}
+                                                onChange={this.handleInputChange(pollingStation.areaId, "ballotBoxesReceived")}
                                             />
                                             <TextField
                                                 id="box-id3"
@@ -349,7 +347,7 @@ class CE201Entry extends Component {
                                                 variant="outlined"
                                                 label="Box Id"
                                                 autoComplete='off'
-                                                onChange={this.handleInputChange(pollingStation.officeId, "ballotBoxesReceived")}
+                                                onChange={this.handleInputChange(pollingStation.areaId, "ballotBoxesReceived")}
                                             />
                                         </TableCell>
                                         <TableCell style={{fontSize: 13, width: '11%'}}>
@@ -359,7 +357,7 @@ class CE201Entry extends Component {
                                                 variant="outlined"
                                                 label="Count"
                                                 autoComplete='off'
-                                                onChange={this.handleInputChange(pollingStation.officeId, "ballotsReceived")}
+                                                onChange={this.handleInputChange(pollingStation.areaId, "ballotsReceived")}
                                             />
                                         </TableCell>
                                         <TableCell style={{fontSize: 13, width: '11%'}}>
@@ -369,7 +367,7 @@ class CE201Entry extends Component {
                                                 variant="outlined"
                                                 label="Count"
                                                 autoComplete='off'
-                                                onChange={this.handleInputChange(pollingStation.officeId, "ballotsSpoilt")}
+                                                onChange={this.handleInputChange(pollingStation.areaId, "ballotsSpoilt")}
                                             />
                                         </TableCell>
                                         <TableCell style={{fontSize: 13, width: '11%'}}>
@@ -379,7 +377,7 @@ class CE201Entry extends Component {
                                                 variant="outlined"
                                                 label="Count"
                                                 autoComplete='off'
-                                                onChange={this.handleInputChange(pollingStation.officeId, "ballotsIssued")}
+                                                onChange={this.handleInputChange(pollingStation.areaId, "ballotsIssued")}
                                             />
                                         </TableCell>
                                         <TableCell style={{fontSize: 13, width: '11%'}}>
@@ -389,7 +387,7 @@ class CE201Entry extends Component {
                                                 variant="outlined"
                                                 label="Count"
                                                 autoComplete='off'
-                                                onChange={this.handleInputChange(pollingStation.officeId, "ballotsUnused")}
+                                                onChange={this.handleInputChange(pollingStation.areaId, "ballotsUnused")}
                                             />
                                         </TableCell>
                                         <TableCell style={{fontSize: 13, width: '19%'}}>
@@ -399,7 +397,7 @@ class CE201Entry extends Component {
                                                 variant="outlined"
                                                 label="Ballot Paper A."
                                                 autoComplete='off'
-                                                onChange={this.handleInputChange(pollingStation.officeId, "ordinaryBallotCountFromBallotPaperAccount")}
+                                                onChange={this.handleInputChange(pollingStation.areaId, "ordinaryBallotCountFromBallotPaperAccount")}
                                             />
                                             <TextField
                                                 id="ordinaryBallotCountFromBoxCount"
@@ -407,7 +405,7 @@ class CE201Entry extends Component {
                                                 variant="outlined"
                                                 label="Box Count"
                                                 autoComplete='off'
-                                                onChange={this.handleInputChange(pollingStation.officeId, "ordinaryBallotCountFromBoxCount")}
+                                                onChange={this.handleInputChange(pollingStation.areaId, "ordinaryBallotCountFromBoxCount")}
                                             />
                                             <TextField
                                                 label="Difference"
@@ -425,7 +423,7 @@ class CE201Entry extends Component {
                                                 variant="outlined"
                                                 label="Ballot Paper A."
                                                 autoComplete='off'
-                                                onChange={this.handleInputChange(pollingStation.officeId, "tenderedBallotCountFromBallotPaperAccount")}
+                                                onChange={this.handleInputChange(pollingStation.areaId, "tenderedBallotCountFromBallotPaperAccount")}
                                             />
                                             <TextField
                                                 id="tenderedBallotCountFromBoxCount"
@@ -433,7 +431,7 @@ class CE201Entry extends Component {
                                                 variant="outlined"
                                                 label="Box Count"
                                                 autoComplete='off'
-                                                onChange={this.handleInputChange(pollingStation.officeId, "tenderedBallotCountFromBoxCount")}
+                                                onChange={this.handleInputChange(pollingStation.areaId, "tenderedBallotCountFromBoxCount")}
                                             />
                                             <TextField
                                                 id="outlined-dense"
