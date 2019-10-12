@@ -19,6 +19,9 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "demo-bash": "HTTPS=true PORT=9000 npm start",
+    "demo-cmd": "set HTTPS=true && set PORT=9000 && npm start",
+    "demo-pshell": "($env:HTTPS = \"true\") -and ($env:PORT = \"9000\") -and (npm start)",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
