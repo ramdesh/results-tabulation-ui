@@ -1,15 +1,16 @@
 const DEFAULT_CONFIG = {
-    BASE_PATH: "admin",
-    HOME_PATH: "/overview",
+    BASE_PATH: "tabulation",
+    HOME_PATH: "/home",
     LOGIN_PATH: "/login",
     LOGOUT_PATH: "/logout",
     IS_ENDPOINT: "https://localhost:9443",
     TABULATION_API_ENDPOINT: "https://api.tabulation.ecstag.opensource.lk",
-    CLIENT_ID: "ECLK_ADMIN_APP",
+    CLIENT_ID: "ECLK_TABULATION_APP",
     CLIENT_HOST: "https://localhost:9000",
-    LOGIN_CALLBACK_URL: "https://localhost:9000/login",
-    LOGOUT_CALLBACK_URL: "https://localhost:9000/logout"
+    LOGIN_CALLBACK_URL: "https://localhost:9000/tabulation/login",
+    LOGOUT_CALLBACK_URL: "https://localhost:9000/tabulation/logout"
 };
+
 /**
  * App configuration provider class.
  * Reads the environment variables and returns the corresponding environment values
