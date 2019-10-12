@@ -17,6 +17,19 @@ const DEFAULT_CONFIG = {
  * or falls back to the defaults.
  */
 export class AppConfig {
+
+    /**
+     * Instance of the `AppConfig` class.
+     */
+    static instance;
+
+    constructor() {
+        if(!AppConfig.instance){
+            AppConfig.instance = this;
+        }
+        return AppConfig.instance;
+    }
+
     /**
      * Returns the app base path.
      *
@@ -118,3 +131,8 @@ export class AppConfig {
             : DEFAULT_CONFIG.LOGOUT_CALLBACK_URL;
     }
 }
+
+const instance = new AppConfig();
+Object.freeze(instance);
+
+export default instance;
