@@ -1,43 +1,78 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const axios_1 = require("axios");
-const constants_1 = require("../constants");
-const crypto_1 = require("./crypto");
-const op_config_1 = require("./op-config");
-const session_1 = require("./session");
-exports.hasAuthorizationCode = () => {
-    return !!new URL(window.location.href).searchParams.get(constants_1.AUTHORIZATION_CODE);
+/**
+ * Copyright (c) 2019, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ *
+ * WSO2 Inc. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+import axios from "axios";
+import { AUTHORIZATION_CODE, OIDC_SCOPE, PKCE_CODE_VERIFIER, REQUEST_PARAMS } from "../constants";
+import { getCodeChallenge, getCodeVerifier, getJWKForTheIdToken, isValidIdToken } from "./crypto";
+import { getAuthorizeEndpoint, getJwksUri, getRevokeTokenEndpoint, getTokenEndpoint } from "./op-config";
+import { getSessionParameter, removeSessionParameter, setSessionParameter } from "./session";
+
+/**
+ * Checks whether authorization code present in the request.
+ *
+ * @returns {boolean} true if authorization code is present.
+ */
+export const hasAuthorizationCode = () => {
+    return !!new URL(window.location.href).searchParams.get(AUTHORIZATION_CODE);
 };
-exports.sendAuthorizationRequest = (requestParams) => {
-    const authorizeEndpoint = op_config_1.getAuthorizeEndpoint();
+
+/**
+ * Send authorization request.
+ *
+ * @param {OIDCRequestParamsInterface} requestParams request parameters required for authorization request.
+ */
+export const sendAuthorizationRequest = (requestParams) => {
+    const authorizeEndpoint = getAuthorizeEndpoint();
     if (!authorizeEndpoint || authorizeEndpoint.trim().length === 0) {
         throw new Error("Invalid authorize endpoint found.");
     }
     let authorizeRequest = authorizeEndpoint + "?response_type=code&client_id="
         + requestParams.clientId;
-    let scope = constants_1.OIDC_SCOPE;
+    let scope = OIDC_SCOPE;
     if (requestParams.scope && requestParams.scope.length > 0) {
-        if (!requestParams.scope.includes(constants_1.OIDC_SCOPE)) {
-            requestParams.scope.push(constants_1.OIDC_SCOPE);
+        if (!requestParams.scope.includes(OIDC_SCOPE)) {
+            requestParams.scope.push(OIDC_SCOPE);
         }
         scope = requestParams.scope.join(" ");
     }
     authorizeRequest += "&scope=" + scope;
     authorizeRequest += "&redirect_uri=" + requestParams.redirectUri;
     if (requestParams.enablePKCE) {
-        const codeVerifier = crypto_1.getCodeVerifier();
-        const codeChallenge = crypto_1.getCodeChallenge(codeVerifier);
-        session_1.setSessionParameter(constants_1.PKCE_CODE_VERIFIER, codeVerifier);
+        const codeVerifier = getCodeVerifier();
+        const codeChallenge = getCodeChallenge(codeVerifier);
+        setSessionParameter(PKCE_CODE_VERIFIER, codeVerifier);
         authorizeRequest += "&code_challenge_method=S256&code_challenge=" + codeChallenge;
     }
     window.location.href = authorizeRequest;
 };
-exports.sendTokenRequest = (requestParams) => {
-    const tokenEndpoint = op_config_1.getTokenEndpoint();
+
+/**
+ * Send token request.
+ *
+ * @param {OIDCRequestParamsInterface} requestParams request parameters required for token request.
+ * @returns {Promise<TokenResponseInterface>} token response data or error.
+ */
+export const sendTokenRequest = (requestParams) => {
+    const tokenEndpoint = getTokenEndpoint();
     if (!tokenEndpoint || tokenEndpoint.trim().length === 0) {
         return Promise.reject("Invalid token endpoint found.");
     }
-    const code = new URL(window.location.href).searchParams.get(constants_1.AUTHORIZATION_CODE);
+    const code = new URL(window.location.href).searchParams.get(AUTHORIZATION_CODE);
     const body = [];
     body.push(`client_id=${requestParams.clientId}`);
     if (requestParams.clientSecret && requestParams.clientSecret.trim().length > 0) {
@@ -47,10 +82,10 @@ exports.sendTokenRequest = (requestParams) => {
     body.push("grant_type=authorization_code");
     body.push(`redirect_uri=${requestParams.redirectUri}`);
     if (requestParams.enablePKCE) {
-        body.push(`code_verifier=${session_1.getSessionParameter(constants_1.PKCE_CODE_VERIFIER)}`);
-        session_1.removeSessionParameter(constants_1.PKCE_CODE_VERIFIER);
+        body.push(`code_verifier=${getSessionParameter(PKCE_CODE_VERIFIER)}`);
+        removeSessionParameter(PKCE_CODE_VERIFIER);
     }
-    return axios_1.default.post(tokenEndpoint, body.join("&"), getTokenRequestHeaders(requestParams.clientHost))
+    return axios.post(tokenEndpoint, body.join("&"), getTokenRequestHeaders(requestParams.clientHost))
         .then((response) => {
         if (response.status !== 200) {
             return Promise.reject("Invalid status code received in the token response: "
@@ -58,7 +93,7 @@ exports.sendTokenRequest = (requestParams) => {
         }
         return validateIdToken(requestParams, response.data.id_token).then((valid) => {
             if (valid) {
-                session_1.setSessionParameter(constants_1.REQUEST_PARAMS, JSON.stringify(requestParams));
+                setSessionParameter(REQUEST_PARAMS, JSON.stringify(requestParams));
                 const tokenResponse = {
                     accessToken: response.data.access_token,
                     expiresIn: response.data.expires_in,
@@ -75,8 +110,16 @@ exports.sendTokenRequest = (requestParams) => {
         return Promise.reject(error);
     });
 };
-exports.sendRefreshTokenRequest = (requestParams, refreshToken) => {
-    const tokenEndpoint = op_config_1.getTokenEndpoint();
+
+/**
+ * Send refresh token request.
+ *
+ * @param {OIDCRequestParamsInterface} requestParams request parameters required for token request.
+ * @param {string} refreshToken
+ * @returns {Promise<TokenResponseInterface>} refresh token response data or error.
+ */
+export const sendRefreshTokenRequest = (requestParams, refreshToken) => {
+    const tokenEndpoint = getTokenEndpoint();
     if (!tokenEndpoint || tokenEndpoint.trim().length === 0) {
         return Promise.reject("Invalid token endpoint found.");
     }
@@ -84,7 +127,7 @@ exports.sendRefreshTokenRequest = (requestParams, refreshToken) => {
     body.push(`client_id=${requestParams.clientId}`);
     body.push(`refresh_token=${refreshToken}`);
     body.push("grant_type=refresh_token");
-    return axios_1.default.post(tokenEndpoint, body.join("&"), getTokenRequestHeaders(requestParams.clientHost))
+    return axios.post(tokenEndpoint, body.join("&"), getTokenRequestHeaders(requestParams.clientHost))
         .then((response) => {
         if (response.status !== 200) {
             return Promise.reject("Invalid status code received in the refresh token response: "
@@ -110,8 +153,16 @@ exports.sendRefreshTokenRequest = (requestParams, refreshToken) => {
         return Promise.reject(error);
     });
 };
-exports.sendRevokeTokenRequest = (requestParams, accessToken) => {
-    const revokeTokenEndpoint = op_config_1.getRevokeTokenEndpoint();
+
+/**
+ * Send revoke token request.
+ *
+ * @param {OIDCRequestParamsInterface} requestParams request parameters required for revoke token request.
+ * @param {string} accessToken access token
+ * @returns {any}
+ */
+export const sendRevokeTokenRequest = (requestParams, accessToken) => {
+    const revokeTokenEndpoint = getRevokeTokenEndpoint();
     if (!revokeTokenEndpoint || revokeTokenEndpoint.trim().length === 0) {
         return Promise.reject("Invalid revoke token endpoint found.");
     }
@@ -119,7 +170,7 @@ exports.sendRevokeTokenRequest = (requestParams, accessToken) => {
     body.push(`client_id=${requestParams.clientId}`);
     body.push(`token=${sessionStorage.getItem(accessToken)}`);
     body.push("token_type_hint=access_token");
-    return axios_1.default.post(revokeTokenEndpoint, body.join("&"), getTokenRequestHeaders(requestParams.clientHost))
+    return axios.post(revokeTokenEndpoint, body.join("&"), getTokenRequestHeaders(requestParams.clientHost))
         .then((response) => {
         if (response.status !== 200) {
             return Promise.reject("Invalid status code received in the revoke token response: "
@@ -130,7 +181,14 @@ exports.sendRevokeTokenRequest = (requestParams, accessToken) => {
         return Promise.reject(error);
     });
 };
-exports.getAuthenticatedUser = (idToken) => {
+
+/**
+ * Get authenticated user from the id_token.
+ *
+ * @param idToken id_token received from the IdP.
+ * @returns {AuthenticatedUserInterface} authenticated user.
+ */
+export const getAuthenticatedUser = (idToken) => {
     const payload = JSON.parse(atob(idToken.split(".")[1]));
     return {
         displayName: payload.preferred_username ? payload.preferred_username : payload.sub,
@@ -138,23 +196,38 @@ exports.getAuthenticatedUser = (idToken) => {
         username: payload.sub,
     };
 };
+
+/**
+ * Validate id_token.
+ *
+ * @param {OIDCRequestParamsInterface} requestParams request params.
+ * @param {string} idToken id_token received from the IdP.
+ * @returns {Promise<boolean>} whether token is valid.
+ */
 const validateIdToken = (requestParams, idToken) => {
-    const jwksEndpoint = op_config_1.getJwksUri();
+    const jwksEndpoint = getJwksUri();
     if (!jwksEndpoint || jwksEndpoint.trim().length === 0) {
         return Promise.reject("Invalid JWKS URI found.");
     }
-    return axios_1.default.get(jwksEndpoint)
+    return axios.get(jwksEndpoint)
         .then((response) => {
         if (response.status !== 200) {
             return Promise.reject("Failed to load public keys from JWKS URI: "
                 + jwksEndpoint);
         }
-        const jwk = crypto_1.getJWKForTheIdToken(idToken.split(".")[0], response.data.keys);
-        return Promise.resolve(crypto_1.isValidIdToken(idToken, jwk, requestParams.clientId));
+        const jwk = getJWKForTheIdToken(idToken.split(".")[0], response.data.keys);
+        return Promise.resolve(isValidIdToken(idToken, jwk, requestParams.clientId));
     }).catch((error) => {
         return Promise.reject(error);
     });
 };
+
+/**
+ * Get token request headers.
+ *
+ * @param {string} clientHost
+ * @returns {{headers: {Accept: string; "Access-Control-Allow-Origin": string; "Content-Type": string}}}
+ */
 const getTokenRequestHeaders = (clientHost) => {
     return {
         headers: {
