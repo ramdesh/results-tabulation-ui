@@ -1,9 +1,6 @@
 import React, {Component} from 'react'
-import {
-    Button,
-} from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import axios from "../../axios-base";
-
 
 class ReportView extends Component {
     constructor(props) {
@@ -84,7 +81,6 @@ class ReportView extends Component {
     }
 
     render() {
-
         return [
             <div style={{padding: 10}}>
                 <iframe
@@ -96,9 +92,7 @@ class ReportView extends Component {
                     ref={this.iframeRef}
                 >
                 </iframe>
-
                 {this.getActionButtonsJsx()}
-
             </div>
         ]
     }

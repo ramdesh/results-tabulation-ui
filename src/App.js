@@ -68,7 +68,7 @@ function App() {
                 <ProtectedRoute exact path="/PRE21-Entry/:name/:name2" component={ PRE21Entry }/>
 
                 <ProtectedRoute exact path="/PRE34CO" component={ PRE34CO }/>
-                <ProtectedRoute exact path="/PRE34CO-Entry/:name" component={ PRE34COEntry }/>
+                <ProtectedRoute exact path="/PRE34CO-Entry" component={ PRE34COEntry }/>
 
                 <ProtectedRoute exact path="/PRE28" component={ PRE28 }/>
                 <ProtectedRoute path="/PRE28-Entry/:name" component={ PRE28Entry }/>
