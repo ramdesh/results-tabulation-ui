@@ -31,7 +31,7 @@ class PRE41Edit extends Component {
             content: {},
             tallySheetId: 0,
             reportId: 0,
-            officeId: 0,
+            areaId: 0,
 
             rejected:0,
             rejectedVotes:0,
@@ -204,12 +204,12 @@ class PRE41Edit extends Component {
         const {countingId} = this.props.match.params
         console.log("Counting Hall No (Name) ", countingId)
         this.setState({
-            officeId: countingId
+            areaId: countingId
         })
 
 
         console.log("Set >>> ", this.state.tallySheetId)
-        console.log("Set >>> ", this.state.officeId)
+        console.log("Set >>> ", this.state.areaId)
         console.log("Token added")
 
 
@@ -256,7 +256,7 @@ class PRE41Edit extends Component {
 
                         <Breadcrumbs style={{marginLeft: '0.2%', marginBottom: '2%', fontSize: '14px'}} separator="/"
                                      aria-label="breadcrumb">
-                            <Link color="inherit" href="/">
+                            <Link color="inherit" href="/Election">
                                 Home
                             </Link>
                             <Link color="inherit" href="/Main">

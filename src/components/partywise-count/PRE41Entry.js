@@ -36,7 +36,7 @@ class PRE41Entry extends Component {
             content: {},
             tallySheetId: 0,
             reportId: 0,
-            officeId: 0,
+            areaId: 0,
 
             rejected:0,
             rejectedVotes:0,
@@ -76,7 +76,6 @@ class PRE41Entry extends Component {
     handleSubmit = (event) => {
         const {name} = this.props.match.params
         const {name2} = this.props.match.params
-        console.log("Id office >>> ", name2)
 
         event.preventDefault()
         if (this.state.content[1].count === null || this.state.content[2].count === null ||
@@ -196,10 +195,10 @@ class PRE41Entry extends Component {
         const {name2} = this.props.match.params
         console.log("Counting Hall No (Name) ", name2)
         this.setState({
-            officeId: name2
+            areaId: name2
         })
         console.log("Set >>> ", this.state.tallySheetId)
-        console.log("Set >>> ", this.state.officeId)
+        console.log("Set >>> ", this.state.areaId)
         console.log("Token added")
         axios.get('/election?limit=1000&offset=0', {
             headers: {
@@ -223,7 +222,7 @@ class PRE41Entry extends Component {
 
                         <Breadcrumbs style={{marginLeft: '0.2%', marginBottom: '2%', fontSize: '14px'}} separator="/"
                                      aria-label="breadcrumb">
-                            <Link color="inherit" href="/">
+                            <Link color="inherit" href="/Election">
                                 Home
                             </Link>
                             <Link color="inherit" href="/Main">

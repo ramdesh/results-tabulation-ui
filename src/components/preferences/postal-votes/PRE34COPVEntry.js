@@ -28,7 +28,7 @@ class PRE34COPVEntry extends Component {
         this.state = {
             open: false,
             allUsers: [],
-            offices: [],
+            area: [],
             selected: 'Select',
             setOpen: false,
             election: []
@@ -53,7 +53,7 @@ class PRE34COPVEntry extends Component {
     };
 
     componentDidMount() {
-        axios.get('https://cors-anywhere.herokuapp.com/https://dev.tabulation.ecdev.opensource.lk/election?limit=20&offset=0', {
+        axios.get('/election?limit=20&offset=0', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
