@@ -76,7 +76,7 @@ class Home extends Component {
                         <div style={{marginBottom: '3%'}}>
                             <Breadcrumbs style={{marginLeft: '0.2%', marginBottom: '2%', fontSize: '14px'}} separator="/"
                                          aria-label="breadcrumb">
-                                <Link color="inherit" href="/">
+                                <Link color="inherit" href="/Election">
                                     Home
                                 </Link>
                                 <Link color="inherit" href="/Main">
@@ -103,21 +103,6 @@ class Home extends Component {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {/*<TableRow>*/}
-                                    {/*<TableCell style={{width:'40%',fontSize: 13,fontWeight: 'bold',}}>Tally Sheet : PRE 28</TableCell>*/}
-                                    {/*<TableCell>*/}
-                                        {/*<Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.open5}*/}
-                                                {/*className="button">Open</Button>*/}
-                                    {/*</TableCell>*/}
-                                {/*</TableRow>*/}
-
-                                {/*<TableRow>*/}
-                                    {/*<TableCell style={{fontSize: 13,fontWeight: 'bold'}}>Tally Sheet : PRE 28A</TableCell>*/}
-                                    {/*<TableCell>*/}
-                                        {/*<Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.open6}*/}
-                                                {/*className="button">Open</Button>*/}
-                                    {/*</TableCell>*/}
-                                {/*</TableRow>*/}
 
                                 <TableRow>
                                     <TableCell style={{fontSize: 13,fontWeight: 'bold'}}>Tally Sheet : CE 201</TableCell>
@@ -133,17 +118,7 @@ class Home extends Component {
                                         <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.open1}
                                                 className="button">Open</Button>
                                     </TableCell>
-
                                 </TableRow>
-                                {/*<TableRow>*/}
-                                    {/*<TableCell style={{fontSize: 13,fontWeight: 'bold'}}>Tally Sheet : PRE 21</TableCell>*/}
-                                    {/*<TableCell>*/}
-                                        {/*<Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.open2}*/}
-                                                {/*className="button">Open</Button>*/}
-                                    {/*</TableCell>*/}
-
-                                {/*</TableRow>*/}
-
                             </TableBody>
                         </Table>
                     </Paper>

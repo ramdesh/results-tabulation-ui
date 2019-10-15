@@ -4,13 +4,9 @@ import {
     Button
 } from '@material-ui/core';
 import axios from "../../axios-base";
-
 import {
     AuthenticateSessionUtil,
-    AuthenticateTokenKeys,
-    OPConfigurationUtil,
     SignInUtil,
-    SignOutUtil
 } from "../../lib";
 // import { setSignIn, setSignOut } from "../actions";
 import { AppConfig, RESOURCE_ENDPOINTS } from "../../configs";
@@ -38,7 +34,6 @@ class HomeElection extends Component {
         this.setState({open: false});
     }
 
-
     /** loginSuccessRedirect  **/
     loginSuccessRedirect () {
         const AuthenticationCallbackUrl = getAuthenticationCallbackUrl();
@@ -47,7 +42,6 @@ class HomeElection extends Component {
 
         history.push(location);
     };
-
 
     /** sendSignInRequest**/
     sendSignInRequest(){
@@ -74,9 +68,6 @@ class HomeElection extends Component {
             SignInUtil.sendAuthorizationRequest(requestParams);
         }
     }
-
-
-
 
 
     handleClickOpen(type, subElection) {
@@ -134,14 +125,11 @@ class HomeElection extends Component {
                             Election Result Tabulation
                         </Typography>
                     </div>
-                    {/*<iframe src="https://dev.tabulation.ecdev.opensource.lk/tally-sheet/6/version/4/html"></iframe>*/}
 
                     <div style={{marginLeft: '33%', marginRight: '33%'}}>
-
                         {this.state.elections.map((election, idx) => (
                             <Button align={"center"}
                                     style={{borderRadius: 18, color: 'white', width: '100%', marginTop: '6%'}}
-
                                     onClick={() => this.handleClickOpen(election.electionId, election.subElections)}
                                     className="button">{election.electionName}</Button>
                         ))}

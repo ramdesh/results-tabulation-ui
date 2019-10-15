@@ -1,12 +1,6 @@
 import React, {Component} from 'react'
 import {
     Typography,
-    Table,
-    TableRow,
-    TableCell,
-    TableHead,
-    TableBody,
-    Paper,
     Button,
     Breadcrumbs,
     Link
@@ -24,7 +18,7 @@ class HomeSelection extends Component {
         this.open4 = this.open4.bind(this);
         this.open5 = this.open5.bind(this);
         this.open6 = this.open6.bind(this);
-        this.open7= this.open7.bind(this);
+        this.open7 = this.open7.bind(this);
         this.open8 = this.open8.bind(this);
         this.open9 = this.open9.bind(this);
         this.open10 = this.open10.bind(this);
@@ -37,18 +31,23 @@ class HomeSelection extends Component {
     open1() {
         this.props.history.replace('/PRE41')
     }
+
     open2() {
         this.props.history.replace('/PRE21')
     }
+
     open3() {
         this.props.history.replace('/CE201')
     }
+
     open4() {
         this.props.history.replace('/PRE34CO')
     }
+
     open5() {
         this.props.history.replace('/PRE28')
     }
+
     open6() {
         this.props.history.replace('/PRE28A')
     }
@@ -56,29 +55,32 @@ class HomeSelection extends Component {
     open7() {
         this.props.history.replace('/PRE21PV')
     }
+
     open8() {
         this.props.history.replace('/PRE41PV')
     }
+
     open9() {
         this.props.history.replace('/PRE21PV')
     }
+
     open10() {
         this.props.history.replace('/PRE34COPV')
     }
+
     // modal controllers
     handleClose() {
         console.log("close")
         this.setState({open: false});
     }
 
-    handleClickOpen (){
+    handleClickOpen() {
         this.props.history.replace('/Home')
     }
 
-    handleClickOpen1 (){
+    handleClickOpen1() {
         this.props.history.replace('/ReportsEntry')
     }
-
 
     render() {
         return (
@@ -87,15 +89,13 @@ class HomeSelection extends Component {
                     <div style={{marginBottom: '3%'}}>
                         <Breadcrumbs style={{marginLeft: '0.2%', marginBottom: '2%', fontSize: '14px'}} separator="/"
                                      aria-label="breadcrumb">
-                            <Link color="inherit" href="/">
+                            <Link color="inherit" href="/Election">
                                 Home
                             </Link>
                             <Link color="inherit">
                                 Presidential Election
                             </Link>
 
-
-                            {/*<Typography color="textPrimary"></Typography>*/}
                         </Breadcrumbs>
                         <Typography align={"center"} variant="h4" gutterBottom>
                             Presidential Election 2019
@@ -110,10 +110,7 @@ class HomeSelection extends Component {
                                 style={{borderRadius: 18, color: 'white', width: '100%', marginTop: '6%'}}
                                 onClick={this.handleClickOpen1} className="button">Reports</Button>
                     </div>
-
                 </div>
-
-
             </div>
         )
     }

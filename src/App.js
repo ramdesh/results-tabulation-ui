@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import './App.css';
 import NavBar from "./components/navbar/Navbar";
-import {BrowserRouter as Router, Route} from "react-router-dom";
+import { Route} from "react-router-dom";
 import CE201 from "./components/CE201/CE201";
 import PRE28A from "./components/PRE28A/PRE28A";
 import PRE28AEntry from "./components/PRE28A/PRE28AEntry";
@@ -18,7 +18,6 @@ import PRE34CO from "./components/preferences/PRE34CO";
 import PRE34COEntry from "./components/preferences/PRE34COEntry";
 import PRE34COPV from "./components/preferences/postal-votes/PRE34COPV";
 import PRE34COPVEntry from "./components/preferences/postal-votes/PRE34COPVEntry";
-import Login from "./components/login/Login";
 import CE201Entry from "./components/CE201/CE201Entry";
 import PRE28Entry from "./components/PRE28/PRE28Entry";
 import PRE28 from "./components/PRE28/PRE28";
@@ -33,70 +32,81 @@ import PRE41Report from "./components/partywise-count/PRE41Report";
 import ReportView from "./components/report/ReportView";
 import CE201Report from "./components/CE201/CE201Report";
 import PRE41Edit from "./components/partywise-count/PRE41Edit";
+import {AuthContext} from "./contexts";
+import {Redirect, Switch} from "react-router";
+import {AppConfig} from "./configs";
+import {ProtectedRoute} from "./components/protected-route";
 
+const appConfig = new AppConfig();
 
 function App() {
+    const {signIn, signOut} = useContext(AuthContext);
     return (
-        <Router>
-            <div>
-                <NavBar/>
+        <div>
+            <NavBar/>
+            <Switch>
+                <Redirect exact path="/" to={ appConfig.loginPath }/>
+                <Route path={ appConfig.loginPath } render={ () => {
+                    signIn();
+                    return null;
+                } }/>
+                <Route path={ appConfig.logoutPath } render={ () => {
+                    signOut();
+                    return null;
+                } }/>
 
-                <Route exact path="/" component={HomeElection}/>
 
-                <Route exact path="/report" component={Reports}/>
-                <Route exact path="/ReportsEntry" component={ReportsEntry}/>
-                <Route exact path="/ReportsNew" component={ReportsNew}/>
-                <Route exact path="/ReportView/:tallySheetId/:tallySheetVersionId" component={ReportView}/>
+                <ProtectedRoute exact path="/Election" component={ HomeElection }/>
 
-                <Route exact path="/CE201" component={CE201}/>
-                <Route exact path="/CE201-Entry/:name/:name2/:countingId" component={CE201Entry}/>
-                <Route exact path="/CE201Report/:tallySheetId/:tallySheetVersionId" component={CE201Report}/>
+                <ProtectedRoute exact path="/report" component={ Reports }/>
+                <ProtectedRoute exact path="/ReportsEntry" component={ ReportsEntry }/>
+                <ProtectedRoute exact path="/ReportsNew" component={ ReportsNew }/>
+                <ProtectedRoute exact path="/ReportView/:tallySheetId/:tallySheetVersionId" component={ ReportView }/>
 
-                <Route exact path="/PRE21" component={PRE21}/>
-                <Route exact path="/PRE21-Entry/:name/:name2" component={PRE21Entry}/>
+                <ProtectedRoute exact path="/CE201" component={ CE201 }/>
+                <ProtectedRoute exact path="/CE201-Entry/:name/:name2/:countingId" component={ CE201Entry }/>
+                <ProtectedRoute exact path="/CE201Report/:tallySheetId/:tallySheetVersionId" component={ CE201Report }/>
 
-                <Route exact path="/PRE34CO" component={PRE34CO}/>
-                <Route exact path="/PRE34CO-Entry/:name" component={PRE34COEntry}/>
+                <ProtectedRoute exact path="/PRE21" component={ PRE21 }/>
+                <ProtectedRoute exact path="/PRE21-Entry/:name/:name2" component={ PRE21Entry }/>
 
-                <Route exact path="/PRE28" component={PRE28}/>
-                <Route path="/PRE28-Entry/:name" component={PRE28Entry} />
+                <ProtectedRoute exact path="/PRE34CO" component={ PRE34CO }/>
+                <ProtectedRoute exact path="/PRE34CO-Entry/:name" component={ PRE34COEntry }/>
 
-                <Route exact path="/PRE41" component={PRE41}/>
+                <ProtectedRoute exact path="/PRE28" component={ PRE28 }/>
+                <ProtectedRoute path="/PRE28-Entry/:name" component={ PRE28Entry }/>
 
-                <Route path="/PRE41-Entry/:name/:name2" component={PRE41Entry} />
+                <ProtectedRoute exact path="/PRE41" component={ PRE41 }/>
 
-                <Route exact path="/PRE41Report/:tallySheetId/:tallySheetVersionId/:countingId" component={PRE41Report}/>
+                <ProtectedRoute path="/PRE41-Entry/:name/:name2" component={ PRE41Entry }/>
 
-                <Route exact path="/PRE41Edit/:tallySheetId/:tallySheetVersionId/:countingId" component={PRE41Edit}/>
+                <ProtectedRoute exact path="/PRE41Report/:tallySheetId/:tallySheetVersionId/:countingId"
+                                component={ PRE41Report }/>
 
-                <Route exact path="/PRE28A" component={PRE28A}/>
-                <Route path="/PRE28A-Entry/:name" component={PRE28AEntry} />
+                <ProtectedRoute exact path="/PRE41Edit/:tallySheetId/:tallySheetVersionId/:countingId"
+                                component={ PRE41Edit }/>
 
-                <Route exact path="/PRE21PV" component={PRE21PV}/>
-                <Route exact path="/PRE21PV-Entry/:name/:name2" component={PRE21PVEntry}/>
+                <ProtectedRoute exact path="/PRE28A" component={ PRE28A }/>
+                <ProtectedRoute path="/PRE28A-Entry/:name" component={ PRE28AEntry }/>
 
-                <Route exact path="/PRE41PV" component={PRE41PV}/>
-                <Route exact path="/PRE41PV-Entry/:name/:name2" component={PRE41PVEntry}/>
+                <ProtectedRoute exact path="/PRE21PV" component={ PRE21PV }/>
+                <ProtectedRoute exact path="/PRE21PV-Entry/:name/:name2" component={ PRE21PVEntry }/>
 
-                <Route exact path="/CE201PV" component={CE201PV}/>
-                <Route exact path="/CE201PV-Entry/:name/:name2/:countingId" component={CE201PVEntry}/>
+                <ProtectedRoute exact path="/PRE41PV" component={ PRE41PV }/>
+                <ProtectedRoute exact path="/PRE41PV-Entry/:name/:name2" component={ PRE41PVEntry }/>
 
-                {/*Route exact path="/CE201PV-Entry/:name/:name2" component={PRE41PVEntry}/>*/}
-                <Route exact path="/Home" component={Home}/>
-                <Route exact path="/Main" component={HomeSelection}/>
+                <ProtectedRoute exact path="/CE201PV" component={ CE201PV }/>
+                <ProtectedRoute exact path="/CE201PV-Entry/:name/:name2/:countingId" component={ CE201PVEntry }/>
 
-                <Route exact path="/PRE34COPV" component={PRE34COPV}/>
-                <Route exact path="/PRE34COPV-Entry" component={PRE34COPVEntry}/>
+                {/*Route exact path="/CE201PV-Entry/:name/:name2" component={PRE41PVEntry}/>*/ }
+                <ProtectedRoute exact path="/Home" component={ Home }/>
+                <ProtectedRoute exact path="/Main" component={ HomeSelection }/>
 
-            </div>
-        </Router>
-
+                <ProtectedRoute exact path="/PRE34COPV" component={ PRE34COPV }/>
+                <ProtectedRoute exact path="/PRE34COPV-Entry" component={ PRE34COPVEntry }/>
+            </Switch>
+        </div>
     );
 }
 
 export default App;
-
-
-
-
-
