@@ -18,7 +18,6 @@ import PRE34CO from "./components/preferences/PRE34CO";
 import PRE34COEntry from "./components/preferences/PRE34COEntry";
 import PRE34COPV from "./components/preferences/postal-votes/PRE34COPV";
 import PRE34COPVEntry from "./components/preferences/postal-votes/PRE34COPVEntry";
-import Login from "./components/login/Login";
 import CE201Entry from "./components/CE201/CE201Entry";
 import PRE28Entry from "./components/PRE28/PRE28Entry";
 import PRE28 from "./components/PRE28/PRE28";
@@ -57,7 +56,7 @@ function App() {
                 } }/>
 
 
-                <ProtectedRoute exact path="/home" component={ HomeElection }/>
+                <ProtectedRoute exact path="/Election" component={ HomeElection }/>
 
                 <ProtectedRoute exact path="/report" component={ Reports }/>
                 <ProtectedRoute exact path="/ReportsEntry" component={ ReportsEntry }/>
