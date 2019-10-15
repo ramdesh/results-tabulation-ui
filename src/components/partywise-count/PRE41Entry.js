@@ -222,7 +222,7 @@ class PRE41Entry extends Component {
 
                         <Breadcrumbs style={{marginLeft: '0.2%', marginBottom: '2%', fontSize: '14px'}} separator="/"
                                      aria-label="breadcrumb">
-                            <Link color="inherit" href="/">
+                            <Link color="inherit" href="/Election">
                                 Home
                             </Link>
                             <Link color="inherit" href="/Main">

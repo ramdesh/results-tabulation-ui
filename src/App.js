@@ -53,8 +53,9 @@ function App() {
                     return null;
                 } }/>
 
-
                 <ProtectedRoute exact path="/Election" component={ HomeElection }/>
+                <ProtectedRoute exact path="/Home" component={ Home }/>
+                <ProtectedRoute exact path="/Main" component={ HomeSelection }/>
 
                 <ProtectedRoute exact path="/ReportsEntry" component={ ReportsEntry }/>
                 <ProtectedRoute exact path="/ReportView/:tallySheetId/:tallySheetVersionId" component={ ReportView }/>
@@ -95,9 +96,6 @@ function App() {
                 <ProtectedRoute exact path="/CE201PV-Entry/:name/:name2/:countingId" component={ CE201PVEntry }/>
 
                 {/*Route exact path="/CE201PV-Entry/:name/:name2" component={PRE41PVEntry}/>*/ }
-                <ProtectedRoute exact path="/Home" component={ Home }/>
-                <ProtectedRoute exact path="/Main" component={ HomeSelection }/>
-
                 <ProtectedRoute exact path="/PRE34COPV" component={ PRE34COPV }/>
                 <ProtectedRoute exact path="/PRE34COPV-Entry" component={ PRE34COPVEntry }/>
             </Switch>
