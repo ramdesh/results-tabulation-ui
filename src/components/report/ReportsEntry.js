@@ -37,8 +37,8 @@ class ReportsEntry extends Component {
 
             open: false,
             allUsers: [],
-            offices: [],
-            officespv: [],
+            areas: [],
+            areasPv: [],
             pollingStation: [],
             pollingStationpv: [],
             electionDivision: [],
@@ -106,8 +106,8 @@ class ReportsEntry extends Component {
             })
                 .catch((error) => console.log(error));
 
-            this.props.history.replace('/ReportView/'+this.state.reportId+'/'+ this.state.reportversion)
-            // window.open('https://dev.tabulation.ecdev.opensource.lk/tally-sheet/' + this.state.reportId + '/version/' + this.state.reportversion + '/html', "_blank");
+            this.props.history.replace('/ReportView/' + this.state.reportId + '/' + this.state.reportversion)
+
         }
         this.setState({open: true});
     }
@@ -134,8 +134,8 @@ class ReportsEntry extends Component {
             })
                 .catch((error) => console.log(error));
 
-            this.props.history.replace('/ReportView/'+this.state.reportIdPRE41Pv+'/'+ this.state.reportversionPRE41Pv)
-            // window.open('https://dev.tabulation.ecdev.opensource.lk/tally-sheet/' + this.state.reportIdPRE41Pv + '/version/' + this.state.reportversionPRE41Pv + '/html', "_blank");
+            this.props.history.replace('/ReportView/' + this.state.reportIdPRE41Pv + '/' + this.state.reportversionPRE41Pv)
+
         }
         this.setState({open: true});
     }
@@ -161,8 +161,8 @@ class ReportsEntry extends Component {
             })
                 .catch((error) => console.log(error));
 
-            this.props.history.replace('/ReportView/'+this.state.reportIdCE201+'/'+ this.state.reportversionCE201)
-            // window.open('https://dev.tabulation.ecdev.opensource.lk/tally-sheet/' + this.state.reportId + '/version/' + this.state.reportversion + '/html', "_blank");
+            this.props.history.replace('/ReportView/' + this.state.reportIdCE201 + '/' + this.state.reportversionCE201)
+
         }
 
         this.setState({open: true});
@@ -190,8 +190,8 @@ class ReportsEntry extends Component {
             })
                 .catch((error) => console.log(error));
 
-            this.props.history.replace('/ReportView/'+this.state.reportIdCE201pv+'/'+ this.state.reportversionCE201pv)
-            // window.open('https://dev.tabulation.ecdev.opensource.lk/tally-sheet/' + this.state.reportId + '/version/' + this.state.reportversion + '/html', "_blank");
+            this.props.history.replace('/ReportView/' + this.state.reportIdCE201pv + '/' + this.state.reportversionCE201pv)
+
         }
 
         this.setState({open: true});
@@ -218,8 +218,6 @@ class ReportsEntry extends Component {
                 // })
             })
                 .catch((error) => console.log(error));
-
-            window.open('https://dev.tabulation.ecdev.opensource.lk/tally-sheet/' + this.state.reportId + '/version/' + this.state.reportversion + '/html', "_blank");
         }
 
         this.setState({open: true});
@@ -247,7 +245,6 @@ class ReportsEntry extends Component {
             })
                 .catch((error) => console.log(error));
 
-            window.open('https://dev.tabulation.ecdev.opensource.lk/tally-sheet/' + this.state.reportIdPRE21Pv + '/version/' + this.state.reportversionPRE21Pv + '/html', "_blank");
         }
 
 
@@ -260,8 +257,8 @@ class ReportsEntry extends Component {
             alert('Report not Avialable')
         } else {
 
-            this.props.history.replace('/ReportView/'+this.state.report30PD+'/'+ this.state.reportversionPD30)
-            // window.open('https://dev.tabulation.ecdev.opensource.lk/tally-sheet/' + this.state.reportId + '/version/' + this.state.reportversion + '/html', "_blank");
+            this.props.history.replace('/ReportView/' + this.state.report30PD + '/' + this.state.reportversionPD30)
+
         }
         this.setState({open: true});
 
@@ -275,7 +272,7 @@ class ReportsEntry extends Component {
                 console.log(res.data.htmlUrl);
                 window.open(res.data.htmlUrl, "_blank")
             });
-        // window.open('newPageUrl', "https://dev.tabulation.ecdev.opensource.lk")
+
         this.setState({open: true});
     }
 
@@ -294,7 +291,6 @@ class ReportsEntry extends Component {
             this.props.history.replace('/ReportView/' + this.state.report30pdpv + '/' + this.state.reportversionPD30PV)
         }
 
-        // window.open('newPageUrl', "https://dev.tabulation.ecdev.opensource.lk")
         this.setState({open: true});
     }
 
@@ -360,7 +356,7 @@ class ReportsEntry extends Component {
             reportId: event.target.value
         })
 
-        axios.get('/tally-sheet?limit=20&offset=0&electionId=' + localStorage.getItem('electionType_NonPostal_Id') + '&officeId=' + event.target.value + '&tallySheetCode=PRE-41', {
+        axios.get('/tally-sheet?limit=20&offset=0&electionId=' + localStorage.getItem('electionType_NonPostal_Id') + '&areaId=' + event.target.value + '&tallySheetCode=PRE-41', {
             headers: {
                 'Authorization': "Bearer " + localStorage.getItem('token'),
                 'Access-Control-Allow-Origin': '*',
@@ -387,7 +383,7 @@ class ReportsEntry extends Component {
             reportIdPRE41Pv: event.target.value
         })
 
-        axios.get('/tally-sheet?limit=1000&offset=0&electionId=' + localStorage.getItem('electionType_Postal_Id') + '&officeId=' + event.target.value + '&tallySheetCode=PRE-41', {
+        axios.get('/tally-sheet?limit=1000&offset=0&electionId=' + localStorage.getItem('electionType_Postal_Id') + '&areaId=' + event.target.value + '&tallySheetCode=PRE-41', {
             headers: {
                 'Authorization': "Bearer " + localStorage.getItem('token'),
                 'Access-Control-Allow-Origin': '*',
@@ -414,7 +410,7 @@ class ReportsEntry extends Component {
             reportIdCE201: event.target.value
         })
 
-        axios.get('/tally-sheet?limit=1000&offset=0&electionId=' + localStorage.getItem('electionType_NonPostal_Id') + '&officeId=' + event.target.value + '&tallySheetCode=CE-201', {
+        axios.get('/tally-sheet?limit=1000&offset=0&electionId=' + localStorage.getItem('electionType_NonPostal_Id') + '&areaId=' + event.target.value + '&tallySheetCode=CE-201', {
             headers: {
                 'Authorization': "Bearer " + localStorage.getItem('token'),
                 'Access-Control-Allow-Origin': '*',
@@ -440,7 +436,7 @@ class ReportsEntry extends Component {
             reportIdCE201pv: event.target.value
         })
 
-        axios.get('/tally-sheet?limit=1000&offset=0&electionId=' + localStorage.getItem('electionType_NonPostal_Id') + '&officeId=' + event.target.value + '&tallySheetCode=CE-201-PV', {
+        axios.get('/tally-sheet?limit=1000&offset=0&electionId=' + localStorage.getItem('electionType_NonPostal_Id') + '&areaId=' + event.target.value + '&tallySheetCode=CE-201-PV', {
             headers: {
                 'Authorization': "Bearer " + localStorage.getItem('token'),
                 'Access-Control-Allow-Origin': '*',
@@ -467,7 +463,7 @@ class ReportsEntry extends Component {
             reportIdPRE21: event.target.value
         })
 
-        axios.get('/tally-sheet?limit=20&offset=0&electionId=' + localStorage.getItem('electionType_NonPostal_Id') + '&officeId=' + event.target.value + '&tallySheetCode=PRE-21', {
+        axios.get('/tally-sheet?limit=20&offset=0&electionId=' + localStorage.getItem('electionType_NonPostal_Id') + '&areaId=' + event.target.value + '&tallySheetCode=PRE-21', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -491,7 +487,7 @@ class ReportsEntry extends Component {
             reportIdPRE21Pv: event.target.value
         })
 
-        axios.get('/tally-sheet?limit=20&offset=0&electionId=' + localStorage.getItem('electionType_Postal_Id') + '&officeId=' + event.target.value + '&tallySheetCode=PRE-21', {
+        axios.get('/tally-sheet?limit=20&offset=0&electionId=' + localStorage.getItem('electionType_Postal_Id') + '&areaId=' + event.target.value + '&tallySheetCode=PRE-21', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -517,7 +513,7 @@ class ReportsEntry extends Component {
             report30PD: event.target.value
         })
 
-        axios.get('/tally-sheet?limit=20&offset=0&electionId=' + localStorage.getItem('electionType_NonPostal_Id') + '&officeId=' + event.target.value + '&tallySheetCode=PRE-30-PD', {
+        axios.get('/tally-sheet?limit=20&offset=0&electionId=' + localStorage.getItem('electionType_NonPostal_Id') + '&areaId=' + event.target.value + '&tallySheetCode=PRE-30-PD', {
             headers: {
                 'Authorization': "Bearer " + localStorage.getItem('token'),
                 'Access-Control-Allow-Origin': '*',
@@ -538,7 +534,7 @@ class ReportsEntry extends Component {
     handleDivision = event => {
         this.setState({selected2: event.target.value, name: event.target.name});
 
-        axios.get('/tally-sheet?limit=20&offset=0&electionId=' + localStorage.getItem('electionType_NonPostal_Id') + '&officeId=' + event.target.value + '&tallySheetCode=PRE-30-ED', {
+        axios.get('/tally-sheet?limit=20&offset=0&electionId=' + localStorage.getItem('electionType_NonPostal_Id') + '&areaId=' + event.target.value + '&tallySheetCode=PRE-30-ED', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -562,7 +558,7 @@ class ReportsEntry extends Component {
             report30pdpv: event.target.value
         })
 
-        axios.get('/tally-sheet?limit=20&offset=0&electionId=' + localStorage.getItem('electionType_Postal_Id') + '&officeId=' + event.target.value + '&tallySheetCode=PRE-30-PD', {
+        axios.get('/tally-sheet?limit=20&offset=0&electionId=' + localStorage.getItem('electionType_Postal_Id') + '&areaId=' + event.target.value + '&tallySheetCode=PRE-30-PD', {
             headers: {
                 'Authorization': "Bearer " + localStorage.getItem('token'),
                 'Access-Control-Allow-Origin': '*',
@@ -595,7 +591,7 @@ class ReportsEntry extends Component {
         }).then(res => {
             console.log("Election" + res.data)
             this.setState({
-                offices: res.data.sort(function (a, b) {
+                areas: res.data.sort(function (a, b) {
                     if (parseInt(a.areaName) > parseInt(b.areaName)) {
                         return 1;
                     } else {
@@ -618,7 +614,7 @@ class ReportsEntry extends Component {
         }).then(res => {
             console.log("Election" + res.data)
             this.setState({
-                officespv: res.data.sort(function (a, b) {
+                areasPv: res.data.sort(function (a, b) {
                     if (parseInt(a.areaName) > parseInt(b.areaName)) {
                         return 1;
                     } else {
@@ -732,7 +728,7 @@ class ReportsEntry extends Component {
                                             </InputLabel>
                                             <Select className="width50" value={this.state.selectedCE201}
                                                     onChange={this.handleChangeCE201}>
-                                                {this.state.offices.map((districtCentre, idx) => (
+                                                {this.state.areas.map((districtCentre, idx) => (
                                                     <MenuItem
                                                         value={districtCentre.areaId}>{districtCentre.areaName}</MenuItem>
                                                 ))}
@@ -756,7 +752,7 @@ class ReportsEntry extends Component {
                                             </InputLabel>
                                             <Select className="width50" value={this.state.selected}
                                                     onChange={this.handleChangePRE41}>
-                                                {this.state.offices.map((CountingCenter, idx) => (
+                                                {this.state.areas.map((CountingCenter, idx) => (
                                                     <MenuItem
                                                         value={CountingCenter.areaId}>{CountingCenter.areaName}</MenuItem>
                                                 ))}
@@ -802,7 +798,7 @@ class ReportsEntry extends Component {
                                 {/*Counting Center*/}
                                 {/*</InputLabel>*/}
                                 {/*<Select className="width50" value={this.state.selectedPRE21} onChange={this.handleChangePRE21}>*/}
-                                {/*{this.state.offices.map((districtCentre, idx) => (*/}
+                                {/*{this.state.areas.map((districtCentre, idx) => (*/}
                                 {/*<MenuItem value={districtCentre.areaId}>{districtCentre.areaName}</MenuItem>*/}
                                 {/*))}*/}
                                 {/*</Select>*/}
@@ -870,7 +866,7 @@ class ReportsEntry extends Component {
                                             </InputLabel>
                                             <Select className="width50" value={this.state.selectedPRE41PV}
                                                     onChange={this.handleChangePRE41pv}>
-                                                {this.state.officespv.map((CountingCenter, idx) => (
+                                                {this.state.areasPv.map((CountingCenter, idx) => (
                                                     <MenuItem
                                                         value={CountingCenter.areaId}>{CountingCenter.areaName}</MenuItem>
                                                 ))}
@@ -892,7 +888,7 @@ class ReportsEntry extends Component {
                                 {/*Counting Center*/}
                                 {/*</InputLabel>*/}
                                 {/*<Select className="width50" value={this.state.selectedPRE21PV} onChange={this.handleChangePRE21pv}>*/}
-                                {/*{this.state.officespv.map((districtCentre, idx) => (*/}
+                                {/*{this.state.areasPv.map((districtCentre, idx) => (*/}
                                 {/*<MenuItem value={districtCentre.areaId}>{districtCentre.areaName}</MenuItem>*/}
                                 {/*))}*/}
                                 {/*</Select>*/}

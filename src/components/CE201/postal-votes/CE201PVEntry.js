@@ -29,7 +29,7 @@ class CE201PVEntry extends Component {
         this.state = {
             open: false,
             allUsers: [],
-            offices: [],
+            areas: [],
             selected: 'Select',
             setOpen: false
         };
@@ -61,7 +61,7 @@ class CE201PVEntry extends Component {
     };
 
     componentDidMount() {
-        axios.get('/office?limit=20&offset=0&electionId=1', {
+        axios.get('/area?limit=20&offset=0&electionId=1', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -71,7 +71,7 @@ class CE201PVEntry extends Component {
         }).then(res => {
             console.log("Election" + res.data)
             this.setState({
-                offices: res.data
+                areas: res.data
             })
         })
             .catch((error) => console.log(error));

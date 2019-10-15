@@ -18,7 +18,7 @@ class Reports extends Component {
 
             open: false,
             allUsers: [],
-            offices: [],
+            areas: [],
             selected: 'Select',
             selected1: 'Select',
             setOpen: false,
@@ -31,14 +31,12 @@ class Reports extends Component {
     handleClickOpen() {
         console.log("open")
 
-        axios.post('https://cors-anywhere.herokuapp.com/https://dev.tabulation.ecdev.opensource.lk/report/' + this.state.value + '/version')
+        axios.post('/report/' + this.state.value + '/version')
             .then(res => {
                 console.log(res);
                 console.log(res.data.reportFile.urlInline);
                 window.open(res.data.reportFile.urlInline, "_blank")
             });
-
-        // window.open('newPageUrl', "https://dev.tabulation.ecdev.opensource.lk")
 
 
         this.setState({open: true});
@@ -53,7 +51,7 @@ class Reports extends Component {
     handleChange = event => {
         this.setState({selected: event.target.value, name: event.target.name});
 
-        axios.get('https://cors-anywhere.herokuapp.com/https://dev.tabulation.ecdev.opensource.lk/report?limit=20&offset=0&officeId=' + event.target.value, {
+        axios.get('/report?limit=20&offset=0&areaId=' + event.target.value, {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -73,7 +71,7 @@ class Reports extends Component {
 
     componentDidMount() {
         console.log("Election Result Test")
-        axios.get('https://cors-anywhere.herokuapp.com/https://dev.tabulation.ecdev.opensource.lk/office?limit=20&offset=0&electionId=1', {
+        axios.get('/area?limit=20&offset=0&electionId=1', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -83,7 +81,7 @@ class Reports extends Component {
         }).then(res => {
             console.log("Election" + res.data)
             this.setState({
-                offices: res.data
+                areas: res.data
             })
         })
             .catch((error) => console.log(error));
@@ -108,8 +106,8 @@ class Reports extends Component {
                             </InputLabel>
 
                             <Select className="width50" value={this.state.selected} onChange={this.handleChange}>
-                                {this.state.offices.map((office, idx) => (
-                                    <MenuItem value={office.officeId}>{office.officeName}</MenuItem>
+                                {this.state.areas.map((area, idx) => (
+                                    <MenuItem value={area.areaId}>{area.areaName}</MenuItem>
 
                                 ))}
 

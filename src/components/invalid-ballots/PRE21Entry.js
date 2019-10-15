@@ -29,7 +29,7 @@ class PRE21Entry extends Component {
         this.state = {
             open: false,
             allUsers: [],
-            offices: [],
+            areas: [],
             selected: 'Select',
             setOpen: false,
 
@@ -38,7 +38,7 @@ class PRE21Entry extends Component {
             content: {},
             tallySheetId: 0,
             reportId: 0,
-            officeId: 0,
+            areaId: 0,
             sum: 0,
             errorText:''
 
@@ -99,12 +99,11 @@ class PRE21Entry extends Component {
             tallySheetId: name
         })
         const {name2} = this.props.match.params
-        console.log("Id office >>> ", name2)
         this.setState({
-            officeId: name2
+            areaId: name2
         })
         console.log("Set >>> ", this.state.tallySheetId)
-        console.log("Set >>> ", this.state.officeId)
+        console.log("Set >>> ", this.state.areaId)
 
         axios.get('/election?limit=1000&offset=0', {
             headers: {
@@ -123,8 +122,6 @@ class PRE21Entry extends Component {
     handleSubmit = (event) => {
         const {name} = this.props.match.params
         const {name2} = this.props.match.params
-        console.log("Id office >>> ", name2)
-        console.log("TALLY SHEET >>> ", name)
         event.preventDefault()
         // console.log("Content1" ,this.state.content[1])
         // console.log("Content2" ,this.state.content[2])

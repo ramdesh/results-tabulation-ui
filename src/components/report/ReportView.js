@@ -4,16 +4,31 @@ import {
 } from '@material-ui/core';
 import axios from "../../axios-base";
 
+
 class ReportView extends Component {
     constructor(props) {
         super(props);
-        this.handleReport = this.handleReport.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handlePrint = this.handlePrint.bind(this);
         this.state = {
             open: "Test",
-            htmlContent: " ",
-            dataURI: ''
+            htmlContent: null,
+            iframeHeight: 600,
+            iframeWidth: "100%"
         };
+        this.iframeRef = React.createRef()
+    }
+
+    getIframeContent() {
+        if (this.isIframeContentReady()) {
+            return this.state.htmlContent
+        } else {
+            return "<div style='font-size: 20px; color: #222323; text-align: center'>Loading ...</div>"
+        }
+    }
+
+    isIframeContentReady() {
+        return this.state.htmlContent !== null
     }
 
     componentDidMount() {
@@ -33,22 +48,7 @@ class ReportView extends Component {
             this.setState({
                 htmlContent: res.data
             })
-            this.handleReport()
-        })
-            .catch((error) => console.log(error));
-    }
-
-    handleReport() {
-        console.log("HTML")
-        // var html = document.getElementById("html").innerHTML;
-        var dataURI = 'data:text/html,' + encodeURIComponent(this.state.htmlContent);
-        console.log(dataURI)
-
-        this.setState({
-            dataURI: dataURI
-        })
-
-        // alert("Successfully Created the TallySheet - PRE41")
+        }).catch((error) => console.log(error));
     }
 
     // submit the form data
@@ -57,15 +57,50 @@ class ReportView extends Component {
         this.props.history.replace('/Home')
     }
 
-    render() {
-        return (
-            <div style={{marginLeft: '11%', marginTop: '4%'}}>
-                <iframe height="1700" width="1110" src={this.state.dataURI}>
-                </iframe>
-                <Button style={{margin: '4%',marginLeft: '78%',borderRadius: 18, color: 'white'}} onClick={this.handleSubmit}
+    handlePrint() {
+        this.iframeRef.current.contentWindow.print()
+    }
+
+    handleIframeHeight(evt) {
+        this.setState({
+            iframeHeight: evt.target.contentDocument.documentElement.scrollHeight + 50,
+            //iframeWidth: evt.target.contentDocument.documentElement.scrollWidth + 50
+        })
+    }
+
+    getActionButtonsJsx() {
+        if (this.isIframeContentReady()) {
+            return <div style={{width: "100%", textAlign: "right"}}>
+                <Button style={{borderRadius: 18, color: 'white', align: 'right', marginLeft: 10}}
+                        onClick={this.handlePrint}
+                        className="button">Print</Button>
+                <Button style={{borderRadius: 18, color: 'white', align: 'right', marginLeft: 10}}
+                        onClick={this.handleSubmit}
                         className="button">Submit</Button>
             </div>
-        )
+        } else {
+            return null
+        }
+    }
+
+    render() {
+
+        return [
+            <div style={{padding: 10}}>
+                <iframe
+                    style={{border: "none"}}
+                    height={this.state.iframeHeight}
+                    width={this.state.iframeWidth}
+                    srcDoc={this.getIframeContent()}
+                    onLoad={this.handleIframeHeight.bind(this)}
+                    ref={this.iframeRef}
+                >
+                </iframe>
+
+                {this.getActionButtonsJsx()}
+
+            </div>
+        ]
     }
 }
 
