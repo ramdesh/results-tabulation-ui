@@ -4,17 +4,13 @@ import {
     Button
 } from '@material-ui/core';
 import axios from "../../axios-base";
-
 import {
     AuthenticateSessionUtil,
-    AuthenticateTokenKeys,
-    OPConfigurationUtil,
     SignInUtil,
-    SignOutUtil
 } from "../../lib";
 // import { setSignIn, setSignOut } from "../actions";
-import { AppConfig, RESOURCE_ENDPOINTS } from "../../configs";
-import { getAuthenticationCallbackUrl, history } from "../../utils";
+import {AppConfig, RESOURCE_ENDPOINTS} from "../../configs";
+import {getAuthenticationCallbackUrl, history} from "../../utils";
 // import { SEND_SIGN_IN_REQUEST, SEND_SIGN_OUT_REQUEST } from "../actions/types";
 
 const appConfig = new AppConfig();
@@ -38,9 +34,8 @@ class HomeElection extends Component {
         this.setState({open: false});
     }
 
-
     /** loginSuccessRedirect  **/
-    loginSuccessRedirect () {
+    loginSuccessRedirect() {
         const AuthenticationCallbackUrl = getAuthenticationCallbackUrl();
         const location = ((!AuthenticationCallbackUrl)
             || (AuthenticationCallbackUrl === appConfig.loginPath)) ? appConfig.homePath : AuthenticationCallbackUrl;
@@ -48,9 +43,8 @@ class HomeElection extends Component {
         history.push(location);
     };
 
-
     /** sendSignInRequest**/
-    sendSignInRequest(){
+    sendSignInRequest() {
         const requestParams = {
             clientHost: appConfig.clientHost,
             clientId: appConfig.clientID,
@@ -74,9 +68,6 @@ class HomeElection extends Component {
             SignInUtil.sendAuthorizationRequest(requestParams);
         }
     }
-
-
-
 
 
     handleClickOpen(type, subElection) {
@@ -134,14 +125,11 @@ class HomeElection extends Component {
                             Election Result Tabulation
                         </Typography>
                     </div>
-                    {/*<iframe src="https://dev.tabulation.ecdev.opensource.lk/tally-sheet/6/version/4/html"></iframe>*/}
 
                     <div style={{marginLeft: '33%', marginRight: '33%'}}>
-
                         {this.state.elections.map((election, idx) => (
                             <Button align={"center"}
                                     style={{borderRadius: 18, color: 'white', width: '100%', marginTop: '6%'}}
-
                                     onClick={() => this.handleClickOpen(election.electionId, election.subElections)}
                                     className="button">{election.electionName}</Button>
                         ))}

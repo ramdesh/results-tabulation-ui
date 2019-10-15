@@ -27,7 +27,7 @@ class PRE28Entry extends Component {
         this.state = {
             open: false,
             allUsers: [],
-            offices: [],
+            areas: [],
             selected: 'Select',
             setOpen: false
         };
@@ -55,7 +55,7 @@ class PRE28Entry extends Component {
         console.log("Election Result Test")
         const {name} = this.props.match.params
         // let token = localStorage.getItem('id_token');
-        axios.get('https://cors-anywhere.herokuapp.com/https://dev.tabulation.ecdev.opensource.lk/office?limit=20&offset=0&electionId=1', {
+        axios.get('/area?limit=20&offset=0&electionId=1', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -65,7 +65,7 @@ class PRE28Entry extends Component {
         }).then(res => {
             console.log("Election" + res.data)
             this.setState({
-                offices: res.data
+                areas: res.data
             })
         })
             .catch((error) => console.log(error));

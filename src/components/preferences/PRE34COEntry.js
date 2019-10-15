@@ -26,7 +26,7 @@ class PRE34COEntry extends Component {
         this.handleBack = this.handleBack.bind(this);
         this.state = {
             open: false,
-            offices: [],
+            areas: [],
             selected: 'Select',
             election: []
         };

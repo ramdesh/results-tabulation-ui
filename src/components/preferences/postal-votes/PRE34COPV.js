@@ -23,7 +23,7 @@ class PRE34COPV extends Component {
         this.state = {
             open: false,
             allUsers: [],
-            offices: [],
+            areas: [],
             selected: 'Select',
             setOpen: false
         };
@@ -45,7 +45,7 @@ class PRE34COPV extends Component {
 
     componentDidMount() {
         console.log("Election Result Test")
-        axios.get('https://cors-anywhere.herokuapp.com/https://dev.tabulation.ecdev.opensource.lk/office?limit=20&offset=0&electionId=1', {
+        axios.get('/area?limit=20&offset=0&electionId=1', {
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
@@ -55,7 +55,7 @@ class PRE34COPV extends Component {
         }).then(res => {
             console.log("Election" + res.data)
             this.setState({
-                offices: res.data
+                areas: res.data
             })
         })
             .catch((error) => console.log(error));
@@ -80,8 +80,8 @@ class PRE34COPV extends Component {
                                     District Centre
                                 </InputLabel>
                                 <Select className="width50" value={this.state.selected} onChange={this.handleChange}>
-                                    {this.state.offices.map((office, idx) => (
-                                        <MenuItem value={office.officeName}>{office.officeName}</MenuItem>
+                                    {this.state.areas.map((area, idx) => (
+                                        <MenuItem value={area.areaName}>{area.areaName}</MenuItem>
                                     ))}
                                 </Select>
                             </FormControl>
@@ -92,8 +92,8 @@ class PRE34COPV extends Component {
                                     Counting Centre
                                 </InputLabel>
                                 <Select className="width50" value={this.state.selected} onChange={this.handleChange}>
-                                    {this.state.offices.map((day1, idx) => (
-                                        <MenuItem value={day1.officeName}>{day1.officeName}</MenuItem>
+                                    {this.state.areas.map((area, idx) => (
+                                        <MenuItem value={area.areaName}>{area.areaName}</MenuItem>
                                     ))}
                                 </Select>
                             </FormControl>
@@ -104,8 +104,8 @@ class PRE34COPV extends Component {
                                     Polling Station
                                 </InputLabel>
                                 <Select className="width50" value={this.state.selected} onChange={this.handleChange}>
-                                    {this.state.offices.map((day1, idx) => (
-                                        <MenuItem value={day1.officeName}>{day1.officeName}</MenuItem>
+                                    {this.state.areas.map((area, idx) => (
+                                        <MenuItem value={area.areaName}>{area.areaName}</MenuItem>
                                     ))}
                                 </Select>
                             </FormControl>
