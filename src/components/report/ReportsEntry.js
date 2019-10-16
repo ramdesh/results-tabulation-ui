@@ -256,14 +256,11 @@ class ReportsEntry extends Component {
         if (this.state.reportversionPD30 == null) {
             alert('Report not Avialable')
         } else {
-
             this.props.history.replace('/ReportView/' + this.state.report30PD + '/' + this.state.reportversionPD30)
-
         }
         this.setState({open: true});
 
     }
-
 
     handleClickOpenElectorate() {
         axios.post('/tally-sheet/PRE-30-ED/' + this.state.reportDivision + '/version')
@@ -272,11 +269,9 @@ class ReportsEntry extends Component {
                 console.log(res.data.htmlUrl);
                 window.open(res.data.htmlUrl, "_blank")
             });
-
         this.setState({open: true});
     }
 
-    //
     handleClickOpenPRE30Pv() {
         if (this.state.reportversionPD30PV == null) {
             alert('Report not Avialable')
@@ -290,7 +285,6 @@ class ReportsEntry extends Component {
 
             this.props.history.replace('/ReportView/' + this.state.report30pdpv + '/' + this.state.reportversionPD30PV)
         }
-
         this.setState({open: true});
     }
 
@@ -313,7 +307,6 @@ class ReportsEntry extends Component {
                 });
         })
             .catch((error) => console.log(error));
-
         this.setState({open: true});
     }
 
@@ -336,8 +329,6 @@ class ReportsEntry extends Component {
                 });
         })
             .catch((error) => console.log(error));
-
-        // this.setState({open: true});
     }
 
     // modal controllers
@@ -346,16 +337,14 @@ class ReportsEntry extends Component {
         this.setState({open: false});
     }
 
-    // Report handling for PRE 41  Non postal votel
+    // Report handling for PRE 41  Non postal vote
     handleChangePRE41 = event => {
         this.setState({selected: event.target.value, name: event.target.name});
-
         console.log("PRE41 Counting " + event.target.value)
 
         this.setState({
             reportId: event.target.value
         })
-
         axios.get('/tally-sheet?limit=20&offset=0&electionId=' + localStorage.getItem('electionType_NonPostal_Id') + '&areaId=' + event.target.value + '&tallySheetCode=PRE-41', {
             headers: {
                 'Authorization': "Bearer " + localStorage.getItem('token'),
@@ -374,10 +363,10 @@ class ReportsEntry extends Component {
 
     };
 
-    // Report handling for PRE 41pv   postal votel
+    // Report handling for PRE 41pv   postal vote
     handleChangePRE41pv = event => {
         this.setState({selectedPRE41PV: event.target.value, name: event.target.name});
-        console.log("PRE41 Counting " + event.target.value)
+        console.log("PRE41 Pv Counting " + event.target.value)
 
         this.setState({
             reportIdPRE41Pv: event.target.value
@@ -401,11 +390,9 @@ class ReportsEntry extends Component {
 
     };
 
-    // Report handling for CE 201  Non postal votel
+    // Report handling for CE 201  Non postal vote
     handleChangeCE201 = event => {
         this.setState({selectedCE201: event.target.value, name: event.target.name});
-        console.log("PRE41 Counting " + event.target.value)
-
         this.setState({
             reportIdCE201: event.target.value
         })
@@ -430,8 +417,6 @@ class ReportsEntry extends Component {
     // Report handling for CE 201   postal votel
     handleChangeCE201pv = event => {
         this.setState({selectedCE201PV: event.target.value, name: event.target.name});
-        console.log("PRE41 Counting " + event.target.value)
-
         this.setState({
             reportIdCE201pv: event.target.value
         })
@@ -453,58 +438,6 @@ class ReportsEntry extends Component {
             .catch((error) => console.log(error));
     };
 
-    // Report handling for PRE 21  Non postal votel
-    handleChangePRE21 = event => {
-        this.setState({selectedPRE21: event.target.value, name: event.target.name});
-
-        console.log("PRE41 Counting " + event.target.value)
-
-        this.setState({
-            reportIdPRE21: event.target.value
-        })
-
-        axios.get('/tally-sheet?limit=20&offset=0&electionId=' + localStorage.getItem('electionType_NonPostal_Id') + '&areaId=' + event.target.value + '&tallySheetCode=PRE-21', {
-            headers: {
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': 'GET',
-                'Access-Control-Allow-Headers': 'Content-Type',
-                'X-Requested-With': 'XMLHttpRequest'
-            }
-        }).then(res => {
-            console.log(res.data[0].latestVersionId)
-            this.setState({
-                reportversionPRE21: res.data[0].latestVersionId
-            })
-        })
-            .catch((error) => console.log(error));
-    };
-
-    // Report handling for PRE 21 postal votel
-    handleChangePRE21pv = event => {
-        this.setState({selectedPRE21PV: event.target.value, name: event.target.name});
-        console.log("PRE41 Counting " + event.target.value)
-        this.setState({
-            reportIdPRE21Pv: event.target.value
-        })
-
-        axios.get('/tally-sheet?limit=20&offset=0&electionId=' + localStorage.getItem('electionType_Postal_Id') + '&areaId=' + event.target.value + '&tallySheetCode=PRE-21', {
-            headers: {
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': 'GET',
-                'Access-Control-Allow-Headers': 'Content-Type',
-                'X-Requested-With': 'XMLHttpRequest'
-            }
-        }).then(res => {
-            console.log(res.data[0].latestVersionId)
-            this.setState({
-                reportversionPRE21Pv: res.data[0].latestVersionId
-            })
-        })
-            .catch((error) => console.log(error));
-
-
-    };
-
     // Event for PRE 30 PD
     PD30 = event => {
         this.setState({selectedPD30: event.target.value, name: event.target.name});
@@ -512,7 +445,6 @@ class ReportsEntry extends Component {
         this.setState({
             report30PD: event.target.value
         })
-
         axios.get('/tally-sheet?limit=20&offset=0&electionId=' + localStorage.getItem('electionType_NonPostal_Id') + '&areaId=' + event.target.value + '&tallySheetCode=PRE-30-PD', {
             headers: {
                 'Authorization': "Bearer " + localStorage.getItem('token'),
@@ -550,6 +482,7 @@ class ReportsEntry extends Component {
             .catch((error) => console.log(error));
 
     };
+
     //PRE 30-Pv
     handleDivisionPv = event => {
         this.setState({selectedPRE30PV: event.target.value, name: event.target.name});
@@ -576,7 +509,6 @@ class ReportsEntry extends Component {
             .catch((error) => console.log(error));
 
     };
-
 
     componentDidMount() {
         console.log("Election Result Test")
@@ -993,14 +925,11 @@ class ReportsEntry extends Component {
                         </Table>
                     </Paper>
                 </div>
-
                 <div style={{marginLeft: '76%', marginTop: '4%'}}>
                     <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleBack}
                             className="button">Back</Button>
-
                 </div>
             </div>
-
         )
     }
 }

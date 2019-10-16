@@ -78,11 +78,11 @@ class PRE41Entry extends Component {
         const {name2} = this.props.match.params
 
         event.preventDefault()
-        if (this.state.content[1].count === null || this.state.content[2].count === null ||
-            this.state.content[1].countInWords === null || this.state.content[2].countInWords === null) {
-            alert("Please Enter the necessary fields !")
+        // if (this.state.content[1].count === null || this.state.content[2].count === null ||
+        //     this.state.content[1].countInWords === null || this.state.content[2].countInWords === null) {
+        //     alert("Please Enter the necessary fields !")
 
-        } else {
+        // } else {
             axios.post('/tally-sheet/PRE-41/' + name + '/version', {
                 "content": this.state.candidatesList.map((candidateId) => {
                     return {
@@ -114,7 +114,7 @@ class PRE41Entry extends Component {
 
 
                 }).catch((error) => console.log(error));
-        }
+
     }
 
     handleClickOpen() {
