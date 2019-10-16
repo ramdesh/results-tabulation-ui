@@ -41,7 +41,7 @@ class CE201Entry extends Component {
             countingName: 0,
             countingId: 0,
             // ballotBoxes:[]
-            tallySheetVersionId: 1,
+            // tallySheetVersionId: 1,
         };
     }
 
@@ -118,7 +118,8 @@ class CE201Entry extends Component {
             countingId: countingId
         })
 
-        axios.get('/area?limit=1000&offset=0&parentareaId=' + countingId, {
+
+        axios.get('/area?limit=1000&offset=0&associatedAreaId='+countingId+'&areaType=PollingStation', {
             headers: {
                 'Authorization': "Bearer "+localStorage.getItem('token'),
                 'Access-Control-Allow-Origin': '*',
@@ -196,10 +197,14 @@ class CE201Entry extends Component {
             .then(res => {
                 console.log("URL" + res.data.htmlUrl);
                 console.log("Result" + res.data[0]);
+
+                console.log("Version" + res.data.tallySheetVersionId);
+
+
                 // alert("Successfully Created the TallySheet - CE 201")
                 // const htmlURL = res.data.htmlUrl
                 // window.open(htmlURL, "_blank")
-                this.props.history.replace('/CE201Report/'+this.state.tallySheetId+'/'+ this.state.tallySheetVersionId)
+                this.props.history.replace('/CE201Report/'+this.state.tallySheetId+'/'+ res.data.tallySheetVersionId)
 
             }).catch((error) => console.log(error));
 

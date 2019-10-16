@@ -43,6 +43,7 @@ function App() {
         <div>
             <NavBar/>
             <Switch>
+
                 <Redirect exact path="/" to={ appConfig.loginPath }/>
                 <Route path={ appConfig.loginPath } render={ () => {
                     signIn();
@@ -74,12 +75,9 @@ function App() {
                 <ProtectedRoute path="/PRE28-Entry/:name" component={ PRE28Entry }/>
 
                 <ProtectedRoute exact path="/PRE41" component={ PRE41 }/>
-
                 <ProtectedRoute path="/PRE41-Entry/:name/:name2" component={ PRE41Entry }/>
-
                 <ProtectedRoute exact path="/PRE41Report/:tallySheetId/:tallySheetVersionId/:countingId"
                                 component={ PRE41Report }/>
-
                 <ProtectedRoute exact path="/PRE41Edit/:tallySheetId/:tallySheetVersionId/:countingId"
                                 component={ PRE41Edit }/>
 
