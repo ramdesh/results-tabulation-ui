@@ -161,6 +161,8 @@ class ReportsEntry extends Component {
             })
                 .catch((error) => console.log(error));
 
+            console.log(this.state.reportIdCE201);
+
             this.props.history.replace('/ReportView/' + this.state.reportIdCE201 + '/' + this.state.reportversionCE201)
 
         }
@@ -393,9 +395,7 @@ class ReportsEntry extends Component {
     // Report handling for CE 201  Non postal vote
     handleChangeCE201 = event => {
         this.setState({selectedCE201: event.target.value, name: event.target.name});
-        this.setState({
-            reportIdCE201: event.target.value
-        })
+
 
         axios.get('/tally-sheet?limit=1000&offset=0&electionId=' + localStorage.getItem('electionType_NonPostal_Id') + '&areaId=' + event.target.value + '&tallySheetCode=CE-201', {
             headers: {
@@ -409,6 +409,9 @@ class ReportsEntry extends Component {
             console.log(res.data[0].latestVersionId)
             this.setState({
                 reportversionCE201: res.data[0].latestVersionId
+            })
+            this.setState({
+                reportIdCE201: res.data[0].tallySheetId
             })
         })
             .catch((error) => console.log(error));

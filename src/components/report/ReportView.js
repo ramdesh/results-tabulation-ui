@@ -5,7 +5,7 @@ import axios from "../../axios-base";
 class ReportView extends Component {
     constructor(props) {
         super(props);
-        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleBack = this.handleBack.bind(this);
         this.handlePrint = this.handlePrint.bind(this);
         this.state = {
             open: "Test",
@@ -49,9 +49,8 @@ class ReportView extends Component {
     }
 
     // submit the form data
-    handleSubmit() {
-        alert("Successfully Created the TallySheet - CE 201")
-        this.props.history.replace('/Home')
+    handleBack() {
+        this.props.history.replace('/ReportsEntry')
     }
 
     handlePrint() {
@@ -69,11 +68,13 @@ class ReportView extends Component {
         if (this.isIframeContentReady()) {
             return <div style={{width: "100%", textAlign: "right"}}>
                 <Button style={{borderRadius: 18, color: 'white', align: 'right', marginLeft: 10}}
+                        onClick={this.handleBack}
+                        className="button">Back</Button>
+
+                <Button style={{borderRadius: 18, color: 'white', align: 'right', marginLeft: 10}}
                         onClick={this.handlePrint}
                         className="button">Print</Button>
-                <Button style={{borderRadius: 18, color: 'white', align: 'right', marginLeft: 10}}
-                        onClick={this.handleSubmit}
-                        className="button">Submit</Button>
+
             </div>
         } else {
             return null
