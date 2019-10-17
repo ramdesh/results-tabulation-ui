@@ -26,7 +26,9 @@ class PRE41PV extends Component {
         this.state = {
             open: false,
             selectedDistrictCentre: '',
+
             selectedPollingDivision: '',
+
             selectedCountingCenter: '',
             districtCentres: [],
             countingCenter: [],
@@ -41,7 +43,7 @@ class PRE41PV extends Component {
     }
 
     handleBack() {
-        this.props.history.replace('/Home')
+        this.props.history.goBack()
     }
 
     handleClickOpen() {
@@ -50,6 +52,7 @@ class PRE41PV extends Component {
         } else {
             axios.get('/tally-sheet?limit=1000&offset=0&electionId='+localStorage.getItem('electionType_Postal_Id')+'&areaId='+this.state.countingId+'&tallySheetCode=PRE-41', {
                 headers: {
+                    'Authorization': "Bearer "+localStorage.getItem('token'),
                     'Access-Control-Allow-Origin': '*',
                     'Access-Control-Allow-Methods': 'GET',
                     'Access-Control-Allow-Headers': 'Content-Type',
@@ -64,7 +67,7 @@ class PRE41PV extends Component {
                         tallySheetId: res.data[0].tallySheetId
                     })
                     console.log("ID :" + res.data[0].tallySheetId)
-                    this.props.history.replace('/PRE41PV-Entry/' + this.state.tallySheetId + '/'+ this.state.countingName)
+                    this.props.history.push('/PRE41PV-Entry/' + this.state.tallySheetId + '/'+ this.state.countingName)
                 }
             })
                 .catch((error) => console.log(error));
@@ -77,6 +80,7 @@ class PRE41PV extends Component {
         console.log("District Centre :"+event.target.value)
         axios.get('/area?limit=1000&offset=0&electionId='+localStorage.getItem('electionType_Postal_Id')+'&associatedAreaId='+event.target.value+'&areaType=PollingDivision', {
             headers: {
+                'Authorization': "Bearer "+localStorage.getItem('token'),
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
                 'Access-Control-Allow-Headers': 'Content-Type',
@@ -97,6 +101,7 @@ class PRE41PV extends Component {
         console.log(event.target.value)
         axios.get('/area?limit=1000&offset=0&electionId='+localStorage.getItem('electionType_Postal_Id')+'&associatedAreaId='+event.target.value+'&areaType=CountingCentre', {
             headers: {
+                'Authorization': "Bearer "+localStorage.getItem('token'),
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
                 'Access-Control-Allow-Headers': 'Content-Type',
@@ -131,6 +136,7 @@ class PRE41PV extends Component {
         // get the areaId by areaName
         axios.get('/area?limit=1000&offset=0&electionId='+localStorage.getItem('electionType_Postal_Id')+'&areaName=' + event.target.value + '&areaType=CountingCentre', {
             headers: {
+                'Authorization': "Bearer "+localStorage.getItem('token'),
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
                 'Access-Control-Allow-Headers': 'Content-Type',
@@ -155,6 +161,7 @@ class PRE41PV extends Component {
     componentDidMount() {
         axios.get('/area?limit=1000&offset=0&electionId='+localStorage.getItem('electionType_Postal_Id')+'&areaType=DistrictCentre', {
             headers: {
+                'Authorization': "Bearer "+localStorage.getItem('token'),
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
                 'Access-Control-Allow-Headers': 'Content-Type',

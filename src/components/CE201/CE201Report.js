@@ -54,7 +54,7 @@ class CE201Report extends Component {
     // submit the form data
     handleSubmit() {
         alert("Successfully Created the TallySheet - CE 201")
-        this.props.history.replace('/Home')
+        this.props.history.push('/Home')
     }
 
     render() {

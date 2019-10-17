@@ -80,7 +80,7 @@ class ReportsEntry extends Component {
     }
 
     handleBack() {
-        this.props.history.replace('/Main')
+        this.props.history.goBack()
     }
 
     // Handle click for PRE 41 Non Postal votes
@@ -106,7 +106,7 @@ class ReportsEntry extends Component {
             })
                 .catch((error) => console.log(error));
 
-            this.props.history.replace('/ReportView/' + this.state.reportId + '/' + this.state.reportversion)
+            this.props.history.push('/ReportView/' + this.state.reportId + '/' + this.state.reportversion)
 
         }
         this.setState({open: true});
@@ -134,7 +134,7 @@ class ReportsEntry extends Component {
             })
                 .catch((error) => console.log(error));
 
-            this.props.history.replace('/ReportView/' + this.state.reportIdPRE41Pv + '/' + this.state.reportversionPRE41Pv)
+            this.props.history.push('/ReportView/' + this.state.reportIdPRE41Pv + '/' + this.state.reportversionPRE41Pv)
 
         }
         this.setState({open: true});
@@ -163,7 +163,7 @@ class ReportsEntry extends Component {
 
             console.log(this.state.reportIdCE201);
 
-            this.props.history.replace('/ReportView/' + this.state.reportIdCE201 + '/' + this.state.reportversionCE201)
+            this.props.history.push('/ReportView/' + this.state.reportIdCE201 + '/' + this.state.reportversionCE201)
 
         }
 
@@ -192,7 +192,7 @@ class ReportsEntry extends Component {
             })
                 .catch((error) => console.log(error));
 
-            this.props.history.replace('/ReportView/' + this.state.reportIdCE201pv + '/' + this.state.reportversionCE201pv)
+            this.props.history.push('/ReportView/' + this.state.reportIdCE201pv + '/' + this.state.reportversionCE201pv)
 
         }
 
@@ -255,6 +255,7 @@ class ReportsEntry extends Component {
 
     // handle click for PRE 30 PD Non-postal votes
     handleClickPD30() {
+
         console.log("PRE 30 PD")
         axios.post('/tally-sheet/PRE-30-PD/' + this.state.reportversionPD30 + '/version',null,{
             headers:{
@@ -268,9 +269,7 @@ class ReportsEntry extends Component {
                 this.props.history.replace('/ReportView/' + this.state.reportversionPD30 + '/' + res.data.tallySheetVersionId)
 
             });
-
-
-
+        
         this.setState({open: true});
 
     }
@@ -296,7 +295,7 @@ class ReportsEntry extends Component {
                     window.open(res.data.htmlUrl, "_blank")
                 });
 
-            this.props.history.replace('/ReportView/' + this.state.report30pdpv + '/' + this.state.reportversionPD30PV)
+            this.props.history.push('/ReportView/' + this.state.report30pdpv + '/' + this.state.reportversionPD30PV)
         }
         this.setState({open: true});
     }

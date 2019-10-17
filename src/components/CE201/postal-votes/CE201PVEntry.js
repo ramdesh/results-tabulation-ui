@@ -39,17 +39,14 @@ class CE201PVEntry extends Component {
         this.setState({open: true});
     }
     handleBack() {
-        this.props.history.replace('/CE201PV')
+        this.props.history.goBack()
     }
 
     // submit the form data
     handleSubmit = (event) => {
-                    alert("Successfully Created the TallySheet - CE 201 PV")
-
-                    this.props.history.replace('/Home')
-
+         alert("Successfully Created the TallySheet - CE 201 PV")
+         this.props.history.push('/Home')
     }
-
 
     // modal controllers
     handleClose() {

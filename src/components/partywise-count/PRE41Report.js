@@ -97,7 +97,7 @@ class PRE41Report extends Component {
                 console.log("Lock API " + res);
 
                 alert("Successfully Created the TallySheet - PRE 41")
-                this.props.history.replace('/Home')
+                this.props.history.push('/Home')
 
             }).catch((error) => console.log(error));
 
@@ -120,7 +120,7 @@ class PRE41Report extends Component {
             .then(res => {
                 console.log("UnLock API " + res);
                 alert("Successfully Unlocked the TallySheet - PRE 41")
-                this.props.history.replace('/PRE41Edit/' + tallySheetId + '/'+tallySheetVersionId+'/'+countingId)
+                this.props.history.push('/PRE41Edit/' + tallySheetId + '/'+tallySheetVersionId+'/'+countingId)
 
             }).catch((error) => console.log(error));
 
@@ -135,11 +135,11 @@ class PRE41Report extends Component {
         // alert("Successfully Created the TallySheet - PRE 41")
 
 
-        this.props.history.replace('/PRE41Edit/' + tallySheetId + '/'+tallySheetVersionId+'/'+countingId)
+        this.props.history.push('/PRE41Edit/' + tallySheetId + '/'+tallySheetVersionId+'/'+countingId)
     }
 
     handleBackToPRE41() {
-        this.props.history.replace('/PRE41')
+        this.props.history.push('/PRE41')
     }
 
 

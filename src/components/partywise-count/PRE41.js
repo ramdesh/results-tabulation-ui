@@ -25,10 +25,10 @@ class PRE41 extends Component {
         this.handleClickOpen = this.handleClickOpen.bind(this);
         this.state = {
             open: false,
-            selectedDistrictCentre: '',
+            selectedElectoralDistrict: '',
             selectedPollingDivision: '',
             selectedCountingCenter: '',
-            districtCentres: [],
+            electoralDistrict: [],
             countingCenter: [],
             PollingDivision:[],
             polling: 0,
@@ -42,7 +42,7 @@ class PRE41 extends Component {
     }
 
     handleBack() {
-        this.props.history.replace('/Home')
+        this.props.history.goBack()
     }
 
     handleClickOpen() {
@@ -71,7 +71,7 @@ class PRE41 extends Component {
                     })
 
                     console.log("ID :" + res.data[0].tallySheetId)
-                    this.props.history.replace('/PRE41Report/' + this.state.tallySheetId + '/'+ res.data[0].lockedVersionId+'/'+this.state.countingId)
+                    this.props.history.push('/PRE41Report/' + this.state.tallySheetId + '/'+ res.data[0].lockedVersionId+'/'+this.state.countingId)
 
                 }else{
                     this.setState({
@@ -79,17 +79,18 @@ class PRE41 extends Component {
                     })
 
                     console.log("ID :" + res.data[0].tallySheetId)
-                    this.props.history.replace('/PRE41-Entry/' + this.state.tallySheetId + '/'+ this.state.countingName)
+                    this.props.history.push('/PRE41-Entry/' + this.state.tallySheetId + '/'+ this.state.countingName)
                 }
             })
                 .catch((error) => console.log(error));
         }
     }
 
-    /** District Centre **/
+    /** District Centre > ElectoralDistrict **/
+
     handleChange = event => {
-        this.setState({selectedDistrictCentre: event.target.value, name: event.target.name});
-        console.log("District Centre :"+event.target.value)
+        this.setState({selectedElectoralDistrict: event.target.value, name: event.target.name});
+        console.log("Electoral District :"+event.target.value)
         axios.get('/area?limit=1000&offset=0&electionId='+localStorage.getItem('electionType_NonPostal_Id')+'&associatedAreaId='+event.target.value+'&areaType=PollingDivision', {
             headers: {
                 'Authorization': "Bearer "+localStorage.getItem('token'),
@@ -171,8 +172,9 @@ class PRE41 extends Component {
         this.setState({open: false});
     }
 
+    // ElectoralDistrict
     componentDidMount() {
-        axios.get('/area?limit=1000&offset=0&electionId='+localStorage.getItem('electionType_NonPostal_Id')+'&areaType=DistrictCentre', {
+        axios.get('/area?limit=1000&offset=0&electionId='+localStorage.getItem('electionType_NonPostal_Id')+'&areaType=ElectoralDistrict', {
             headers: {
                 'Authorization': "Bearer "+localStorage.getItem('token'),
                 'Access-Control-Allow-Origin': '*',
@@ -183,7 +185,7 @@ class PRE41 extends Component {
         }).then(res => {
             console.log("Election" + res.data[0])
             this.setState({
-                districtCentres: res.data
+                electoralDistrict: res.data
             })
         })
             .catch((error) => console.log(error));
@@ -222,12 +224,12 @@ class PRE41 extends Component {
                         <Grid item xs={5} sm={4}>
                             <FormControl variant="outlined" margin="dense">
                                 <InputLabel style={{marginLeft: '-5%'}}>
-                                    District Centre
+                                    Electoral District
                                 </InputLabel>
-                                <Select className="width50" value={this.state.selectedDistrictCentre}
+                                <Select className="width50" value={this.state.selectedElectoralDistrict}
                                         onChange={this.handleChange}>
-                                    {this.state.districtCentres.map((districtCentre, idx) => (
-                                        <MenuItem value={districtCentre.areaId}>{districtCentre.areaName}</MenuItem>
+                                    {this.state.electoralDistrict.map((electoralDistrict, idx) => (
+                                        <MenuItem value={electoralDistrict.areaId}>{electoralDistrict.areaName}</MenuItem>
                                     ))}
                                 </Select>
                             </FormControl>

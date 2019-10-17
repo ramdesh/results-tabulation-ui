@@ -33,34 +33,34 @@ class Home extends Component {
     }
 
     open1() {
-        this.props.history.replace('/PRE41')
+        this.props.history.push('/PRE41')
     }
     open2() {
-        this.props.history.replace('/PRE21')
+        this.props.history.push('/PRE21')
     }
     open3() {
-        this.props.history.replace('/CE201')
+        this.props.history.push('/CE201')
     }
     open4() {
-        this.props.history.replace('/PRE34CO')
+        this.props.history.push('/PRE34CO')
     }
     open5() {
-        this.props.history.replace('/PRE28')
+        this.props.history.push('/PRE28')
     }
     open6() {
-        this.props.history.replace('/PRE28A')
+        this.props.history.push('/PRE28A')
     }
     open7() {
-        this.props.history.replace('/CE201PV')
+        this.props.history.push('/CE201PV')
     }
     open8() {
-        this.props.history.replace('/PRE41PV')
+        this.props.history.push('/PRE41PV')
     }
     open9() {
-        this.props.history.replace('/PRE21PV')
+        this.props.history.push('/PRE21PV')
     }
     open10() {
-        this.props.history.replace('/PRE34COPV')
+        this.props.history.push('/PRE34COPV')
     }
     // modal controllers
     handleClose() {
