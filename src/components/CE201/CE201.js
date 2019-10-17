@@ -41,7 +41,7 @@ class CE201 extends Component {
     }
 
     handleBack() {
-        this.props.history.replace('/Home')
+        this.props.history.goBack()
     }
 
     handleClickOpen() {
@@ -66,7 +66,7 @@ class CE201 extends Component {
                         tallySheetId: res.data[0].tallySheetId
                     })
                     console.log("ID :" + res.data[0].tallySheetId)
-                    this.props.history.replace('/CE201-Entry/' + this.state.tallySheetId + '/'+ this.state.countingName+ '/'+ this.state.countingId)
+                    this.props.history.push('/CE201-Entry/' + this.state.tallySheetId + '/'+ this.state.countingName+ '/'+ this.state.countingId)
                 }
             })
                 .catch((error) => console.log(error));
@@ -213,7 +213,7 @@ class CE201 extends Component {
                         <Grid item xs={5} sm={4}>
                             <FormControl variant="outlined" margin="dense">
                                 <InputLabel style={{marginLeft: '-5%'}}>
-                                    District Centre
+                                    Electoral District
                                 </InputLabel>
                                 <Select className="width50" value={this.state.selectedDistrictCentre}
                                         onChange={this.handleChange}>

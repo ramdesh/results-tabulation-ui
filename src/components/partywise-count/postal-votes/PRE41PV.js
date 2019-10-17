@@ -26,7 +26,9 @@ class PRE41PV extends Component {
         this.state = {
             open: false,
             selectedDistrictCentre: '',
+
             selectedPollingDivision: '',
+
             selectedCountingCenter: '',
             districtCentres: [],
             countingCenter: [],
@@ -41,7 +43,7 @@ class PRE41PV extends Component {
     }
 
     handleBack() {
-        this.props.history.replace('/Home')
+        this.props.history.goBack()
     }
 
     handleClickOpen() {
@@ -65,7 +67,7 @@ class PRE41PV extends Component {
                         tallySheetId: res.data[0].tallySheetId
                     })
                     console.log("ID :" + res.data[0].tallySheetId)
-                    this.props.history.replace('/PRE41PV-Entry/' + this.state.tallySheetId + '/'+ this.state.countingName)
+                    this.props.history.push('/PRE41PV-Entry/' + this.state.tallySheetId + '/'+ this.state.countingName)
                 }
             })
                 .catch((error) => console.log(error));

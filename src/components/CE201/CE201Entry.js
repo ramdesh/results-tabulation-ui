@@ -79,7 +79,7 @@ class CE201Entry extends Component {
     }
 
     handleBack() {
-        this.props.history.replace('/CE201')
+        this.props.history.goBack()
     }
 
     // modal controllers
@@ -204,7 +204,7 @@ class CE201Entry extends Component {
                 // alert("Successfully Created the TallySheet - CE 201")
                 // const htmlURL = res.data.htmlUrl
                 // window.open(htmlURL, "_blank")
-                this.props.history.replace('/CE201Report/'+this.state.tallySheetId+'/'+ res.data.tallySheetVersionId)
+                this.props.history.push('/CE201Report/'+this.state.tallySheetId+'/'+ res.data.tallySheetVersionId)
 
             }).catch((error) => console.log(error));
 

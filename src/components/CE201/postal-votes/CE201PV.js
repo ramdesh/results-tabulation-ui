@@ -41,7 +41,7 @@ class CE201PV extends Component {
     }
 
     handleBack() {
-        this.props.history.replace('/Home')
+        this.props.history.goBack()
     }
 
     handleClickOpen() {
@@ -66,7 +66,7 @@ class CE201PV extends Component {
                         tallySheetId: res.data[0].tallySheetId
                     })
                     console.log("ID :" + res.data[0].tallySheetId)
-                    this.props.history.replace('/CE201PV-Entry/' + this.state.tallySheetId + '/'+ this.state.countingName+ '/'+ this.state.countingId)
+                    this.props.history.push('/CE201PV-Entry/' + this.state.tallySheetId + '/'+ this.state.countingName+ '/'+ this.state.countingId)
                 }
             })
                 .catch((error) => console.log(error));
