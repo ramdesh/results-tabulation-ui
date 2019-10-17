@@ -34,6 +34,7 @@ import {AuthContext} from "./contexts";
 import {Redirect, Switch} from "react-router";
 import {AppConfig} from "./configs";
 import {ProtectedRoute} from "./components/protected-route";
+import PRE41New from "./components/partywise-count/PRE41New";
 
 const appConfig = new AppConfig();
 
@@ -75,9 +76,13 @@ function App() {
                 <ProtectedRoute path="/PRE28-Entry/:name" component={ PRE28Entry }/>
 
                 <ProtectedRoute exact path="/PRE41" component={ PRE41 }/>
+
                 <ProtectedRoute path="/PRE41-Entry/:name/:name2" component={ PRE41Entry }/>
-                <ProtectedRoute exact path="/PRE41Report/:tallySheetId/:tallySheetVersionId/:countingId"
+                <ProtectedRoute path="/PRE41Entry/:tallySheetId/:tallySheetVersionId" component={ PRE41New }/>
+
+                <ProtectedRoute exact path="/PRE41Report/:tallySheetId/:tallySheetVersionId/"
                                 component={ PRE41Report }/>
+
                 <ProtectedRoute exact path="/PRE41Edit/:tallySheetId/:tallySheetVersionId/:countingId"
                                 component={ PRE41Edit }/>
 

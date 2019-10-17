@@ -16,8 +16,12 @@ class PRE41Report extends Component {
             open: "Test",
             htmlContent: " ",
             dataURI: '',
-            isLocked: false
+            isLocked: false,
+            iframeHeight: 600,
+            iframeWidth: "100%"
         };
+        this.iframeRef = React.createRef()
+
     }
 
     componentDidMount() {
@@ -108,8 +112,8 @@ class PRE41Report extends Component {
     handleUnlock() {
         console.log("unlock");
         const {tallySheetId} = this.props.match.params
-        const {tallySheetVersionId} = this.props.match.params
-        const {countingId} = this.props.match.params
+        // const {tallySheetVersionId} = this.props.match.params
+        // const {countingId} = this.props.match.params
         /** UnLock Report **/
         axios.put('/tally-sheet/' + tallySheetId + '/unlock',
             {
@@ -120,7 +124,8 @@ class PRE41Report extends Component {
             .then(res => {
                 console.log("UnLock API " + res);
                 alert("Successfully Unlocked the TallySheet - PRE 41")
-                this.props.history.push('/PRE41Edit/' + tallySheetId + '/'+tallySheetVersionId+'/'+countingId)
+                // this.props.history.push('/PRE41Entry/' + tallySheetId + '/'+tallySheetVersionId+'/'+countingId)
+                // this.props.history.push('/PRE41Edit/' + tallySheetId + '/'+tallySheetVersionId+'/'+countingId)
 
             }).catch((error) => console.log(error));
 
@@ -135,27 +140,55 @@ class PRE41Report extends Component {
         // alert("Successfully Created the TallySheet - PRE 41")
 
 
-        this.props.history.push('/PRE41Edit/' + tallySheetId + '/'+tallySheetVersionId+'/'+countingId)
+        this.props.history.push('/PRE41Entry/' + tallySheetId + '/'+tallySheetVersionId)
     }
 
     handleBackToPRE41() {
         this.props.history.push('/PRE41')
     }
 
+    handleIframeHeight(evt) {
+        this.setState({
+            iframeHeight: evt.target.contentDocument.documentElement.scrollHeight + 50,
+            //iframeWidth: evt.target.contentDocument.documentElement.scrollWidth + 50
+        })
+    }
+
+    isIframeContentReady() {
+        return this.state.htmlContent !== null
+    }
+
+    getIframeContent() {
+        if (this.isIframeContentReady()) {
+            return this.state.htmlContent
+        } else {
+            return "<div style='font-size: 20px; color: #222323; text-align: center'>Loading ...</div>"
+        }
+    }
 
     render() {
         return (
-            <div style={{marginLeft: '18%', marginTop: '4%'}}>
-                <iframe height="2700" width="900" src={this.state.dataURI}>
+            <div style={{marginLeft: '2%', marginTop: '4%'}}>
+                <iframe
+                    style={{border: "none"}}
+                    height={this.state.iframeHeight}
+                    width={this.state.iframeWidth}
+                    srcDoc={this.getIframeContent()}
+                    onLoad={this.handleIframeHeight.bind(this)}
+                    ref={this.iframeRef}
+                >
                 </iframe>
 
-                {this.state.isLocked===false && <div style={{margin: '4%', marginLeft: '56%'}}>
+                {/*<iframe height="2700" width="1380" src={this.state.dataURI}>*/}
+                {/*</iframe>*/}
+
+                {this.state.isLocked===false && <div style={{margin: '4%', marginLeft: '76%'}}>
                    <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleBack}
                             className="button">Back</Button>
                     <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleSubmit}
                             className="button">Submit</Button>
                 </div>}
-                {this.state.isLocked===true && <div style={{margin: '4%', marginLeft: '56%'}}>
+                {this.state.isLocked===true && <div style={{margin: '4%', marginLeft: '76%'}}>
                     <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleBackToPRE41}
                             className="button">Back</Button>
                     <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleUnlock}

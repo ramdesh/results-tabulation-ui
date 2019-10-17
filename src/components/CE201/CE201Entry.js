@@ -395,7 +395,7 @@ class CE201Entry extends Component {
                                                 onChange={this.handleInputChange(pollingStation.areaId, "ballotsUnused")}
                                             />
                                         </TableCell>
-                                        <TableCell style={{fontSize: 13, width: '19%'}}>
+                                        <TableCell style={{backgroundColor:'#f2f2f2',fontSize: 13, width: '19%'}}>
                                             <TextField
                                                 id="ordinaryBallotCountFromBallotPaperAccount"
                                                 margin="dense"
