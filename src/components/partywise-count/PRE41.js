@@ -71,7 +71,7 @@ class PRE41 extends Component {
                     })
 
                     console.log("ID :" + res.data[0].tallySheetId)
-                    this.props.history.push('/PRE41Report/' + this.state.tallySheetId + '/'+ res.data[0].lockedVersionId+'/'+this.state.countingId)
+                    this.props.history.push('/PRE41Report/' + this.state.tallySheetId + '/'+ res.data[0].lockedVersionId)
 
                 }else{
                     this.setState({
