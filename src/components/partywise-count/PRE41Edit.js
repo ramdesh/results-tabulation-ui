@@ -40,7 +40,7 @@ class PRE41Edit extends Component {
             vals:0,
             tallySheetVersionId: 0,
 
-            filledData:[]
+            // filledData:[]
 
         };
         this.calculation = [0];
@@ -57,8 +57,8 @@ class PRE41Edit extends Component {
             candidateMap[candidate.candidateId] = candidate;
             content[candidate.candidateId] = {
                 "candidateId": candidate.candidateId,
-                "count": null,
-                "countInWords": null
+                "count": undefined,
+                "countInWords": undefined
             };
             return candidate.candidateId
         })
@@ -79,11 +79,11 @@ class PRE41Edit extends Component {
         console.log("tally>>> ",tallySheetId)
 
         event.preventDefault()
-        if (this.state.content[1].count === null || this.state.content[2].count === null ||
-            this.state.content[1].countInWords === null || this.state.content[2].countInWords === null) {
-            alert("Please Enter the necessary fields !")
-
-        } else {
+        // if (this.state.content[1].count === null || this.state.content[2].count === null ||
+        //     this.state.content[1].countInWords === null || this.state.content[2].countInWords === null) {
+        //     alert("Please Enter the necessary fields !")
+        //
+        // } else {
             axios.post('/tally-sheet/PRE-41/' + tallySheetId + '/version', {
                     "content": this.state.candidatesList.map((candidateId) => {
                         return {
@@ -113,7 +113,7 @@ class PRE41Edit extends Component {
 
 
                 }).catch((error) => console.log(error));
-        }
+        //}
     }
 
     handleClickOpen() {
@@ -159,36 +159,58 @@ class PRE41Edit extends Component {
         console.log("Rejected:" + event.target.value)
     }
 
-
-    handleInputChange = (candidateId, property) => (event) => {
-        const name = event.target.name
-        console.log("NN",event.target.name);
-        if ((name) === "votes"+candidateId){
-            this.calculation[candidateId] = parseInt(event.target.value);
-            console.log(this.calculation);
-        }else{
-            console.log("NaN");
+    getInputValue(candidateId, property){
+        const value =  this.state.content[candidateId][property];
+        if (!value) {
+            return undefined
+        } else {
+            return value
         }
+    }
+
+    setInputValue(candidateId, property, value){
         this.setState({
             ...this.state,
             content: {
                 ...this.state.content,
                 [candidateId]: {
                     ...this.state.content[candidateId],
-                    [property]: event.target.value
+                    [property]: value
                 }
             }
         })
+    }
 
-        this.setState({
-            sum: this.calculation.reduce((total, amount) => total + amount)
-        })
+
+    handleInputChange = (candidateId, property) => (event) => {
+        const value = event.target.value
+        this.setInputValue(candidateId, property, value)
+
+
+        // console.log("NN",event.target.name);
+        // if ((name) === "votes"+candidateId){
+        //     this.calculation[candidateId] = parseInt(event.target.value);
+        //     console.log(this.calculation);
+        // }else{
+        //     console.log("NaN");
+        // }
+        // this.setState({
+        //     ...this.state,
+        //     content: {
+        //         ...this.state.content,
+        //         [candidateId]: {
+        //             ...this.state.content[candidateId],
+        //             [property]: event.target.value
+        //         }
+        //     }
+        // })
+        //
+        // this.setState({
+        //     sum: this.calculation.reduce((total, amount) => total + amount)
+        // })
     }
 
     componentDidMount() {
-
-
-
 
         const {tallySheetId} = this.props.match.params
         console.log("tally sheet Id ", tallySheetId)
@@ -225,25 +247,39 @@ class PRE41Edit extends Component {
         }).then(res => {
             console.log("Election" + res.data[0].parties)
             this.setElection(res.data[0])
+
+            axios.get('/tally-sheet/PRE-41/'+tallySheetId+'/version/'+tallySheetVersionId, {
+                headers: {
+                    'Authorization': "Bearer "+localStorage.getItem('token'),
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'GET',
+                    'Access-Control-Allow-Headers': 'Content-Type',
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            }).then(res => {
+                // console.log("get PRE 41 > >" + res.data.htmlUrl)
+                // console.log("get PRE 41 nndd > >" + res.data.content)
+                // this.setState({
+                //     filledData: res.data.content
+                // })
+
+                const candidateWiseCounts = res.data.content;
+                for(var i = 0; i< candidateWiseCounts.length; i++){
+                    let candidateWiseCount = candidateWiseCounts[i];
+                    this.setInputValue(candidateWiseCount.candidateId, "count", candidateWiseCount.count);
+                    this.setInputValue(candidateWiseCount.candidateId, "countInWords", candidateWiseCount.countInWords);
+                }
+                debugger;
+
+
+
+                // console.log("filled data> >" + this.state.filledData)
+            }).catch((error) => console.log(error));
+
         }).catch((error) => console.log(error));
 
 
-        axios.get('/tally-sheet/PRE-41/'+tallySheetId+'/version/'+tallySheetVersionId, {
-            headers: {
-                'Authorization': "Bearer "+localStorage.getItem('token'),
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': 'GET',
-                'Access-Control-Allow-Headers': 'Content-Type',
-                'X-Requested-With': 'XMLHttpRequest'
-            }
-        }).then(res => {
-            console.log("get PRE 41 > >" + res.data.htmlUrl)
-            console.log("get PRE 41 nndd > >" + res.data.content)
-            this.setState({
-                filledData: res.data.content
-            })
-            console.log("filled data> >" + this.state.filledData)
-        }).catch((error) => console.log(error));
+
 
 
     }
@@ -325,9 +361,10 @@ class PRE41Edit extends Component {
                                                 margin="dense"
                                                 variant="outlined"
                                                 // label={this.state.filledData[idx].count}
-                                                name={'votesWords' + (idx + 1)}
-                                                defaultValue={this.state.filledData[idx].countInWords}
+                                                // name={'votesWords' + (idx + 1)}
+                                                //defaultValue={this.state.filledData[idx].countInWords}
                                                 // placeholder={this.state.filledData[idx].countInWords}
+                                                value={this.getInputValue(candidateId, "countInWords")}
                                                 autoComplete='off'
                                                 onChange={this.handleInputChange(candidateId, "countInWords")}
                                             />
@@ -337,10 +374,11 @@ class PRE41Edit extends Component {
                                                 id="outlined-dense"
                                                 margin="dense"
                                                 variant="outlined"
-                                                label="No of votes"
-                                                name={'votes' + (idx + 1)}
+                                                //label="No of votes"
+                                                // name={'votes' + (idx + 1)}
                                                 autoComplete='off'
-                                                defaultValue={this.state.filledData[idx].count}
+                                                //defaultValue={this.state.filledData[idx].count}
+                                                value={this.getInputValue(candidateId, "count")}
                                                 // defaultValue={this.state.vals}
                                                 onChange={this.handleInputChange(candidateId, "count")}
                                             />

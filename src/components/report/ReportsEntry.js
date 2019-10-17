@@ -255,11 +255,21 @@ class ReportsEntry extends Component {
 
     // handle click for PRE 30 PD Non-postal votes
     handleClickPD30() {
-        if (this.state.reportversionPD30 == null) {
-            alert('Report not Avialable')
-        } else {
-            this.props.history.push('/ReportView/' + this.state.report30PD + '/' + this.state.reportversionPD30)
-        }
+
+        console.log("PRE 30 PD")
+        axios.post('/tally-sheet/PRE-30-PD/' + this.state.reportversionPD30 + '/version',null,{
+            headers:{
+                'Authorization': "Bearer " + localStorage.getItem('token'),
+                'Access-Control-Allow-Origin': '*'
+            }
+        })
+            .then(res => {
+               console.log(res.data.tallySheetVersionId)
+
+                this.props.history.replace('/ReportView/' + this.state.reportversionPD30 + '/' + res.data.tallySheetVersionId)
+
+            });
+        
         this.setState({open: true});
 
     }
@@ -445,9 +455,9 @@ class ReportsEntry extends Component {
     PD30 = event => {
         this.setState({selectedPD30: event.target.value, name: event.target.name});
 
-        this.setState({
-            report30PD: event.target.value
-        })
+        console.log(event.target.value);
+
+
         axios.get('/tally-sheet?limit=20&offset=0&electionId=' + localStorage.getItem('electionType_NonPostal_Id') + '&areaId=' + event.target.value + '&tallySheetCode=PRE-30-PD', {
             headers: {
                 'Authorization': "Bearer " + localStorage.getItem('token'),
@@ -457,9 +467,9 @@ class ReportsEntry extends Component {
                 'X-Requested-With': 'XMLHttpRequest'
             }
         }).then(res => {
-            console.log("Election" + res.data[0].latestVersionId)
+            console.log("Election" + res.data[0].tallySheetId)
             this.setState({
-                reportversionPD30: res.data[0].latestVersionId
+                reportversionPD30: res.data[0].tallySheetId
             })
         })
             .catch((error) => console.log(error));

@@ -79,7 +79,7 @@ class PRE41 extends Component {
                     })
 
                     console.log("ID :" + res.data[0].tallySheetId)
-                    this.props.history.push('/PRE41-Entry/' + this.state.tallySheetId + '/'+ this.state.countingName)
+                    this.props.history.push('/PRE41Entry/' + this.state.tallySheetId + '/'+ this.state.countingId)
                 }
             })
                 .catch((error) => console.log(error));
