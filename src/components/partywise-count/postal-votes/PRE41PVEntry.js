@@ -98,7 +98,7 @@ class PRE41PVEntry extends Component {
 
                     const htmlURL = res.data.htmlUrl
                     window.open(htmlURL, "_blank")
-                    this.props.history.replace('/Home')
+                    this.props.history.push('/Home')
 
                 }).catch((error) => console.log(error));
         }
@@ -109,7 +109,7 @@ class PRE41PVEntry extends Component {
     }
 
     handleBack() {
-        this.props.history.replace('/PRE41PV')
+        this.props.history.goBack()
     }
 
     // modal controllers

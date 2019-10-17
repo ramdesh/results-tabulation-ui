@@ -42,7 +42,7 @@ class PRE41 extends Component {
     }
 
     handleBack() {
-        this.props.history.replace('/Home')
+        this.props.history.goBack()
     }
 
     handleClickOpen() {
@@ -71,7 +71,7 @@ class PRE41 extends Component {
                     })
 
                     console.log("ID :" + res.data[0].tallySheetId)
-                    this.props.history.replace('/PRE41Report/' + this.state.tallySheetId + '/'+ res.data[0].lockedVersionId+'/'+this.state.countingId)
+                    this.props.history.push('/PRE41Report/' + this.state.tallySheetId + '/'+ res.data[0].lockedVersionId+'/'+this.state.countingId)
 
                 }else{
                     this.setState({
@@ -79,7 +79,7 @@ class PRE41 extends Component {
                     })
 
                     console.log("ID :" + res.data[0].tallySheetId)
-                    this.props.history.replace('/PRE41-Entry/' + this.state.tallySheetId + '/'+ this.state.countingName)
+                    this.props.history.push('/PRE41-Entry/' + this.state.tallySheetId + '/'+ this.state.countingName)
                 }
             })
                 .catch((error) => console.log(error));

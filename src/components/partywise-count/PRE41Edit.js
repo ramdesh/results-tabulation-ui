@@ -109,7 +109,7 @@ class PRE41Edit extends Component {
                     // alert("Successfully Created the TallySheet - PRE41")
                     // const htmlURL = res.data.htmlUrl
                     // window.open(htmlURL, "_blank")
-                    this.props.history.replace('/PRE41Report/'+this.state.tallySheetId+'/'+ this.state.tallySheetVersionId+'/'+countingId)
+                    this.props.history.push('/PRE41Report/'+this.state.tallySheetId+'/'+ this.state.tallySheetVersionId+'/'+countingId)
 
 
                 }).catch((error) => console.log(error));
@@ -121,7 +121,7 @@ class PRE41Edit extends Component {
     }
 
     handleBack() {
-        this.props.history.replace('/PRE41')
+        this.props.history.goBack()
     }
 
     // modal controllers
