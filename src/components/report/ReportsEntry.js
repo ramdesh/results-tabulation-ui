@@ -569,7 +569,7 @@ class ReportsEntry extends Component {
             this.setState({selectedCE201PD1: event.target.value, name: event.target.name},);
         }
 
-        
+
         console.log(event.target.value)
         axios.get('/area?limit=20&offset=0&electionId='+localStorage.getItem('electionType_NonPostal_Id')+'&associatedAreaId='+event.target.value+'&areaType=CountingCentre', {
             headers: {
