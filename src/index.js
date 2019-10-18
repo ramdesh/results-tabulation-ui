@@ -11,9 +11,9 @@ import { history } from "./utils";
 ReactDOM.render(
     <BrowserRouter>
         <Router history={ history }>
-            <AuthProvider>
+            {/*<AuthProvider>*/}
                 <App />
-            </AuthProvider>
+            {/*</AuthProvider>*/}
         </Router>
     </BrowserRouter>
     , document.getElementById('root')
