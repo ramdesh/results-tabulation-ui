@@ -58,16 +58,35 @@ class CE201 extends Component {
                     'X-Requested-With': 'XMLHttpRequest'
                 }
             }).then(res => {
-                // console.log("Election ID :" + res.data[0])
                 if (res.data.length === 0) {
                     alert("No TallySheets Allocated for here !")
-                } else {
+                } else if (res.data[0].locked){
+                    console.log("locked - passed the lockedVersionId")
+
                     this.setState({
                         tallySheetId: res.data[0].tallySheetId
                     })
+
+                    console.log("ID :" + res.data[0].tallySheetId)
+                    this.props.history.push('/CE201Report/' + this.state.tallySheetId + '/'+ res.data[0].lockedVersionId)
+
+                }else{
+                    this.setState({
+                        tallySheetId: res.data[0].tallySheetId
+                    })
+
                     console.log("ID :" + res.data[0].tallySheetId)
                     this.props.history.push('/CE201Entry/' + this.state.tallySheetId + '/'+ this.state.countingId)
                 }
+                
+
+                //     {
+                //     this.setState({
+                //         tallySheetId: res.data[0].tallySheetId
+                //     })
+                //     console.log("ID :" + res.data[0].tallySheetId)
+                //     this.props.history.push('/CE201Entry/' + this.state.tallySheetId + '/'+ this.state.countingId)
+                // }
             })
                 .catch((error) => console.log(error));
         }

@@ -67,8 +67,33 @@ class CE201Report extends Component {
 
     // submit the form data
     handleSubmit() {
-        alert("Successfully Created the TallySheet - CE 201")
-        this.props.history.push('/Home')
+
+        const {tallySheetId} = this.props.match.params
+        const {tallySheetVersionId} = this.props.match.params
+        // const {countingId} = this.props.match.params
+
+        /** Lock Report CE201 **/
+        axios.put('/tally-sheet/' + tallySheetId + '/lock',
+            {
+                "lockedVersionId": parseInt(tallySheetVersionId)
+            },
+            {
+                headers: {
+                    'authorization': "Bearer " + localStorage.getItem('token'),
+                }
+            })
+            .then(res => {
+                console.log("Lock API " + res);
+
+                alert("Successfully Locked the TallySheet - CE 201")
+                this.props.history.push('/Home')
+
+            }).catch((error) => console.log(error));
+
+
+
+        // alert("Successfully Created the TallySheet - CE 201")
+        // this.props.history.push('/Home')
     }
 
     render() {
