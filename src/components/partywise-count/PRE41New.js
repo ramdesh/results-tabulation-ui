@@ -85,8 +85,8 @@ class PRE41New extends Component {
             candidateMap[candidate.candidateId] = candidate;
             content[candidate.candidateId] = {
                 "candidateId": candidate.candidateId,
-                "count": undefined,
-                "countInWords": undefined
+                "count": 0,
+                "countInWords": ""
             };
             return candidate.candidateId
         })
@@ -182,7 +182,7 @@ class PRE41New extends Component {
 
     getInputValue(candidateId, property) {
         const value = this.state.content[candidateId][property];
-        if (!value) {
+        if (value === null || value === undefined) {
             return undefined
         } else {
             return value
