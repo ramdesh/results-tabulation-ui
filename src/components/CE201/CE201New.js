@@ -28,8 +28,6 @@ class CE201New extends Component {
         this.state = {
             open: false,
             selected: 'Select',
-
-            // selectedbox1: 'Select',
             pollingStationsList: [],
             pollingStationsMap: {},
             content: {},
@@ -39,6 +37,8 @@ class CE201New extends Component {
             reportId: 0,
             countingName: 0,
             countingId: 0,
+
+            latestVersionId:0,
             // ballotBoxes:[]
             // tallySheetVersionId: 1,
         };
@@ -83,7 +83,6 @@ class CE201New extends Component {
 
     // modal controllers
     handleClose() {
-        console.log("close")
         this.setState({open: false});
     }
 
@@ -91,69 +90,77 @@ class CE201New extends Component {
         this.setState({selected: event.target.value, name: event.target.name});
     };
 
-    handleBoxes = event => {
-
-        this.setState({selectedbox1: event.target.value, name: event.target.name});
-        console.log("Boxes"+ event.target.value)
-    };
-
-
-
     componentDidMount() {
-
         const {tallySheetId} = this.props.match.params
         console.log("tally sheet Id ", tallySheetId)
         this.setState({
             tallySheetId: tallySheetId
         })
 
-        // const {name2} = this.props.match.params
-        // this.setState({
-        //     countingName: name2
-        // })
-        //
-        const {tallySheetVersionId} = this.props.match.params
-        console.log("counting Id : ", tallySheetVersionId)
-        // this.setState({
-        //     countingId: tallySheetVersionId
-        // })
-
-
-        axios.get('/area?limit=1000&offset=0&associatedAreaId='+tallySheetVersionId+'&areaType=PollingStation', {
+        /** get tallysheet by ID **/
+        axios.get('/tally-sheet/' + tallySheetId, {
             headers: {
-                'Authorization': "Bearer "+localStorage.getItem('token'),
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': 'GET',
-                'X-Requested-With': 'XMLHttpRequest'
-            }
-        }).then(res => {
-            console.log("New" + res.data[0])
-            this.setState({
-                pollingStations: res.data
-            })
-            this.setElection(res.data)
-            // this.setElection(res.data[0])
-        }).catch((error) => console.log(error));
-
-        /** get box data **/
-
-        axios.get('/ballot-box?limit=1000&offset=0&electionId='+localStorage.getItem('electionType') , {
-            headers: {
-                'Authorization': "Bearer "+localStorage.getItem('token'),
+                'Authorization': "Bearer " + localStorage.getItem('token'),
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
                 'Access-Control-Allow-Headers': 'Content-Type',
                 'X-Requested-With': 'XMLHttpRequest'
             }
         }).then(res => {
-            console.log("Boxes >>" + res.data)
+            console.log("New tally VERSION CE201", res.data.latestVersionId)
             this.setState({
-                ballotBoxes: res.data
+                latestVersionId: res.data.latestVersionId
             })
-            // this.setElection(res.data)
-            // this.setElection(res.data[0])
-        }).catch((error) => console.log(error));
+            if (res.data.latestVersionId === "null") {
 
+            } else {
+                const {tallySheetVersionId} = this.props.match.params
+                console.log("counting center Id : ", tallySheetVersionId)
+                // this.setState({
+                //     countingId: tallySheetVersionId
+                // })
+
+                /** To get the Polling Stations **/
+                axios.get('/area?limit=1000&offset=0&associatedAreaId='+tallySheetVersionId+'&areaType=PollingStation', {
+                    headers: {
+                        'Authorization': "Bearer "+localStorage.getItem('token'),
+                        'Access-Control-Allow-Origin': '*',
+                        'Access-Control-Allow-Methods': 'GET',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                }).then(res => {
+                    console.log("New" + res.data[0])
+                    this.setState({
+                        pollingStations: res.data
+                    })
+                    this.setElection(res.data)
+
+
+                    axios.get('/tally-sheet/CE-201/' + tallySheetId + '/version/' + this.state.latestVersionId, {
+                        headers: {
+                            'Authorization': "Bearer " + localStorage.getItem('token'),
+                            'Access-Control-Allow-Origin': '*',
+                            'Access-Control-Allow-Methods': 'GET',
+                            'Access-Control-Allow-Headers': 'Content-Type',
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    }).then(res => {
+                        console.log("201" + res)
+                        // const candidateWiseCounts = res.data.content;
+                        // for (var i = 0; i < candidateWiseCounts.length; i++) {
+                        //     let candidateWiseCount = candidateWiseCounts[i];
+                        //     this.setInputValue(candidateWiseCount.candidateId, "count", candidateWiseCount.count);
+                        //     this.setInputValue(candidateWiseCount.candidateId, "countInWords", candidateWiseCount.countInWords);
+                        // }
+                    }).catch((error) => console.log(error));
+
+
+                }).catch((error) => console.log(error));
+
+
+            }
+        })
+            .catch((error) => console.log(error));
 
     }
 
@@ -195,14 +202,15 @@ class CE201New extends Component {
                 }
             })
             .then(res => {
-                console.log("Result" + res.data.latestVersionId);
+                // console.log("Result data" + res.data);
+                console.log("Result" + res.data.tallySheetVersionId);
 
                 // console.log("URL" + res.data.htmlUrl);
                 // console.log("Result" + res.data[0]);
                 // console.log("Version" + res.data.tallySheetVersionId);
 
                 // alert("Successfully Created the TallySheet - CE 201")
-                this.props.history.push('/CE201Report/'+this.state.tallySheetId+'/'+ res.data.latestVersionId)
+                this.props.history.push('/CE201Report/'+this.state.tallySheetId+'/'+ res.data.tallySheetVersionId)
 
             }).catch((error) => console.log(error));
 
@@ -223,16 +231,6 @@ class CE201New extends Component {
                 }
             }
         })
-    }
-
-    /** Rejected **/
-    handleBoxes = event => {
-        // this.setState({rejected: event.target.value, name: event.target.name});
-        console.log("Box :" + event.target.value)
-
-        // this.setState({rejectedVotes: event.target.value});
-        //
-        // console.log("Rejected state new:" + this.state.rejectedVotes)
     }
 
     render() {
