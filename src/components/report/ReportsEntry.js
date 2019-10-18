@@ -289,28 +289,28 @@ class ReportsEntry extends Component {
     }
 
     handleClickOpenElectorate() {
-        axios.post('/tally-sheet/PRE-30-ED/' + this.state.reportDivision + '/version')
+        axios.post('/tally-sheet/PRE-30-ED/' + this.state.reportDivision + '/version',null,{headers:{'Authorization': "Bearer " + localStorage.getItem('token'),
+                'Access-Control-Allow-Origin': '*'}})
             .then(res => {
-                console.log(res);
-                console.log(res.data.htmlUrl);
-                window.open(res.data.htmlUrl, "_blank")
+                
+                this.props.history.push('/ReportView/' + this.state.reportDivision + '/' + res.data.tallySheetVersionId)
             });
         this.setState({open: true});
     }
 
     handleClickOpenPRE30Pv() {
-        if (this.state.reportversionPD30PV == null) {
-            alert('Report not Avialable')
-        } else {
-            axios.post('/tally-sheet/PRE-30-PD/' + this.state.reportversionPD30PV + '/version')
+
+            axios.post('/tally-sheet/PRE-30-PD/' + this.state.report30pdpv + '/version',null,{
+                headers:{
+                    'Authorization': "Bearer " + localStorage.getItem('token'),
+                    'Access-Control-Allow-Origin': '*'
+                }})
                 .then(res => {
-                    console.log(res);
-                    console.log(res.data.htmlUrl);
-                    window.open(res.data.htmlUrl, "_blank")
+                    console.log(res.data.tallySheetVersionId)
+                    this.props.history.push('/ReportView/' + this.state.report30pdpv + '/' + res.data.tallySheetVersionId)
+
                 });
 
-            this.props.history.push('/ReportView/' + this.state.report30pdpv + '/' + this.state.reportversionPD30PV)
-        }
         this.setState({open: true});
     }
 
@@ -514,6 +514,7 @@ class ReportsEntry extends Component {
 
         axios.get('/tally-sheet?limit=20&offset=0&electionId=' + localStorage.getItem('electionType_NonPostal_Id') + '&areaId=' + event.target.value + '&tallySheetCode=PRE-30-ED', {
             headers: {
+                'Authorization': "Bearer " + localStorage.getItem('token'),
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
                 'Access-Control-Allow-Headers': 'Content-Type',
@@ -533,9 +534,7 @@ class ReportsEntry extends Component {
     handleDivisionPv = event => {
         this.setState({selectedPRE30PV: event.target.value, name: event.target.name});
 
-        this.setState({
-            report30pdpv: event.target.value
-        })
+        console.log(event.target.value);
 
         axios.get('/tally-sheet?limit=20&offset=0&electionId=' + localStorage.getItem('electionType_Postal_Id') + '&areaId=' + event.target.value + '&tallySheetCode=PRE-30-PD', {
             headers: {
@@ -546,9 +545,9 @@ class ReportsEntry extends Component {
                 'X-Requested-With': 'XMLHttpRequest'
             }
         }).then(res => {
-            console.log("Election" + res.data[0].latestVersionId)
+            console.log("Election" + res.data[0].tallySheetId)
             this.setState({
-                reportversionPD30PV: res.data[0].latestVersionId
+                report30pdpv: res.data[0].tallySheetId
             })
 
         })
@@ -1088,11 +1087,11 @@ class ReportsEntry extends Component {
                                     <TableCell style={{fontSize: 13}}>
                                         <FormControl variant="outlined" margin="dense">
                                             <InputLabel>
-                                                Polling Division
+                                                Electoral District
                                             </InputLabel>
                                             <Select className="width50" value={this.state.selectedPRE30PV}
                                                     onChange={this.handleDivisionPv}>
-                                                {this.state.pollingStationpv.map((electralDivision, idx) => (
+                                                {this.state.electionDivision.map((electralDivision, idx) => (
                                                     <MenuItem
                                                         value={electralDivision.areaId}>{electralDivision.areaName}</MenuItem>
                                                 ))}
