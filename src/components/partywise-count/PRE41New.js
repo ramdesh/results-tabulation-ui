@@ -195,7 +195,6 @@ class PRE41New extends Component {
     }
 
 
-
     setTotal(){
 
     }
@@ -203,7 +202,6 @@ class PRE41New extends Component {
     handleInputChange = (candidateId, property) => (event) => {
 
         console.log("property",property)
-
         const value = event.target.value
         this.setInputValue(candidateId, property, value)
 
