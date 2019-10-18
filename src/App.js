@@ -67,8 +67,8 @@ function App() {
 
                 <ProtectedRoute exact path="/CE201-Entry/:name/:name2/:countingId" component={ CE201Entry }/>
 
-
                 <ProtectedRoute path="/CE201Entry/:tallySheetId/:tallySheetVersionId" component={ CE201New }/>
+
                 <ProtectedRoute exact path="/CE201Report/:tallySheetId/:tallySheetVersionId" component={ CE201Report }/>
 
                 <ProtectedRoute exact path="/PRE21" component={ PRE21 }/>

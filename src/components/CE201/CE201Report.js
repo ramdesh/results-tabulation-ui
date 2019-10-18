@@ -9,11 +9,25 @@ class CE201Report extends Component {
         super(props);
         this.handleReport = this.handleReport.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleBack = this.handleBack.bind(this);
         this.state = {
             open: "Test",
             htmlContent: " ",
-            dataURI: ''
+            dataURI: '',
+            isLocked: false,
         };
+    }
+
+    // submit the form data
+    handleBack() {
+        console.log("Back API ");
+        const {tallySheetId} = this.props.match.params
+        const {tallySheetVersionId} = this.props.match.params
+        // const {countingId} = this.props.match.params
+        // alert("Successfully Created the TallySheet - PRE 41")
+
+
+        this.props.history.push('/CE201Entry/'+tallySheetId+'/'+tallySheetVersionId)
     }
 
     componentDidMount() {
@@ -62,8 +76,18 @@ class CE201Report extends Component {
             <div style={{marginLeft: '11%', marginTop: '4%'}}>
                 <iframe height="1700" width="1110" src={this.state.dataURI}>
                 </iframe>
-                <Button style={{margin: '4%',marginLeft: '78%',borderRadius: 18, color: 'white'}} onClick={this.handleSubmit}
-                        className="button">Submit</Button>
+                {this.state.isLocked===false && <div style={{margin: '4%', marginLeft: '76%'}}>
+                    <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleBack}
+                            className="button">Back</Button>
+                    <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleSubmit}
+                            className="button">Submit</Button>
+                </div>}
+                {this.state.isLocked===true && <div style={{margin: '4%', marginLeft: '76%'}}>
+                    <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleBackToPRE41}
+                            className="button">Back</Button>
+                    <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleUnlock}
+                            className="button">Unlock</Button>
+                </div>}
             </div>
         )
     }

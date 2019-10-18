@@ -101,7 +101,7 @@ class PRE41New extends Component {
             }
         )
             .then(res => {
-                console.log("Result" + res.data.latestVersionId);
+                // console.log("Result" + res.data.latestVersionId);
                 console.log(res.data.htmlUrl);
                 // alert("Successfully Created the TallySheet - PRE41")
                 this.props.history.push('/PRE41Report/' + this.state.tallySheetId + '/' + res.data.tallySheetVersionId)
@@ -421,7 +421,7 @@ class PRE41New extends Component {
                                     <TableCell
                                         style={{width: '30%', fontSize: 13}}></TableCell>
                                     <TableCell style={{fontSize: 14, color: 'black', fontWeight: 'bold'}}>Total
-                                        Votes :</TableCell>
+                                        Votes : </TableCell>
 
                                     {this.state.sum > 0 && <TableCell
                                         style={{paddingLeft: '2%', width: '30%', fontSize: 16, fontWeight: 'bold'}}>
@@ -465,9 +465,9 @@ class PRE41New extends Component {
                                         style={{width: '20%', fontSize: 13}}></TableCell>
                                     <TableCell
                                         style={{width: '30%', fontSize: 13}}></TableCell>
+
                                     <TableCell style={{fontSize: 14, color: 'black', fontWeight: 'bold'}}>Grand Total
                                         :</TableCell>
-
 
                                     {(this.state.sum + parseInt(this.state.rejected)) > 0 && <TableCell
                                         style={{paddingLeft: '2%', width: '30%', fontSize: 16, fontWeight: 'bold'}}>
