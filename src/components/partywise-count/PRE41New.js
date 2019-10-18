@@ -85,8 +85,8 @@ class PRE41New extends Component {
             candidateMap[candidate.candidateId] = candidate;
             content[candidate.candidateId] = {
                 "candidateId": candidate.candidateId,
-                "count": undefined,
-                "countInWords": undefined
+                "count": 0,
+                "countInWords": ""
             };
             return candidate.candidateId
         })
@@ -182,7 +182,7 @@ class PRE41New extends Component {
 
     getInputValue(candidateId, property) {
         const value = this.state.content[candidateId][property];
-        if (!value) {
+        if (value === null || value === undefined) {
             return undefined
         } else {
             return value
@@ -370,7 +370,7 @@ class PRE41New extends Component {
                             Presidential Election 2019
                         </Typography>
                         <Typography variant="h6" gutterBottom>
-                            PRE-41 - Counting Hall No : {this.props.match.params.name2}
+                            PRE-41 - Counting Hall No : {this.props.match.params.tallySheetVersionId}
                             {/*PRE-41 - Tally Sheet ID : {this.props.match.params.name}*/}
                         </Typography>
                     </div>
@@ -385,7 +385,7 @@ class PRE41New extends Component {
                                         color: 'white',
                                         fontSize: 13,
                                         fontWeight: 'bold'
-                                    }}>Symbol</TableCell>
+                                    }}>Party Name</TableCell>
                                     <TableCell className="header"
                                                style={{color: 'white', fontSize: 13, fontWeight: 'bold'}}>Name of
                                         Candidate</TableCell>
@@ -411,7 +411,7 @@ class PRE41New extends Component {
                                         <TableCell
                                             style={{width: '30%', fontSize: 13}}>{candidate.candidateName}</TableCell>
 
-                                        <TableCell style={{width: '27%', fontSize: 13}}> No of votes in words :
+                                        <TableCell style={{width: '24%', fontSize: 13}}> No of votes in words :
                                             <TextField
                                                 id="outlined-dense"
                                                 margin="dense"
