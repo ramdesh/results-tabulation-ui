@@ -60,6 +60,7 @@ class CE201PVEntry extends Component {
     componentDidMount() {
         axios.get('/area?limit=20&offset=0&electionId=1', {
             headers: {
+                'Authorization': "Bearer "+localStorage.getItem('token'),
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
                 'Access-Control-Allow-Headers': 'Content-Type',
@@ -82,7 +83,7 @@ class CE201PVEntry extends Component {
 
                     <Breadcrumbs style={{marginLeft: '0.2%', marginBottom: '2%', fontSize: '14px'}} separator="/"
                                  aria-label="breadcrumb">
-                        <Link color="inherit" href="/">
+                        <Link color="inherit" href="/Election">
                             Home
                         </Link>
                         <Link color="inherit" href="/Main">
@@ -114,7 +115,7 @@ class CE201PVEntry extends Component {
                             Presidential Election 2019
                         </Typography>
                         <Typography variant="h6" gutterBottom>
-                            CE 201 - Postal Votes : {this.props.match.params.name}
+                            CE 201 - Postal Votes / Counting Hall No : {this.props.match.params.tallySheetVersionId}
                         </Typography>
 
                     </div>
