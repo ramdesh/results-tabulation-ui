@@ -77,8 +77,8 @@ class CE201Report extends Component {
                 <iframe height="1700" width="1110" src={this.state.dataURI}>
                 </iframe>
                 {this.state.isLocked===false && <div style={{margin: '4%', marginLeft: '76%'}}>
-                    <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleBack}
-                            className="button">Back</Button>
+                    {/*<Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleBack}*/}
+                            {/*className="button">Back</Button>*/}
                     <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleSubmit}
                             className="button">Submit</Button>
                 </div>}
