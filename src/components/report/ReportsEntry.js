@@ -44,12 +44,14 @@ class ReportsEntry extends Component {
             electionDivision: [],
             districtCentres: [],
             PollingDivision:[],
+            PollingDivisionpostal:[],
             countingCenter:[],
             selected: 'Select',
             selectedPD30: 'Select',
             selectedCE201: 'Select',
             selectedPRE21: 'Select',
             selectedCE201PV: 'Select',
+            selectedCE201PV1: 'Select',
             selectedPRE30PV: 'Select',
             selectedPRE21PV: 'Select',
             selectedPRE41PV: 'Select',
@@ -68,6 +70,7 @@ class ReportsEntry extends Component {
             report30PD: 0,
             report30pdpv: 0,
             reportIdPRE41Pv: 0,
+            ALLIslandtallyId: 0,
             reportversion: null,
             reportversionCE201: null,
             reportversionCE201pv: null,
@@ -310,6 +313,7 @@ class ReportsEntry extends Component {
     handleClickAllIsland() {
         axios.get('/tally-sheet?limit=20&offset=0&tallySheetCode=PRE_ALL_ISLAND_RESULTS', {
             headers: {
+                'Authorization': "Bearer " + localStorage.getItem('token'),
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
                 'Access-Control-Allow-Headers': 'Content-Type',
@@ -318,11 +322,23 @@ class ReportsEntry extends Component {
         }).then(res => {
             console.log("Election" + res.data[0].tallySheetId)
 
-            axios.post('/tally-sheet/PRE_ALL_ISLAND_RESULTS/' + res.data[0].tallySheetId + '/version', {timeout: 4000})
+            this.setState({
+                ALLIslandtallyId: res.data[0].tallySheetId
+            })
+
+            axios.post('/tally-sheet/PRE_ALL_ISLAND_RESULTS/' + res.data[0].tallySheetId + '/version', null, {
+                headers:{
+                        'Authorization': "Bearer " + localStorage.getItem('token'),
+                        'Access-Control-Allow-Origin': '*'
+                    }}
+                )
                 .then(res => {
-                    console.log(res);
-                    console.log(res.data.htmlUrl);
-                    window.open(res.data.htmlUrl, "_blank")
+                    // console.log(res);
+                    // console.log(res.data.htmlUrl);
+                    // window.open(res.data.htmlUrl, "_blank")
+
+                    this.props.history.replace('/ReportView/' + this.state.ALLIslandtallyId + '/' + res.data.tallySheetVersionId)
+
                 });
         })
             .catch((error) => console.log(error));
@@ -438,9 +454,7 @@ class ReportsEntry extends Component {
     // Report handling for CE 201   postal votel
     handleChangeCE201pv = event => {
         this.setState({selectedCE201PV: event.target.value, name: event.target.name});
-        this.setState({
-            reportIdCE201pv: event.target.value
-        })
+
 
         axios.get('/tally-sheet?limit=1000&offset=0&electionId=' + localStorage.getItem('electionType_NonPostal_Id') + '&areaId=' + event.target.value + '&tallySheetCode=CE-201-PV', {
             headers: {
@@ -454,6 +468,9 @@ class ReportsEntry extends Component {
             console.log(res.data[0].latestVersionId)
             this.setState({
                 reportversionCE201pv: res.data[0].latestVersionId
+            })
+            this.setState({
+                reportIdCE201pv: res.data[0].tallySheetId
             })
         })
             .catch((error) => console.log(error));
@@ -553,6 +570,35 @@ class ReportsEntry extends Component {
             console.log("Election" + res.data[0])
             this.setState({
                 PollingDivision: res.data
+            })
+
+        })
+            .catch((error) => console.log(error));
+    };
+
+
+    /** District Centre postal **/
+    handleChangepostal = event => {
+        console.log(event.target.value)
+        if(event.target.name == 'selectedCE201PV1'){
+            this.setState({selectedCE201PV1: event.target.value, name: event.target.name},);
+        }else{
+            this.setState({selectedED2: event.target.value, name: event.target.name},);
+        }
+
+        console.log("District Centre :"+event.target.value)
+        axios.get('/area?limit=1000&offset=0&electionId='+localStorage.getItem('electionType_Postal_Id')+'&associatedAreaId='+event.target.value+'&areaType=CountingCentre', {
+            headers: {
+                'Authorization': "Bearer "+localStorage.getItem('token'),
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET',
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        }).then(res => {
+            console.log("Election" + res.data[0].areaName)
+            this.setState({
+                PollingDivisionpostal: res.data
             })
 
         })
@@ -677,7 +723,7 @@ class ReportsEntry extends Component {
 
         // Get electoral District
 
-        axios.get('/area?limit=1000&offset=0&electionId='+localStorage.getItem('electionType_NonPostal_Id')+'&areaType=DistrictCentre', {
+        axios.get('/area?limit=1000&offset=0&electionId='+localStorage.getItem('electionType_NonPostal_Id')+'&areaType=ElectoralDistrict', {
             headers: {
                 'Authorization': "Bearer "+localStorage.getItem('token'),
                 'Access-Control-Allow-Origin': '*',
@@ -939,11 +985,25 @@ class ReportsEntry extends Component {
                                     <TableCell style={{fontSize: 13}}>
                                         <FormControl variant="outlined" margin="dense">
                                             <InputLabel>
+                                                Electoral District
+                                            </InputLabel>
+                                            <Select className="width50" value={this.state.selectedCE201PV1} name={'selectedCE201PV1'}
+                                                    onChange={this.handleChangepostal}>
+                                                {this.state.electionDivision.map((districtCentre, idx) => (
+                                                    <MenuItem
+                                                        value={districtCentre.areaId}>{districtCentre.areaName}</MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
+                                    </TableCell>
+                                    <TableCell style={{fontSize: 13}}>
+                                        <FormControl variant="outlined" margin="dense">
+                                            <InputLabel>
                                                 Polling Division
                                             </InputLabel>
                                             <Select className="width50" value={this.state.selectedCE201PV}
                                                     onChange={this.handleChangeCE201pv}>
-                                                {this.state.pollingStationpv.map((districtCentre, idx) => (
+                                                {this.state.PollingDivisionpostal.map((districtCentre, idx) => (
                                                     <MenuItem
                                                         value={districtCentre.areaId}>{districtCentre.areaName}</MenuItem>
                                                 ))}
