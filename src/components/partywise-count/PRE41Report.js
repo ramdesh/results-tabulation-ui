@@ -27,7 +27,7 @@ class PRE41Report extends Component {
     componentDidMount() {
         const {tallySheetId} = this.props.match.params
         const {tallySheetVersionId} = this.props.match.params
-        const {countingId} = this.props.match.params
+        // const {countingId} = this.props.match.params
         console.log("Ids >>> ", tallySheetId, tallySheetVersionId)
         axios.get('/tally-sheet/' + tallySheetId + '/version/' + tallySheetVersionId + '/html', {
             headers: {
@@ -47,18 +47,16 @@ class PRE41Report extends Component {
             .catch((error) => console.log(error));
 
         /** To confirm the Lock status **/
-        axios.get('/tally-sheet?limit=1000&offset=0&electionId='+localStorage.getItem('electionType_NonPostal_Id')+'&areaId='+countingId+'&tallySheetCode=PRE-41', {
+        axios.get('/tally-sheet/' + tallySheetId, {
             headers: {
-                'Authorization': "Bearer "+localStorage.getItem('token'),
+                'Authorization': "Bearer " + localStorage.getItem('token'),
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
                 'Access-Control-Allow-Headers': 'Content-Type',
                 'X-Requested-With': 'XMLHttpRequest'
             }
         }).then(res => {
-
-
-            if (res.data[0].locked){
+            if (res.data.locked){
                 // alert("Already Locked Tally Sheet !")
                 this.setState({
                     isLocked: true
@@ -69,6 +67,30 @@ class PRE41Report extends Component {
             }
         })
             .catch((error) => console.log(error));
+
+        //
+        // axios.get('/tally-sheet?limit=1000&offset=0&electionId='+localStorage.getItem('electionType_NonPostal_Id')+'&areaId='+countingId+'&tallySheetCode=PRE-41', {
+        //     headers: {
+        //         'Authorization': "Bearer "+localStorage.getItem('token'),
+        //         'Access-Control-Allow-Origin': '*',
+        //         'Access-Control-Allow-Methods': 'GET',
+        //         'Access-Control-Allow-Headers': 'Content-Type',
+        //         'X-Requested-With': 'XMLHttpRequest'
+        //     }
+        // }).then(res => {
+        //
+        //
+        //     if (res.data[0].locked){
+        //         // alert("Already Locked Tally Sheet !")
+        //         this.setState({
+        //             isLocked: true
+        //         })
+        //
+        //     }else {
+        //         console.log("Unlocked Tally Sheet !")
+        //     }
+        // })
+        //     .catch((error) => console.log(error));
 
     }
 
@@ -86,7 +108,8 @@ class PRE41Report extends Component {
     handleSubmit() {
         const {tallySheetId} = this.props.match.params
         const {tallySheetVersionId} = this.props.match.params
-        const {countingId} = this.props.match.params
+        // const {countingId} = this.props.match.params
+
         /** Lock Report **/
         axios.put('/tally-sheet/' + tallySheetId + '/lock',
             {
@@ -100,7 +123,7 @@ class PRE41Report extends Component {
             .then(res => {
                 console.log("Lock API " + res);
 
-                alert("Successfully Created the TallySheet - PRE 41")
+                alert("Successfully Locked the TallySheet - PRE 41")
                 this.props.history.push('/Home')
 
             }).catch((error) => console.log(error));
@@ -108,14 +131,14 @@ class PRE41Report extends Component {
 
     }
 
-    // submit the form data
+    // unlock
     handleUnlock() {
         console.log("unlock");
         const {tallySheetId} = this.props.match.params
-        // const {tallySheetVersionId} = this.props.match.params
+        const {tallySheetVersionId} = this.props.match.params
         // const {countingId} = this.props.match.params
         /** UnLock Report **/
-        axios.put('/tally-sheet/' + tallySheetId + '/unlock',
+        axios.put('/tally-sheet/' + tallySheetId + '/unlock', null,
             {
                 headers: {
                     'authorization': "Bearer " + localStorage.getItem('token'),
@@ -124,7 +147,7 @@ class PRE41Report extends Component {
             .then(res => {
                 console.log("UnLock API " + res);
                 alert("Successfully Unlocked the TallySheet - PRE 41")
-                // this.props.history.push('/PRE41Entry/' + tallySheetId + '/'+tallySheetVersionId+'/'+countingId)
+                this.props.history.push('/PRE41Entry/' + tallySheetId + '/'+tallySheetVersionId)
                 // this.props.history.push('/PRE41Edit/' + tallySheetId + '/'+tallySheetVersionId+'/'+countingId)
 
             }).catch((error) => console.log(error));
