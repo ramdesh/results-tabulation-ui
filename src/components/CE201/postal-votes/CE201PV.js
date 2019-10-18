@@ -66,7 +66,7 @@ class CE201PV extends Component {
                         tallySheetId: res.data[0].tallySheetId
                     })
                     console.log("ID :" + res.data[0].tallySheetId)
-                    this.props.history.push('/CE201PV-Entry/' + this.state.tallySheetId + '/'+ this.state.countingName+ '/'+ this.state.countingId)
+                    this.props.history.push('/CE201PVEntry/' + this.state.tallySheetId+ '/'+ this.state.countingId)
                 }
             })
                 .catch((error) => console.log(error));
@@ -204,8 +204,8 @@ class CE201PV extends Component {
                         <Typography variant="h4" gutterBottom>
                             Presidential Election 2019
                         </Typography>
-                        <Typography variant="h6" gutterBottom>
-                            CE - 201 : Postal Votes
+                        <Typography variant="h5" gutterBottom>
+                            CE 201 : Postal Votes
                         </Typography>
                     </div>
 

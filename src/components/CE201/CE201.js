@@ -66,7 +66,7 @@ class CE201 extends Component {
                         tallySheetId: res.data[0].tallySheetId
                     })
                     console.log("ID :" + res.data[0].tallySheetId)
-                    this.props.history.push('/CE201-Entry/' + this.state.tallySheetId + '/'+ this.state.countingName+ '/'+ this.state.countingId)
+                    this.props.history.push('/CE201Entry/' + this.state.tallySheetId + '/'+ this.state.countingId)
                 }
             })
                 .catch((error) => console.log(error));
