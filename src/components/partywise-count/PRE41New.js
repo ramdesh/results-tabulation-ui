@@ -29,13 +29,17 @@ class PRE41New extends Component {
             candidatesList: [],
             candidatesMap: {},
             content: {},
+            summary: {
+                rejectedVoteCount: 0
+            },
+
             tallySheetId: 0,
             reportId: 0,
             areaId: 0,
 
-            rejected: 0,
-            rejectedVotes: 0,
-            grandTotal: 0,
+            // rejected: 0,
+            // rejectedVotes: 0,
+            // grandTotal: 0,
             sum: 0,
             vals: 0,
             tallySheetVersionId: 0,
@@ -87,7 +91,7 @@ class PRE41New extends Component {
                     }
                 }),
                 "summary": {
-                    "rejectedVoteCount": parseInt(this.state.rejected)
+                    "rejectedVoteCount": parseInt(this.state.summary.rejectedVoteCount)
                 }
             },
             {
@@ -146,9 +150,9 @@ class PRE41New extends Component {
     // }
 
     /** Rejected **/
-    handleRejected = event => {
-        this.setState({rejected: event.target.value, name: event.target.name});
-        console.log("Rejected:" + event.target.value)
+    handleRejectedVoteCount = event => {
+        const rejectedVoteCount =  event.target.value
+        this.setRejectedVoteCount(rejectedVoteCount)
     }
 
     getInputValue(candidateId, property) {
@@ -171,6 +175,20 @@ class PRE41New extends Component {
                 }
             }
         })
+    }
+
+    setRejectedVoteCount(rejectedVoteCount) {
+        this.setState({
+            ...this.state,
+            summary: {
+                ...this.state.summary,
+                rejectedVoteCount: rejectedVoteCount
+            }
+        })
+    }
+
+    getRejectedVoteCount(){
+        return this.state.summary.rejectedVoteCount
     }
 
 
@@ -275,6 +293,10 @@ class PRE41New extends Component {
                             this.setInputValue(candidateWiseCount.candidateId, "count", candidateWiseCount.count);
                             this.setInputValue(candidateWiseCount.candidateId, "countInWords", candidateWiseCount.countInWords);
                         }
+
+                        this.setRejectedVoteCount(res.data.summary.rejectedVoteCount)
+
+
                         // debugger;
                         // console.log("filled data> >" + this.state.filledData)
                     }).catch((error) => console.log(error));
@@ -358,8 +380,7 @@ class PRE41New extends Component {
                                         <TableCell
                                             style={{width: '30%', fontSize: 13}}>{candidate.candidateName}</TableCell>
 
-                                        <TableCell style={{width: '30%', fontSize: 13}}>
-
+                                        <TableCell style={{width: '27%', fontSize: 13}}>  No of votes in words :
                                             <TextField
                                                 id="outlined-dense"
                                                 margin="dense"
@@ -373,7 +394,7 @@ class PRE41New extends Component {
                                                 onChange={this.handleInputChange(candidateId, "countInWords")}
                                             />
                                         </TableCell>
-                                        <TableCell style={{width: '25%', fontSize: 13}}>
+                                        <TableCell style={{width: '25%', fontSize: 13}}> No of votes :
                                             <TextField
                                                 id="outlined-dense"
                                                 margin="dense"
@@ -427,9 +448,10 @@ class PRE41New extends Component {
                                             id="outlined-dense"
                                             margin="dense"
                                             variant="outlined"
-                                            label="Rejected Votes"
+                                            //label="Rejected Votes"
                                             autoComplete='off'
-                                            onChange={this.handleRejected}
+                                            value={this.getRejectedVoteCount()}
+                                            onChange={this.handleRejectedVoteCount}
                                         /></TableCell>
                                     {/*<TableCell style={{paddingLeft:'2%',width: '30%', fontSize: 16,fontWeight: 'bold'}}>*/}
                                     {/*{this.state.sum}*/}
