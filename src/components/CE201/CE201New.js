@@ -28,8 +28,6 @@ class CE201New extends Component {
         this.state = {
             open: false,
             selected: 'Select',
-
-            // selectedbox1: 'Select',
             pollingStationsList: [],
             pollingStationsMap: {},
             content: {},
@@ -85,7 +83,6 @@ class CE201New extends Component {
 
     // modal controllers
     handleClose() {
-        console.log("close")
         this.setState({open: false});
     }
 
@@ -93,22 +90,12 @@ class CE201New extends Component {
         this.setState({selected: event.target.value, name: event.target.name});
     };
 
-    handleBoxes = event => {
-
-        this.setState({selectedbox1: event.target.value, name: event.target.name});
-        console.log("Boxes"+ event.target.value)
-    };
-
-
-
     componentDidMount() {
-
         const {tallySheetId} = this.props.match.params
         console.log("tally sheet Id ", tallySheetId)
         this.setState({
             tallySheetId: tallySheetId
         })
-
 
         /** get tallysheet by ID **/
         axios.get('/tally-sheet/' + tallySheetId, {
@@ -125,16 +112,15 @@ class CE201New extends Component {
                 latestVersionId: res.data.latestVersionId
             })
             if (res.data.latestVersionId === "null") {
-                // alert("No Latest version for here !")
-            } else {
 
+            } else {
                 const {tallySheetVersionId} = this.props.match.params
                 console.log("counting center Id : ", tallySheetVersionId)
                 // this.setState({
                 //     countingId: tallySheetVersionId
                 // })
 
-
+                /** To get the Polling Stations **/
                 axios.get('/area?limit=1000&offset=0&associatedAreaId='+tallySheetVersionId+'&areaType=PollingStation', {
                     headers: {
                         'Authorization': "Bearer "+localStorage.getItem('token'),
@@ -169,61 +155,12 @@ class CE201New extends Component {
                     }).catch((error) => console.log(error));
 
 
-
-
                 }).catch((error) => console.log(error));
 
-
-
-                // axios.get('/election?limit=1000&offset=0', {
-                //     headers: {
-                //         'Authorization': "Bearer " + localStorage.getItem('token'),
-                //         'Access-Control-Allow-Origin': '*',
-                //         'Access-Control-Allow-Methods': 'GET',
-                //         'Access-Control-Allow-Headers': 'Content-Type',
-                //         'X-Requested-With': 'XMLHttpRequest'
-                //     }
-                // }).then(res => {
-                //     console.log("Election" + res.data[0].parties)
-                //     this.setElection(res.data[0])
-                //
-                //     axios.get('/tally-sheet/PRE-41/' + tallySheetId + '/version/' + this.state.latestVersionId, {
-                //         headers: {
-                //             'Authorization': "Bearer " + localStorage.getItem('token'),
-                //             'Access-Control-Allow-Origin': '*',
-                //             'Access-Control-Allow-Methods': 'GET',
-                //             'Access-Control-Allow-Headers': 'Content-Type',
-                //             'X-Requested-With': 'XMLHttpRequest'
-                //         }
-                //     }).then(res => {
-                //         // console.log("get PRE 41 > >" + res.data.htmlUrl)
-                //         // console.log("get PRE 41 nndd > >" + res.data.content)
-                //         // this.setState({
-                //         //     filledData: res.data.content
-                //         // })
-                //
-                //         const candidateWiseCounts = res.data.content;
-                //         for (var i = 0; i < candidateWiseCounts.length; i++) {
-                //             let candidateWiseCount = candidateWiseCounts[i];
-                //             this.setInputValue(candidateWiseCount.candidateId, "count", candidateWiseCount.count);
-                //             this.setInputValue(candidateWiseCount.candidateId, "countInWords", candidateWiseCount.countInWords);
-                //         }
-                //
-                //         this.setRejectedVoteCount(res.data.summary.rejectedVoteCount)
-                //
-                //
-                //         // debugger;
-                //         // console.log("filled data> >" + this.state.filledData)
-                //     }).catch((error) => console.log(error));
-                //
-                // }).catch((error) => console.log(error));
 
             }
         })
             .catch((error) => console.log(error));
-
-
-
 
     }
 
@@ -294,16 +231,6 @@ class CE201New extends Component {
                 }
             }
         })
-    }
-
-    /** Rejected **/
-    handleBoxes = event => {
-        // this.setState({rejected: event.target.value, name: event.target.name});
-        console.log("Box :" + event.target.value)
-
-        // this.setState({rejectedVotes: event.target.value});
-        //
-        // console.log("Rejected state new:" + this.state.rejectedVotes)
     }
 
     render() {
