@@ -292,7 +292,7 @@ class ReportsEntry extends Component {
         axios.post('/tally-sheet/PRE-30-ED/' + this.state.reportDivision + '/version',null,{headers:{'Authorization': "Bearer " + localStorage.getItem('token'),
                 'Access-Control-Allow-Origin': '*'}})
             .then(res => {
-                
+
                 this.props.history.push('/ReportView/' + this.state.reportDivision + '/' + res.data.tallySheetVersionId)
             });
         this.setState({open: true});

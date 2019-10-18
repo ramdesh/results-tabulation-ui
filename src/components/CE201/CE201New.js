@@ -90,6 +90,7 @@ class CE201New extends Component {
         this.setState({selected: event.target.value, name: event.target.name});
     };
 
+
     componentDidMount() {
         const {tallySheetId} = this.props.match.params
         console.log("tally sheet Id ", tallySheetId)
@@ -129,7 +130,7 @@ class CE201New extends Component {
                         'X-Requested-With': 'XMLHttpRequest'
                     }
                 }).then(res => {
-                    console.log("New" + res.data[0])
+                    console.log("New man" + res.data[0].pollingDistricts)
                     this.setState({
                         pollingStations: res.data
                     })
@@ -304,7 +305,13 @@ class CE201New extends Component {
                                 {this.state.pollingStations.map((pollingStation, idx) => (
                                     <TableRow>
                                         <TableCell style={{fontSize: 13, width: '1%'}}>
-                                            {idx+1}
+                                            {/*{pollingStation.pollingDistricts[0].areaId}*/}
+                                            {
+                                                pollingStation.pollingDistricts.map((member, index) => {
+                                                    return <p key={index}>{ member.areaId }</p>
+                                                })
+                                            }
+
                                         </TableCell>
                                         <TableCell style={{fontSize: 13, width: '5%'}}>
                                             {pollingStation.areaName}
