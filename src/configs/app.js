@@ -3,12 +3,12 @@ const DEFAULT_CONFIG = {
     HOME_PATH: "/home",
     LOGIN_PATH: "/login",
     LOGOUT_PATH: "/logout",
-    IS_ENDPOINT: "https://localhost:9443",
+    IS_ENDPOINT: "https://is.ecdev.opensource.lk",
     TABULATION_API_ENDPOINT: "https://api.tabulation.ecstag.opensource.lk",
-    CLIENT_ID: "ECLK_TABULATION_APP",
-    CLIENT_HOST: "https://localhost:9000",
-    LOGIN_CALLBACK_URL: "https://localhost:9000/tabulation/login",
-    LOGOUT_CALLBACK_URL: "https://localhost:9000/tabulation/logout"
+    CLIENT_ID: "vNAlVemkxkxLJdhgfYsYyiRmN3Ma",
+    CLIENT_HOST: "http://localhost:3000",
+    LOGIN_CALLBACK_URL: "http://localhost:3000/tabulation/login",
+    LOGOUT_CALLBACK_URL: "http://localhost:3000/tabulation/logout"
 };
 
 /**
