@@ -405,14 +405,15 @@ class PRE41New extends Component {
                                     var candidate = this.state.candidateMap[candidateId];
                                     return <TableRow>
                                         <TableCell
-                                            style={{width: '4%', fontSize: 13}}>{idx + 1}</TableCell>
+                                            style={{width: '6%', fontSize: 13}}>{idx + 1}</TableCell>
                                         <TableCell
-                                            style={{width: '20%', fontSize: 13}}>{candidate.partyName}</TableCell>
+                                            style={{width: '24%', fontSize: 13}}>{candidate.partyName}</TableCell>
                                         <TableCell
-                                            style={{width: '30%', fontSize: 13}}>{candidate.candidateName}</TableCell>
+                                            style={{width: '22%', fontSize: 13}}>{candidate.candidateName}</TableCell>
 
-                                        <TableCell style={{width: '24%', fontSize: 13}}> No of votes in words :
+                                        <TableCell style={{width: '25%', fontSize: 13}}>Votes in words :
                                             <TextField
+                                                fullWidth= "160"
                                                 id="outlined-dense"
                                                 margin="dense"
                                                 variant="outlined"
@@ -425,7 +426,7 @@ class PRE41New extends Component {
                                                 onChange={this.handleInputChange(candidateId, "countInWords")}
                                             />
                                         </TableCell>
-                                        <TableCell style={{width: '25%', fontSize: 13}}> No of votes :
+                                        <TableCell style={{width: '34%', fontSize: 13}}> Votes in figures :
                                             <TextField
                                                 id="outlined-dense"
                                                 margin="dense"

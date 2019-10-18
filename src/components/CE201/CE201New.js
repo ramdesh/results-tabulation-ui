@@ -404,7 +404,7 @@ class CE201New extends Component {
                                                 id="ordinaryBallotCountFromBallotPaperAccount"
                                                 margin="dense"
                                                 variant="outlined"
-                                                label="Ballot Paper A."
+                                                label="Ballot Account"
                                                 autoComplete='off'
                                                 onChange={this.handleInputChange(pollingStation.areaId, "ordinaryBallotCountFromBallotPaperAccount")}
                                             />
@@ -430,7 +430,7 @@ class CE201New extends Component {
                                                 id="tenderedBallotCountFromBallotPaperAccount"
                                                 margin="dense"
                                                 variant="outlined"
-                                                label="Ballot Paper A."
+                                                label="Ballot Account"
                                                 autoComplete='off'
                                                 onChange={this.handleInputChange(pollingStation.areaId, "tenderedBallotCountFromBallotPaperAccount")}
                                             />
