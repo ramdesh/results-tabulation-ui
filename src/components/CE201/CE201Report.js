@@ -15,7 +15,13 @@ class CE201Report extends Component {
             htmlContent: " ",
             dataURI: '',
             isLocked: false,
+            iframeHeight: 600,
+            iframeWidth: "100%"
         };
+        this.iframeRef = React.createRef()
+
+
+
     }
 
     // submit the form data
@@ -96,12 +102,43 @@ class CE201Report extends Component {
         // this.props.history.push('/Home')
     }
 
+    handleIframeHeight(evt) {
+        this.setState({
+            iframeHeight: evt.target.contentDocument.documentElement.scrollHeight + 50,
+            //iframeWidth: evt.target.contentDocument.documentElement.scrollWidth + 50
+        })
+    }
+
+    isIframeContentReady() {
+        return this.state.htmlContent !== null
+    }
+
+    getIframeContent() {
+        if (this.isIframeContentReady()) {
+            return this.state.htmlContent
+        } else {
+            return "<div style='font-size: 20px; color: #222323; text-align: center'>Loading ...</div>"
+        }
+    }
+
     render() {
         return (
-            <div style={{marginLeft: '11%', marginTop: '4%'}}>
-                <iframe height="1700" width="1110" src={this.state.dataURI}>
+            <div style={{marginLeft: '2%', marginTop: '3%'}}>
+
+                <iframe
+                    style={{border: "none"}}
+                    height={this.state.iframeHeight}
+                    width={this.state.iframeWidth}
+                    srcDoc={this.getIframeContent()}
+                    onLoad={this.handleIframeHeight.bind(this)}
+                    ref={this.iframeRef}
+                >
                 </iframe>
-                {this.state.isLocked===false && <div style={{margin: '4%', marginLeft: '76%'}}>
+
+
+                {/*<iframe height="1700" width="1110" src={this.state.dataURI}>*/}
+                {/*</iframe>*/}
+                {this.state.isLocked===false && <div style={{margin: '4%', marginLeft: '80%'}}>
                     {/*<Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleBack}*/}
                             {/*className="button">Back</Button>*/}
                     <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleSubmit}

@@ -78,7 +78,7 @@ class CE201 extends Component {
                     console.log("ID :" + res.data[0].tallySheetId)
                     this.props.history.push('/CE201Entry/' + this.state.tallySheetId + '/'+ this.state.countingId)
                 }
-                
+
 
                 //     {
                 //     this.setState({
