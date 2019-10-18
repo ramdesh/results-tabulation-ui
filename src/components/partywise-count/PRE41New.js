@@ -40,8 +40,11 @@ class PRE41New extends Component {
             // rejected: 0,
             // rejectedVotes: 0,
             // grandTotal: 0,
+
+
             sum: 0,
             vals: 0,
+
             tallySheetVersionId: 0,
             latestVersionId: 0,
             // filledData:[]
@@ -192,7 +195,13 @@ class PRE41New extends Component {
     }
 
 
+    setTotal(){
+
+    }
+
     handleInputChange = (candidateId, property) => (event) => {
+
+        console.log("property",property)
         const value = event.target.value
         this.setInputValue(candidateId, property, value)
 
