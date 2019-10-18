@@ -58,7 +58,7 @@ class PRE41 extends Component {
                     'X-Requested-With': 'XMLHttpRequest'
                 }
             }).then(res => {
-                console.log(res.data[0].locked)
+                // console.log(res.data[0].locked)
                 if (res.data.length === 0) {
                     alert("No TallySheets Allocated for here !")
                 } else if (res.data[0].locked){

@@ -223,11 +223,8 @@ class PRE41New extends Component {
 
     handleInputChange = (candidateId, property) => (event) => {
 
-
+        console.log("property",property)
         const value = event.target.value
-
-        console.log("property : " + property, event.target.value);
-
         this.setInputValue(candidateId, property, value)
 
         // console.log("NN",event.target.name);
