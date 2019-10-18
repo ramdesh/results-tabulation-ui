@@ -125,9 +125,12 @@ class CE201PVEntry extends Component {
                         <Table>
                             <TableHead>
                                 <TableRow>
-                                    <TableCell style={{fontSize: 13, color : 'black',fontWeight: 'bold'}}>Serial No of Postal Votes Ballot Box</TableCell>
-                                    <TableCell style={{fontSize: 13, color : 'black',fontWeight: 'bold'}}>No of Packets inserted by the Returning Officer</TableCell>
-                                    <TableCell style={{fontSize: 13, color : 'black',fontWeight: 'bold'}}>No of PV-A Packets found inside the Ballot Box after the count</TableCell>
+                                    <TableCell className="header"
+                                               style={{fontSize: 14, fontWeight: 'bold', color: 'white'}}>Serial No of Postal Votes Ballot Box</TableCell>
+                                    <TableCell className="header"
+                                        style={{fontSize: 14, fontWeight: 'bold', color: 'white'}}>No of Packets inserted by the Returning Officer</TableCell>
+                                    <TableCell className="header"
+                                               style={{fontSize: 14, fontWeight: 'bold', color: 'white'}}>No of PV-A Packets found inside the Ballot Box after the count</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -264,6 +267,30 @@ class CE201PVEntry extends Component {
 
                                         Total No packets rejected on various grounds after opening B covers in accepted ballot papers
                                         receptacle :
+                                    </TableCell>
+                                    <TableCell style={{fontSize: 13}}>
+                                        {/*<TextField*/}
+                                        {/*id="outlined-dense"*/}
+                                        {/*margin="dense"*/}
+                                        {/*variant="outlined"*/}
+                                        {/*/>*/}
+                                    </TableCell>
+                                    <TableCell style={{fontSize: 13}}>
+                                        <TextField
+                                            id="outlined-dense"
+                                            margin="dense"
+                                            variant="outlined"
+                                            autoComplete='off'
+                                        />
+                                    </TableCell>
+
+                                </TableRow>
+
+                                <TableRow>
+                                    <TableCell style={{fontWeight: 'bold',fontSize: 14}}>
+
+                                        No of postal ballot papers for the count in the receptable for accepted ballot papers
+                                        :
                                     </TableCell>
                                     <TableCell style={{fontSize: 13}}>
                                         {/*<TextField*/}
