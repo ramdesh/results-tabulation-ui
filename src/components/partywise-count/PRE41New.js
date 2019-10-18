@@ -71,7 +71,6 @@ class PRE41New extends Component {
     // submit the form data
     handleSubmit = (event) => {
         const {tallySheetId} = this.props.match.params
-
         console.log("tallySheet ID :", tallySheetId)
         event.preventDefault()
         // if (this.state.content[1].count === null || this.state.content[2].count === null ||
