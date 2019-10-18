@@ -32,6 +32,8 @@ class ReportsEntry extends Component {
         this.handleClickOpenPRE21pv = this.handleClickOpenPRE21pv.bind(this);
         this.handleClickOpenPRE41Pv = this.handleClickOpenPRE41Pv.bind(this);
         this.handleClickAllIsland = this.handleClickAllIsland.bind(this);
+        this.handleClickAllIslandED = this.handleClickAllIslandED.bind(this);
+
 
         this.state = {
 
@@ -52,6 +54,7 @@ class ReportsEntry extends Component {
             selectedPRE21: 'Select',
             selectedCE201PV: 'Select',
             selectedCE201PV1: 'Select',
+            selectedCE201PV2:'Select',
             selectedPRE30PV: 'Select',
             selectedPRE21PV: 'Select',
             selectedPRE41PV: 'Select',
@@ -71,6 +74,7 @@ class ReportsEntry extends Component {
             report30pdpv: 0,
             reportIdPRE41Pv: 0,
             ALLIslandtallyId: 0,
+            ALLIslandEDtallId: 0,
             reportversion: null,
             reportversionCE201: null,
             reportversionCE201pv: null,
@@ -348,6 +352,7 @@ class ReportsEntry extends Component {
     handleClickAllIslandED() {
         axios.get('/tally-sheet?limit=20&offset=0&tallySheetCode=PRE_ALL_ISLAND_RESULTS_BY_ELECTORAL_DISTRICTS', {
             headers: {
+                'Authorization': "Bearer " + localStorage.getItem('token'),
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
                 'Access-Control-Allow-Headers': 'Content-Type',
@@ -355,12 +360,15 @@ class ReportsEntry extends Component {
             }
         }).then(res => {
             console.log("Election" + res.data[0].tallySheetId)
+            this.setState({
+                ALLIslandEDtallId: res.data[0].tallySheetId
+            })
 
-            axios.post('/tally-sheet/PRE_ALL_ISLAND_RESULTS_BY_ELECTORAL_DISTRICTS/' + res.data[0].tallySheetId + '/version', {timeout: 4000})
+
+            axios.post('/tally-sheet/PRE_ALL_ISLAND_RESULTS_BY_ELECTORAL_DISTRICTS/' + this.state.ALLIslandEDtallId+ '/version', null, {headers:{ 'Authorization': "Bearer " + localStorage.getItem('token'),}})
                 .then(res => {
-                    console.log(res);
-                    console.log(res.data.htmlUrl);
-                    window.open(res.data.htmlUrl, "_blank")
+
+                    this.props.history.replace('/ReportView/' + this.state.ALLIslandEDtallId + '/' + res.data.tallySheetVersionId)
                 });
         })
             .catch((error) => console.log(error));
@@ -404,9 +412,6 @@ class ReportsEntry extends Component {
         this.setState({selectedPRE41PV: event.target.value, name: event.target.name});
         console.log("PRE41 Pv Counting " + event.target.value)
 
-        this.setState({
-            reportIdPRE41Pv: event.target.value
-        })
 
         axios.get('/tally-sheet?limit=1000&offset=0&electionId=' + localStorage.getItem('electionType_Postal_Id') + '&areaId=' + event.target.value + '&tallySheetCode=PRE-41', {
             headers: {
@@ -420,6 +425,9 @@ class ReportsEntry extends Component {
             console.log(res.data[0].latestVersionId)
             this.setState({
                 reportversionPRE41Pv: res.data[0].latestVersionId
+            })
+            this.setState({
+                reportIdPRE41Pv: res.data[0].tallySheetId
             })
         })
             .catch((error) => console.log(error));
@@ -583,7 +591,7 @@ class ReportsEntry extends Component {
         if(event.target.name == 'selectedCE201PV1'){
             this.setState({selectedCE201PV1: event.target.value, name: event.target.name},);
         }else{
-            this.setState({selectedED2: event.target.value, name: event.target.name},);
+            this.setState({selectedCE201PV2: event.target.value, name: event.target.name},);
         }
 
         console.log("District Centre :"+event.target.value)
@@ -999,7 +1007,7 @@ class ReportsEntry extends Component {
                                     <TableCell style={{fontSize: 13}}>
                                         <FormControl variant="outlined" margin="dense">
                                             <InputLabel>
-                                                Polling Division
+                                                Counting Center
                                             </InputLabel>
                                             <Select className="width50" value={this.state.selectedCE201PV}
                                                     onChange={this.handleChangeCE201pv}>
@@ -1020,6 +1028,21 @@ class ReportsEntry extends Component {
                                 <TableRow>
                                     <TableCell style={{width: '40%', fontSize: 13, fontWeight: 'bold',}}>PRE 41
                                         PV</TableCell>
+
+                                    <TableCell style={{fontSize: 13}}>
+                                        <FormControl variant="outlined" margin="dense">
+                                            <InputLabel>
+                                                Electoral District
+                                            </InputLabel>
+                                            <Select className="width50" value={this.state.selectedCE201PV2} name={'selectedCE201PV2'}
+                                                    onChange={this.handleChangepostal}>
+                                                {this.state.electionDivision.map((districtCentre, idx) => (
+                                                    <MenuItem
+                                                        value={districtCentre.areaId}>{districtCentre.areaName}</MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
+                                    </TableCell>
                                     <TableCell style={{fontSize: 13}}>
                                         <FormControl variant="outlined" margin="dense">
                                             <InputLabel>
@@ -1027,7 +1050,7 @@ class ReportsEntry extends Component {
                                             </InputLabel>
                                             <Select className="width50" value={this.state.selectedPRE41PV}
                                                     onChange={this.handleChangePRE41pv}>
-                                                {this.state.areasPv.map((CountingCenter, idx) => (
+                                                {this.state.PollingDivisionpostal.map((CountingCenter, idx) => (
                                                     <MenuItem
                                                         value={CountingCenter.areaId}>{CountingCenter.areaName}</MenuItem>
                                                 ))}
