@@ -14,6 +14,7 @@ import {
     Breadcrumbs,
     Link
 } from '@material-ui/core';
+import {getNumOrZero} from "../../utils";
 
 class PRE41New extends Component {
     constructor(props) {
@@ -50,6 +51,27 @@ class PRE41New extends Component {
             // filledData:[]
         };
         this.calculation = [0];
+    }
+
+
+    getValidVoteCountTotal() {
+        let validVoteCountTotal = 0;
+        for (var candidateIndex = 0; candidateIndex < this.state.candidatesList.length; candidateIndex++) {
+            let candidateId = this.state.candidatesList[candidateIndex];
+            let validVoteCount = this.getInputValue(candidateId, "count");
+            validVoteCount = getNumOrZero(validVoteCount);
+            validVoteCountTotal += validVoteCount;
+        }
+
+        return validVoteCountTotal
+    }
+
+    getVoteCountTotal() {
+        let validVoteCountTotal = this.getValidVoteCountTotal();
+        let rejectedVoteCount = this.getRejectedVoteCount();
+        rejectedVoteCount = getNumOrZero(rejectedVoteCount);
+
+        return validVoteCountTotal + rejectedVoteCount;
     }
 
     setElection(election) {
@@ -154,7 +176,7 @@ class PRE41New extends Component {
 
     /** Rejected **/
     handleRejectedVoteCount = event => {
-        const rejectedVoteCount =  event.target.value
+        const rejectedVoteCount = event.target.value;
         this.setRejectedVoteCount(rejectedVoteCount)
     }
 
@@ -190,12 +212,12 @@ class PRE41New extends Component {
         })
     }
 
-    getRejectedVoteCount(){
+    getRejectedVoteCount() {
         return this.state.summary.rejectedVoteCount
     }
 
 
-    setTotal(){
+    setTotal() {
 
     }
 
@@ -389,7 +411,7 @@ class PRE41New extends Component {
                                         <TableCell
                                             style={{width: '30%', fontSize: 13}}>{candidate.candidateName}</TableCell>
 
-                                        <TableCell style={{width: '27%', fontSize: 13}}>  No of votes in words :
+                                        <TableCell style={{width: '27%', fontSize: 13}}> No of votes in words :
                                             <TextField
                                                 id="outlined-dense"
                                                 margin="dense"
@@ -432,10 +454,10 @@ class PRE41New extends Component {
                                     <TableCell style={{fontSize: 14, color: 'black', fontWeight: 'bold'}}>Total
                                         Votes : </TableCell>
 
-                                    {this.state.sum > 0 && <TableCell
+                                    <TableCell
                                         style={{paddingLeft: '2%', width: '30%', fontSize: 16, fontWeight: 'bold'}}>
-                                        {this.state.sum}
-                                    </TableCell>}
+                                        {this.getValidVoteCountTotal()}
+                                    </TableCell>
 
                                     {/*<TableCell style={{paddingLeft:'2%',width: '30%', fontSize: 16,fontWeight: 'bold'}}>*/}
                                     {/*{this.state.sum}*/}
@@ -478,10 +500,10 @@ class PRE41New extends Component {
                                     <TableCell style={{fontSize: 14, color: 'black', fontWeight: 'bold'}}>Grand Total
                                         :</TableCell>
 
-                                    {(this.state.sum + parseInt(this.state.rejected)) > 0 && <TableCell
+                                    <TableCell
                                         style={{paddingLeft: '2%', width: '30%', fontSize: 16, fontWeight: 'bold'}}>
-                                        {(this.state.sum + parseInt(this.state.rejected))}
-                                    </TableCell>}
+                                        {this.getVoteCountTotal()}
+                                    </TableCell>
 
                                     {/*<TableCell style={{paddingLeft:'2%',width: '30%', fontSize: 16,fontWeight: 'bold'}}>*/}
                                     {/*{this.state.sum}*/}
