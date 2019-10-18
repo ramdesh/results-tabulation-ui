@@ -26,9 +26,7 @@ class PRE41PV extends Component {
         this.state = {
             open: false,
             selectedDistrictCentre: '',
-
             selectedPollingDivision: '',
-
             selectedCountingCenter: '',
             districtCentres: [],
             countingCenter: [],
@@ -51,6 +49,7 @@ class PRE41PV extends Component {
             alert("Please select the necessary fields !")
         } else {
             axios.get('/tally-sheet?limit=1000&offset=0&electionId='+localStorage.getItem('electionType_Postal_Id')+'&areaId='+this.state.countingId+'&tallySheetCode=PRE-41', {
+
                 headers: {
                     'Authorization': "Bearer "+localStorage.getItem('token'),
                     'Access-Control-Allow-Origin': '*',
@@ -67,7 +66,7 @@ class PRE41PV extends Component {
                         tallySheetId: res.data[0].tallySheetId
                     })
                     console.log("ID :" + res.data[0].tallySheetId)
-                    this.props.history.push('/PRE41PV-Entry/' + this.state.tallySheetId + '/'+ this.state.countingName)
+                    this.props.history.push('/PRE41Entry/' + this.state.tallySheetId+ '/'+ this.state.countingId)
                 }
             })
                 .catch((error) => console.log(error));
@@ -100,7 +99,7 @@ class PRE41PV extends Component {
     handlePollingDivision = event => {
         this.setState({selectedPollingDivision: event.target.value, name: event.target.name});
         console.log(event.target.value)
-        axios.get('/area?limit=1000&offset=0&electionId='+localStorage.getItem('electionType_Postal_Id')+'&associatedAreaId='+event.target.value+'&areaType=CountingCentre', {
+        axios.get('/area?limit=20&offset=0&electionId='+localStorage.getItem('electionType_Postal_Id')+'&associatedAreaId='+event.target.value+'&areaType=CountingCentre', {
             headers: {
                 'Authorization': "Bearer "+localStorage.getItem('token'),
                 'Access-Control-Allow-Origin': '*',
@@ -128,28 +127,29 @@ class PRE41PV extends Component {
         // set the counting center name
         this.setState({
             selectedCountingCenter: event.target.value,
+            countingId: event.target.value,
             name: event.target.name
         });
 
         this.setState({countingName: event.target.value});
-        console.log("Counting Name" + event.target.value)
+        console.log("Counting ID" + event.target.value)
 
-        // get the areaId by areaName
-        axios.get('/area?limit=1000&offset=0&electionId='+localStorage.getItem('electionType_Postal_Id')+'&areaName=' + event.target.value + '&areaType=CountingCentre', {
-            headers: {
-                'Authorization': "Bearer "+localStorage.getItem('token'),
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': 'GET',
-                'Access-Control-Allow-Headers': 'Content-Type',
-                'X-Requested-With': 'XMLHttpRequest'
-            }
-        }).then(res => {
-            console.log("Counting Center Id" + res.data[0].areaId)
-            this.setState({
-                countingId: res.data[0].areaId
-            })
-        })
-            .catch((error) => console.log(error));
+        /** get the areaId by areaName **/
+        // axios.get('/area?limit=1000&offset=0&electionId='+localStorage.getItem('electionType_Postal_Id')+'&areaName=' + event.target.value + '&areaType=CountingCentre', {
+        //     headers: {
+        //         'Authorization': "Bearer "+localStorage.getItem('token'),
+        //         'Access-Control-Allow-Origin': '*',
+        //         'Access-Control-Allow-Methods': 'GET',
+        //         'Access-Control-Allow-Headers': 'Content-Type',
+        //         'X-Requested-With': 'XMLHttpRequest'
+        //     }
+        // }).then(res => {
+        //     console.log("Counting Center Id" + res.data[0].areaId)
+        //     this.setState({
+        //         countingId: res.data[0].areaId
+        //     })
+        // })
+        //     .catch((error) => console.log(error));
 
     };
 
@@ -182,27 +182,30 @@ class PRE41PV extends Component {
             <div style={{margin: '3%'}}>
                 <div>
                     <div style={{marginBottom: '4%'}}>
+
                         <Breadcrumbs style={{marginLeft: '0.2%', marginBottom: '2%', fontSize: '14px'}} separator="/"
                                      aria-label="breadcrumb">
-                            <Link color="inherit" href="/">
+                            <Link color="inherit" href="/Election">
                                 Home
                             </Link>
                             <Link color="inherit" href="/Main">
                                 Presidential Election
                             </Link>
-                            <Link color="inherit" href="/Home" >
+                            <Link color="inherit" href="/Home">
                                 Data Entry
                             </Link>
-                            <Link color="inherit" >
+                            <Link color="inherit">
                                 Postal Votes - PRE 41
                             </Link>
                             {/*<Typography color="textPrimary"></Typography>*/}
                         </Breadcrumbs>
+
+
                         <Typography variant="h4" gutterBottom>
                             Presidential Election 2019
                         </Typography>
-                        <Typography variant="h6" gutterBottom>
-                            Party-wise Count ( PRE-41 ) : Postal Votes
+                        <Typography variant="h5" gutterBottom>
+                            PRE 41 : Postal Votes
                         </Typography>
                     </div>
 
@@ -210,7 +213,7 @@ class PRE41PV extends Component {
                         <Grid item xs={5} sm={4}>
                             <FormControl variant="outlined" margin="dense">
                                 <InputLabel style={{marginLeft: '-5%'}}>
-                                    District Centre
+                                    Electoral District
                                 </InputLabel>
                                 <Select className="width50" value={this.state.selectedDistrictCentre}
                                         onChange={this.handleChange}>
@@ -221,17 +224,17 @@ class PRE41PV extends Component {
                             </FormControl>
                         </Grid>
                         {/*<Grid item xs={5} sm={4}>*/}
-                            {/*<FormControl variant="outlined" margin="dense">*/}
-                                {/*<InputLabel style={{marginLeft: '-5%'}}>*/}
-                                    {/*Polling Division*/}
-                                {/*</InputLabel>*/}
-                                {/*<Select className="width50" value={this.state.selectedPollingDivision}*/}
-                                        {/*onChange={this.handlePollingDivision}>*/}
-                                    {/*{this.state.PollingDivision.map((pollingDivision, idx) => (*/}
-                                        {/*<MenuItem value={pollingDivision.areaId}>{pollingDivision.areaName}</MenuItem>*/}
-                                    {/*))}*/}
-                                {/*</Select>*/}
-                            {/*</FormControl>*/}
+                        {/*<FormControl variant="outlined" margin="dense">*/}
+                        {/*<InputLabel style={{marginLeft: '-5%'}}>*/}
+                        {/*Polling Division*/}
+                        {/*</InputLabel>*/}
+                        {/*<Select className="width50" value={this.state.selectedPollingDivision}*/}
+                        {/*onChange={this.handlePollingDivision}>*/}
+                        {/*{this.state.PollingDivision.map((pollingDivision, idx) => (*/}
+                        {/*<MenuItem value={pollingDivision.areaId}>{pollingDivision.areaName}</MenuItem>*/}
+                        {/*))}*/}
+                        {/*</Select>*/}
+                        {/*</FormControl>*/}
                         {/*</Grid>*/}
                         <Grid item xs={5} sm={4}>
                             <FormControl variant="outlined" margin="dense">
@@ -241,11 +244,12 @@ class PRE41PV extends Component {
                                 <Select className="width50" value={this.state.selectedCountingCenter}
                                         onChange={this.handleCounting}>
                                     {this.state.PollingDivision.map((countingCenter, idx) => (
-                                        <MenuItem value={countingCenter.areaName}>{countingCenter.areaName}</MenuItem>
+                                        <MenuItem value={countingCenter.areaId}>{countingCenter.areaName}</MenuItem>
                                     ))}
                                 </Select>
                             </FormControl>
                         </Grid>
+
                     </Grid>
                 </div>
 

@@ -98,7 +98,8 @@ function App() {
                 <ProtectedRoute exact path="/PRE21PV-Entry/:name/:name2" component={ PRE21PVEntry }/>
 
                 <ProtectedRoute exact path="/PRE41PV" component={ PRE41PV }/>
-                <ProtectedRoute exact path="/PRE41PV-Entry/:name/:name2" component={ PRE41PVEntry }/>
+
+                <ProtectedRoute exact path="/PRE41PVEntry/:tallySheetId/:tallySheetVersionId" component={ PRE41PVEntry }/>
 
                 <ProtectedRoute exact path="/CE201PV" component={ CE201PV }/>
 
