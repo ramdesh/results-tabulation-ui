@@ -66,7 +66,7 @@ class CE201PV extends Component {
                         tallySheetId: res.data[0].tallySheetId
                     })
                     console.log("ID :" + res.data[0].tallySheetId)
-                    this.props.history.push('/CE201PV-Entry/' + this.state.tallySheetId + '/'+ this.state.countingName+ '/'+ this.state.countingId)
+                    this.props.history.push('/CE201PVEntry/' + this.state.tallySheetId+ '/'+ this.state.countingId)
                 }
             })
                 .catch((error) => console.log(error));
@@ -77,7 +77,7 @@ class CE201PV extends Component {
     handleChange = event => {
         this.setState({selectedDistrictCentre: event.target.value, name: event.target.name});
         console.log("District Centre :"+event.target.value)
-        axios.get('/area?limit=20&offset=0&electionId='+localStorage.getItem('electionType_Postal_Id')+'&associatedAreaId='+event.target.value+'&areaType=PollingDivision', {
+        axios.get('/area?limit=1000&offset=0&electionId='+localStorage.getItem('electionType_Postal_Id')+'&associatedAreaId='+event.target.value+'&areaType=CountingCentre', {
             headers: {
                 'Authorization': "Bearer "+localStorage.getItem('token'),
                 'Access-Control-Allow-Origin': '*',
@@ -86,7 +86,7 @@ class CE201PV extends Component {
                 'X-Requested-With': 'XMLHttpRequest'
             }
         }).then(res => {
-            console.log("Election" + res.data[0])
+            console.log("Election" + res.data[0].areaName)
             this.setState({
                 PollingDivision: res.data
             })
@@ -160,16 +160,16 @@ class CE201PV extends Component {
     }
 
     componentDidMount() {
-        axios.get('/area?limit=1000&offset=0&electionId='+localStorage.getItem('electionType_Postal_Id')+'&areaType=DistrictCentre', {
+        axios.get('/area?limit=1000&offset=0&areaType=ElectoralDistrict', {
             headers: {
-                'Authorization': "Bearer "+localStorage.getItem('token'),
+                'Authorization': "Bearer " + localStorage.getItem('token'),
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
                 'Access-Control-Allow-Headers': 'Content-Type',
                 'X-Requested-With': 'XMLHttpRequest'
             }
         }).then(res => {
-            console.log("Election" + res.data[0])
+            console.log("Election" + res.data)
             this.setState({
                 districtCentres: res.data
             })
@@ -204,8 +204,8 @@ class CE201PV extends Component {
                         <Typography variant="h4" gutterBottom>
                             Presidential Election 2019
                         </Typography>
-                        <Typography variant="h6" gutterBottom>
-                            CE - 201 : Postal Votes
+                        <Typography variant="h5" gutterBottom>
+                            CE 201 : Postal Votes
                         </Typography>
                     </div>
 
@@ -213,7 +213,7 @@ class CE201PV extends Component {
                         <Grid item xs={5} sm={4}>
                             <FormControl variant="outlined" margin="dense">
                                 <InputLabel style={{marginLeft: '-5%'}}>
-                                    District Centre
+                                    Electoral District
                                 </InputLabel>
                                 <Select className="width50" value={this.state.selectedDistrictCentre}
                                         onChange={this.handleChange}>
@@ -223,19 +223,19 @@ class CE201PV extends Component {
                                 </Select>
                             </FormControl>
                         </Grid>
-                        <Grid item xs={5} sm={4}>
-                            <FormControl variant="outlined" margin="dense">
-                                <InputLabel style={{marginLeft: '-5%'}}>
-                                    Polling Division
-                                </InputLabel>
-                                <Select className="width50" value={this.state.selectedPollingDivision}
-                                        onChange={this.handlePollingDivision}>
-                                    {this.state.PollingDivision.map((pollingDivision, idx) => (
-                                        <MenuItem value={pollingDivision.areaId}>{pollingDivision.areaName}</MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                        </Grid>
+                        {/*<Grid item xs={5} sm={4}>*/}
+                            {/*<FormControl variant="outlined" margin="dense">*/}
+                                {/*<InputLabel style={{marginLeft: '-5%'}}>*/}
+                                    {/*Polling Division*/}
+                                {/*</InputLabel>*/}
+                                {/*<Select className="width50" value={this.state.selectedPollingDivision}*/}
+                                        {/*onChange={this.handlePollingDivision}>*/}
+                                    {/*{this.state.PollingDivision.map((pollingDivision, idx) => (*/}
+                                        {/*<MenuItem value={pollingDivision.areaId}>{pollingDivision.areaName}</MenuItem>*/}
+                                    {/*))}*/}
+                                {/*</Select>*/}
+                            {/*</FormControl>*/}
+                        {/*</Grid>*/}
                         <Grid item xs={5} sm={4}>
                             <FormControl variant="outlined" margin="dense">
                                 <InputLabel style={{marginLeft: '-5%'}}>
@@ -243,7 +243,7 @@ class CE201PV extends Component {
                                 </InputLabel>
                                 <Select className="width50" value={this.state.selectedCountingCenter}
                                         onChange={this.handleCounting}>
-                                    {this.state.countingCenter.map((countingCenter, idx) => (
+                                    {this.state.PollingDivision.map((countingCenter, idx) => (
                                         <MenuItem value={countingCenter.areaId}>{countingCenter.areaName}</MenuItem>
                                     ))}
                                 </Select>

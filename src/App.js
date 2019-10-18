@@ -35,6 +35,7 @@ import {Redirect, Switch} from "react-router";
 import {AppConfig} from "./configs";
 import {ProtectedRoute} from "./components/protected-route";
 import PRE41New from "./components/partywise-count/PRE41New";
+import CE201New from "./components/CE201/CE201New";
 
 const appConfig = new AppConfig();
 
@@ -63,7 +64,11 @@ function App() {
                 <ProtectedRoute exact path="/ReportView/:tallySheetId/:tallySheetVersionId" component={ ReportView }/>
 
                 <ProtectedRoute exact path="/CE201" component={ CE201 }/>
+
                 <ProtectedRoute exact path="/CE201-Entry/:name/:name2/:countingId" component={ CE201Entry }/>
+
+
+                <ProtectedRoute path="/CE201Entry/:tallySheetId/:tallySheetVersionId" component={ CE201New }/>
                 <ProtectedRoute exact path="/CE201Report/:tallySheetId/:tallySheetVersionId" component={ CE201Report }/>
 
                 <ProtectedRoute exact path="/PRE21" component={ PRE21 }/>
@@ -96,7 +101,8 @@ function App() {
                 <ProtectedRoute exact path="/PRE41PV-Entry/:name/:name2" component={ PRE41PVEntry }/>
 
                 <ProtectedRoute exact path="/CE201PV" component={ CE201PV }/>
-                <ProtectedRoute exact path="/CE201PV-Entry/:name/:name2/:countingId" component={ CE201PVEntry }/>
+
+                <ProtectedRoute exact path="/CE201PVEntry/:tallySheetId/:tallySheetVersionId" component={ CE201PVEntry }/>
 
                 {/*Route exact path="/CE201PV-Entry/:name/:name2" component={PRE41PVEntry}/>*/ }
                 <ProtectedRoute exact path="/PRE34COPV" component={ PRE34COPV }/>

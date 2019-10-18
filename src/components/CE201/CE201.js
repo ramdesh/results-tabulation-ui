@@ -25,10 +25,10 @@ class CE201 extends Component {
         this.handleClickOpen = this.handleClickOpen.bind(this);
         this.state = {
             open: false,
-            selectedDistrictCentre: '',
+            selectedElectoralDistrict: '',
             selectedPollingDivision: '',
             selectedCountingCenter: '',
-            districtCentres: [],
+            electoralDistrict: [],
             countingCenter: [],
             PollingDivision:[],
             polling: 0,
@@ -66,7 +66,7 @@ class CE201 extends Component {
                         tallySheetId: res.data[0].tallySheetId
                     })
                     console.log("ID :" + res.data[0].tallySheetId)
-                    this.props.history.push('/CE201-Entry/' + this.state.tallySheetId + '/'+ this.state.countingName+ '/'+ this.state.countingId)
+                    this.props.history.push('/CE201Entry/' + this.state.tallySheetId + '/'+ this.state.countingId)
                 }
             })
                 .catch((error) => console.log(error));
@@ -75,7 +75,7 @@ class CE201 extends Component {
 
     /** District Centre **/
     handleChange = event => {
-        this.setState({selectedDistrictCentre: event.target.value, name: event.target.name});
+        this.setState({selectedElectoralDistrict: event.target.value, name: event.target.name});
         console.log("District Centre :"+event.target.value)
         axios.get('/area?limit=20&offset=0&electionId='+localStorage.getItem('electionType_NonPostal_Id')+'&associatedAreaId='+event.target.value+'&areaType=PollingDivision', {
             headers: {
@@ -155,12 +155,11 @@ class CE201 extends Component {
 
     // modal controllers
     handleClose() {
-        console.log("close")
         this.setState({open: false});
     }
 
     componentDidMount() {
-        axios.get('/area?limit=1000&offset=0&electionId='+localStorage.getItem('electionType_NonPostal_Id')+'&areaType=DistrictCentre', {
+        axios.get('/area?limit=1000&offset=0&electionId='+localStorage.getItem('electionType_NonPostal_Id')+'&areaType=ElectoralDistrict', {
             headers: {
                 'Authorization': "Bearer "+localStorage.getItem('token'),
                 'Access-Control-Allow-Origin': '*',
@@ -171,7 +170,7 @@ class CE201 extends Component {
         }).then(res => {
             console.log("Election" + res.data[0])
             this.setState({
-                districtCentres: res.data
+                electoralDistrict: res.data
             })
         })
             .catch((error) => console.log(error));
@@ -204,7 +203,7 @@ class CE201 extends Component {
                         <Typography variant="h4" gutterBottom>
                             Presidential Election 2019
                         </Typography>
-                        <Typography variant="h6" gutterBottom>
+                        <Typography variant="h5" gutterBottom>
                           CE - 201
                         </Typography>
                     </div>
@@ -215,10 +214,10 @@ class CE201 extends Component {
                                 <InputLabel style={{marginLeft: '-5%'}}>
                                     Electoral District
                                 </InputLabel>
-                                <Select className="width50" value={this.state.selectedDistrictCentre}
+                                <Select className="width50" value={this.state.selectedElectoralDistrict}
                                         onChange={this.handleChange}>
-                                    {this.state.districtCentres.map((districtCentre, idx) => (
-                                        <MenuItem value={districtCentre.areaId}>{districtCentre.areaName}</MenuItem>
+                                    {this.state.electoralDistrict.map((electoralDistrict, idx) => (
+                                        <MenuItem value={electoralDistrict.areaId}>{electoralDistrict.areaName}</MenuItem>
                                     ))}
                                 </Select>
                             </FormControl>

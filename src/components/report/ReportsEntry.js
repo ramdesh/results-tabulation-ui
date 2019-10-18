@@ -32,6 +32,8 @@ class ReportsEntry extends Component {
         this.handleClickOpenPRE21pv = this.handleClickOpenPRE21pv.bind(this);
         this.handleClickOpenPRE41Pv = this.handleClickOpenPRE41Pv.bind(this);
         this.handleClickAllIsland = this.handleClickAllIsland.bind(this);
+        this.handleClickAllIslandED = this.handleClickAllIslandED.bind(this);
+
 
         this.state = {
 
@@ -42,16 +44,26 @@ class ReportsEntry extends Component {
             pollingStation: [],
             pollingStationpv: [],
             electionDivision: [],
+            districtCentres: [],
+            PollingDivision:[],
+            PollingDivisionpostal:[],
+            countingCenter:[],
             selected: 'Select',
             selectedPD30: 'Select',
             selectedCE201: 'Select',
             selectedPRE21: 'Select',
             selectedCE201PV: 'Select',
+            selectedCE201PV1: 'Select',
+            selectedCE201PV2:'Select',
             selectedPRE30PV: 'Select',
             selectedPRE21PV: 'Select',
             selectedPRE41PV: 'Select',
             selected2: 'Select',
             selected3: 'Select',
+            selectedED1: 'Select',
+            selectedED2: 'Select',
+            selectedCE201PD: 'Select',
+            selectedCE201PD1:'Select',
             setOpen: false,
             reportId: 0,
             reportIdCE201: 0,
@@ -61,6 +73,8 @@ class ReportsEntry extends Component {
             report30PD: 0,
             report30pdpv: 0,
             reportIdPRE41Pv: 0,
+            ALLIslandtallyId: 0,
+            ALLIslandEDtallId: 0,
             reportversion: null,
             reportversionCE201: null,
             reportversionCE201pv: null,
@@ -269,7 +283,7 @@ class ReportsEntry extends Component {
                 this.props.history.replace('/ReportView/' + this.state.reportversionPD30 + '/' + res.data.tallySheetVersionId)
 
             });
-        
+
         this.setState({open: true});
 
     }
@@ -303,6 +317,7 @@ class ReportsEntry extends Component {
     handleClickAllIsland() {
         axios.get('/tally-sheet?limit=20&offset=0&tallySheetCode=PRE_ALL_ISLAND_RESULTS', {
             headers: {
+                'Authorization': "Bearer " + localStorage.getItem('token'),
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
                 'Access-Control-Allow-Headers': 'Content-Type',
@@ -311,11 +326,23 @@ class ReportsEntry extends Component {
         }).then(res => {
             console.log("Election" + res.data[0].tallySheetId)
 
-            axios.post('/tally-sheet/PRE_ALL_ISLAND_RESULTS/' + res.data[0].tallySheetId + '/version', {timeout: 4000})
+            this.setState({
+                ALLIslandtallyId: res.data[0].tallySheetId
+            })
+
+            axios.post('/tally-sheet/PRE_ALL_ISLAND_RESULTS/' + res.data[0].tallySheetId + '/version', null, {
+                headers:{
+                        'Authorization': "Bearer " + localStorage.getItem('token'),
+                        'Access-Control-Allow-Origin': '*'
+                    }}
+                )
                 .then(res => {
-                    console.log(res);
-                    console.log(res.data.htmlUrl);
-                    window.open(res.data.htmlUrl, "_blank")
+                    // console.log(res);
+                    // console.log(res.data.htmlUrl);
+                    // window.open(res.data.htmlUrl, "_blank")
+
+                    this.props.history.replace('/ReportView/' + this.state.ALLIslandtallyId + '/' + res.data.tallySheetVersionId)
+
                 });
         })
             .catch((error) => console.log(error));
@@ -325,6 +352,7 @@ class ReportsEntry extends Component {
     handleClickAllIslandED() {
         axios.get('/tally-sheet?limit=20&offset=0&tallySheetCode=PRE_ALL_ISLAND_RESULTS_BY_ELECTORAL_DISTRICTS', {
             headers: {
+                'Authorization': "Bearer " + localStorage.getItem('token'),
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
                 'Access-Control-Allow-Headers': 'Content-Type',
@@ -332,12 +360,15 @@ class ReportsEntry extends Component {
             }
         }).then(res => {
             console.log("Election" + res.data[0].tallySheetId)
+            this.setState({
+                ALLIslandEDtallId: res.data[0].tallySheetId
+            })
 
-            axios.post('/tally-sheet/PRE_ALL_ISLAND_RESULTS_BY_ELECTORAL_DISTRICTS/' + res.data[0].tallySheetId + '/version', {timeout: 4000})
+
+            axios.post('/tally-sheet/PRE_ALL_ISLAND_RESULTS_BY_ELECTORAL_DISTRICTS/' + this.state.ALLIslandEDtallId+ '/version', null, {headers:{ 'Authorization': "Bearer " + localStorage.getItem('token'),}})
                 .then(res => {
-                    console.log(res);
-                    console.log(res.data.htmlUrl);
-                    window.open(res.data.htmlUrl, "_blank")
+
+                    this.props.history.replace('/ReportView/' + this.state.ALLIslandEDtallId + '/' + res.data.tallySheetVersionId)
                 });
         })
             .catch((error) => console.log(error));
@@ -354,9 +385,7 @@ class ReportsEntry extends Component {
         this.setState({selected: event.target.value, name: event.target.name});
         console.log("PRE41 Counting " + event.target.value)
 
-        this.setState({
-            reportId: event.target.value
-        })
+
         axios.get('/tally-sheet?limit=20&offset=0&electionId=' + localStorage.getItem('electionType_NonPostal_Id') + '&areaId=' + event.target.value + '&tallySheetCode=PRE-41', {
             headers: {
                 'Authorization': "Bearer " + localStorage.getItem('token'),
@@ -370,6 +399,9 @@ class ReportsEntry extends Component {
             this.setState({
                 reportversion: res.data[0].latestVersionId
             })
+            this.setState({
+                reportId: res.data[0].tallySheetId
+            })
         })
             .catch((error) => console.log(error));
 
@@ -380,9 +412,6 @@ class ReportsEntry extends Component {
         this.setState({selectedPRE41PV: event.target.value, name: event.target.name});
         console.log("PRE41 Pv Counting " + event.target.value)
 
-        this.setState({
-            reportIdPRE41Pv: event.target.value
-        })
 
         axios.get('/tally-sheet?limit=1000&offset=0&electionId=' + localStorage.getItem('electionType_Postal_Id') + '&areaId=' + event.target.value + '&tallySheetCode=PRE-41', {
             headers: {
@@ -396,6 +425,9 @@ class ReportsEntry extends Component {
             console.log(res.data[0].latestVersionId)
             this.setState({
                 reportversionPRE41Pv: res.data[0].latestVersionId
+            })
+            this.setState({
+                reportIdPRE41Pv: res.data[0].tallySheetId
             })
         })
             .catch((error) => console.log(error));
@@ -430,9 +462,7 @@ class ReportsEntry extends Component {
     // Report handling for CE 201   postal votel
     handleChangeCE201pv = event => {
         this.setState({selectedCE201PV: event.target.value, name: event.target.name});
-        this.setState({
-            reportIdCE201pv: event.target.value
-        })
+
 
         axios.get('/tally-sheet?limit=1000&offset=0&electionId=' + localStorage.getItem('electionType_NonPostal_Id') + '&areaId=' + event.target.value + '&tallySheetCode=CE-201-PV', {
             headers: {
@@ -446,6 +476,9 @@ class ReportsEntry extends Component {
             console.log(res.data[0].latestVersionId)
             this.setState({
                 reportversionCE201pv: res.data[0].latestVersionId
+            })
+            this.setState({
+                reportIdCE201pv: res.data[0].tallySheetId
             })
         })
             .catch((error) => console.log(error));
@@ -521,6 +554,98 @@ class ReportsEntry extends Component {
         })
             .catch((error) => console.log(error));
 
+    };
+
+    /** District Centre **/
+    handleChange = event => {
+        console.log(event.target)
+        if(event.target.name == 'vals'){
+            this.setState({selectedED1: event.target.value, name: event.target.name},);
+        }else{
+            this.setState({selectedED2: event.target.value, name: event.target.name},);
+        }
+
+        console.log("District Centre :"+event.target.value)
+        axios.get('/area?limit=20&offset=0&electionId='+localStorage.getItem('electionType_NonPostal_Id')+'&associatedAreaId='+event.target.value+'&areaType=PollingDivision', {
+            headers: {
+                'Authorization': "Bearer "+localStorage.getItem('token'),
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET',
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        }).then(res => {
+            console.log("Election" + res.data[0])
+            this.setState({
+                PollingDivision: res.data
+            })
+
+        })
+            .catch((error) => console.log(error));
+    };
+
+
+    /** District Centre postal **/
+    handleChangepostal = event => {
+        console.log(event.target.value)
+        if(event.target.name == 'selectedCE201PV1'){
+            this.setState({selectedCE201PV1: event.target.value, name: event.target.name},);
+        }else{
+            this.setState({selectedCE201PV2: event.target.value, name: event.target.name},);
+        }
+
+        console.log("District Centre :"+event.target.value)
+        axios.get('/area?limit=1000&offset=0&electionId='+localStorage.getItem('electionType_Postal_Id')+'&associatedAreaId='+event.target.value+'&areaType=CountingCentre', {
+            headers: {
+                'Authorization': "Bearer "+localStorage.getItem('token'),
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET',
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        }).then(res => {
+            console.log("Election" + res.data[0].areaName)
+            this.setState({
+                PollingDivisionpostal: res.data
+            })
+
+        })
+            .catch((error) => console.log(error));
+    };
+
+
+    /** Polling Division **/
+    handlePollingDivision = event => {
+        console.log(event.target)
+        if(event.target.name == 'selectedCE201PD'){
+            this.setState({selectedCE201PD: event.target.value, name: event.target.name},);
+        }else{
+            this.setState({selectedCE201PD1: event.target.value, name: event.target.name},);
+        }
+
+
+        console.log(event.target.value)
+        axios.get('/area?limit=20&offset=0&electionId='+localStorage.getItem('electionType_NonPostal_Id')+'&associatedAreaId='+event.target.value+'&areaType=CountingCentre', {
+            headers: {
+                'Authorization': "Bearer "+localStorage.getItem('token'),
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET',
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        }).then(res => {
+            console.log("Election" + res.data[0])
+            this.setState({
+                countingCenter: res.data.sort(function (a,b) {
+                    if (parseInt(a.areaName) > parseInt(b.areaName)) {
+                        return 1;
+                    } else {
+                        return -1;
+                    }
+                })
+            })
+        })
+            .catch((error) => console.log(error));
     };
 
     componentDidMount() {
@@ -604,6 +729,27 @@ class ReportsEntry extends Component {
             .catch((error) => console.log(error));
 
 
+        // Get electoral District
+
+        axios.get('/area?limit=1000&offset=0&electionId='+localStorage.getItem('electionType_NonPostal_Id')+'&areaType=ElectoralDistrict', {
+            headers: {
+                'Authorization': "Bearer "+localStorage.getItem('token'),
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET',
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        }).then(res => {
+            console.log("Election" + res.data[0])
+            this.setState({
+                districtCentres: res.data
+            })
+        })
+            .catch((error) => console.log(error));
+
+
+
+
         // Electrorial for postal votes
 
         axios.get('/area?limit=1000&offset=0&areaType=ElectoralDistrict', {
@@ -622,6 +768,9 @@ class ReportsEntry extends Component {
         })
             .catch((error) => console.log(error));
     }
+
+
+
 
 
     handleReport = event => {
@@ -669,15 +818,46 @@ class ReportsEntry extends Component {
                                     <TableCell style={{fontSize: 13}}>
                                         <FormControl variant="outlined" margin="dense">
                                             <InputLabel>
-                                                Counting Center
+                                                Electoral District
                                             </InputLabel>
-                                            <Select className="width50" value={this.state.selectedCE201}
-                                                    onChange={this.handleChangeCE201}>
-                                                {this.state.areas.map((districtCentre, idx) => (
+                                            <Select className="width50" value={this.state.selectedED1} name={"vals"}
+                                                    onChange={this.handleChange}>
+                                                {this.state.districtCentres.map((districtCentre, idx) => (
                                                     <MenuItem
                                                         value={districtCentre.areaId}>{districtCentre.areaName}</MenuItem>
                                                 ))}
                                             </Select>
+
+                                        </FormControl>
+                                    </TableCell>
+                                    <TableCell style={{fontSize: 13}}>
+                                        <FormControl variant="outlined" margin="dense">
+                                            <InputLabel>
+                                               Polling Division
+                                            </InputLabel>
+                                            <Select className="width50" value={this.state.selectedCE201PD} name={"selectedCE201PD"}
+                                                    onChange={this.handlePollingDivision}>
+                                                {this.state.PollingDivision.map((districtCentre, idx) => (
+                                                    <MenuItem
+                                                        value={districtCentre.areaId}>{districtCentre.areaName}</MenuItem>
+                                                ))}
+                                            </Select>
+
+                                        </FormControl>
+                                    </TableCell>
+                                    <TableCell style={{fontSize: 13}}>
+                                        <FormControl variant="outlined" margin="dense">
+                                            <InputLabel>
+                                                Counting Center
+                                            </InputLabel>
+                                            <Select className="width50" value={this.state.selectedCE201}
+                                                    onChange={this.handleChangeCE201}>
+                                                {this.state.countingCenter.map((districtCentre, idx) => (
+                                                    <MenuItem
+                                                        value={districtCentre.areaId}>{districtCentre.areaName}</MenuItem>
+                                                ))}
+                                            </Select>
+
                                         </FormControl>
                                     </TableCell>
                                     <TableCell>
@@ -693,11 +873,41 @@ class ReportsEntry extends Component {
                                     <TableCell style={{fontSize: 13}}>
                                         <FormControl variant="outlined" margin="dense">
                                             <InputLabel>
+                                                Electoral District
+                                            </InputLabel>
+                                            <Select className="width50" value={this.state.selectedED2} name={"val2"}
+                                                    onChange={this.handleChange}>
+                                                {this.state.districtCentres.map((CountingCenter, idx) => (
+                                                    <MenuItem
+                                                        value={CountingCenter.areaId}>{CountingCenter.areaName}</MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
+                                    </TableCell>
+
+                                    <TableCell style={{fontSize: 13}}>
+                                        <FormControl variant="outlined" margin="dense">
+                                            <InputLabel>
+                                                Polling Division
+                                            </InputLabel>
+                                            <Select className="width50" value={this.state.selectedCE201PD1} name={"selectedCE201PD1"}
+                                                    onChange={this.handlePollingDivision}>
+                                                {this.state.PollingDivision.map((CountingCenter, idx) => (
+                                                    <MenuItem
+                                                        value={CountingCenter.areaId}>{CountingCenter.areaName}</MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
+                                    </TableCell>
+
+                                    <TableCell style={{fontSize: 13}}>
+                                        <FormControl variant="outlined" margin="dense">
+                                            <InputLabel>
                                                 Counting Center
                                             </InputLabel>
                                             <Select className="width50" value={this.state.selected}
                                                     onChange={this.handleChangePRE41}>
-                                                {this.state.areas.map((CountingCenter, idx) => (
+                                                {this.state.countingCenter.map((CountingCenter, idx) => (
                                                     <MenuItem
                                                         value={CountingCenter.areaId}>{CountingCenter.areaName}</MenuItem>
                                                 ))}
@@ -783,11 +993,25 @@ class ReportsEntry extends Component {
                                     <TableCell style={{fontSize: 13}}>
                                         <FormControl variant="outlined" margin="dense">
                                             <InputLabel>
-                                                Polling Division
+                                                Electoral District
+                                            </InputLabel>
+                                            <Select className="width50" value={this.state.selectedCE201PV1} name={'selectedCE201PV1'}
+                                                    onChange={this.handleChangepostal}>
+                                                {this.state.electionDivision.map((districtCentre, idx) => (
+                                                    <MenuItem
+                                                        value={districtCentre.areaId}>{districtCentre.areaName}</MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
+                                    </TableCell>
+                                    <TableCell style={{fontSize: 13}}>
+                                        <FormControl variant="outlined" margin="dense">
+                                            <InputLabel>
+                                                Counting Center
                                             </InputLabel>
                                             <Select className="width50" value={this.state.selectedCE201PV}
                                                     onChange={this.handleChangeCE201pv}>
-                                                {this.state.pollingStationpv.map((districtCentre, idx) => (
+                                                {this.state.PollingDivisionpostal.map((districtCentre, idx) => (
                                                     <MenuItem
                                                         value={districtCentre.areaId}>{districtCentre.areaName}</MenuItem>
                                                 ))}
@@ -804,6 +1028,21 @@ class ReportsEntry extends Component {
                                 <TableRow>
                                     <TableCell style={{width: '40%', fontSize: 13, fontWeight: 'bold',}}>PRE 41
                                         PV</TableCell>
+
+                                    <TableCell style={{fontSize: 13}}>
+                                        <FormControl variant="outlined" margin="dense">
+                                            <InputLabel>
+                                                Electoral District
+                                            </InputLabel>
+                                            <Select className="width50" value={this.state.selectedCE201PV2} name={'selectedCE201PV2'}
+                                                    onChange={this.handleChangepostal}>
+                                                {this.state.electionDivision.map((districtCentre, idx) => (
+                                                    <MenuItem
+                                                        value={districtCentre.areaId}>{districtCentre.areaName}</MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
+                                    </TableCell>
                                     <TableCell style={{fontSize: 13}}>
                                         <FormControl variant="outlined" margin="dense">
                                             <InputLabel>
@@ -811,7 +1050,7 @@ class ReportsEntry extends Component {
                                             </InputLabel>
                                             <Select className="width50" value={this.state.selectedPRE41PV}
                                                     onChange={this.handleChangePRE41pv}>
-                                                {this.state.areasPv.map((CountingCenter, idx) => (
+                                                {this.state.PollingDivisionpostal.map((CountingCenter, idx) => (
                                                     <MenuItem
                                                         value={CountingCenter.areaId}>{CountingCenter.areaName}</MenuItem>
                                                 ))}
@@ -891,28 +1130,6 @@ class ReportsEntry extends Component {
                             <TableBody>
 
                                 <TableRow>
-                                    <TableCell style={{fontSize: 13, fontWeight: 'bold'}}>All Island</TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}}
-                                                onClick={this.handleClickAllIsland}
-                                                className="button">Generate</Button>
-                                    </TableCell>
-                                </TableRow>
-
-                                <TableRow>
-                                    <TableCell style={{fontSize: 13, fontWeight: 'bold'}}>All Island ED</TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}}
-                                                onClick={this.handleClickAllIslandED}
-                                                className="button">Generate</Button>
-                                    </TableCell>
-                                </TableRow>
-
-                                <TableRow>
                                     <TableCell style={{fontSize: 13, fontWeight: 'bold'}}>PRE 30 ED</TableCell>
                                     <TableCell style={{fontSize: 13}}>
                                         <FormControl variant="outlined" margin="dense">
@@ -934,6 +1151,30 @@ class ReportsEntry extends Component {
                                                 className="button">Generate</Button>
                                     </TableCell>
                                 </TableRow>
+
+                                <TableRow>
+                                    <TableCell style={{fontSize: 13, fontWeight: 'bold'}}>All Island</TableCell>
+                                    <TableCell style={{fontSize: 13}}>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}}
+                                                onClick={this.handleClickAllIsland}
+                                                className="button">Generate</Button>
+                                    </TableCell>
+                                </TableRow>
+
+                                <TableRow>
+                                    <TableCell style={{fontSize: 13, fontWeight: 'bold'}}>All Island ED</TableCell>
+                                    <TableCell style={{fontSize: 13}}>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}}
+                                                onClick={this.handleClickAllIslandED}
+                                                className="button">Generate</Button>
+                                    </TableCell>
+                                </TableRow>
+
+
                             </TableBody>
                         </Table>
                     </Paper>
