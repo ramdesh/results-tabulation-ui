@@ -141,7 +141,7 @@ class PRE41New extends Component {
     }
 
     handleBack() {
-        this.props.history.push('/PRE41')
+        this.props.history.goBack()
 
     }
 
@@ -214,11 +214,6 @@ class PRE41New extends Component {
 
     getRejectedVoteCount() {
         return this.state.summary.rejectedVoteCount
-    }
-
-
-    setTotal() {
-
     }
 
     handleInputChange = (candidateId, property) => (event) => {
@@ -326,7 +321,6 @@ class PRE41New extends Component {
                         }
 
                         this.setRejectedVoteCount(res.data.summary.rejectedVoteCount)
-
 
                         // debugger;
                         // console.log("filled data> >" + this.state.filledData)
