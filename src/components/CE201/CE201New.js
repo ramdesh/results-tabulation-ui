@@ -308,7 +308,7 @@ class CE201New extends Component {
                                             {/*{pollingStation.pollingDistricts[0].areaId}*/}
                                             {
                                                 pollingStation.pollingDistricts.map((member, index) => {
-                                                    return <p key={index}>{ member.areaId }</p>
+                                                    return <p key={index}>{ member.areaName }</p>
                                                 })
                                             }
 
