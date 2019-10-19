@@ -298,7 +298,7 @@ class CE201New extends Component {
                                                style={{fontSize: 14, fontWeight: 'bold', color: 'white'}}>No of Spoilt
                                         Ballots </TableCell>
                                     <TableCell className="header"
-                                               style={{fontSize: 14, fontWeight: 'bold', color: 'white'}}>No of Issued
+                                               style={{width:'10%',fontSize: 14, fontWeight: 'bold', color: 'white'}}>No of Issued
                                         Ballots</TableCell>
                                     <TableCell className="header"
                                                style={{fontSize: 14, fontWeight: 'bold', color: 'white'}}>No of Unused
@@ -314,7 +314,7 @@ class CE201New extends Component {
                             <TableBody>
                                 {this.state.pollingStations.map((pollingStation, idx) => (
                                     <TableRow>
-                                        <TableCell style={{fontSize: 13, width: '1%'}}>
+                                        <TableCell style={{fontSize: 13}}>
                                             {/*{pollingStation.pollingDistricts[0].areaId}*/}
                                             {
                                                 pollingStation.pollingDistricts.map((member, index) => {
@@ -323,11 +323,11 @@ class CE201New extends Component {
                                             }
 
                                         </TableCell>
-                                        <TableCell style={{fontSize: 13, width: '5%'}}>
+                                        <TableCell style={{fontSize: 13, width: '4%'}}>
                                             {pollingStation.areaName}
                                         </TableCell>
 
-                                        <TableCell style={{fontSize: 13, width: '14%'}}>
+                                        <TableCell style={{fontSize: 13, width: '16%'}}>
 
                                             {/*<FormControl variant="outlined" margin="dense">*/}
 
@@ -367,9 +367,25 @@ class CE201New extends Component {
                                                 autoComplete='off'
                                                 onChange={this.handleInputChange(pollingStation.areaId, "ballotBoxesReceived")}
                                             />
+                                            <TextField
+                                                id="box-id4"
+                                                margin="dense"
+                                                variant="outlined"
+                                                label="Box Id"
+                                                autoComplete='off'
+                                                onChange={this.handleInputChange(pollingStation.areaId, "ballotBoxesReceived")}
+                                            />
+                                            <TextField
+                                                id="box-id5"
+                                                margin="dense"
+                                                variant="outlined"
+                                                label="Box Id"
+                                                autoComplete='off'
+                                                onChange={this.handleInputChange(pollingStation.areaId, "ballotBoxesReceived")}
+                                            />
                                         </TableCell>
 
-                                        <TableCell style={{fontSize: 13, width: '11%'}}>
+                                        <TableCell style={{fontSize: 13, width: '12%'}}>
                                             <TextField
                                                 id="ballots-received"
                                                 margin="dense"
@@ -379,7 +395,7 @@ class CE201New extends Component {
                                                 onChange={this.handleInputChange(pollingStation.areaId, "ballotsReceived")}
                                             />
                                         </TableCell>
-                                        <TableCell style={{fontSize: 13, width: '11%'}}>
+                                        <TableCell style={{fontSize: 13, width: '12%'}}>
                                             <TextField
                                                 id="ballots-spoilt"
                                                 margin="dense"
@@ -389,7 +405,7 @@ class CE201New extends Component {
                                                 onChange={this.handleInputChange(pollingStation.areaId, "ballotsSpoilt")}
                                             />
                                         </TableCell>
-                                        <TableCell style={{fontSize: 13, width: '11%'}}>
+                                        <TableCell style={{fontSize: 13, width: '12%'}}>
                                             <TextField
                                                 id="ballots-issued"
                                                 margin="dense"
@@ -399,7 +415,7 @@ class CE201New extends Component {
                                                 onChange={this.handleInputChange(pollingStation.areaId, "ballotsIssued")}
                                             />
                                         </TableCell>
-                                        <TableCell style={{fontSize: 13, width: '11%'}}>
+                                        <TableCell style={{fontSize: 13, width: '10%'}}>
                                             <TextField
                                                 id="ballots-unused"
                                                 margin="dense"
@@ -409,7 +425,9 @@ class CE201New extends Component {
                                                 onChange={this.handleInputChange(pollingStation.areaId, "ballotsUnused")}
                                             />
                                         </TableCell>
-                                        <TableCell style={{backgroundColor: '#f2f2f2', fontSize: 13, width: '19%'}}>
+
+                                        <TableCell style={{backgroundColor:'#f2f2f2',fontSize: 13, width: '17%'}}>
+
                                             <TextField
                                                 id="ordinaryBallotCountFromBallotPaperAccount"
                                                 margin="dense"
@@ -435,7 +453,7 @@ class CE201New extends Component {
 
                                             />
                                         </TableCell>
-                                        <TableCell style={{fontSize: 13, width: '20%'}}>
+                                        <TableCell style={{fontSize: 13, width: '16%'}}>
                                             <TextField
                                                 id="tenderedBallotCountFromBallotPaperAccount"
                                                 margin="dense"
