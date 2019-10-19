@@ -37,12 +37,11 @@ class PRE41New extends Component {
             tallySheetId: 0,
             reportId: 0,
             areaId: 0,
+            area: null,
 
             // rejected: 0,
             // rejectedVotes: 0,
             // grandTotal: 0,
-
-
             sum: 0,
             vals: 0,
 
@@ -73,6 +72,15 @@ class PRE41New extends Component {
 
         return validVoteCountTotal + rejectedVoteCount;
     }
+
+
+    getCountingCentreName() {
+        if (this.state.area) {
+            return this.state.area.areaName;
+        }
+        return null
+    }
+
 
     setElection(election) {
         var parties = election.parties;
@@ -280,7 +288,8 @@ class PRE41New extends Component {
         }).then(res => {
             console.log("New tally VERSION", res.data.latestVersionId)
             this.setState({
-                latestVersionId: res.data.latestVersionId
+                latestVersionId: res.data.latestVersionId,
+                area: res.data.area
             })
             if (res.data.latestVersionId === "null") {
                 // alert("No Latest version for here !")
@@ -364,7 +373,7 @@ class PRE41New extends Component {
                             Presidential Election 2019
                         </Typography>
                         <Typography variant="h6" gutterBottom>
-                            PRE-41 - Counting Hall No : {this.props.match.params.tallySheetVersionId}
+                            PRE-41 - Counting Hall No :  {this.getCountingCentreName()}
                             {/*PRE-41 - Tally Sheet ID : {this.props.match.params.name}*/}
                         </Typography>
                     </div>
