@@ -12,7 +12,8 @@ import {
     TableBody,
     Breadcrumbs,
     Link,
-    Paper
+    Paper,
+    Grid
 } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -49,9 +50,21 @@ class CE201New extends Component {
         if (this.state.area) {
             return this.state.area.areaName;
         }
-
         return null
     }
+
+
+    // /** get Input value **/
+    // getInputValue(candidateId, property) {
+    //     const value = this.state.content[candidateId][property];
+    //     if (value === null || value === undefined) {
+    //         return undefined
+    //     } else {
+    //         return value
+    //     }
+    // }
+    //
+
 
     setElection(pollingStations) {
         var pollingStationsMap = {};
@@ -68,7 +81,7 @@ class CE201New extends Component {
                 "ballotBoxesReceived": [
                     "string"
                 ],
-                "ballotsIssued": null,
+                "ballotsIssued": 0,
                 "ballotsReceived": null,
                 "ballotsSpoilt": null,
                 "ballotsUnused": null,
@@ -272,10 +285,23 @@ class CE201New extends Component {
                         <Typography variant="h4" gutterBottom>
                             Presidential Election 2019
                         </Typography>
-                        <Typography variant="h5" gutterBottom>
-                            CE-201 - Counting Hall No : {this.getCountingCentreName()}
-                            {/*CE-201 - Tally Sheet ID : {this.props.match.params.name}*/}
-                        </Typography>
+
+                        <Grid container spacing={3}>
+                            <Grid item xs={5}>
+                                <Typography variant="h5" gutterBottom>
+                                    CE 201
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={4}>
+                                <Typography style={{fontWeight: 'bold'}} variant="h5" gutterBottom>
+                                    Counting Hall No :  {this.getCountingCentreName()}
+                                </Typography>
+                            </Grid>
+                        </Grid>
+                        {/*<Typography variant="h5" gutterBottom>*/}
+                            {/*CE-201 - Counting Hall No : {this.getCountingCentreName()}*/}
+                            {/*/!*CE-201 - Tally Sheet ID : {this.props.match.params.name}*!/*/}
+                        {/*</Typography>*/}
                     </div>
 
                     <Paper>
