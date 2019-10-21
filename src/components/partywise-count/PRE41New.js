@@ -384,15 +384,12 @@ class PRE41New extends Component {
                                     <TableCell className="header"
                                                style={{color: 'white', fontSize: 13, fontWeight: 'bold'}}>
                                         No</TableCell>
-                                    <TableCell className="header" style={{
-                                        color: 'white',
-                                        fontSize: 13,
-                                        fontWeight: 'bold'
-                                    }}>Party Name</TableCell>
+
                                     <TableCell className="header"
                                                style={{color: 'white', fontSize: 13, fontWeight: 'bold'}}>Name of
                                         Candidate</TableCell>
-
+                                    <TableCell className="header" style={{color: 'white', fontSize: 13, fontWeight: 'bold'}}>
+                                        Party Name</TableCell>
                                     <TableCell className="header"
                                                style={{color: 'white', fontSize: 13, fontWeight: 'bold'}}>No of votes in
                                         words</TableCell>
@@ -409,10 +406,12 @@ class PRE41New extends Component {
                                     return <TableRow>
                                         <TableCell
                                             style={{width: '6%', fontSize: 13}}>{idx + 1}</TableCell>
-                                        <TableCell
-                                            style={{width: '24%', fontSize: 13}}>{candidate.partyName}</TableCell>
+
                                         <TableCell
                                             style={{width: '22%', fontSize: 13}}>{candidate.candidateName}</TableCell>
+
+                                        <TableCell
+                                            style={{width: '24%', fontSize: 13}}>{candidate.partyName}</TableCell>
 
                                         <TableCell style={{width: '25%', fontSize: 13}}>Votes in words :
                                             <TextField
