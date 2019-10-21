@@ -58,26 +58,21 @@ class PRE41 extends Component {
                     'X-Requested-With': 'XMLHttpRequest'
                 }
             }).then(res => {
-                // console.log(res.data[0].locked)
                 if (res.data.length === 0) {
                     alert("No TallySheets Allocated for here !")
                 } else if (res.data[0].locked){
-                    // window.confirm('Are you sure you want to save this thing into the database?')
                     // alert("Already Locked Tally Sheet !")
                     console.log("locked - passed the lockedVersionId")
-
                     this.setState({
                         tallySheetId: res.data[0].tallySheetId
                     })
-
-                    console.log("ID :" + res.data[0].tallySheetId)
+                    // console.log("ID :" + res.data[0].tallySheetId)
                     this.props.history.push('/PRE41Report/' + this.state.tallySheetId + '/'+ res.data[0].lockedVersionId)
 
                 }else{
                     this.setState({
                         tallySheetId: res.data[0].tallySheetId
                     })
-
                     console.log("ID :" + res.data[0].tallySheetId)
                     this.props.history.push('/PRE41Entry/' + this.state.tallySheetId + '/'+ this.state.countingId)
                 }

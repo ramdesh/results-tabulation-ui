@@ -10,29 +10,20 @@ import {
     Breadcrumbs,
     Link
 } from '@material-ui/core';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import MenuItem from '@material-ui/core/MenuItem';
 
 class PRE41PV extends Component {
     constructor(props) {
         super(props);
-        this.handleClose = this.handleClose.bind(this);
         this.handleBack = this.handleBack.bind(this);
         this.handleClickOpen = this.handleClickOpen.bind(this);
         this.state = {
-            open: false,
             selectedDistrictCentre: '',
-            selectedPollingDivision: '',
             selectedCountingCenter: '',
             districtCentres: [],
             countingCenter: [],
             PollingDivision:[],
             polling: 0,
-
             /** url params **/
             countingId: 0,
             countingName: 0,
@@ -44,12 +35,12 @@ class PRE41PV extends Component {
         this.props.history.goBack()
     }
 
+    /** PRE41 Postal **/
     handleClickOpen() {
         if (this.state.selectedCountingCenter === '') {
             alert("Please select the necessary fields !")
         } else {
             axios.get('/tally-sheet?limit=1000&offset=0&electionId='+localStorage.getItem('electionType_Postal_Id')+'&areaId='+this.state.countingId+'&tallySheetCode=PRE-41', {
-
                 headers: {
                     'Authorization': "Bearer "+localStorage.getItem('token'),
                     'Access-Control-Allow-Origin': '*',
@@ -58,15 +49,23 @@ class PRE41PV extends Component {
                     'X-Requested-With': 'XMLHttpRequest'
                 }
             }).then(res => {
-                // console.log("Election ID :" + res.data[0])
                 if (res.data.length === 0) {
                     alert("No TallySheets Allocated for here !")
-                } else {
+                } else if (res.data[0].locked){
+                    // alert("Already Locked Tally Sheet !")
+                    console.log("locked - passed the lockedVersionId")
+                    this.setState({
+                        tallySheetId: res.data[0].tallySheetId
+                    })
+                    // console.log("ID :" + res.data[0].tallySheetId)
+                    this.props.history.push('/PRE41Report/' + this.state.tallySheetId + '/'+ res.data[0].lockedVersionId)
+
+                }else{
                     this.setState({
                         tallySheetId: res.data[0].tallySheetId
                     })
                     console.log("ID :" + res.data[0].tallySheetId)
-                    this.props.history.push('/PRE41Entry/' + this.state.tallySheetId+ '/'+ this.state.countingId)
+                    this.props.history.push('/PRE41Entry/' + this.state.tallySheetId + '/'+ this.state.countingId)
                 }
             })
                 .catch((error) => console.log(error));
@@ -76,7 +75,7 @@ class PRE41PV extends Component {
     /** District Centre **/
     handleChange = event => {
         this.setState({selectedDistrictCentre: event.target.value, name: event.target.name});
-        console.log("District Centre :"+event.target.value)
+        console.log("Electoral District :"+event.target.value)
         axios.get('/area?limit=1000&offset=0&electionId='+localStorage.getItem('electionType_Postal_Id')+'&associatedAreaId='+event.target.value+'&areaType=CountingCentre', {
             headers: {
                 'Authorization': "Bearer "+localStorage.getItem('token'),
@@ -95,33 +94,6 @@ class PRE41PV extends Component {
             .catch((error) => console.log(error));
     };
 
-    /** Polling Division **/
-    handlePollingDivision = event => {
-        this.setState({selectedPollingDivision: event.target.value, name: event.target.name});
-        console.log(event.target.value)
-        axios.get('/area?limit=20&offset=0&electionId='+localStorage.getItem('electionType_Postal_Id')+'&associatedAreaId='+event.target.value+'&areaType=CountingCentre', {
-            headers: {
-                'Authorization': "Bearer "+localStorage.getItem('token'),
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': 'GET',
-                'Access-Control-Allow-Headers': 'Content-Type',
-                'X-Requested-With': 'XMLHttpRequest'
-            }
-        }).then(res => {
-            console.log("Election" + res.data[0])
-            this.setState({
-                countingCenter: res.data.sort(function (a,b) {
-                    if (parseInt(a.areaName) > parseInt(b.areaName)) {
-                        return 1;
-                    } else {
-                        return -1;
-                    }
-                })
-            })
-        })
-            .catch((error) => console.log(error));
-    };
-
     /** Counting Centre **/
     handleCounting = event => {
         // set the counting center name
@@ -134,30 +106,7 @@ class PRE41PV extends Component {
         this.setState({countingName: event.target.value});
         console.log("Counting ID" + event.target.value)
 
-        /** get the areaId by areaName **/
-        // axios.get('/area?limit=1000&offset=0&electionId='+localStorage.getItem('electionType_Postal_Id')+'&areaName=' + event.target.value + '&areaType=CountingCentre', {
-        //     headers: {
-        //         'Authorization': "Bearer "+localStorage.getItem('token'),
-        //         'Access-Control-Allow-Origin': '*',
-        //         'Access-Control-Allow-Methods': 'GET',
-        //         'Access-Control-Allow-Headers': 'Content-Type',
-        //         'X-Requested-With': 'XMLHttpRequest'
-        //     }
-        // }).then(res => {
-        //     console.log("Counting Center Id" + res.data[0].areaId)
-        //     this.setState({
-        //         countingId: res.data[0].areaId
-        //     })
-        // })
-        //     .catch((error) => console.log(error));
-
     };
-
-    // modal controllers
-    handleClose() {
-        console.log("close")
-        this.setState({open: false});
-    }
 
     componentDidMount() {
         axios.get('/area?limit=1000&offset=0&areaType=ElectoralDistrict', {
@@ -197,7 +146,6 @@ class PRE41PV extends Component {
                             <Link color="inherit">
                                 Postal Votes - PRE 41
                             </Link>
-                            {/*<Typography color="textPrimary"></Typography>*/}
                         </Breadcrumbs>
 
 
@@ -223,19 +171,7 @@ class PRE41PV extends Component {
                                 </Select>
                             </FormControl>
                         </Grid>
-                        {/*<Grid item xs={5} sm={4}>*/}
-                        {/*<FormControl variant="outlined" margin="dense">*/}
-                        {/*<InputLabel style={{marginLeft: '-5%'}}>*/}
-                        {/*Polling Division*/}
-                        {/*</InputLabel>*/}
-                        {/*<Select className="width50" value={this.state.selectedPollingDivision}*/}
-                        {/*onChange={this.handlePollingDivision}>*/}
-                        {/*{this.state.PollingDivision.map((pollingDivision, idx) => (*/}
-                        {/*<MenuItem value={pollingDivision.areaId}>{pollingDivision.areaName}</MenuItem>*/}
-                        {/*))}*/}
-                        {/*</Select>*/}
-                        {/*</FormControl>*/}
-                        {/*</Grid>*/}
+
                         <Grid item xs={5} sm={4}>
                             <FormControl variant="outlined" margin="dense">
                                 <InputLabel style={{marginLeft: '-5%'}}>
@@ -260,27 +196,6 @@ class PRE41PV extends Component {
                             className="button">Next</Button>
                 </div>
 
-                <Dialog
-                    open={this.state.open}
-                    onClose={this.handleClose}
-                    aria-labelledby="alert-dialog-title"
-                    aria-describedby="alert-dialog-description"
-                >
-                    <DialogTitle id="alert-dialog-title">{"Invalid Ballot Count Confirmation "}</DialogTitle>
-                    <DialogContent>
-                        <DialogContentText id="alert-dialog-description">
-                            Are you sure you that all the necessary data entered correctly ?
-                        </DialogContentText>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button color="primary">
-                            Confirm
-                        </Button>
-                        <Button onClick={this.handleClose} color="primary" autoFocus>
-                            Cancel
-                        </Button>
-                    </DialogActions>
-                </Dialog>
             </div>
         )
     }
