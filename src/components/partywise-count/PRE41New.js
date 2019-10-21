@@ -372,8 +372,8 @@ class PRE41New extends Component {
                         <Typography variant="h4" gutterBottom>
                             Presidential Election 2019
                         </Typography>
-                        <Typography variant="h6" gutterBottom>
-                            PRE-41 - Counting Hall No :  {this.getCountingCentreName()}
+                        <Typography variant="h5" gutterBottom>
+                            PRE 41 - Counting Hall No :  {this.getCountingCentreName()}
                             {/*PRE-41 - Tally Sheet ID : {this.props.match.params.name}*/}
                         </Typography>
                     </div>
@@ -403,7 +403,7 @@ class PRE41New extends Component {
                                 {this.state.candidatesList.map((candidateId, idx) => {
 
                                     var candidate = this.state.candidateMap[candidateId];
-                                    return <TableRow>
+                                    return <TableRow style ={ idx % 2? { background : "white" }:{ background : "#f6f6f6" }}>
                                         <TableCell
                                             style={{width: '6%', fontSize: 13}}>{idx + 1}</TableCell>
 
