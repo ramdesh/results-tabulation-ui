@@ -210,7 +210,7 @@ class PRE41 extends Component {
                         <Typography variant="h4" gutterBottom>
                             Presidential Election 2019
                         </Typography>
-                        <Typography variant="h6" gutterBottom>
+                        <Typography variant="h5" gutterBottom>
                             Party-wise Count ( PRE-41 )
                         </Typography>
                     </div>
