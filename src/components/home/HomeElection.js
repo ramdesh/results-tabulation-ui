@@ -18,20 +18,12 @@ const appConfig = new AppConfig();
 class HomeElection extends Component {
     constructor(props, context) {
         super(props, context);
-        this.handleClose = this.handleClose.bind(this);
         this.handleClickOpen = this.handleClickOpen.bind(this);
         this.handleClickOpen1 = this.handleClickOpen1.bind(this);
         this.state = {
             elections: [],
-            open: false,
             value: 0
         };
-    }
-
-    // modal controllers
-    handleClose() {
-        console.log("close")
-        this.setState({open: false});
     }
 
     /** loginSuccessRedirect  **/
@@ -91,7 +83,6 @@ class HomeElection extends Component {
         this.props.history.push('/ReportsEntry')
     }
 
-
     componentDidMount() {
         // this.sendSignInRequest()
         localStorage.removeItem('electionType')
@@ -115,7 +106,6 @@ class HomeElection extends Component {
         })
             .catch((error) => console.log(error));
     }
-
 
     render() {
         return (

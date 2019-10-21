@@ -37,12 +37,11 @@ class PRE41New extends Component {
             tallySheetId: 0,
             reportId: 0,
             areaId: 0,
+            area: null,
 
             // rejected: 0,
             // rejectedVotes: 0,
             // grandTotal: 0,
-
-
             sum: 0,
             vals: 0,
 
@@ -73,6 +72,15 @@ class PRE41New extends Component {
 
         return validVoteCountTotal + rejectedVoteCount;
     }
+
+
+    getCountingCentreName() {
+        if (this.state.area) {
+            return this.state.area.areaName;
+        }
+        return null
+    }
+
 
     setElection(election) {
         var parties = election.parties;
@@ -141,7 +149,7 @@ class PRE41New extends Component {
     }
 
     handleBack() {
-        this.props.history.push('/PRE41')
+        this.props.history.goBack()
 
     }
 
@@ -216,11 +224,6 @@ class PRE41New extends Component {
         return this.state.summary.rejectedVoteCount
     }
 
-
-    setTotal() {
-
-    }
-
     handleInputChange = (candidateId, property) => (event) => {
 
         console.log("property",property)
@@ -285,7 +288,8 @@ class PRE41New extends Component {
         }).then(res => {
             console.log("New tally VERSION", res.data.latestVersionId)
             this.setState({
-                latestVersionId: res.data.latestVersionId
+                latestVersionId: res.data.latestVersionId,
+                area: res.data.area
             })
             if (res.data.latestVersionId === "null") {
                 // alert("No Latest version for here !")
@@ -326,7 +330,6 @@ class PRE41New extends Component {
                         }
 
                         this.setRejectedVoteCount(res.data.summary.rejectedVoteCount)
-
 
                         // debugger;
                         // console.log("filled data> >" + this.state.filledData)
@@ -369,8 +372,8 @@ class PRE41New extends Component {
                         <Typography variant="h4" gutterBottom>
                             Presidential Election 2019
                         </Typography>
-                        <Typography variant="h6" gutterBottom>
-                            PRE-41 - Counting Hall No : {this.props.match.params.tallySheetVersionId}
+                        <Typography variant="h5" gutterBottom>
+                            PRE 41 - Counting Hall No :  {this.getCountingCentreName()}
                             {/*PRE-41 - Tally Sheet ID : {this.props.match.params.name}*/}
                         </Typography>
                     </div>
@@ -381,15 +384,12 @@ class PRE41New extends Component {
                                     <TableCell className="header"
                                                style={{color: 'white', fontSize: 13, fontWeight: 'bold'}}>
                                         No</TableCell>
-                                    <TableCell className="header" style={{
-                                        color: 'white',
-                                        fontSize: 13,
-                                        fontWeight: 'bold'
-                                    }}>Party Name</TableCell>
+
                                     <TableCell className="header"
                                                style={{color: 'white', fontSize: 13, fontWeight: 'bold'}}>Name of
                                         Candidate</TableCell>
-
+                                    <TableCell className="header" style={{color: 'white', fontSize: 13, fontWeight: 'bold'}}>
+                                        Party Name</TableCell>
                                     <TableCell className="header"
                                                style={{color: 'white', fontSize: 13, fontWeight: 'bold'}}>No of votes in
                                         words</TableCell>
@@ -403,13 +403,15 @@ class PRE41New extends Component {
                                 {this.state.candidatesList.map((candidateId, idx) => {
 
                                     var candidate = this.state.candidateMap[candidateId];
-                                    return <TableRow>
+                                    return <TableRow style ={ idx % 2? { background : "white" }:{ background : "#f6f6f6" }}>
                                         <TableCell
                                             style={{width: '6%', fontSize: 13}}>{idx + 1}</TableCell>
-                                        <TableCell
-                                            style={{width: '24%', fontSize: 13}}>{candidate.partyName}</TableCell>
+
                                         <TableCell
                                             style={{width: '22%', fontSize: 13}}>{candidate.candidateName}</TableCell>
+
+                                        <TableCell
+                                            style={{width: '24%', fontSize: 13}}>{candidate.partyName}</TableCell>
 
                                         <TableCell style={{width: '25%', fontSize: 13}}>Votes in words :
                                             <TextField
