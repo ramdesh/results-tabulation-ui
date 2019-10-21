@@ -313,7 +313,7 @@ class CE201New extends Component {
                             </TableHead>
                             <TableBody>
                                 {this.state.pollingStations.map((pollingStation, idx) => (
-                                    <TableRow>
+                                    <TableRow  style ={ idx % 2? { background : "white" }:{ background : "#f6f6f6" }}>
                                         <TableCell style={{fontSize: 13}}>
                                             {/*{pollingStation.pollingDistricts[0].areaId}*/}
                                             {
@@ -426,7 +426,7 @@ class CE201New extends Component {
                                             />
                                         </TableCell>
 
-                                        <TableCell style={{backgroundColor:'#f2f2f2',fontSize: 13, width: '17%'}}>
+                                        <TableCell style={{backgroundColor:'#ddd',fontSize: 13, width: '17%'}}>
 
                                             <TextField
                                                 id="ordinaryBallotCountFromBallotPaperAccount"
