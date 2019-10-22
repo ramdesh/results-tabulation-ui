@@ -587,12 +587,41 @@ class CE201New extends Component {
                                     </TableRow>
                                 ))}
 
+                                <TableRow>
+                                    <TableCell
+                                        style={ {fontSize: 13}}></TableCell>
+                                    <TableCell
+                                        style={{width: '4%', fontSize: 13}}></TableCell>
+                                    <TableCell
+                                        style={{width: '16%', fontSize: 13}}></TableCell>
+                                    <TableCell
+                                        style={{width: '12%', fontSize: 13}}></TableCell>
+                                    <TableCell
+                                        style={{width: '12%', fontSize: 13}}></TableCell>
+                                    <TableCell
+                                        style={{width: '12%', fontSize: 13}}></TableCell>
+
+                                    <TableCell style={{fontSize: 15, color: 'black', fontWeight: 'bold'}}>
+                                        Total Box Count : </TableCell>
+
+                                        <TableCell
+                                            style={{width: '16%',fontSize: 14,}}>
+                                            <TextField
+                                                id="outlined-dense"
+                                                margin="dense"
+                                                variant="outlined"
+                                                label="Total"
+                                                autoComplete='off'
+                                            /></TableCell>
+
+                                </TableRow>
+
                             </TableBody>
                         </Table>
                     </Paper>
                 </div>
 
-                <div style={{marginLeft: '80%', marginTop: '2%'}}>
+                <div style={{marginLeft: '84%', marginTop: '2%'}}>
                     <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleBack}
                             className="button">Back</Button>
                     <Button style={{borderRadius: 18, color: 'white'}} onClick={this.handleSubmit}
