@@ -37,12 +37,11 @@ class PRE41New extends Component {
 
             tallySheetId: 0,
             reportId: 0,
+
             areaId: 0,
             area: null,
-
-            // rejected: 0,
-            // rejectedVotes: 0,
-            // grandTotal: 0,
+            pollingDivision: null,
+            electoralDistrict: null,
             sum: 0,
             vals: 0,
 
@@ -52,7 +51,6 @@ class PRE41New extends Component {
         };
         this.calculation = [0];
     }
-
 
     getValidVoteCountTotal() {
         let validVoteCountTotal = 0;
@@ -81,7 +79,6 @@ class PRE41New extends Component {
         }
         return null
     }
-
 
     setElection(election) {
         var parties = election.parties;
@@ -115,7 +112,6 @@ class PRE41New extends Component {
             }
         }, false);
     }
-
 
 
     // submit the form data
@@ -239,7 +235,7 @@ class PRE41New extends Component {
 
     handleInputChange = (candidateId, property) => (event) => {
 
-        console.log("property",property)
+        console.log("property", property)
         console.log(event.target.value);
         const value = event.target.value
         this.setInputValue(candidateId, property, value)
@@ -274,23 +270,7 @@ class PRE41New extends Component {
             tallySheetId: tallySheetId
         })
 
-        // const {tallySheetVersionId} = this.props.match.params
-        // console.log("tally sheet version Id ", tallySheetVersionId)
-        // this.setState({
-        //     tallySheetVersionId: tallySheetVersionId
-        // })
-        // const {countingId} = this.props.match.params
-        // console.log("Counting Hall No (Name) ", countingId)
-        // this.setState({
-        //     areaId: countingId
-        // })
-
-        // console.log("Set >>> ", this.state.tallySheetId)
-        // console.log("Set >>> ", this.state.areaId)
-        // console.log("Token added")
-
-
-        /** get tallysheet by ID **/
+        /** get tally sheet by ID **/
         axios.get('/tally-sheet/' + tallySheetId, {
             headers: {
                 'Authorization': "Bearer " + localStorage.getItem('token'),
@@ -303,8 +283,41 @@ class PRE41New extends Component {
             console.log("New tally VERSION", res.data.latestVersionId)
             this.setState({
                 latestVersionId: res.data.latestVersionId,
-                area: res.data.area
+                area: res.data.area,
+                areaId: res.data.area.areaId
             })
+
+            /** get electoral district name **/
+            axios.get('/area?limit=1000&offset=0&associatedAreaId=' + this.state.areaId + '&areaType=ElectoralDistrict', {
+                headers: {
+                    'Authorization': "Bearer " + localStorage.getItem('token'),
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'GET',
+                    'Access-Control-Allow-Headers': 'Content-Type',
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            }).then(res => {
+                this.setState({
+                    electoralDistrict: res.data[0].areaName
+                })
+            }).catch((error) => console.log(error));
+
+            /** get polling division name **/
+            axios.get('/area?limit=1000&offset=0&associatedAreaId=' + this.state.areaId + '&areaType=PollingDivision', {
+                headers: {
+                    'Authorization': "Bearer " + localStorage.getItem('token'),
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'GET',
+                    'Access-Control-Allow-Headers': 'Content-Type',
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            }).then(res => {
+                this.setState({
+                    pollingDivision: res.data[0].areaName
+                })
+            }).catch((error) => console.log(error));
+
+
             if (res.data.latestVersionId === "null") {
                 // alert("No Latest version for here !")
             } else {
@@ -340,7 +353,7 @@ class PRE41New extends Component {
                         for (var i = 0; i < candidateWiseCounts.length; i++) {
 
                             let candidateWiseCount = candidateWiseCounts[i];
-                            console.log("Loop"+candidateWiseCount.count)
+                            console.log("Loop" + candidateWiseCount.count)
                             this.setInputValue(candidateWiseCount.candidateId, "count", candidateWiseCount.count);
                             this.setInputValue(candidateWiseCount.candidateId, "countInWords", candidateWiseCount.countInWords);
                         }
@@ -388,25 +401,33 @@ class PRE41New extends Component {
                         <Typography variant="h4" gutterBottom>
                             Presidential Election 2019
                         </Typography>
-
+                        <Typography variant="h5" gutterBottom>
+                            PRE 41
+                        </Typography>
+                        <br/>
 
                         <Grid container spacing={3}>
-                            <Grid item xs={5}>
-                                <Typography variant="h5" gutterBottom>
-                                    PRE 41
+                            <Grid item xs={4}>
+                                <Typography style={{fontWeight: 'bold'}} variant="h5" gutterBottom>
+                                    Electoral District : {this.state.electoralDistrict}
                                 </Typography>
                             </Grid>
-                            <Grid item xs={5}>
+                            {this.state.pollingDivision !== null &&  <Grid item xs={4}>
+                                    <Typography style={{fontWeight: 'bold'}} variant="h5" gutterBottom>
+                                        Polling Division : {this.state.pollingDivision}
+                                    </Typography>
+                                </Grid>}
+                            <Grid item xs={4}>
                                 <Typography style={{fontWeight: 'bold'}} variant="h5" gutterBottom>
-                                 Counting Hall No :  {this.getCountingCentreName()}
+                                    Counting Hall No : {this.getCountingCentreName()}
 
                                 </Typography>
                             </Grid>
                         </Grid>
 
                         {/*<Typography variant="h5" gutterBottom>*/}
-                            {/*PRE 41 - Counting Hall No :  {this.getCountingCentreName()}*/}
-                            {/*/!*PRE-41 - Tally Sheet ID : {this.props.match.params.name}*!/*/}
+                        {/*PRE 41 - Counting Hall No :  {this.getCountingCentreName()}*/}
+                        {/*/!*PRE-41 - Tally Sheet ID : {this.props.match.params.name}*!/*/}
                         {/*</Typography>*/}
                     </div>
                     <Paper>
@@ -420,7 +441,8 @@ class PRE41New extends Component {
                                     <TableCell className="header"
                                                style={{color: 'white', fontSize: 13, fontWeight: 'bold'}}>Name of
                                         Candidate</TableCell>
-                                    <TableCell className="header" style={{color: 'white', fontSize: 13, fontWeight: 'bold'}}>
+                                    <TableCell className="header"
+                                               style={{color: 'white', fontSize: 13, fontWeight: 'bold'}}>
                                         Party Name</TableCell>
                                     <TableCell className="header"
                                                style={{color: 'white', fontSize: 13, fontWeight: 'bold'}}>No of votes in
@@ -435,7 +457,7 @@ class PRE41New extends Component {
                                 {this.state.candidatesList.map((candidateId, idx) => {
 
                                     var candidate = this.state.candidateMap[candidateId];
-                                    return <TableRow style ={ idx % 2? { background : "white" }:{ background : "#f6f6f6" }}>
+                                    return <TableRow style={idx % 2 ? {background: "white"} : {background: "#f6f6f6"}}>
                                         <TableCell
                                             style={{width: '6%', fontSize: 13}}>{idx + 1}</TableCell>
 
@@ -447,7 +469,7 @@ class PRE41New extends Component {
 
                                         <TableCell style={{width: '25%', fontSize: 13}}>Votes in words :
                                             <TextField
-                                                fullWidth= "160"
+                                                fullWidth="160"
                                                 id="outlined-dense"
                                                 margin="dense"
                                                 variant="outlined"
@@ -487,7 +509,8 @@ class PRE41New extends Component {
                                         style={{width: '20%', fontSize: 13}}></TableCell>
                                     <TableCell
                                         style={{width: '30%', fontSize: 13}}></TableCell>
-                                    <TableCell style={{fontSize: 15, color: 'black', fontWeight: 'bold'}}>එකතුව / மொத்த / Total : </TableCell>
+                                    <TableCell style={{fontSize: 15, color: 'black', fontWeight: 'bold'}}>එකතුව / மொத்த
+                                        / Total : </TableCell>
 
                                     <TableCell
                                         style={{paddingLeft: '2%', width: '30%', fontSize: 16, fontWeight: 'bold'}}>
@@ -506,7 +529,8 @@ class PRE41New extends Component {
                                         style={{width: '20%', fontSize: 13}}></TableCell>
                                     <TableCell
                                         style={{width: '30%', fontSize: 13}}></TableCell>
-                                    <TableCell style={{fontSize: 15, color: 'black', fontWeight: 'bold'}}>ප්‍රතික්ෂේප කළ ඡන්ද / நிராகரிக்கப்பட்ட வாக்குகள் /  Rejected Votes :</TableCell>
+                                    <TableCell style={{fontSize: 15, color: 'black', fontWeight: 'bold'}}>ප්‍රතික්ෂේප කළ
+                                        ඡන්ද / நிராகரிக்கப்பட்ட வாக்குகள் / Rejected Votes :</TableCell>
                                     <TableCell
                                         style={{fontSize: 14,}}>
                                         <TextField
@@ -531,7 +555,8 @@ class PRE41New extends Component {
                                     <TableCell
                                         style={{width: '30%', fontSize: 13}}></TableCell>
 
-                                    <TableCell style={{fontSize: 15, color: 'black', fontWeight: 'bold'}}>මුලු එකතුව / மொத்தம் / Grand Total
+                                    <TableCell style={{fontSize: 15, color: 'black', fontWeight: 'bold'}}>මුලු එකතුව /
+                                        மொத்தம் / Grand Total
                                         :</TableCell>
 
                                     <TableCell
