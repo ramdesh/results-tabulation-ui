@@ -325,7 +325,9 @@ class PRE41New extends Component {
 
                         const candidateWiseCounts = res.data.content;
                         for (var i = 0; i < candidateWiseCounts.length; i++) {
+
                             let candidateWiseCount = candidateWiseCounts[i];
+                            console.log("Loop"+candidateWiseCount.count)
                             this.setInputValue(candidateWiseCount.candidateId, "count", candidateWiseCount.count);
                             this.setInputValue(candidateWiseCount.candidateId, "countInWords", candidateWiseCount.countInWords);
                         }
