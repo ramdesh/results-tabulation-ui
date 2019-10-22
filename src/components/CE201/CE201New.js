@@ -39,7 +39,10 @@ class CE201New extends Component {
             reportId: 0,
             countingName: 0,
             countingId: 0,
+
             area: null,
+            // for getting the list
+            areaId: 0,
 
             latestVersionId: 0,
             // ballotBoxes:[]
@@ -146,7 +149,8 @@ class CE201New extends Component {
             console.log("New tally VERSION CE201", res.data.latestVersionId)
             this.setState({
                 latestVersionId: res.data.latestVersionId,
-                area: res.data.area
+                area: res.data.area,
+                areaId : res.data.area.areaId
             })
             if (res.data.latestVersionId === "null") {
 
@@ -158,7 +162,7 @@ class CE201New extends Component {
                 // })
 
                 /** To get the Polling Stations **/
-                axios.get('/area?limit=1000&offset=0&associatedAreaId=' + tallySheetVersionId + '&areaType=PollingStation', {
+                axios.get('/area?limit=1000&offset=0&associatedAreaId=' + this.state.areaId + '&areaType=PollingStation', {
                     headers: {
                         'Authorization': "Bearer " + localStorage.getItem('token'),
                         'Access-Control-Allow-Origin': '*',
