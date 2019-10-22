@@ -55,13 +55,13 @@ class PRE41Report extends Component {
                 'X-Requested-With': 'XMLHttpRequest'
             }
         }).then(res => {
-            if (res.data.locked) {
+            if (res.data.locked){
                 // alert("Already Locked Tally Sheet !")
                 this.setState({
                     isLocked: true
                 })
 
-            } else {
+            }else {
                 console.log("Unlocked Tally Sheet !")
             }
         })
@@ -122,7 +122,7 @@ class PRE41Report extends Component {
             .then(res => {
                 console.log("UnLock API " + res);
                 alert("Successfully Unlocked the TallySheet - PRE 41")
-                this.props.history.push('/PRE41Entry/' + tallySheetId + '/' + tallySheetVersionId)
+                this.props.history.push('/PRE41Entry/' + tallySheetId + '/'+tallySheetVersionId)
                 // this.props.history.push('/PRE41Edit/' + tallySheetId + '/'+tallySheetVersionId+'/'+countingId)
 
             }).catch((error) => console.log(error));
@@ -138,7 +138,7 @@ class PRE41Report extends Component {
         // alert("Successfully Created the TallySheet - PRE 41")
 
 
-        this.props.history.push('/PRE41Entry/' + tallySheetId + '/' + tallySheetVersionId)
+        this.props.history.push('/PRE41Entry/' + tallySheetId + '/'+tallySheetVersionId)
     }
 
     handleBackToPRE41() {
@@ -180,15 +180,14 @@ class PRE41Report extends Component {
                 {/*<iframe height="2700" width="1380" src={this.state.dataURI}>*/}
                 {/*</iframe>*/}
 
-                {this.state.isLocked === false && <div style={{margin: '4%', marginLeft: '76%'}}>
-                    <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleBack}
+                {this.state.isLocked===false && <div style={{margin: '4%', marginLeft: '76%'}}>
+                   <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleBack}
                             className="button">Back</Button>
                     <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleSubmit}
                             className="button">Submit</Button>
                 </div>}
-                {this.state.isLocked === true && <div style={{margin: '4%', marginLeft: '76%'}}>
-                    <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}}
-                            onClick={this.handleBackToPRE41}
+                {this.state.isLocked===true && <div style={{margin: '4%', marginLeft: '76%'}}>
+                    <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleBackToPRE41}
                             className="button">Back</Button>
                     <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleUnlock}
                             className="button">Unlock</Button>
