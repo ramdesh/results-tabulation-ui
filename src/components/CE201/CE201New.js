@@ -41,8 +41,9 @@ class CE201New extends Component {
             countingId: 0,
 
             area: null,
-            // for getting the list
             areaId: 0,
+            pollingDivision: null,
+            electoralDistrict: null,
 
             latestVersionId: 0,
             // ballotBoxes:[]
@@ -64,12 +65,12 @@ class CE201New extends Component {
             return undefined
         } else {
             return value
-            debugger ;
+            debugger;
         }
     }
 
     setInputValue(pollingStationId, property, value) {
-        console.log("set state"+pollingStationId, property, value)
+        console.log("set state" + pollingStationId, property, value)
         this.setState({
             ...this.state,
             content: {
@@ -150,8 +151,41 @@ class CE201New extends Component {
             this.setState({
                 latestVersionId: res.data.latestVersionId,
                 area: res.data.area,
-                areaId : res.data.area.areaId
+                areaId: res.data.area.areaId
             })
+
+
+            /** get electoral district name **/
+            axios.get('/area?limit=1000&offset=0&associatedAreaId=' + this.state.areaId + '&areaType=ElectoralDistrict', {
+                headers: {
+                    'Authorization': "Bearer " + localStorage.getItem('token'),
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'GET',
+                    'Access-Control-Allow-Headers': 'Content-Type',
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            }).then(res => {
+                this.setState({
+                    electoralDistrict: res.data[0].areaName
+                })
+            }).catch((error) => console.log(error));
+
+            /** get polling division name **/
+            axios.get('/area?limit=1000&offset=0&associatedAreaId=' + this.state.areaId + '&areaType=PollingDivision', {
+                headers: {
+                    'Authorization': "Bearer " + localStorage.getItem('token'),
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'GET',
+                    'Access-Control-Allow-Headers': 'Content-Type',
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            }).then(res => {
+                this.setState({
+                    pollingDivision: res.data[0].areaName
+                })
+            }).catch((error) => console.log(error));
+
+
             if (res.data.latestVersionId === "null") {
 
             } else {
@@ -202,8 +236,8 @@ class CE201New extends Component {
 
                         const pollingStationWiseCounts = res.data.content;
                         for (var i = 0; i < pollingStationWiseCounts.length; i++) {
-                            let pollingStationWiseCount  = pollingStationWiseCounts [i];
-                            console.log("Loop"+pollingStationWiseCount.areaId+" - "+pollingStationWiseCount.ballotsIssued)
+                            let pollingStationWiseCount = pollingStationWiseCounts [i];
+                            console.log("Loop" + pollingStationWiseCount.areaId + " - " + pollingStationWiseCount.ballotsIssued)
                             this.setInputValue(pollingStationWiseCount.areaId, "ballotsIssued", pollingStationWiseCount.ballotsIssued);
                             this.setInputValue(pollingStationWiseCount.areaId, "ballotsReceived", pollingStationWiseCount.ballotsReceived);
                             // this.setInputValue(pollingStationWiseCount.candidateId, "countInWords", candidateWiseCount.countInWords);
@@ -318,27 +352,33 @@ class CE201New extends Component {
                         {/*<Typography color="textPrimary"></Typography>*/}
                     </Breadcrumbs>
 
+
                     <div style={{marginBottom: '3%'}}>
                         <Typography variant="h4" gutterBottom>
                             Presidential Election 2019
                         </Typography>
-
+                        <Typography variant="h5" gutterBottom>
+                            CE 201
+                        </Typography>
+                        <br/>
                         <Grid container spacing={3}>
-                            <Grid item xs={5}>
-                                <Typography variant="h5" gutterBottom>
-                                    CE 201
-                                </Typography>
-                            </Grid>
                             <Grid item xs={4}>
                                 <Typography style={{fontWeight: 'bold'}} variant="h5" gutterBottom>
-                                    Counting Hall No :  {this.getCountingCentreName()}
+                                    Electoral District : {this.state.electoralDistrict}
+                                </Typography>
+                            </Grid>
+                            {this.state.pollingDivision !== null && <Grid item xs={4}>
+                                <Typography style={{fontWeight: 'bold'}} variant="h5" gutterBottom>
+                                    Polling Division : {this.state.pollingDivision}
+                                </Typography>
+                            </Grid>}
+                            <Grid item xs={4}>
+                                <Typography style={{fontWeight: 'bold'}} variant="h5" gutterBottom>
+                                    Counting Hall No : {this.getCountingCentreName()}
                                 </Typography>
                             </Grid>
                         </Grid>
-                        {/*<Typography variant="h5" gutterBottom>*/}
-                            {/*CE-201 - Counting Hall No : {this.getCountingCentreName()}*/}
-                            {/*/!*CE-201 - Tally Sheet ID : {this.props.match.params.name}*!/*/}
-                        {/*</Typography>*/}
+
                     </div>
 
                     <Paper>
@@ -361,7 +401,8 @@ class CE201New extends Component {
                                                style={{fontSize: 14, fontWeight: 'bold', color: 'white'}}>No of Spoilt
                                         Ballots </TableCell>
                                     <TableCell className="header"
-                                               style={{width:'10%',fontSize: 14, fontWeight: 'bold', color: 'white'}}>No of Issued
+                                               style={{width: '10%', fontSize: 14, fontWeight: 'bold', color: 'white'}}>No
+                                        of Issued
                                         Ballots</TableCell>
                                     <TableCell className="header"
                                                style={{fontSize: 14, fontWeight: 'bold', color: 'white'}}>No of Unused
@@ -376,7 +417,7 @@ class CE201New extends Component {
                             </TableHead>
                             <TableBody>
                                 {this.state.pollingStations.map((pollingStation, idx) => (
-                                    <TableRow  style ={ idx % 2? { background : "white" }:{ background : "#f6f6f6" }}>
+                                    <TableRow style={idx % 2 ? {background: "white"} : {background: "#f6f6f6"}}>
                                         <TableCell style={{fontSize: 13}}>
                                             {/*{pollingStation.pollingDistricts[0].areaId}*/}
                                             {
@@ -387,7 +428,7 @@ class CE201New extends Component {
 
                                         </TableCell>
                                         <TableCell style={{fontSize: 13, width: '4%'}}>
-                                            {pollingStation.areaName+pollingStation.areaId}
+                                            {pollingStation.areaName + pollingStation.areaId}
                                         </TableCell>
 
                                         <TableCell style={{fontSize: 13, width: '16%'}}>
@@ -491,7 +532,7 @@ class CE201New extends Component {
                                             />
                                         </TableCell>
 
-                                        <TableCell style={{backgroundColor:'#ddd',fontSize: 13, width: '17%'}}>
+                                        <TableCell style={{backgroundColor: '#ddd', fontSize: 13, width: '17%'}}>
 
                                             <TextField
                                                 id="ordinaryBallotCountFromBallotPaperAccount"
