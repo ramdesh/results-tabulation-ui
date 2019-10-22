@@ -12,7 +12,8 @@ import {
     TableBody,
     Paper,
     Breadcrumbs,
-    Link
+    Link,
+    Grid
 } from '@material-ui/core';
 import {getNumOrZero} from "../../utils";
 
@@ -372,10 +373,26 @@ class PRE41New extends Component {
                         <Typography variant="h4" gutterBottom>
                             Presidential Election 2019
                         </Typography>
-                        <Typography variant="h5" gutterBottom>
-                            PRE 41 - Counting Hall No :  {this.getCountingCentreName()}
-                            {/*PRE-41 - Tally Sheet ID : {this.props.match.params.name}*/}
-                        </Typography>
+
+
+                        <Grid container spacing={3}>
+                            <Grid item xs={5}>
+                                <Typography variant="h5" gutterBottom>
+                                    PRE 41
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={5}>
+                                <Typography style={{fontWeight: 'bold'}} variant="h5" gutterBottom>
+                                 Counting Hall No :  {this.getCountingCentreName()}
+
+                                </Typography>
+                            </Grid>
+                        </Grid>
+
+                        {/*<Typography variant="h5" gutterBottom>*/}
+                            {/*PRE 41 - Counting Hall No :  {this.getCountingCentreName()}*/}
+                            {/*/!*PRE-41 - Tally Sheet ID : {this.props.match.params.name}*!/*/}
+                        {/*</Typography>*/}
                     </div>
                     <Paper>
                         <Table>
@@ -454,8 +471,7 @@ class PRE41New extends Component {
                                         style={{width: '20%', fontSize: 13}}></TableCell>
                                     <TableCell
                                         style={{width: '30%', fontSize: 13}}></TableCell>
-                                    <TableCell style={{fontSize: 14, color: 'black', fontWeight: 'bold'}}>Total
-                                        Votes : </TableCell>
+                                    <TableCell style={{fontSize: 15, color: 'black', fontWeight: 'bold'}}>එකතුව / மொத்த / Total : </TableCell>
 
                                     <TableCell
                                         style={{paddingLeft: '2%', width: '30%', fontSize: 16, fontWeight: 'bold'}}>
@@ -474,8 +490,7 @@ class PRE41New extends Component {
                                         style={{width: '20%', fontSize: 13}}></TableCell>
                                     <TableCell
                                         style={{width: '30%', fontSize: 13}}></TableCell>
-                                    <TableCell style={{fontSize: 14, color: 'black', fontWeight: 'bold'}}>Rejected
-                                        Votes :</TableCell>
+                                    <TableCell style={{fontSize: 15, color: 'black', fontWeight: 'bold'}}>ප්‍රතික්ෂේප කළ ඡන්ද / நிராகரிக்கப்பட்ட வாக்குகள் /  Rejected Votes :</TableCell>
                                     <TableCell
                                         style={{fontSize: 14,}}>
                                         <TextField
@@ -500,7 +515,7 @@ class PRE41New extends Component {
                                     <TableCell
                                         style={{width: '30%', fontSize: 13}}></TableCell>
 
-                                    <TableCell style={{fontSize: 14, color: 'black', fontWeight: 'bold'}}>Grand Total
+                                    <TableCell style={{fontSize: 15, color: 'black', fontWeight: 'bold'}}>මුලු එකතුව / மொத்தம் / Grand Total
                                         :</TableCell>
 
                                     <TableCell
