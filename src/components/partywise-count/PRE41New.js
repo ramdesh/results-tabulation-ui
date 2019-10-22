@@ -228,6 +228,7 @@ class PRE41New extends Component {
     handleInputChange = (candidateId, property) => (event) => {
 
         console.log("property",property)
+        console.log(event.target.value);
         const value = event.target.value
         this.setInputValue(candidateId, property, value)
 
@@ -452,6 +453,7 @@ class PRE41New extends Component {
                                                 id="outlined-dense"
                                                 margin="dense"
                                                 variant="outlined"
+                                                type="number"
                                                 //label="No of votes"
                                                 // name={'votes' + (idx + 1)}
                                                 autoComplete='off'
