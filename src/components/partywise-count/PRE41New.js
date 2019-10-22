@@ -107,16 +107,10 @@ class PRE41New extends Component {
     }
 
     componentWillMount() {
-        console.log('working');
-        // window.history.pushState({name: "browserBack"}, "on browser back click", window.location.href);
         window.addEventListener('popstate', (event) => {
-            if (event.state) {
-                window.confirm('Entered Data will be lost !');
-            }
-        }, false);
+           alert('You will move to PRE 41')
+        });
     }
-
-
 
     // submit the form data
     handleSubmit = (event) => {
