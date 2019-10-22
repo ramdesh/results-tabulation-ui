@@ -42,7 +42,7 @@ class PRE41 extends Component {
     }
 
     handleBack() {
-        this.props.history.goBack()
+        this.props.history.push('/Home')
     }
 
     handleClickOpen() {

@@ -21,13 +21,12 @@ class PRE41Report extends Component {
             iframeWidth: "100%"
         };
         this.iframeRef = React.createRef()
-
     }
 
     componentDidMount() {
         const {tallySheetId} = this.props.match.params
         const {tallySheetVersionId} = this.props.match.params
-        // const {countingId} = this.props.match.params
+
         console.log("Ids >>> ", tallySheetId, tallySheetVersionId)
         axios.get('/tally-sheet/' + tallySheetId + '/version/' + tallySheetVersionId + '/html', {
             headers: {
@@ -56,41 +55,17 @@ class PRE41Report extends Component {
                 'X-Requested-With': 'XMLHttpRequest'
             }
         }).then(res => {
-            if (res.data.locked){
+            if (res.data.locked) {
                 // alert("Already Locked Tally Sheet !")
                 this.setState({
                     isLocked: true
                 })
 
-            }else {
+            } else {
                 console.log("Unlocked Tally Sheet !")
             }
         })
             .catch((error) => console.log(error));
-
-        //
-        // axios.get('/tally-sheet?limit=1000&offset=0&electionId='+localStorage.getItem('electionType_NonPostal_Id')+'&areaId='+countingId+'&tallySheetCode=PRE-41', {
-        //     headers: {
-        //         'Authorization': "Bearer "+localStorage.getItem('token'),
-        //         'Access-Control-Allow-Origin': '*',
-        //         'Access-Control-Allow-Methods': 'GET',
-        //         'Access-Control-Allow-Headers': 'Content-Type',
-        //         'X-Requested-With': 'XMLHttpRequest'
-        //     }
-        // }).then(res => {
-        //
-        //
-        //     if (res.data[0].locked){
-        //         // alert("Already Locked Tally Sheet !")
-        //         this.setState({
-        //             isLocked: true
-        //         })
-        //
-        //     }else {
-        //         console.log("Unlocked Tally Sheet !")
-        //     }
-        // })
-        //     .catch((error) => console.log(error));
 
     }
 
@@ -131,7 +106,7 @@ class PRE41Report extends Component {
 
     }
 
-    // unlock
+    /** unlock **/
     handleUnlock() {
         console.log("unlock");
         const {tallySheetId} = this.props.match.params
@@ -147,7 +122,7 @@ class PRE41Report extends Component {
             .then(res => {
                 console.log("UnLock API " + res);
                 alert("Successfully Unlocked the TallySheet - PRE 41")
-                this.props.history.push('/PRE41Entry/' + tallySheetId + '/'+tallySheetVersionId)
+                this.props.history.push('/PRE41Entry/' + tallySheetId + '/' + tallySheetVersionId)
                 // this.props.history.push('/PRE41Edit/' + tallySheetId + '/'+tallySheetVersionId+'/'+countingId)
 
             }).catch((error) => console.log(error));
@@ -163,7 +138,7 @@ class PRE41Report extends Component {
         // alert("Successfully Created the TallySheet - PRE 41")
 
 
-        this.props.history.push('/PRE41Entry/' + tallySheetId + '/'+tallySheetVersionId)
+        this.props.history.push('/PRE41Entry/' + tallySheetId + '/' + tallySheetVersionId)
     }
 
     handleBackToPRE41() {
@@ -205,14 +180,15 @@ class PRE41Report extends Component {
                 {/*<iframe height="2700" width="1380" src={this.state.dataURI}>*/}
                 {/*</iframe>*/}
 
-                {this.state.isLocked===false && <div style={{margin: '4%', marginLeft: '76%'}}>
-                   <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleBack}
+                {this.state.isLocked === false && <div style={{margin: '4%', marginLeft: '76%'}}>
+                    <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleBack}
                             className="button">Back</Button>
                     <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleSubmit}
                             className="button">Submit</Button>
                 </div>}
-                {this.state.isLocked===true && <div style={{margin: '4%', marginLeft: '76%'}}>
-                    <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleBackToPRE41}
+                {this.state.isLocked === true && <div style={{margin: '4%', marginLeft: '76%'}}>
+                    <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}}
+                            onClick={this.handleBackToPRE41}
                             className="button">Back</Button>
                     <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleUnlock}
                             className="button">Unlock</Button>
