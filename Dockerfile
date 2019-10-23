@@ -6,7 +6,8 @@ COPY ./public /app/public
 WORKDIR /app
 RUN npm install
 
-ENV REACT_APP_AUTH_APP_URL="http://localhost:3001"
+ENV REACT_APP_AUTH_APP_URL="https://tabulations.ecdev.opensource.lk"
+ENV REACT_APP_TABULATION_API_URL="https://dev.tabulation.ecdev.opensource.lk"
 
 RUN npm run build
 
