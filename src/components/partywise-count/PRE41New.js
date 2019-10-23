@@ -518,7 +518,7 @@ class PRE41New extends Component {
                                     {/*</TableCell>*/}
                                 </TableRow>
 
-                                <TableRow>
+                                <TableRow bgcolor="#DDDDDD">
                                     <TableCell
                                         style={{width: '4%', fontSize: 13}}></TableCell>
                                     <TableCell
@@ -534,6 +534,8 @@ class PRE41New extends Component {
                                             margin="dense"
                                             variant="outlined"
                                             //label="Rejected Votes"
+                                            error={"required field null"}
+                                            helperText={this.getRejectedVoteCount() === "" ? 'This field is required!' : ' '}
                                             autoComplete='off'
                                             value={this.getRejectedVoteCount()}
                                             onChange={this.handleRejectedVoteCount}

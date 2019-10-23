@@ -1,4 +1,4 @@
-export * from "./authenticate";
+export * from "../auth";
 export * from "./history";
 
 export function getNumOrZero(num) {

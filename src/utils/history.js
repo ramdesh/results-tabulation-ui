@@ -1,6 +1,3 @@
-import { createBrowserHistory } from "history";
-import { AppConfig } from "../configs";
+import {createBrowserHistory} from "history";
 
-const appConfig = new AppConfig();
-
-export const history = createBrowserHistory({ basename: appConfig.basePath });
+export const history = createBrowserHistory({basename: ''});
