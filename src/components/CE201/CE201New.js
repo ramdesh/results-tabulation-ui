@@ -96,7 +96,7 @@ class CE201New extends Component {
                     "string"
                 ],
                 "ballotBoxesReceived": [
-                    "string"
+
                 ],
                 "ballotsIssued": 0,
                 "ballotsReceived": 0,
@@ -209,7 +209,6 @@ class CE201New extends Component {
                         pollingStations: res.data
                     })
                     this.setElection(res.data);
-                    this.setDefaultValues();
 
                     // const candidateWiseCounts = res.data.length;
 
@@ -274,7 +273,7 @@ class CE201New extends Component {
                             ""
                         ],
                         "ballotBoxesReceived": [
-                            (this.state.content[pollingId].ballotBoxesReceived),
+
                         ],
                         "ballotsIssued": parseInt(this.state.content[pollingId].ballotsIssued),
                         "ballotsReceived": parseInt(this.state.content[pollingId].ballotsReceived),
@@ -393,33 +392,14 @@ class CE201New extends Component {
                                                style={{fontSize: 14, fontWeight: 'bold', color: 'white'}}>Polling
                                         Station</TableCell>
                                     <TableCell className="header"
-                                               style={{fontSize: 14, fontWeight: 'bold', color: 'white'}}>Ballot Box
-                                        IDs</TableCell>
-                                    <TableCell className="header"
-                                               style={{fontSize: 14, fontWeight: 'bold', color: 'white'}}>No of Ballot
-                                        Papers Received</TableCell>
-                                    <TableCell className="header"
-                                               style={{fontSize: 14, fontWeight: 'bold', color: 'white'}}>No of Spoilt
-                                        Ballots </TableCell>
-                                    <TableCell className="header"
-                                               style={{width: '10%', fontSize: 14, fontWeight: 'bold', color: 'white'}}>No
-                                        of Issued
-                                        Ballots</TableCell>
-                                    <TableCell className="header"
-                                               style={{fontSize: 14, fontWeight: 'bold', color: 'white'}}>No of Unused
-                                        Ballots</TableCell>
-                                    <TableCell className="header"
                                                style={{fontSize: 14, fontWeight: 'bold', color: 'white'}}>Ordinary
                                         Ballot Paper Count</TableCell>
-                                    <TableCell className="header"
-                                               style={{fontSize: 14, fontWeight: 'bold', color: 'white'}}>Tender Ballot
-                                        Paper Count</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
                                 {this.state.pollingStations.map((pollingStation, idx) => (
                                     <TableRow style={idx % 2 ? {background: "white"} : {background: "#f6f6f6"}}>
-                                        <TableCell style={{fontSize: 13}}>
+                                        <TableCell style={{fontSize: 13, width: '10%'}}>
                                             {/*{pollingStation.pollingDistricts[0].areaId}*/}
                                             {
                                                 pollingStation.pollingDistricts.map((member, index) => {
@@ -428,125 +408,12 @@ class CE201New extends Component {
                                             }
 
                                         </TableCell>
-                                        <TableCell style={{fontSize: 13, width: '4%'}}>
+                                        <TableCell style={{fontSize: 13, width: '50%'}}>
                                             {pollingStation.areaName + pollingStation.areaId}
                                         </TableCell>
 
-                                        <TableCell style={{fontSize: 13, width: '16%'}}>
+                                        <TableCell style={{backgroundColor: '#ddd', fontSize: 13, width: '25%'}}>
 
-                                            {/*<FormControl variant="outlined" margin="dense">*/}
-
-                                            {/*<InputLabel style={{fontSize:'12px',marginLeft: '-5%'}}>*/}
-                                            {/*Box ID*/}
-                                            {/*</InputLabel>*/}
-
-                                            {/*<Select className="width40" value={this.state.selectedbox1}*/}
-                                            {/*onChange={this.handleBoxes} >*/}
-                                            {/*{this.state.ballotBoxes.map((ballotbox, idx) => (*/}
-                                            {/*<MenuItem value={ballotbox.ballotBoxId}>{ballotbox.ballotBoxId}</MenuItem>*/}
-                                            {/*))}*/}
-                                            {/*</Select>*/}
-                                            {/*</FormControl>*/}
-
-                                            <TextField
-                                                id="box-id1"
-                                                margin="dense"
-                                                variant="outlined"
-                                                label="Box Id"
-                                                autoComplete='off'
-                                                onChange={this.handleInputChange(pollingStation.areaId, "ballotBoxesReceived")}
-                                            />
-                                            <TextField
-                                                id="box-id2"
-                                                margin="dense"
-                                                variant="outlined"
-                                                label="Box Id"
-                                                autoComplete='off'
-                                                onChange={this.handleInputChange(pollingStation.areaId, "ballotBoxesReceived")}
-                                            />
-                                            <TextField
-                                                id="box-id3"
-                                                margin="dense"
-                                                variant="outlined"
-                                                label="Box Id"
-                                                autoComplete='off'
-                                                onChange={this.handleInputChange(pollingStation.areaId, "ballotBoxesReceived")}
-                                            />
-                                            <TextField
-                                                id="box-id4"
-                                                margin="dense"
-                                                variant="outlined"
-                                                label="Box Id"
-                                                autoComplete='off'
-                                                onChange={this.handleInputChange(pollingStation.areaId, "ballotBoxesReceived")}
-                                            />
-                                            <TextField
-                                                id="box-id5"
-                                                margin="dense"
-                                                variant="outlined"
-                                                label="Box Id"
-                                                autoComplete='off'
-                                                onChange={this.handleInputChange(pollingStation.areaId, "ballotBoxesReceived")}
-                                            />
-                                        </TableCell>
-
-                                        <TableCell style={{fontSize: 11, width: '12%'}}>Received Ballots:
-                                            <TextField
-                                                id="ballots-received"
-                                                margin="dense"
-                                                variant="outlined"
-                                                // label="Count"
-                                                autoComplete='off'
-                                                defaultValue="0"
-                                                // value={this.getInputValue(pollingStation.areaId, "ballotsReceived")}
-                                                onChange={this.handleInputChange(pollingStation.areaId, "ballotsReceived")}
-                                            />
-                                        </TableCell>
-                                        <TableCell style={{fontSize: 11, width: '12%'}}>Spoilt Ballots:
-                                            <TextField
-                                                id="ballots-spoilt"
-                                                margin="dense"
-                                                variant="outlined"
-                                                // label="Count"
-                                                autoComplete='off'
-                                                defaultValue="0"
-                                                onChange={this.handleInputChange(pollingStation.areaId, "ballotsSpoilt")}
-                                            />
-                                        </TableCell>
-                                        <TableCell style={{fontSize: 11, width: '12%'}}>Issued Ballots:
-                                            <TextField
-                                                id="ballots-issued"
-                                                margin="dense"
-                                                variant="outlined"
-                                                // label="Count"
-                                                autoComplete='off'
-                                                defaultValue="0"
-                                                // value={this.getInputValue(pollingStation.areaId, "ballotsIssued")}
-                                                onChange={this.handleInputChange(pollingStation.areaId, "ballotsIssued")}
-                                            />
-                                        </TableCell>
-                                        <TableCell style={{fontSize: 11, width: '10%'}}>Unused:
-                                            <TextField
-                                                id="ballots-unused"
-                                                margin="dense"
-                                                variant="outlined"
-                                                // label="Count"
-                                                autoComplete='off'
-                                                defaultValue="0"
-                                                onChange={this.handleInputChange(pollingStation.areaId, "ballotsUnused")}
-                                            />
-                                        </TableCell>
-
-                                        <TableCell style={{backgroundColor: '#ddd', fontSize: 13, width: '17%'}}>
-
-                                            <TextField
-                                                id="ordinaryBallotCountFromBallotPaperAccount"
-                                                margin="dense"
-                                                variant="outlined"
-                                                label="Ballot Account"
-                                                autoComplete='off'
-                                                onChange={this.handleInputChange(pollingStation.areaId, "ordinaryBallotCountFromBallotPaperAccount")}
-                                            />
                                             <TextField
                                                 id="ordinaryBallotCountFromBoxCount"
                                                 margin="dense"
@@ -555,72 +422,24 @@ class CE201New extends Component {
                                                 autoComplete='off'
                                                 onChange={this.handleInputChange(pollingStation.areaId, "ordinaryBallotCountFromBoxCount")}
                                             />
-                                            <TextField
-                                                label="Difference"
-                                                id="outlined-dense"
-                                                margin="dense"
-                                                variant="outlined"
-                                                autoComplete='off'
-
-                                            />
-                                        </TableCell>
-                                        <TableCell style={{fontSize: 13, width: '16%'}}>
-                                            <TextField
-                                                id="tenderedBallotCountFromBallotPaperAccount"
-                                                margin="dense"
-                                                variant="outlined"
-                                                label="Ballot Account"
-                                                autoComplete='off'
-                                                defaultValue="0"
-                                                onChange={this.handleInputChange(pollingStation.areaId, "tenderedBallotCountFromBallotPaperAccount")}
-                                            />
-                                            <TextField
-                                                id="tenderedBallotCountFromBoxCount"
-                                                margin="dense"
-                                                variant="outlined"
-                                                label="Box Count"
-                                                autoComplete='off'
-                                                defaultValue="0"
-                                                onChange={this.handleInputChange(pollingStation.areaId, "tenderedBallotCountFromBoxCount")}
-                                            />
-                                            <TextField
-                                                id="outlined-dense"
-                                                margin="dense"
-                                                variant="outlined"
-                                                label="Difference"
-                                                autoComplete='off'
-                                                defaultValue="0"
-                                            />
                                         </TableCell>
                                     </TableRow>
                                 ))}
 
                                 <TableRow>
-                                    <TableCell
-                                        style={ {fontSize: 13}}></TableCell>
-                                    <TableCell
-                                        style={{width: '4%', fontSize: 13}}></TableCell>
-                                    <TableCell
-                                        style={{width: '16%', fontSize: 13}}></TableCell>
-                                    <TableCell
-                                        style={{width: '12%', fontSize: 13}}></TableCell>
-                                    <TableCell
-                                        style={{width: '12%', fontSize: 13}}></TableCell>
-                                    <TableCell
-                                        style={{width: '12%', fontSize: 13}}></TableCell>
-
+                                    <TableCell></TableCell>
                                     <TableCell style={{fontSize: 15, color: 'black', fontWeight: 'bold'}}>
                                         Total Box Count : </TableCell>
 
-                                        <TableCell
-                                            style={{width: '16%',fontSize: 14,}}>
-                                            <TextField
-                                                id="outlined-dense"
-                                                margin="dense"
-                                                variant="outlined"
-                                                label="Total"
-                                                autoComplete='off'
-                                            /></TableCell>
+                                    <TableCell
+                                        style={{width: '16%', fontSize: 14,}}>
+                                        <TextField
+                                            id="outlined-dense"
+                                            margin="dense"
+                                            variant="outlined"
+                                            label="Total"
+                                            autoComplete='off'
+                                        /></TableCell>
 
                                 </TableRow>
 
@@ -629,8 +448,8 @@ class CE201New extends Component {
                     </Paper>
                 </div>
 
-                <div style={{marginLeft: '84%', marginTop: '2%'}}>
-                    <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleBack}
+                <div style={{textAlign: 'right', marginTop: '2%'}}>
+                    <Button style={{borderRadius: 18, color: 'white', marginRight: '10px'}} onClick={this.handleBack}
                             className="button">Back</Button>
                     <Button style={{borderRadius: 18, color: 'white'}} onClick={this.handleSubmit}
                             className="button">Next</Button>
