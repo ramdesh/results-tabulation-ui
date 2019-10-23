@@ -100,12 +100,12 @@ class CE201New extends Component {
                 ],
                 "ballotsIssued": 0,
                 "ballotsReceived": 0,
-                "ballotsSpoilt": null,
-                "ballotsUnused": null,
-                "ordinaryBallotCountFromBallotPaperAccount": null,
-                "ordinaryBallotCountFromBoxCount": null,
-                "tenderedBallotCountFromBallotPaperAccount": null,
-                "tenderedBallotCountFromBoxCount": null
+                "ballotsSpoilt": 0,
+                "ballotsUnused": 0,
+                "ordinaryBallotCountFromBallotPaperAccount": 0,
+                "ordinaryBallotCountFromBoxCount": 0,
+                "tenderedBallotCountFromBallotPaperAccount": 0,
+                "tenderedBallotCountFromBoxCount": 0
             };
             return pollingStation.areaId
         })
@@ -128,7 +128,6 @@ class CE201New extends Component {
     handleChange = event => {
         this.setState({selected: event.target.value, name: event.target.name});
     };
-
 
     componentDidMount() {
         const {tallySheetId} = this.props.match.params
@@ -209,7 +208,8 @@ class CE201New extends Component {
                     this.setState({
                         pollingStations: res.data
                     })
-                    this.setElection(res.data)
+                    this.setElection(res.data);
+                    this.setDefaultValues();
 
                     // const candidateWiseCounts = res.data.length;
 
@@ -311,6 +311,7 @@ class CE201New extends Component {
 
         console.log("Polling ID", pollingId)
         console.log("value", property)
+        console.log("number", event.target.value)
 
         /** Addition **/
         const value = event.target.value
@@ -496,6 +497,7 @@ class CE201New extends Component {
                                                 variant="outlined"
                                                 // label="Count"
                                                 autoComplete='off'
+                                                defaultValue="0"
                                                 // value={this.getInputValue(pollingStation.areaId, "ballotsReceived")}
                                                 onChange={this.handleInputChange(pollingStation.areaId, "ballotsReceived")}
                                             />
@@ -507,6 +509,7 @@ class CE201New extends Component {
                                                 variant="outlined"
                                                 // label="Count"
                                                 autoComplete='off'
+                                                defaultValue="0"
                                                 onChange={this.handleInputChange(pollingStation.areaId, "ballotsSpoilt")}
                                             />
                                         </TableCell>
@@ -517,6 +520,7 @@ class CE201New extends Component {
                                                 variant="outlined"
                                                 // label="Count"
                                                 autoComplete='off'
+                                                defaultValue="0"
                                                 // value={this.getInputValue(pollingStation.areaId, "ballotsIssued")}
                                                 onChange={this.handleInputChange(pollingStation.areaId, "ballotsIssued")}
                                             />
@@ -528,6 +532,7 @@ class CE201New extends Component {
                                                 variant="outlined"
                                                 // label="Count"
                                                 autoComplete='off'
+                                                defaultValue="0"
                                                 onChange={this.handleInputChange(pollingStation.areaId, "ballotsUnused")}
                                             />
                                         </TableCell>
@@ -566,6 +571,7 @@ class CE201New extends Component {
                                                 variant="outlined"
                                                 label="Ballot Account"
                                                 autoComplete='off'
+                                                defaultValue="0"
                                                 onChange={this.handleInputChange(pollingStation.areaId, "tenderedBallotCountFromBallotPaperAccount")}
                                             />
                                             <TextField
@@ -574,6 +580,7 @@ class CE201New extends Component {
                                                 variant="outlined"
                                                 label="Box Count"
                                                 autoComplete='off'
+                                                defaultValue="0"
                                                 onChange={this.handleInputChange(pollingStation.areaId, "tenderedBallotCountFromBoxCount")}
                                             />
                                             <TextField
@@ -582,6 +589,7 @@ class CE201New extends Component {
                                                 variant="outlined"
                                                 label="Difference"
                                                 autoComplete='off'
+                                                defaultValue="0"
                                             />
                                         </TableCell>
                                     </TableRow>
