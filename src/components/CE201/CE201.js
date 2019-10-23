@@ -41,7 +41,7 @@ class CE201 extends Component {
     }
 
     handleBack() {
-        this.props.history.goBack()
+        this.props.history.push('/Home')
     }
 
     handleClickOpen() {

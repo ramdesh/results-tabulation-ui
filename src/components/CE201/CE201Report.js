@@ -11,6 +11,7 @@ class CE201Report extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleBack = this.handleBack.bind(this);
         this.handleUnlock = this.handleUnlock.bind(this);
+        this.handleBackToCE201 = this.handleBackToCE201.bind(this);
         this.state = {
             open: "Test",
             htmlContent: " ",
@@ -20,21 +21,19 @@ class CE201Report extends Component {
             iframeWidth: "100%"
         };
         this.iframeRef = React.createRef()
-
-
-
     }
 
-    // submit the form data
+    handleBackToCE201() {
+        console.log("Back to CE201 selection ");
+        this.props.history.push('/CE201')
+    }
+
+    /** Back **/
     handleBack() {
-        console.log("Back API ");
+        console.log("Back API CE201 ");
         const {tallySheetId} = this.props.match.params
         const {tallySheetVersionId} = this.props.match.params
-        // const {countingId} = this.props.match.params
-        // alert("Successfully Created the TallySheet - PRE 41")
-
-
-        this.props.history.push('/CE201Entry/'+tallySheetId+'/'+tallySheetVersionId)
+        this.props.history.push('/CE201Entry/' + tallySheetId + '/' + tallySheetVersionId)
     }
 
     componentDidMount() {
@@ -57,7 +56,32 @@ class CE201Report extends Component {
             this.handleReport()
         })
             .catch((error) => console.log(error));
+
+
+        /** To confirm the Lock status **/
+        axios.get('/tally-sheet/' + tallySheetId, {
+            headers: {
+                'Authorization': "Bearer " + localStorage.getItem('token'),
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET',
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        }).then(res => {
+            if (res.data.locked) {
+                // alert("Already Locked Tally Sheet !")
+                this.setState({
+                    isLocked: true
+                })
+
+            } else {
+                console.log("Unlocked Tally Sheet !")
+            }
+        })
+            .catch((error) => console.log(error));
+
     }
+
 
     handleReport() {
         console.log("HTML")
@@ -68,11 +92,9 @@ class CE201Report extends Component {
         this.setState({
             dataURI: dataURI
         })
-
-        // alert("Successfully Created the TallySheet - PRE41")
     }
 
-    // unlock
+    /** unlock **/
     handleUnlock() {
         const {tallySheetId} = this.props.match.params
         const {tallySheetVersionId} = this.props.match.params
@@ -88,10 +110,9 @@ class CE201Report extends Component {
                 console.log("UnLock API " + res);
                 alert("Successfully Unlocked the TallySheet - CE 201")
                 this.props.history.push('/Home')
-                // this.props.history.push('/PRE41Edit/' + tallySheetId + '/'+tallySheetVersionId+'/'+countingId)
+                this.props.history.push('/CE201Entry/' + tallySheetId + '/' + tallySheetVersionId)
 
             }).catch((error) => console.log(error));
-
     }
 
     // submit the form data
@@ -112,16 +133,11 @@ class CE201Report extends Component {
             })
             .then(res => {
                 console.log("Lock API " + res);
-
                 alert("Successfully Locked the TallySheet - CE 201")
                 this.props.history.push('/Home')
 
             }).catch((error) => console.log(error));
 
-
-
-        // alert("Successfully Created the TallySheet - CE 201")
-        // this.props.history.push('/Home')
     }
 
     handleIframeHeight(evt) {
@@ -157,20 +173,20 @@ class CE201Report extends Component {
                 >
                 </iframe>
 
-
                 {/*<iframe height="1700" width="1110" src={this.state.dataURI}>*/}
                 {/*</iframe>*/}
-                {this.state.isLocked===false && <div style={{margin: '4%', marginLeft: '80%'}}>
+                {this.state.isLocked === false && <div style={{margin: '4%', marginLeft: '80%'}}>
                     {/*<Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleBack}*/}
-                            {/*className="button">Back</Button>*/}
-                    <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleUnlock}
-                            className="button">Unlock</Button>
+                    {/*className="button">Back</Button>*/}
+                    <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleBack}
+                            className="button">Back</Button>
                     <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleSubmit}
                             className="button">Submit</Button>
 
                 </div>}
-                {this.state.isLocked===true && <div style={{margin: '4%', marginLeft: '76%'}}>
-                    <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleBackToPRE41}
+                {this.state.isLocked === true && <div style={{margin: '4%', marginLeft: '80%'}}>
+                    <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}}
+                            onClick={this.handleBackToCE201}
                             className="button">Back</Button>
                     <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleUnlock}
                             className="button">Unlock</Button>

@@ -33,6 +33,8 @@ class ReportsEntry extends Component {
         this.handleClickOpenPRE41Pv = this.handleClickOpenPRE41Pv.bind(this);
         this.handleClickAllIsland = this.handleClickAllIsland.bind(this);
         this.handleClickAllIslandED = this.handleClickAllIslandED.bind(this);
+        this.handleClickPD30View = this.handleClickPD30View.bind(this);
+
 
         this.state = {
             open: false,
@@ -85,6 +87,9 @@ class ReportsEntry extends Component {
             reportDivision: [],
             reportDivisionPV: [],
             reportAllisland: [],
+            latestVersionIdPD30: null,
+
+            isLokedPRE30PD:false,
 
             value: 0
         };
@@ -240,6 +245,23 @@ class ReportsEntry extends Component {
             .then(res => {
                 console.log(res.data.tallySheetVersionId)
                 this.props.history.replace('/ReportView/' + this.state.reportversionPD30 + '/' + res.data.tallySheetVersionId)
+            });
+
+        this.setState({open: true});
+    }
+
+    /** PRE 30 PD Non-postal votes **/
+    handleClickPD30View() {
+        console.log("PRE 30 PD")
+        axios.post('/tally-sheet/PRE-30-PD/' + this.state.reportversionPD30 + '/version', null, {
+            headers: {
+                'Authorization': "Bearer " + localStorage.getItem('token'),
+                'Access-Control-Allow-Origin': '*'
+            }
+        })
+            .then(res => {
+                console.log(res.data.tallySheetVersionId)
+                this.props.history.replace('/ReportView/' + this.state.reportversionPD30 + '/' + this.state.latestVersionIdPD30)
             });
 
         this.setState({open: true});
@@ -461,6 +483,19 @@ class ReportsEntry extends Component {
             this.setState({
                 reportversionPD30: res.data[0].tallySheetId
             })
+            this.setState({
+                latestVersionIdPD30: res.data[0].lockedVersionId
+            })
+
+            console.log(this.state.latestVersionIdPD30);
+
+            if (this.state.latestVersionIdPD30 == null){
+
+            } else {
+                this.setState({isLokedPRE30PD:true});
+            }
+
+            //latestVersionIdPD30
         })
             .catch((error) => console.log(error));
     };
@@ -888,9 +923,13 @@ class ReportsEntry extends Component {
                                         </FormControl>
                                     </TableCell>
                                     <TableCell>
-                                        <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}}
+                                        {this.state.isLokedPRE30PD===false && <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}}
                                                 onClick={this.handleClickPD30}
-                                                className="button">Generate</Button>
+                                                className="button">Generate</Button>}
+
+                                        {this.state.isLokedPRE30PD===true && <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}}
+                                                onClick={this.handleClickPD30View}
+                                                className="button">View</Button>}
                                     </TableCell>
                                 </TableRow>
 
