@@ -41,11 +41,7 @@ function App() {
             <NavBar/>
             <Switch>
 
-                <Redirect exact path="/" to="/auth"/>
-
-                <Route exact path="/auth" component={() => {
-                    return <Redirect exact path="/" to="/Election"/>
-                }}/>
+                <Redirect exact path="/" to="/Election"/>
 
                 <ProtectedRoute exact path="/Election" component={HomeElection}/>
                 <ProtectedRoute exact path="/Home" component={Home}/>
