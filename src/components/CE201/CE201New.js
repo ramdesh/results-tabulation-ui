@@ -129,7 +129,6 @@ class CE201New extends Component {
         this.setState({selected: event.target.value, name: event.target.name});
     };
 
-
     componentDidMount() {
         const {tallySheetId} = this.props.match.params
         console.log("tally sheet Id ", tallySheetId)
@@ -311,6 +310,7 @@ class CE201New extends Component {
 
         console.log("Polling ID", pollingId)
         console.log("value", property)
+        console.log("number", event.target.value)
 
         /** Addition **/
         const value = event.target.value
