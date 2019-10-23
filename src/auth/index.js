@@ -17,6 +17,7 @@ export function getAuthAppSignInUrl() {
 
 export function getAccessToken() {
     const tabulationAccessToken = getCookie(API_ACCESS_TOKEN_KEY);
+    localStorage.setItem('token', tabulationAccessToken);
 
     return tabulationAccessToken;
 }

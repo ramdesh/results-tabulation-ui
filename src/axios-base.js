@@ -1,8 +1,9 @@
 import axios from 'axios';
+import {TABULATION_API_URL} from "./config";
 
 const instance = axios.create({
-    // baseURL: 'https://api.tabulation.ecstag.opensource.lk'
-    baseURL: 'https://dev.tabulation.ecdev.opensource.lk'
+    baseURL: TABULATION_API_URL
 });
 
 export default instance;
+;
