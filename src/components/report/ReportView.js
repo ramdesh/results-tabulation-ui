@@ -7,11 +7,14 @@ class ReportView extends Component {
         super(props);
         this.handleBack = this.handleBack.bind(this);
         this.handlePrint = this.handlePrint.bind(this);
+        this.handleLock = this.handleLock.bind(this);
+        this.handleUnlock = this.handleUnlock.bind(this);
         this.state = {
             open: "Test",
             htmlContent: null,
             iframeHeight: 600,
-            iframeWidth: "100%"
+            iframeWidth: "100%",
+            isLocked: false,
         };
         this.iframeRef = React.createRef()
     }
@@ -46,6 +49,30 @@ class ReportView extends Component {
                 htmlContent: res.data
             })
         }).catch((error) => console.log(error));
+
+        /** To confirm the Lock status **/
+        axios.get('/tally-sheet/' + tallySheetId, {
+            headers: {
+                'Authorization': "Bearer " + localStorage.getItem('token'),
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET',
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        }).then(res => {
+            if (res.data.locked){
+                // alert("Already Locked Tally Sheet !")
+                this.setState({
+                    isLocked: true
+                })
+
+            }else {
+                console.log("Unlocked Tally Sheet !")
+            }
+        })
+            .catch((error) => console.log(error));
+
+
     }
 
     // submit the form data
@@ -81,9 +108,53 @@ class ReportView extends Component {
         }
     }
 
+    /** Lock Report **/
+    handleLock() {
+        const {tallySheetId} = this.props.match.params
+        const {tallySheetVersionId} = this.props.match.params
+        // const {countingId} = this.props.match.params
+
+        /** Lock Report **/
+        axios.put('/tally-sheet/' + tallySheetId + '/lock',
+            {
+                "lockedVersionId": parseInt(tallySheetVersionId)
+            },
+            {
+                headers: {
+                    'authorization': "Bearer " + localStorage.getItem('token'),
+                }
+            })
+            .then(res => {
+                console.log("Lock API " + res);
+                alert("Successfully Locked the Report")
+                this.props.history.push('/ReportsEntry')
+
+            }).catch((error) => console.log(error));
+    }
+
+    /** unlock Report **/
+    handleUnlock() {
+        console.log("unlock");
+        const {tallySheetId} = this.props.match.params
+        const {tallySheetVersionId} = this.props.match.params
+        // const {countingId} = this.props.match.params
+        /** UnLock Report **/
+        axios.put('/tally-sheet/' + tallySheetId + '/unlock', null,
+            {
+                headers: {
+                    'authorization': "Bearer " + localStorage.getItem('token'),
+                }
+            })
+            .then(res => {
+                console.log("UnLock API " + res);
+                alert("Successfully Unlocked the Report")
+                this.props.history.push('/ReportsEntry')
+            }).catch((error) => console.log(error));
+    }
+
     render() {
-        return [
-            <div style={{padding: 10}}>
+        return (
+            <div style={{marginLeft: '2%', marginTop: '4%'}}>
                 <iframe
                     style={{border: "none"}}
                     height={this.state.iframeHeight}
@@ -93,10 +164,43 @@ class ReportView extends Component {
                     ref={this.iframeRef}
                 >
                 </iframe>
-                {this.getActionButtonsJsx()}
+
+                {this.state.isLocked===false && <div style={{margin: '4%', marginLeft: '65%'}}>
+                    <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleBack}
+                            className="button">Back</Button>
+                    <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handlePrint}
+                            className="button">Print</Button>
+                    <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleLock}
+                            className="button">Lock</Button>
+                </div>}
+                {this.state.isLocked===true && <div style={{margin: '4%', marginLeft: '65%'}}>
+                    <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleBack}
+                            className="button">Back</Button>
+                    <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handlePrint}
+                            className="button">Print</Button>
+                    <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleUnlock}
+                            className="button">Unlock</Button>
+                </div>}
             </div>
-        ]
+        )
     }
+
+    // render() {
+    //     return [
+    //         <div style={{padding: 10}}>
+    //             <iframe
+    //                 style={{border: "none"}}
+    //                 height={this.state.iframeHeight}
+    //                 width={this.state.iframeWidth}
+    //                 srcDoc={this.getIframeContent()}
+    //                 onLoad={this.handleIframeHeight.bind(this)}
+    //                 ref={this.iframeRef}
+    //             >
+    //             </iframe>
+    //             {this.getActionButtonsJsx()}
+    //         </div>
+    //     ]
+    // }
 }
 
 export default ReportView;
