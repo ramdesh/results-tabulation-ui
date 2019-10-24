@@ -61,13 +61,41 @@ class CE201PV extends Component {
                 // console.log("Election ID :" + res.data[0])
                 if (res.data.length === 0) {
                     alert("No TallySheets Allocated for here !")
-                } else {
+
+
+                } else if (res.data[0].locked){
+                    console.log("locked - passed the lockedVersionId")
+
                     this.setState({
                         tallySheetId: res.data[0].tallySheetId
                     })
+
                     console.log("ID :" + res.data[0].tallySheetId)
-                    this.props.history.push('/CE201PVEntry/' + this.state.tallySheetId+ '/'+ this.state.countingId)
+                    this.props.history.push('/CE201PVReport/' + this.state.tallySheetId + '/'+ res.data[0].lockedVersionId)
+
+                }else{
+                    this.setState({
+                        tallySheetId: res.data[0].tallySheetId
+                    })
+
+                    console.log("ID :" + res.data[0].tallySheetId)
+                    this.props.history.push('/CE201PVEntry/' + this.state.tallySheetId + '/'+ this.state.countingId)
                 }
+
+
+
+
+                //
+                // } else {
+                //     this.setState({
+                //         tallySheetId: res.data[0].tallySheetId
+                //     })
+                //     console.log("ID :" + res.data[0].tallySheetId)
+                //     this.props.history.push('/CE201PVEntry/' + this.state.tallySheetId+ '/'+ this.state.countingId)
+                // }
+                //
+                //
+
             })
                 .catch((error) => console.log(error));
         }
