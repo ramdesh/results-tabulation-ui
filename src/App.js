@@ -36,9 +36,20 @@ import {ProtectedRoute} from "./auth";
 
 
 function App() {
+
+    function getHeader(){
+        if(ProtectedRoute.isAuthenticated()) {
+            return <NavBar/>
+        } else {
+            return <div class="fixed-loading-page">
+                Loading ...
+            </div>
+        }
+    }
+
     return (
         <div>
-            <NavBar/>
+            {getHeader()}
             <Switch>
 
                 <Redirect exact path="/" to="/Election"/>

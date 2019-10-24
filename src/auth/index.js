@@ -41,12 +41,12 @@ export class ProtectedRoute extends Component {
         super(props)
     }
 
-    isAuthenticated() {
+    static isAuthenticated() {
         return hasValidToken()
     }
 
     render() {
-        if (!this.isAuthenticated()) {
+        if (!ProtectedRoute.isAuthenticated()) {
             redirectToLogin();
             return null;
         } else {
