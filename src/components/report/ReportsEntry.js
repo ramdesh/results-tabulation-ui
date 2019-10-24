@@ -35,6 +35,7 @@ class ReportsEntry extends Component {
         this.handleClickAllIslandED = this.handleClickAllIslandED.bind(this);
         this.handleClickPD30View = this.handleClickPD30View.bind(this);
 
+        this.handleClickOpenElectorateView = this.handleClickOpenElectorateView.bind(this);
 
         this.state = {
             open: false,
@@ -438,6 +439,7 @@ class ReportsEntry extends Component {
     handleChangePRE41 = event => {
         this.setState({selected: event.target.value, name: event.target.name});
         console.log("PRE41 Counting " + event.target.value)
+        this.setState({btnPRE41: true})
 
         axios.get('/tally-sheet?limit=20&offset=0&electionId=' + localStorage.getItem('electionType_NonPostal_Id') + '&areaId=' + event.target.value + '&tallySheetCode=PRE-41', {
             headers: {
@@ -464,7 +466,7 @@ class ReportsEntry extends Component {
     handleChangePRE41pv = event => {
         this.setState({selectedPRE41PV: event.target.value, name: event.target.name});
         console.log("PRE41 Pv Counting " + event.target.value)
-
+        this.setState({btnPRE41PV: true})
 
         axios.get('/tally-sheet?limit=1000&offset=0&electionId=' + localStorage.getItem('electionType_Postal_Id') + '&areaId=' + event.target.value + '&tallySheetCode=PRE-41', {
             headers: {
@@ -491,6 +493,8 @@ class ReportsEntry extends Component {
     handleChangeCE201 = event => {
         this.setState({selectedCE201: event.target.value, name: event.target.name});
 
+        this.setState({btnCE201: true})
+
         axios.get('/tally-sheet?limit=1000&offset=0&electionId=' + localStorage.getItem('electionType_NonPostal_Id') + '&areaId=' + event.target.value + '&tallySheetCode=CE-201', {
             headers: {
                 'Authorization': "Bearer " + localStorage.getItem('token'),
@@ -515,6 +519,7 @@ class ReportsEntry extends Component {
     // Report handling for CE 201 postal vote
     handleChangeCE201pv = event => {
         this.setState({selectedCE201PV: event.target.value, name: event.target.name});
+        this.setState({btnCE201PV:true});
 
         axios.get('/tally-sheet?limit=1000&offset=0&electionId=' + localStorage.getItem('electionType_NonPostal_Id') + '&areaId=' + event.target.value + '&tallySheetCode=CE-201-PV', {
             headers: {
@@ -569,7 +574,7 @@ class ReportsEntry extends Component {
                 this.setState({isLokedPRE30PD:true});
 
             }
-            console.log("button"+this.state.showButtons);
+            console.log("button"+this.state.btnPRE30PD);
 
             //latestVersionIdPD30
         })
@@ -579,6 +584,8 @@ class ReportsEntry extends Component {
 
     handleDivision = event => {
         this.setState({selected2: event.target.value, name: event.target.name});
+        this.setState({btnPRE30ED:true});
+
         axios.get('/tally-sheet?limit=20&offset=0&electionId=' + localStorage.getItem('electionType_NonPostal_Id') + '&areaId=' + event.target.value + '&tallySheetCode=PRE-30-ED', {
             headers: {
                 'Authorization': "Bearer " + localStorage.getItem('token'),
@@ -603,7 +610,8 @@ class ReportsEntry extends Component {
 
 
             } else {
-
+                this.setState({btnPRE30ED:true});
+                this.setState({isLokedPRE30ED:true});
 
             }
 
@@ -615,6 +623,7 @@ class ReportsEntry extends Component {
     //PRE 30-Pv
     handleDivisionPv = event => {
         this.setState({selectedPRE30PV: event.target.value, name: event.target.name});
+        this.setState({btnPRE30PV :true})
 
         console.log(event.target.value);
 
@@ -950,7 +959,7 @@ class ReportsEntry extends Component {
 
                                             style={{borderRadius: 18, color: 'white', marginRight: '4%'}}
                                             onClick={this.handleClickOpenCE201}
-                                            className="button">View</Button>}
+                                            className="button">Generate</Button>
                                     </TableCell>
                                     }
                                 </TableRow>
@@ -1018,7 +1027,7 @@ class ReportsEntry extends Component {
 
                                             style={{borderRadius: 18, color: 'white', marginRight: '4%'}}
                                             onClick={this.handleClickOpenPRE41}
-                                            className="button">View</Button>}
+                                            className="button">Generate</Button>
                                     </TableCell>
                                     }
 
@@ -1141,11 +1150,26 @@ class ReportsEntry extends Component {
                                             </Select>
                                         </FormControl>
                                     </TableCell>
+
+
+                                    {this.state.btnCE201PV === false &&
                                     <TableCell>
                                         <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}}
-                                                onClick={this.handleClickOpenCE201pv}
-                                                className="button">Generate</Button>
+                                                disabled={true}
+                                                onClick={this.handleClickPD30}
+                                                className="button1">Generate</Button>
                                     </TableCell>
+                                    }
+                                    {this.state.btnCE201PV === true &&
+                                    <TableCell>
+                                        <Button
+
+                                            style={{borderRadius: 18, color: 'white', marginRight: '4%'}}
+                                            onClick={this.handleClickOpenCE201pv}
+                                            className="button">Generate</Button>
+                                    </TableCell>
+                                    }
+
 
                                 </TableRow>
                                 <TableRow>
@@ -1181,11 +1205,28 @@ class ReportsEntry extends Component {
                                             </Select>
                                         </FormControl>
                                     </TableCell>
+
+
+
+                                    {this.state.btnPRE41PV === false &&
                                     <TableCell>
                                         <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}}
-                                                onClick={this.handleClickOpenPRE41Pv}
-                                                className="button">Generate</Button>
+                                                disabled={true}
+                                                onClick={this.handleClickPD30}
+                                                className="button1">Generate</Button>
                                     </TableCell>
+                                    }
+                                    {this.state.btnPRE41PV === true &&
+                                    <TableCell>
+                                        <Button
+
+                                            style={{borderRadius: 18, color: 'white', marginRight: '4%'}}
+                                            onClick={this.handleClickOpenPRE41Pv}
+                                            className="button">Generate</Button>
+                                    </TableCell>
+                                    }
+
+
 
                                 </TableRow>
                                 {/*<TableRow>*/}
@@ -1223,11 +1264,32 @@ class ReportsEntry extends Component {
                                             </Select>
                                         </FormControl>
                                     </TableCell>
+
+
+                                    {this.state.btnPRE30PV === false &&
                                     <TableCell>
                                         <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}}
-                                                onClick={this.handleClickOpenPRE30Pv}
-                                                className="button">Generate</Button>
+                                                disabled={true}
+                                                onClick={this.handleClickPD30}
+                                                className="button1">Generate</Button>
                                     </TableCell>
+                                    }
+                                    {this.state.btnPRE30PV === true &&
+                                    <TableCell>
+                                        {this.state.isLokedPRE30PV === false &&
+                                        <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}}
+
+                                                onClick={this.handleClickOpenPRE30Pv}
+                                                className="button">Generate</Button>}
+
+                                        {this.state.isLokedPRE30PV === true && <Button
+
+                                            style={{borderRadius: 18, color: 'white', marginRight: '4%'}}
+                                            // onClick={this.handleClickOpenElectorateView}
+                                            className="button">View</Button>}
+                                    </TableCell>
+                                    }
+
                                 </TableRow>
 
                             </TableBody>
@@ -1268,11 +1330,39 @@ class ReportsEntry extends Component {
                                             </Select>
                                         </FormControl>
                                     </TableCell>
+
+                                    {this.state.btnPRE30ED === false &&
                                     <TableCell>
                                         <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}}
-                                                onClick={this.handleClickOpenElectorate}
-                                                className="button">Generate</Button>
+                                                disabled={true}
+                                                onClick={this.handleClickPD30}
+                                                className="button1">Generate</Button>
                                     </TableCell>
+                                    }
+                                    {this.state.btnPRE30ED === true &&
+                                    <TableCell>
+                                        {this.state.isLokedPRE30ED === false &&
+                                        <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}}
+
+                                                onClick={this.handleClickOpenElectorate}
+                                                className="button">Generate</Button>}
+
+                                        {this.state.isLokedPRE30ED === true && <Button
+
+                                            style={{borderRadius: 18, color: 'white', marginRight: '4%'}}
+                                            onClick={this.handleClickOpenElectorateView}
+                                            className="button">View</Button>}
+                                    </TableCell>
+                                    }
+
+
+
+
+                                    {/*<TableCell>*/}
+                                        {/*<Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}}*/}
+                                                {/*onClick={this.handleClickOpenElectorate}*/}
+                                                {/*className="button">Generate</Button>*/}
+                                    {/*</TableCell>*/}
                                 </TableRow>
 
                                 <TableRow>
