@@ -505,7 +505,7 @@ class PRE41New extends Component {
                                         style={{width: '20%', fontSize: 13}}></TableCell>
                                     <TableCell
                                         style={{width: '30%', fontSize: 13}}></TableCell>
-                                    <TableCell style={{fontSize: 15, color: 'black', fontWeight: 'bold'}}>එකතුව / மொத்த
+                                    <TableCell style={{fontSize: 15, color: 'black', fontWeight: 'bold'}}>එකතුව / மொத்தம்
                                         / Total : </TableCell>
 
                                     <TableCell
@@ -554,7 +554,7 @@ class PRE41New extends Component {
                                         style={{width: '30%', fontSize: 13}}></TableCell>
 
                                     <TableCell style={{fontSize: 15, color: 'black', fontWeight: 'bold'}}>මුලු එකතුව /
-                                        மொத்தம் / Grand Total
+                                        முழு மொத்தம் / Grand Total
                                         :</TableCell>
 
                                     <TableCell
