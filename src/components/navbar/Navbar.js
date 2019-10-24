@@ -58,13 +58,13 @@ class NavBar extends Component {
                         </Typography>
                         <Button
                             color="inherit">
-                            <AccountCircle/>
+                            <AccountCircle style={{marginRight: '5px'}}/>
                             {this.username}
                         </Button>
                         <Button
                             onClick={this.logout}
                             color="inherit">
-                            <ExitToAppIcon/>
+                            <ExitToAppIcon style={{marginRight: '5px'}}/> Logout
                         </Button>
                     </Toolbar>
                 </AppBar>
