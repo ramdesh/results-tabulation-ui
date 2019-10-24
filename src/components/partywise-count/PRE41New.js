@@ -16,6 +16,7 @@ import {
     Grid
 } from '@material-ui/core';
 import {getNumOrZero} from "../../utils";
+import {ScaleLoader} from 'react-spinners';
 
 class PRE41New extends Component {
     constructor(props) {
@@ -48,6 +49,8 @@ class PRE41New extends Component {
             tallySheetVersionId: 0,
             latestVersionId: 0,
             // filledData:[]
+            loading: false,
+
         };
         this.calculation = [0];
     }
@@ -112,6 +115,9 @@ class PRE41New extends Component {
 
     // submit the form data
     handleSubmit = (event) => {
+        this.setState({
+            loading: true
+        })
         const {tallySheetId} = this.props.match.params
         console.log("tallySheet ID :", tallySheetId)
         event.preventDefault()
@@ -578,6 +584,15 @@ class PRE41New extends Component {
                     <Button style={{borderRadius: 18, color: 'white'}} onClick={this.handleSubmit}
                             className="button">Next</Button>
                 </div>
+
+                <ScaleLoader
+                    // sizeUnit={"px"}
+                    margin={'2px'}
+                    height={30}
+                    width={30}
+                    color={'#55ab68'}
+                    loading={this.state.loading}
+                />
 
             </div>
         )
