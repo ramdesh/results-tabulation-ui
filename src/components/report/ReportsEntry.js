@@ -91,6 +91,13 @@ class ReportsEntry extends Component {
 
             isLokedPRE30PD:false,
 
+            isLokedPRE30PV:false,
+            isLokedPRE30ED:false,
+            isLokedAllIslandED:false,
+            isLokedAllIsland:false,
+
+            showButtons: false,
+
             value: 0
         };
     }
@@ -492,6 +499,7 @@ class ReportsEntry extends Component {
             if (this.state.latestVersionIdPD30 == null){
 
             } else {
+                this.setState({showButtons:true});
                 this.setState({isLokedPRE30PD:true});
             }
 
@@ -922,15 +930,29 @@ class ReportsEntry extends Component {
                                             </Select>
                                         </FormControl>
                                     </TableCell>
+                                    {this.state.showButtons === false &&
                                     <TableCell>
-                                        {this.state.isLokedPRE30PD===false && <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}}
+                                        <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}}
+                                                disabled={true}
+                                                onClick={this.handleClickPD30}
+                                                className="button1">Generate</Button>
+                                    </TableCell>
+                                    }
+                                    {this.state.showButtons === true &&
+                                    <TableCell>
+                                        {this.state.isLokedPRE30PD === false &&
+                                        <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}}
+
                                                 onClick={this.handleClickPD30}
                                                 className="button">Generate</Button>}
 
-                                        {this.state.isLokedPRE30PD===true && <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}}
-                                                onClick={this.handleClickPD30View}
-                                                className="button">View</Button>}
+                                        {this.state.isLokedPRE30PD === true && <Button
+
+                                            style={{borderRadius: 18, color: 'white', marginRight: '4%'}}
+                                            onClick={this.handleClickPD30View}
+                                            className="button">View</Button>}
                                     </TableCell>
+                                    }
                                 </TableRow>
 
                                 {/*<TableRow>*/}
