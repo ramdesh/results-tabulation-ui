@@ -34,6 +34,9 @@ class ReportsEntry extends Component {
         this.handleClickAllIsland = this.handleClickAllIsland.bind(this);
         this.handleClickAllIslandED = this.handleClickAllIslandED.bind(this);
         this.handleClickPD30View = this.handleClickPD30View.bind(this);
+        this.handleClickOpenPRE30PvView = this.handleClickOpenPRE30PvView.bind(this);
+
+
 
         this.handleClickOpenElectorateView = this.handleClickOpenElectorateView.bind(this);
 
@@ -92,6 +95,7 @@ class ReportsEntry extends Component {
             lockedVersionId30ED: null,
             lockedVersionIdAllIslandED: null,
             lockedVersionIdAllIsland:null,
+            lockedVersionId30PV: null,
 
             isLokedPRE30PD:false,
             isLokedPRE30PV:false,
@@ -273,7 +277,7 @@ class ReportsEntry extends Component {
     handleClickPD30View() {
         console.log("PRE 30 PD")
 
-        this.props.history.replace('/ReportView/' + this.state.reportversionPD30 + '/' + this.state.latestVersionIdPD30)
+        this.props.history.replace('/ReportView/' + this.state.reportversionPD30 + '/' + this.state.lockedVersionId30PV)
 
         // axios.post('/tally-sheet/PRE-30-PD/' + this.state.reportversionPD30 + '/version', null, {
         //     headers: {
@@ -333,6 +337,21 @@ class ReportsEntry extends Component {
                 console.log(res.data.tallySheetVersionId)
                 this.props.history.push('/ReportView/' + this.state.report30pdpv + '/' + res.data.tallySheetVersionId)
             });
+        this.setState({open: true});
+    }
+
+    handleClickOpenPRE30PvView() {
+
+        // axios.post('/tally-sheet/PRE-30-PD/' + this.state.report30pdpv + '/version', null, {
+        //     headers: {
+        //         'Authorization': "Bearer " + localStorage.getItem('token'),
+        //         'Access-Control-Allow-Origin': '*'
+        //     }
+        // })
+        //     .then(res => {
+        //         console.log(res.data.tallySheetVersionId)
+        //         this.props.history.push('/ReportView/' + this.state.report30pdpv + '/' + res.data.tallySheetVersionId)
+        //     });
         this.setState({open: true});
     }
 
@@ -640,6 +659,17 @@ class ReportsEntry extends Component {
             this.setState({
                 report30pdpv: res.data[0].tallySheetId
             })
+
+            this.setState({
+                lockedVersionId30PV: res.data[0].lockedVersionId
+            })
+
+            if (this.state.lockedVersionId30PV == null){
+
+            } else {
+
+
+            }
 
         })
             .catch((error) => console.log(error));
