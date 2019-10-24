@@ -88,6 +88,9 @@ class ReportsEntry extends Component {
             reportDivisionPV: [],
             reportAllisland: [],
             latestVersionIdPD30: null,
+            lockedVersionId30ED: null,
+            lockedVersionIdAllIslandED: null,
+            lockedVersionIdAllIsland:null,
 
             isLokedPRE30PD:false,
             isLokedPRE30PV:false,
@@ -268,21 +271,24 @@ class ReportsEntry extends Component {
     /** PRE 30 PD Non-postal votes **/
     handleClickPD30View() {
         console.log("PRE 30 PD")
-        axios.post('/tally-sheet/PRE-30-PD/' + this.state.reportversionPD30 + '/version', null, {
-            headers: {
-                'Authorization': "Bearer " + localStorage.getItem('token'),
-                'Access-Control-Allow-Origin': '*'
-            }
-        })
-            .then(res => {
-                console.log(res.data.tallySheetVersionId)
-                this.props.history.replace('/ReportView/' + this.state.reportversionPD30 + '/' + this.state.latestVersionIdPD30)
-            });
 
-        this.setState({open: true});
+        this.props.history.replace('/ReportView/' + this.state.reportversionPD30 + '/' + this.state.latestVersionIdPD30)
+
+        // axios.post('/tally-sheet/PRE-30-PD/' + this.state.reportversionPD30 + '/version', null, {
+        //     headers: {
+        //         'Authorization': "Bearer " + localStorage.getItem('token'),
+        //         'Access-Control-Allow-Origin': '*'
+        //     }
+        // })
+        //     .then(res => {
+        //         console.log(res.data.tallySheetVersionId)
+        //         this.props.history.replace('/ReportView/' + this.state.reportversionPD30 + '/' + this.state.latestVersionIdPD30)
+        //     });
+        //
+        // this.setState({open: true});
     }
 
-
+    // For Generate Purposes
     handleClickOpenElectorate() {
         axios.post('/tally-sheet/PRE-30-ED/' + this.state.reportDivision + '/version', null, {
             headers: {
@@ -293,6 +299,23 @@ class ReportsEntry extends Component {
             .then(res => {
                 this.props.history.push('/ReportView/' + this.state.reportDivision + '/' + res.data.tallySheetVersionId)
             });
+        this.setState({open: true});
+    }
+
+    // For viewing
+    handleClickOpenElectorateView() {
+        this.props.history.push('/ReportView/' + this.state.reportDivision + '/' + this.state.lockedVersionId30ED)
+
+        //lockedVersionId30ED
+        // axios.post('/tally-sheet/PRE-30-ED/' + this.state.reportDivision + '/version', null, {
+        //     headers: {
+        //         'Authorization': "Bearer " + localStorage.getItem('token'),
+        //         'Access-Control-Allow-Origin': '*'
+        //     }
+        // })
+        //     .then(res => {
+        //         this.props.history.push('/ReportView/' + this.state.reportDivision + '/' + res.data.tallySheetVersionId)
+        //     });
         this.setState({open: true});
     }
 
@@ -329,17 +352,33 @@ class ReportsEntry extends Component {
                 ALLIslandtallyId: res.data[0].tallySheetId
             })
 
-            axios.post('/tally-sheet/PRE_ALL_ISLAND_RESULTS/' + res.data[0].tallySheetId + '/version', null, {
-                    headers: {
-                        'Authorization': "Bearer " + localStorage.getItem('token'),
-                        'Access-Control-Allow-Origin': '*'
-                    }
-                }
-            )
-                .then(res => {
-                    this.props.history.replace('/ReportView/' + this.state.ALLIslandtallyId + '/' + res.data.tallySheetVersionId)
+            this.setState({
+                lockedVersionIdAllIsland: res.data[0].lockedVersionIdAllIsland
+            })
 
-                });
+            console.log(this.state.lockedVersionIdAllIsland);
+
+            if (this.state.lockedVersionIdAllIsland == null){
+
+                axios.post('/tally-sheet/PRE_ALL_ISLAND_RESULTS/' + res.data[0].tallySheetId + '/version', null, {
+                        headers: {
+                            'Authorization': "Bearer " + localStorage.getItem('token'),
+                            'Access-Control-Allow-Origin': '*'
+                        }
+                    }
+                )
+                    .then(res => {
+                        this.props.history.replace('/ReportView/' + this.state.ALLIslandtallyId + '/' + res.data.tallySheetVersionId)
+
+                    });
+
+            } else {
+
+                this.props.history.replace('/ReportView/' + this.state.ALLIslandtallyId + '/' + res.data.lockedVersionIdAllIsland)
+
+            }
+
+
         })
             .catch((error) => console.log(error));
             this.setState({open: true});
@@ -362,11 +401,29 @@ class ReportsEntry extends Component {
                 ALLIslandEDtallId: res.data[0].tallySheetId
             })
 
-            axios.post('/tally-sheet/PRE_ALL_ISLAND_RESULTS_BY_ELECTORAL_DISTRICTS/' + this.state.ALLIslandEDtallId + '/version', null, {headers: {'Authorization': "Bearer " + localStorage.getItem('token'),}})
-                .then(res => {
+            this.setState({
+                lockedVersionIdAllIslandED: res.data[0].lockedVersionIdAllIslandED
+            })
 
-                    this.props.history.replace('/ReportView/' + this.state.ALLIslandEDtallId + '/' + res.data.tallySheetVersionId)
-                });
+            console.log(this.state.lockedVersionIdAllIslandED);
+
+            if (this.state.lockedVersionIdAllIslandED == null){
+
+                axios.post('/tally-sheet/PRE_ALL_ISLAND_RESULTS_BY_ELECTORAL_DISTRICTS/' + this.state.ALLIslandEDtallId + '/version', null, {headers: {'Authorization': "Bearer " + localStorage.getItem('token'),}})
+                    .then(res => {
+
+                        this.props.history.replace('/ReportView/' + this.state.ALLIslandEDtallId + '/' + res.data.tallySheetVersionId)
+                    });
+
+            } else {
+
+                this.props.history.replace('/ReportView/' + this.state.ALLIslandEDtallId + '/' + res.data.lockedVersionIdAllIslandED)
+
+
+            }
+            console.log("button"+this.state.showButtons);
+
+
         })
             .catch((error) => console.log(error));
     }
@@ -510,7 +567,9 @@ class ReportsEntry extends Component {
             } else {
                 this.setState({btnPRE30PD:true});
                 this.setState({isLokedPRE30PD:true});
+
             }
+            console.log("button"+this.state.showButtons);
 
             //latestVersionIdPD30
         })
@@ -533,6 +592,21 @@ class ReportsEntry extends Component {
             this.setState({
                 reportDivision: res.data[0].tallySheetId
             })
+            this.setState({
+                lockedVersionId30ED: res.data[0].lockedVersionId
+            })
+
+            console.log(this.state.lockedVersionId30ED);
+
+            if (this.state.lockedVersionId30ED == null){
+
+
+
+            } else {
+
+
+            }
+
         })
             .catch((error) => console.log(error));
     };
@@ -991,6 +1065,7 @@ class ReportsEntry extends Component {
                                             className="button">View</Button>}
                                     </TableCell>
                                     }
+
                                 </TableRow>
 
                                 {/*<TableRow>*/}
@@ -1201,6 +1276,17 @@ class ReportsEntry extends Component {
                                 </TableRow>
 
                                 <TableRow>
+                                    <TableCell style={{fontSize: 13, fontWeight: 'bold'}}>All Island ED</TableCell>
+                                    <TableCell style={{fontSize: 13}}>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}}
+                                                onClick={this.handleClickAllIslandED}
+                                                className="button">Generate</Button>
+                                    </TableCell>
+                                </TableRow>
+
+                                <TableRow>
                                     <TableCell style={{fontSize: 13, fontWeight: 'bold'}}>All Island</TableCell>
                                     <TableCell style={{fontSize: 13}}>
                                     </TableCell>
@@ -1211,16 +1297,7 @@ class ReportsEntry extends Component {
                                     </TableCell>
                                 </TableRow>
 
-                                <TableRow>
-                                    <TableCell style={{fontSize: 13, fontWeight: 'bold'}}>All Island ED</TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}}
-                                                onClick={this.handleClickAllIslandED}
-                                                className="button">Generate</Button>
-                                    </TableCell>
-                                </TableRow>
+
 
                             </TableBody>
                         </Table>
