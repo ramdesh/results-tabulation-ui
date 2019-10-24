@@ -266,7 +266,7 @@ class ReportsEntry extends Component {
             }
         })
             .then(res => {
-                console.log(res.data.tallySheetVersionId)
+                console.log(res.data.reportversionPD30)
                 this.props.history.replace('/ReportView/' + this.state.reportversionPD30 + '/' + res.data.tallySheetVersionId)
             });
 
@@ -276,8 +276,9 @@ class ReportsEntry extends Component {
     /** PRE 30 PD Non-postal votes **/
     handleClickPD30View() {
         console.log("PRE 30 PD")
-
-        this.props.history.replace('/ReportView/' + this.state.reportversionPD30 + '/' + this.state.lockedVersionId30PV)
+        console.log(this.state.latestVersionIdPD30)
+        console.log(this.state.latestVersionIdPD30)
+        this.props.history.replace('/ReportView/' + this.state.reportversionPD30 + '/' + this.state.latestVersionIdPD30)
 
         // axios.post('/tally-sheet/PRE-30-PD/' + this.state.reportversionPD30 + '/version', null, {
         //     headers: {
@@ -341,6 +342,8 @@ class ReportsEntry extends Component {
     }
 
     handleClickOpenPRE30PvView() {
+
+        this.props.history.push('/ReportView/' + this.state.report30pdpv + '/' + this.state.lockedVersionId30PV);
 
         // axios.post('/tally-sheet/PRE-30-PD/' + this.state.report30pdpv + '/version', null, {
         //     headers: {
@@ -1300,7 +1303,7 @@ class ReportsEntry extends Component {
                                     <TableCell>
                                         <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}}
                                                 disabled={true}
-                                                onClick={this.handleClickPD30}
+                                                onClick={this.handleClickOpenPRE30Pv}
                                                 className="button1">Generate</Button>
                                     </TableCell>
                                     }
