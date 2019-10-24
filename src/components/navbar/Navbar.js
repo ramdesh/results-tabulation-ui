@@ -3,22 +3,25 @@ import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
+import IconButton from '@material-ui/core/IconButton'
 import './Navbar.css';
-import  {withRouter} from 'react-router-dom';
-
+import {withRouter} from 'react-router-dom';
+import AccountCircle from '@material-ui/icons/AccountCircle';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import Cookies from 'js-cookie';
 
 class NavBar extends Component {
     constructor(props, context) {
         super(props, context);
         this.handleClickOpenDataEntry = this.handleClickOpenDataEntry.bind(this);
         this.handleClickOpenReports = this.handleClickOpenReports.bind(this);
-
+        this.logout = this.logout.bind(this);
+        if (Cookies.get('userinfo') !== undefined) {
+            this.username = JSON.parse(Cookies.get('userinfo'))['sub'];
+        } else {
+            this.username = ""
+        }
     }
-
-    // handleClickOpen () {
-    //     this.props.history.replace('/Home')
-    // }
-
 
     handleClickOpenDataEntry() {
         this.props.history.replace('/Home')
@@ -28,22 +31,44 @@ class NavBar extends Component {
         this.props.history.replace('/ReportsEntry')
     }
 
+    logout() {
+        //TODO: notify api to revoke access token
+        console.log("logging out!");
+        Cookies.remove('userinfo');
+        Cookies.remove('tabulation_access_token');
+        localStorage.clear();
+        window.location.reload();
+    }
 
     render() {
         return (
             <div>
                 <AppBar position="static" style={{backgroundColor: '#5079c8'}}>
                     <Toolbar>
-                        <Typography style={{paddingLeft: '1.5%'}} variant="h7" gutterBottom>
+                        <Typography style={{paddingLeft: '1.5%', flexGrow: 1}} variant="h7" gutterBottom>
                             Election Result Tabulation
                         </Typography>
                         {/*<Typography variant="title" color='#4879d1'>*/}
                         {/*Election Result Tabulation*/}
                         {/*</Typography>*/}
-                        <Button style={{marginLeft:'63%',marginRight:'3%'}} color="inherit" onClick={this.handleClickOpenDataEntry}>Data Entry</Button>
+                        <Button color="inherit" onClick={this.handleClickOpenDataEntry}>Data Entry</Button>
                         <Button color="inherit" onClick={this.handleClickOpenReports}>Reports</Button>
+                        <Typography variant="h7" gutterBottom>
+                            |
+                        </Typography>
+                        <Button
+                            color="inherit">
+                            <AccountCircle/>
+                            {this.username}
+                        </Button>
+                        <Button
+                            onClick={this.logout}
+                            color="inherit">
+                            <ExitToAppIcon/>
+                        </Button>
                     </Toolbar>
                 </AppBar>
+                {this.renderMenu}
                 {/*<div id="main_nav">*/}
                 {/*<ul>*/}
 
@@ -120,4 +145,5 @@ class NavBar extends Component {
         )
     }
 }
+
 export default withRouter(NavBar);
