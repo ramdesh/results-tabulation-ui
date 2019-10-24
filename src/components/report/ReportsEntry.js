@@ -501,7 +501,9 @@ class ReportsEntry extends Component {
             } else {
                 this.setState({showButtons:true});
                 this.setState({isLokedPRE30PD:true});
+
             }
+            console.log("button"+this.state.showButtons);
 
             //latestVersionIdPD30
         })
@@ -930,6 +932,7 @@ class ReportsEntry extends Component {
                                             </Select>
                                         </FormControl>
                                     </TableCell>
+
                                     {this.state.showButtons === false &&
                                     <TableCell>
                                         <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}}
@@ -953,6 +956,7 @@ class ReportsEntry extends Component {
                                             className="button">View</Button>}
                                     </TableCell>
                                     }
+
                                 </TableRow>
 
                                 {/*<TableRow>*/}

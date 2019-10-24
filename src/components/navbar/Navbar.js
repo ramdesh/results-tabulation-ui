@@ -40,8 +40,7 @@ class NavBar extends Component {
                         {/*<Typography variant="title" color='#4879d1'>*/}
                         {/*Election Result Tabulation*/}
                         {/*</Typography>*/}
-                        <Button style={{marginLeft:'63%',marginRight:'3%'}} color="inherit" onClick={this.handleClickOpenDataEntry}>Data Entry</Button>
-                        <Button color="inherit" onClick={this.handleClickOpenReports}>Reports</Button>
+                       
                     </Toolbar>
                 </AppBar>
                 {/*<div id="main_nav">*/}
