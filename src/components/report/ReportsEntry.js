@@ -193,9 +193,10 @@ class ReportsEntry extends Component {
 
     /** CE 201 Postal votes **/
     handleClickOpenCE201pv() {
-        if (this.state.reportversionCE201 == null) {
+        if (this.state.reportversionCE201pv == null) {
             alert('Report not Available')
         } else {
+            console.log('working');
             axios.get('/tally-sheet/' + this.state.reportIdCE201pv + '/version/' + this.state.reportversionCE201pv + '/html', {
                 headers: {
                     'Access-Control-Allow-Origin': '*',
@@ -543,7 +544,7 @@ class ReportsEntry extends Component {
         this.setState({selectedCE201PV: event.target.value, name: event.target.name});
         this.setState({btnCE201PV:true});
 
-        axios.get('/tally-sheet?limit=1000&offset=0&electionId=' + localStorage.getItem('electionType_NonPostal_Id') + '&areaId=' + event.target.value + '&tallySheetCode=CE-201-PV', {
+        axios.get('/tally-sheet?limit=1000&offset=0&electionId=' + localStorage.getItem('electionType_Postal_Id') + '&areaId=' + event.target.value + '&tallySheetCode=CE-201-PV', {
             headers: {
                 'Authorization': "Bearer " + localStorage.getItem('token'),
                 'Access-Control-Allow-Origin': '*',
