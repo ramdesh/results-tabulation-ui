@@ -419,6 +419,7 @@ class CE201New extends Component {
                                                 margin="dense"
                                                 variant="outlined"
                                                 label="Box Count"
+                                                type="number"
                                                 autoComplete='off'
                                                 onChange={this.handleInputChange(pollingStation.areaId, "ordinaryBallotCountFromBoxCount")}
                                             />
@@ -437,7 +438,8 @@ class CE201New extends Component {
                                             id="outlined-dense"
                                             margin="dense"
                                             variant="outlined"
-                                            label="Total"
+                                            type="number"
+                                            label="Total Box Count"
                                             autoComplete='off'
                                         /></TableCell>
 
