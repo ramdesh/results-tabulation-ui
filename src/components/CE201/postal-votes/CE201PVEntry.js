@@ -41,8 +41,17 @@ class CE201PVEntry extends Component {
 
             numberOfACoversRejected:0,
             numberOfBCoversRejected:0,
-            numberOfValidBallotPapers:0
+            numberOfValidBallotPapers:0,
+
+            area: null,
         };
+    }
+
+    getCountingCentreName() {
+        if (this.state.area) {
+            return this.state.area.areaName;
+        }
+        return null
     }
 
     handleClickOpen() {

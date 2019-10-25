@@ -184,12 +184,14 @@ class CE201Report extends Component {
                             className="button">Submit</Button>
 
                 </div>}
-                {this.state.isLocked === true && <div style={{margin: '4%', marginLeft: '80%'}}>
+                {this.state.isLocked === true && <div style={{margin: '4%', marginLeft: '70%'}}>
                     <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}}
                             onClick={this.handleBackToCE201}
                             className="button">Back</Button>
                     <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleUnlock}
                             className="button">Unlock</Button>
+                    <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleSubmit}
+                            className="button">Submit</Button>
                 </div>}
             </div>
         )
