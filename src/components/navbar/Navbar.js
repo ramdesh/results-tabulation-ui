@@ -8,7 +8,8 @@ import './Navbar.css';
 import {withRouter} from 'react-router-dom';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import Cookies from 'js-cookie';
+import * as auth from "../../auth";
+import {getUserName} from "../../auth";
 
 class NavBar extends Component {
     constructor(props, context) {
@@ -16,11 +17,7 @@ class NavBar extends Component {
         this.handleClickOpenDataEntry = this.handleClickOpenDataEntry.bind(this);
         this.handleClickOpenReports = this.handleClickOpenReports.bind(this);
         this.logout = this.logout.bind(this);
-        if (Cookies.get('userinfo') !== undefined) {
-            this.username = JSON.parse(Cookies.get('userinfo'))['sub'];
-        } else {
-            this.username = ""
-        }
+        this.username = getUserName()
     }
 
     handleClickOpenDataEntry() {
@@ -32,12 +29,7 @@ class NavBar extends Component {
     }
 
     logout() {
-        //TODO: notify api to revoke access token
-        console.log("logging out!");
-        Cookies.remove('userinfo');
-        Cookies.remove('tabulation_access_token');
-        localStorage.clear();
-        window.location.reload();
+        auth.logout()
     }
 
     render() {
@@ -51,7 +43,7 @@ class NavBar extends Component {
                         {/*<Typography variant="title" color='#4879d1'>*/}
                         {/*Election Result Tabulation*/}
                         {/*</Typography>*/}
-                        
+
                         <Typography variant="h7" gutterBottom>
                             |
                         </Typography>

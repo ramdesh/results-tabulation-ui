@@ -25,7 +25,23 @@ class CE201PVEntry extends Component {
             allUsers: [],
             areas: [],
             selected: 'Select',
-            setOpen: false
+            setOpen: false,
+            tallySheetId:0,
+
+
+            ballotBoxId1:0,
+            ballotBoxId2:0,
+            ballotBoxId3:0,
+            numberOfAPacketsFound1:0,
+            numberOfAPacketsFound2:0,
+            numberOfAPacketsFound3:0,
+            numberOfPacketsInserted1:0,
+            numberOfPacketsInserted2:0,
+            numberOfPacketsInserted3:0,
+
+            numberOfACoversRejected:0,
+            numberOfBCoversRejected:0,
+            numberOfValidBallotPapers:0
         };
     }
 
@@ -34,6 +50,15 @@ class CE201PVEntry extends Component {
     }
     handleBack() {
         this.props.history.goBack()
+    }
+
+
+    handleInputChange = (event) => {
+        event.preventDefault()
+        console.log(event.target.name)
+        this.setState({
+            [event.target.name]: event.target.value
+        })
     }
 
 
@@ -53,29 +78,30 @@ class CE201PVEntry extends Component {
             {
                 "content": [
                     {
-                        "ballotBoxId": "1",
-                        "numberOfAPacketsFound": 20,
-                        "numberOfPacketsInserted": 40
+                        "ballotBoxId": this.state.ballotBoxId1,
+                        "numberOfAPacketsFound": parseInt(this.state.numberOfAPacketsFound1),
+                        "numberOfPacketsInserted": parseInt(this.state.numberOfPacketsInserted1)
                     },
                     {
-                        "ballotBoxId": "2",
-                        "numberOfAPacketsFound": 20,
-                        "numberOfPacketsInserted": 40
+                        "ballotBoxId": this.state.ballotBoxId2,
+                        "numberOfAPacketsFound": parseInt(this.state.numberOfAPacketsFound2),
+                        "numberOfPacketsInserted": parseInt(this.state.numberOfPacketsInserted2)
                     },
                     {
-                        "ballotBoxId": "3",
-                        "numberOfAPacketsFound": 20,
-                        "numberOfPacketsInserted": 40
+                        "ballotBoxId": this.state.ballotBoxId3,
+                        "numberOfAPacketsFound": parseInt(this.state.numberOfAPacketsFound2),
+                        "numberOfPacketsInserted": parseInt(this.state.numberOfPacketsInserted2)
                     }
                 ],
                 "summary": {
-                    "numberOfACoversRejected": 1,
-                    "numberOfBCoversRejected": 1,
-                    "numberOfValidBallotPapers": 1,
-                    "situation": "string",
+                    "numberOfACoversRejected": parseInt(this.state.numberOfACoversRejected),
+                    "numberOfBCoversRejected": parseInt(this.state.numberOfBCoversRejected),
+                    "numberOfValidBallotPapers": parseInt(this.state.numberOfValidBallotPapers),
+                    "situation": "",
                     "timeOfCommencementOfCount": "2019-10-24T15:21:18.405Z"
                 }
             }
+
 
             // {
             //     "content": this.state.candidatesList.map((candidateId) => {
@@ -100,9 +126,9 @@ class CE201PVEntry extends Component {
         )
             .then(res => {
                 // console.log("Result" + res.data.latestVersionId);
-                console.log(res.data.htmlUrl);
+                // console.log(res.data.htmlUrl);
                 // alert("Successfully Created the TallySheet - PRE41")
-                this.props.history.push('/PRE41Report/' + this.state.tallySheetId + '/' + res.data.tallySheetVersionId)
+                this.props.history.push('/CE201PVReport/' + this.state.tallySheetId + '/' + res.data.tallySheetVersionId)
 
 
             }).catch((error) => console.log(error));
@@ -126,6 +152,13 @@ class CE201PVEntry extends Component {
     };
 
     componentDidMount() {
+
+        const {tallySheetId} = this.props.match.params
+        console.log("tally sheet Id ", tallySheetId)
+        this.setState({
+            tallySheetId: tallySheetId
+        })
+
         axios.get('/area?limit=20&offset=0&electionId=1', {
             headers: {
                 'Authorization': "Bearer "+localStorage.getItem('token'),
@@ -205,6 +238,10 @@ class CE201PVEntry extends Component {
                                             margin="dense"
                                             variant="outlined"
                                             autoComplete='off'
+                                            name="ballotBoxId1"
+                                            onChange={this.handleInputChange}
+
+
                                         />
                                     </TableCell>
                                     <TableCell style={{fontSize: 13}}>
@@ -213,6 +250,8 @@ class CE201PVEntry extends Component {
                                             margin="dense"
                                             variant="outlined"
                                             autoComplete='off'
+                                            name="numberOfAPacketsFound1"
+                                            onChange={this.handleInputChange}
                                         />
                                     </TableCell>
                                     <TableCell style={{fontSize: 13}}>
@@ -221,6 +260,8 @@ class CE201PVEntry extends Component {
                                             margin="dense"
                                             variant="outlined"
                                             autoComplete='off'
+                                            name="numberOfPacketsInserted1"
+                                            onChange={this.handleInputChange}
                                         />
                                     </TableCell>
                                 </TableRow>
@@ -233,6 +274,9 @@ class CE201PVEntry extends Component {
                                             margin="dense"
                                             variant="outlined"
                                             autoComplete='off'
+                                            name="ballotBoxId2"
+
+                                            onChange={this.handleInputChange}
                                         />
                                     </TableCell>
                                     <TableCell style={{fontSize: 13}}>
@@ -241,6 +285,8 @@ class CE201PVEntry extends Component {
                                             margin="dense"
                                             variant="outlined"
                                             autoComplete='off'
+                                            name="numberOfAPacketsFound2"
+                                            onChange={this.handleInputChange}
                                         />
                                     </TableCell>
                                     <TableCell style={{fontSize: 13}}>
@@ -249,6 +295,8 @@ class CE201PVEntry extends Component {
                                             margin="dense"
                                             variant="outlined"
                                             autoComplete='off'
+                                            name="numberOfPacketsInserted2"
+                                            onChange={this.handleInputChange}
                                         />
                                     </TableCell>
 
@@ -263,6 +311,8 @@ class CE201PVEntry extends Component {
                                             margin="dense"
                                             variant="outlined"
                                             autoComplete='off'
+                                            name="ballotBoxId3"
+                                            onChange={this.handleInputChange}
                                         />
                                     </TableCell>
                                     <TableCell style={{fontSize: 13}}>
@@ -271,6 +321,8 @@ class CE201PVEntry extends Component {
                                             margin="dense"
                                             variant="outlined"
                                             autoComplete='off'
+                                            name="numberOfAPacketsFound3"
+                                            onChange={this.handleInputChange}
                                         />
                                     </TableCell>
                                     <TableCell style={{fontSize: 13}}>
@@ -279,6 +331,8 @@ class CE201PVEntry extends Component {
                                             margin="dense"
                                             variant="outlined"
                                             autoComplete='off'
+                                            name="numberOfPacketsInserted3"
+                                            onChange={this.handleInputChange}
                                         />
                                     </TableCell>
 
@@ -299,6 +353,9 @@ class CE201PVEntry extends Component {
                                             margin="dense"
                                             variant="outlined"
                                             autoComplete='off'
+                                            name="numberOfACoversRejected"
+
+                                            onChange={this.handleInputChange}
                                         />
                                     </TableCell>
 
@@ -314,12 +371,15 @@ class CE201PVEntry extends Component {
                                         Total No packets rejected on various grounds after opening A covers :
                                     </TableCell>
 
+
                                     <TableCell style={{fontSize: 13}}>
                                         <TextField
                                             id="outlined-dense"
                                             margin="dense"
                                             variant="outlined"
                                             autoComplete='off'
+                                            name="numberOfBCoversRejected"
+                                            onChange={this.handleInputChange}
                                         />
                                     </TableCell>
 
@@ -342,6 +402,8 @@ class CE201PVEntry extends Component {
                                             margin="dense"
                                             variant="outlined"
                                             autoComplete='off'
+                                            name="numberOfValidBallotPapers"
+                                            onChange={this.handleInputChange}
                                         />
                                     </TableCell>
 
@@ -380,9 +442,11 @@ class CE201PVEntry extends Component {
                                     <TableCell style={{fontSize: 13}}>
                                         <TextField
                                         id="outlined-dense"
+                                        name="lastName"
                                         margin="dense"
                                         variant="outlined"
                                         autoComplete='off'
+                                        onChange={this.handleInputChange}
                                         />
                                     </TableCell>
 
