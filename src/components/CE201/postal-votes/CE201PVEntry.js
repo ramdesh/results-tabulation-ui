@@ -98,7 +98,7 @@ class CE201PVEntry extends Component {
                     "numberOfBCoversRejected": parseInt(this.state.numberOfBCoversRejected),
                     "numberOfValidBallotPapers": parseInt(this.state.numberOfValidBallotPapers),
                     "situation": "",
-                    "timeOfCommencementOfCount": "2019-10-24T15:21:18.405Z"
+                    "timeOfCommencementOfCount": "2019-10-25T15:21:18.405Z"
                 }
             }
 
@@ -250,6 +250,7 @@ class CE201PVEntry extends Component {
                                             margin="dense"
                                             variant="outlined"
                                             autoComplete='off'
+                                            type="number"
                                             name="numberOfAPacketsFound1"
                                             onChange={this.handleInputChange}
                                         />
@@ -260,6 +261,7 @@ class CE201PVEntry extends Component {
                                             margin="dense"
                                             variant="outlined"
                                             autoComplete='off'
+                                            type="number"
                                             name="numberOfPacketsInserted1"
                                             onChange={this.handleInputChange}
                                         />
@@ -285,6 +287,7 @@ class CE201PVEntry extends Component {
                                             margin="dense"
                                             variant="outlined"
                                             autoComplete='off'
+                                            type="number"
                                             name="numberOfAPacketsFound2"
                                             onChange={this.handleInputChange}
                                         />
@@ -295,6 +298,7 @@ class CE201PVEntry extends Component {
                                             margin="dense"
                                             variant="outlined"
                                             autoComplete='off'
+                                            type="number"
                                             name="numberOfPacketsInserted2"
                                             onChange={this.handleInputChange}
                                         />
@@ -321,6 +325,7 @@ class CE201PVEntry extends Component {
                                             margin="dense"
                                             variant="outlined"
                                             autoComplete='off'
+                                            type="number"
                                             name="numberOfAPacketsFound3"
                                             onChange={this.handleInputChange}
                                         />
@@ -331,6 +336,7 @@ class CE201PVEntry extends Component {
                                             margin="dense"
                                             variant="outlined"
                                             autoComplete='off'
+                                            type="number"
                                             name="numberOfPacketsInserted3"
                                             onChange={this.handleInputChange}
                                         />
@@ -354,7 +360,7 @@ class CE201PVEntry extends Component {
                                             variant="outlined"
                                             autoComplete='off'
                                             name="numberOfACoversRejected"
-
+                                            type="number"
                                             onChange={this.handleInputChange}
                                         />
                                     </TableCell>
@@ -378,6 +384,7 @@ class CE201PVEntry extends Component {
                                             margin="dense"
                                             variant="outlined"
                                             autoComplete='off'
+                                            type="number"
                                             name="numberOfBCoversRejected"
                                             onChange={this.handleInputChange}
                                         />
@@ -402,6 +409,7 @@ class CE201PVEntry extends Component {
                                             margin="dense"
                                             variant="outlined"
                                             autoComplete='off'
+                                            type="number"
                                             name="numberOfValidBallotPapers"
                                             onChange={this.handleInputChange}
                                         />
@@ -409,26 +417,21 @@ class CE201PVEntry extends Component {
 
                                 </TableRow>
 
-                                <TableRow>
-                                    <TableCell
-                                        style={{width: '6%', fontSize: 13}}></TableCell>
-                                    <TableCell
-                                        style={{fontSize: 13}}></TableCell>
-                                    <TableCell style={{fontWeight: 'bold',fontSize: 14}}>
+                                {/*<TableRow>*/}
+                                    {/*<TableCell*/}
+                                        {/*style={{width: '6%', fontSize: 13}}></TableCell>*/}
+                                    {/*<TableCell*/}
+                                        {/*style={{fontSize: 13}}></TableCell>*/}
+                                    {/*<TableCell style={{fontWeight: 'bold',fontSize: 14}}>*/}
 
-                                        No of postal ballot papers for the count in the receptable for accepted ballot papers
-                                        :
-                                    </TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        {/*<TextField*/}
-                                            {/*id="outlined-dense"*/}
-                                            {/*margin="dense"*/}
-                                            {/*variant="outlined"*/}
-                                            {/*autoComplete='off'*/}
-                                        {/*/>*/}
-                                    </TableCell>
+                                        {/*No of postal ballot papers for the count in the receptable for accepted ballot papers*/}
+                                        {/*:*/}
+                                    {/*</TableCell>*/}
+                                    {/*<TableCell style={{fontSize: 13}}>*/}
 
-                                </TableRow>
+                                    {/*</TableCell>*/}
+
+                                {/*</TableRow>*/}
 
                                 <TableRow>
                                     <TableCell
