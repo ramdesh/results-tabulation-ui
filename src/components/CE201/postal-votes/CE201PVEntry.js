@@ -168,19 +168,38 @@ class CE201PVEntry extends Component {
             tallySheetId: tallySheetId
         })
 
-        axios.get('/area?limit=20&offset=0&electionId=1', {
+
+
+        /** get tally sheet by ID **/
+        axios.get('/tally-sheet/' + tallySheetId, {
             headers: {
-                'Authorization': "Bearer "+localStorage.getItem('token'),
+                'Authorization': "Bearer " + localStorage.getItem('token'),
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'GET',
                 'Access-Control-Allow-Headers': 'Content-Type',
                 'X-Requested-With': 'XMLHttpRequest'
             }
         }).then(res => {
-            console.log("Election" + res.data)
+            console.log("New tally VERSION", res.data.latestVersionId)
             this.setState({
-                areas: res.data
+                latestVersionId: res.data.latestVersionId,
+                area: res.data.area,
             })
+
+
+        // axios.get('/area?limit=20&offset=0&electionId=1', {
+        //     headers: {
+        //         'Authorization': "Bearer "+localStorage.getItem('token'),
+        //         'Access-Control-Allow-Origin': '*',
+        //         'Access-Control-Allow-Methods': 'GET',
+        //         'Access-Control-Allow-Headers': 'Content-Type',
+        //         'X-Requested-With': 'XMLHttpRequest'
+        //     }
+        // }).then(res => {
+        //     console.log("Election" + res.data)
+        //     this.setState({
+        //         areas: res.data
+        //     })
         })
             .catch((error) => console.log(error));
     }
@@ -216,7 +235,8 @@ class CE201PVEntry extends Component {
                             Presidential Election 2019
                         </Typography>
                         <Typography variant="h5" gutterBottom>
-                            CE 201 - Postal Votes / Counting Hall No : {this.props.match.params.tallySheetVersionId}
+                            CE 201 - Postal Votes / Counting Hall No : {this.getCountingCentreName()}
+                            {/*CE 201 - Postal Votes / Counting Hall No : {this.props.match.params.tallySheetVersionId}*/}
                         </Typography>
                     </div>
 

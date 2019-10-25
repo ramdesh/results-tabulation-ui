@@ -132,7 +132,7 @@ class CE201PVReport extends Component {
             })
             .then(res => {
                 console.log("Lock API " + res);
-                alert("Successfully Locked the TallySheet - CE 201")
+                alert("Successfully Locked the TallySheet - CE 201 PV")
                 this.props.history.push('/Home')
 
             }).catch((error) => console.log(error));
