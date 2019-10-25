@@ -2,9 +2,9 @@ import React, {Component} from 'react'
 import {
     Button,
 } from '@material-ui/core';
-import axios from "../../axios-base";
+import axios from "../../../axios-base";
 
-class CE201Report extends Component {
+class CE201PVReport extends Component {
     constructor(props) {
         super(props);
         this.handleReport = this.handleReport.bind(this);
@@ -24,16 +24,16 @@ class CE201Report extends Component {
     }
 
     handleBackToCE201() {
-        console.log("Back to CE201 selection ");
-        this.props.history.push('/CE201')
+        console.log("Back to CE201 PVselection ");
+        this.props.history.push('/CE201PV')
     }
 
     /** Back **/
     handleBack() {
-        console.log("Back API CE201 ");
+        console.log("Back API CE201 PV");
         const {tallySheetId} = this.props.match.params
         const {tallySheetVersionId} = this.props.match.params
-        this.props.history.push('/CE201Entry/' + tallySheetId + '/' + tallySheetVersionId)
+        this.props.history.push('/CE201PVEntry/' + tallySheetId + '/' + tallySheetVersionId)
     }
 
     componentDidMount() {
@@ -108,9 +108,8 @@ class CE201Report extends Component {
             })
             .then(res => {
                 console.log("UnLock API " + res);
-                alert("Successfully Unlocked the TallySheet - CE 201")
-                this.props.history.push('/Home')
-                this.props.history.push('/CE201Entry/' + tallySheetId + '/' + tallySheetVersionId)
+                alert("Successfully Unlocked the TallySheet - CE 201 PV")
+                this.props.history.push('/CE201PVEntry/' + tallySheetId + '/' + tallySheetVersionId)
 
             }).catch((error) => console.log(error));
     }
@@ -133,7 +132,7 @@ class CE201Report extends Component {
             })
             .then(res => {
                 console.log("Lock API " + res);
-                alert("Successfully Locked the TallySheet - CE 201")
+                alert("Successfully Locked the TallySheet - CE 201 PV")
                 this.props.history.push('/Home')
 
             }).catch((error) => console.log(error));
@@ -184,18 +183,16 @@ class CE201Report extends Component {
                             className="button">Submit</Button>
 
                 </div>}
-                {this.state.isLocked === true && <div style={{margin: '4%', marginLeft: '70%'}}>
+                {this.state.isLocked === true && <div style={{margin: '4%', marginLeft: '80%'}}>
                     <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}}
                             onClick={this.handleBackToCE201}
                             className="button">Back</Button>
                     <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleUnlock}
                             className="button">Unlock</Button>
-                    <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleSubmit}
-                            className="button">Submit</Button>
                 </div>}
             </div>
         )
     }
 }
 
-export default CE201Report;
+export default CE201PVReport;
