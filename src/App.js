@@ -33,6 +33,7 @@ import {Redirect, Switch} from "react-router";
 import PRE41New from "./components/partywise-count/PRE41New";
 import CE201New from "./components/CE201/CE201New";
 import {ProtectedRoute} from "./auth";
+import CE201PVReport from "./components/CE201/postal-votes/CE201PVReport";
 
 
 function App() {
@@ -90,6 +91,7 @@ function App() {
 
                 <ProtectedRoute exact path="/CE201PV" component={CE201PV}/>
                 <ProtectedRoute exact path="/CE201PVEntry/:tallySheetId/:tallySheetVersionId" component={CE201PVEntry}/>
+                <ProtectedRoute exact path="/CE201PVReport/:tallySheetId/:tallySheetVersionId" component={CE201PVReport}/>
 
                 <ProtectedRoute exact path="/PRE34COPV" component={PRE34COPV}/>
                 <ProtectedRoute exact path="/PRE34COPV-Entry" component={PRE34COPVEntry}/>

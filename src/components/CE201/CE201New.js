@@ -412,7 +412,7 @@ class CE201New extends Component {
                                             {pollingStation.areaName + pollingStation.areaId}
                                         </TableCell>
 
-                                        <TableCell style={{backgroundColor: '#ddd', fontSize: 13, width: '25%'}}>
+                                        <TableCell style={{fontSize: 13, width: '20%'}}>
 
                                             <TextField
                                                 id="ordinaryBallotCountFromBoxCount"
@@ -428,7 +428,7 @@ class CE201New extends Component {
 
                                 <TableRow>
                                     <TableCell></TableCell>
-                                    <TableCell style={{fontSize: 15, color: 'black', fontWeight: 'bold'}}>
+                                    <TableCell style={{marginLeft:'30% ',fontSize: 15, color: 'black', fontWeight: 'bold'}}>
                                         Total Box Count : </TableCell>
 
                                     <TableCell

@@ -14,12 +14,6 @@ import {
     Breadcrumbs,
     Link
 } from '@material-ui/core';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-
 class CE201PVEntry extends Component {
     constructor(props, context) {
         super(props, context);
@@ -31,7 +25,23 @@ class CE201PVEntry extends Component {
             allUsers: [],
             areas: [],
             selected: 'Select',
-            setOpen: false
+            setOpen: false,
+            tallySheetId:0,
+
+
+            ballotBoxId1:0,
+            ballotBoxId2:0,
+            ballotBoxId3:0,
+            numberOfAPacketsFound1:0,
+            numberOfAPacketsFound2:0,
+            numberOfAPacketsFound3:0,
+            numberOfPacketsInserted1:0,
+            numberOfPacketsInserted2:0,
+            numberOfPacketsInserted3:0,
+
+            numberOfACoversRejected:0,
+            numberOfBCoversRejected:0,
+            numberOfValidBallotPapers:0
         };
     }
 
@@ -42,11 +52,95 @@ class CE201PVEntry extends Component {
         this.props.history.goBack()
     }
 
+
+    handleInputChange = (event) => {
+        event.preventDefault()
+        console.log(event.target.name)
+        this.setState({
+            [event.target.name]: event.target.value
+        })
+    }
+
+
+
     // submit the form data
     handleSubmit = (event) => {
-         alert("Successfully Created the TallySheet - CE 201 PV")
-         this.props.history.push('/Home')
+        const {tallySheetId} = this.props.match.params
+        console.log("tallySheet ID :", tallySheetId)
+        event.preventDefault()
+        // if (this.state.content[1].count === null || this.state.content[2].count === null ||
+        //     this.state.content[1].countInWords === null || this.state.content[2].countInWords === null) {
+        //     alert("Please Enter the necessary fields !")
+        //
+        // } else {
+        axios.post('/tally-sheet/CE-201-PV/' + tallySheetId + '/version',
+
+            {
+                "content": [
+                    {
+                        "ballotBoxId": this.state.ballotBoxId1,
+                        "numberOfAPacketsFound": parseInt(this.state.numberOfAPacketsFound1),
+                        "numberOfPacketsInserted": parseInt(this.state.numberOfPacketsInserted1)
+                    },
+                    {
+                        "ballotBoxId": this.state.ballotBoxId2,
+                        "numberOfAPacketsFound": parseInt(this.state.numberOfAPacketsFound2),
+                        "numberOfPacketsInserted": parseInt(this.state.numberOfPacketsInserted2)
+                    },
+                    {
+                        "ballotBoxId": this.state.ballotBoxId3,
+                        "numberOfAPacketsFound": parseInt(this.state.numberOfAPacketsFound2),
+                        "numberOfPacketsInserted": parseInt(this.state.numberOfPacketsInserted2)
+                    }
+                ],
+                "summary": {
+                    "numberOfACoversRejected": parseInt(this.state.numberOfACoversRejected),
+                    "numberOfBCoversRejected": parseInt(this.state.numberOfBCoversRejected),
+                    "numberOfValidBallotPapers": parseInt(this.state.numberOfValidBallotPapers),
+                    "situation": "",
+                    "timeOfCommencementOfCount": "2019-10-24T15:21:18.405Z"
+                }
+            }
+
+
+            // {
+            //     "content": this.state.candidatesList.map((candidateId) => {
+            //         return {
+            //             "candidateId": candidateId,
+            //             "count": parseInt(this.state.content[candidateId].count),
+            //             "countInWords": this.state.content[candidateId].countInWords
+            //         }
+            //     }),
+            //     "summary": {
+            //         "rejectedVoteCount": parseInt(this.state.summary.rejectedVoteCount)
+            //     }
+            // }
+            //
+            //
+            ,
+            {
+                headers: {
+                    'authorization': "Bearer " + localStorage.getItem('token'),
+                }
+            }
+        )
+            .then(res => {
+                // console.log("Result" + res.data.latestVersionId);
+                // console.log(res.data.htmlUrl);
+                // alert("Successfully Created the TallySheet - PRE41")
+                this.props.history.push('/CE201PVReport/' + this.state.tallySheetId + '/' + res.data.tallySheetVersionId)
+
+
+            }).catch((error) => console.log(error));
+        //}
     }
+
+
+    // submit the form data
+    // handleSubmit = (event) => {
+    //      alert("Successfully Created the TallySheet - CE 201 PV")
+    //      this.props.history.push('/Home')
+    // }
 
     // modal controllers
     handleClose() {
@@ -58,6 +152,13 @@ class CE201PVEntry extends Component {
     };
 
     componentDidMount() {
+
+        const {tallySheetId} = this.props.match.params
+        console.log("tally sheet Id ", tallySheetId)
+        this.setState({
+            tallySheetId: tallySheetId
+        })
+
         axios.get('/area?limit=20&offset=0&electionId=1', {
             headers: {
                 'Authorization': "Bearer "+localStorage.getItem('token'),
@@ -101,30 +202,24 @@ class CE201PVEntry extends Component {
                         {/*<Typography color="textPrimary"></Typography>*/}
                     </Breadcrumbs>
 
-                    {/*<div style={{marginBottom: '3%'}}>*/}
-                        {/*<Typography variant="h4" gutterBottom>*/}
-                            {/*Presidential Election 2019*/}
-                        {/*</Typography>*/}
-                        {/*<Typography variant="h6" gutterBottom>*/}
-                            {/*CE-201 - Counting Hall No : {this.props.match.params.name2}*/}
-                            {/*/!*CE-201 - Tally Sheet ID : {this.props.match.params.name}*!/*/}
-                        {/*</Typography>*/}
-                    {/*</div>*/}
                     <div style={{marginBottom: '3%'}}>
                         <Typography variant="h4" gutterBottom>
                             Presidential Election 2019
                         </Typography>
-                        <Typography variant="h6" gutterBottom>
+                        <Typography variant="h5" gutterBottom>
                             CE 201 - Postal Votes / Counting Hall No : {this.props.match.params.tallySheetVersionId}
                         </Typography>
-
                     </div>
 
 
                     <Paper>
                         <Table>
                             <TableHead>
+
                                 <TableRow>
+                                    <TableCell className="header"
+                                               style={{color: 'white', fontSize: 13, fontWeight: 'bold'}}>
+                                        No</TableCell>
                                     <TableCell className="header"
                                                style={{fontSize: 14, fontWeight: 'bold', color: 'white'}}>Serial No of Postal Votes Ballot Box</TableCell>
                                     <TableCell className="header"
@@ -135,12 +230,18 @@ class CE201PVEntry extends Component {
                             </TableHead>
                             <TableBody>
                                 <TableRow>
+                                    <TableCell
+                                        style={{width: '6%', fontSize: 13}}>1</TableCell>
                                     <TableCell style={{fontSize: 13}}>
                                         <TextField
                                             id="outlined-dense"
                                             margin="dense"
                                             variant="outlined"
                                             autoComplete='off'
+                                            name="ballotBoxId1"
+                                            onChange={this.handleInputChange}
+
+
                                         />
                                     </TableCell>
                                     <TableCell style={{fontSize: 13}}>
@@ -149,6 +250,8 @@ class CE201PVEntry extends Component {
                                             margin="dense"
                                             variant="outlined"
                                             autoComplete='off'
+                                            name="numberOfAPacketsFound1"
+                                            onChange={this.handleInputChange}
                                         />
                                     </TableCell>
                                     <TableCell style={{fontSize: 13}}>
@@ -157,44 +260,23 @@ class CE201PVEntry extends Component {
                                             margin="dense"
                                             variant="outlined"
                                             autoComplete='off'
+                                            name="numberOfPacketsInserted1"
+                                            onChange={this.handleInputChange}
                                         />
                                     </TableCell>
                                 </TableRow>
                                 <TableRow>
+                                    <TableCell
+                                        style={{width: '6%', fontSize: 13}}>2</TableCell>
                                     <TableCell style={{fontSize: 13}}>
                                         <TextField
                                             id="outlined-dense"
                                             margin="dense"
                                             variant="outlined"
                                             autoComplete='off'
-                                        />
-                                    </TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                            autoComplete='off'
-                                        />
-                                    </TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                            autoComplete='off'
-                                        />
-                                    </TableCell>
+                                            name="ballotBoxId2"
 
-                                </TableRow>
-
-                                <TableRow>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                            autoComplete='off'
+                                            onChange={this.handleInputChange}
                                         />
                                     </TableCell>
                                     <TableCell style={{fontSize: 13}}>
@@ -203,6 +285,8 @@ class CE201PVEntry extends Component {
                                             margin="dense"
                                             variant="outlined"
                                             autoComplete='off'
+                                            name="numberOfAPacketsFound2"
+                                            onChange={this.handleInputChange}
                                         />
                                     </TableCell>
                                     <TableCell style={{fontSize: 13}}>
@@ -211,82 +295,125 @@ class CE201PVEntry extends Component {
                                             margin="dense"
                                             variant="outlined"
                                             autoComplete='off'
+                                            name="numberOfPacketsInserted2"
+                                            onChange={this.handleInputChange}
                                         />
                                     </TableCell>
 
                                 </TableRow>
 
                                 <TableRow>
+                                    <TableCell
+                                        style={{width: '6%', fontSize: 13}}>3</TableCell>
+                                    <TableCell style={{fontSize: 13}}>
+                                        <TextField
+                                            id="outlined-dense"
+                                            margin="dense"
+                                            variant="outlined"
+                                            autoComplete='off'
+                                            name="ballotBoxId3"
+                                            onChange={this.handleInputChange}
+                                        />
+                                    </TableCell>
+                                    <TableCell style={{fontSize: 13}}>
+                                        <TextField
+                                            id="outlined-dense"
+                                            margin="dense"
+                                            variant="outlined"
+                                            autoComplete='off'
+                                            name="numberOfAPacketsFound3"
+                                            onChange={this.handleInputChange}
+                                        />
+                                    </TableCell>
+                                    <TableCell style={{fontSize: 13}}>
+                                        <TextField
+                                            id="outlined-dense"
+                                            margin="dense"
+                                            variant="outlined"
+                                            autoComplete='off'
+                                            name="numberOfPacketsInserted3"
+                                            onChange={this.handleInputChange}
+                                        />
+                                    </TableCell>
+
+                                </TableRow>
+
+                                <TableRow>
+                                    <TableCell
+                                        style={{width: '6%', fontSize: 13}}></TableCell>
+                                    <TableCell
+                                        style={{fontSize: 13}}></TableCell>
                                     <TableCell style={{fontWeight: 'bold',fontSize: 14}}>
-
                                         Total No of PV-A packets found in the boxes :
                                     </TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        {/*<TextField*/}
-                                            {/*id="outlined-dense"*/}
-                                            {/*margin="dense"*/}
-                                            {/*variant="outlined"*/}
-                                        {/*/>*/}
-                                    </TableCell>
+
                                     <TableCell style={{fontSize: 13}}>
                                         <TextField
                                             id="outlined-dense"
                                             margin="dense"
                                             variant="outlined"
                                             autoComplete='off'
+                                            name="numberOfACoversRejected"
+
+                                            onChange={this.handleInputChange}
                                         />
                                     </TableCell>
 
                                 </TableRow>
 
                                 <TableRow>
+                                    <TableCell
+                                        style={{width: '6%', fontSize: 13}}></TableCell>
+                                    <TableCell
+                                        style={{fontSize: 13}}></TableCell>
                                     <TableCell style={{fontWeight: 'bold',fontSize: 14}}>
 
                                         Total No packets rejected on various grounds after opening A covers :
                                     </TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        {/*<TextField*/}
-                                        {/*id="outlined-dense"*/}
-                                        {/*margin="dense"*/}
-                                        {/*variant="outlined"*/}
-                                        {/*/>*/}
-                                    </TableCell>
+
+
                                     <TableCell style={{fontSize: 13}}>
                                         <TextField
                                             id="outlined-dense"
                                             margin="dense"
                                             variant="outlined"
                                             autoComplete='off'
+                                            name="numberOfBCoversRejected"
+                                            onChange={this.handleInputChange}
                                         />
                                     </TableCell>
 
                                 </TableRow>
 
                                 <TableRow>
+                                    <TableCell
+                                        style={{width: '6%', fontSize: 13}}></TableCell>
+                                    <TableCell
+                                        style={{fontSize: 13}}></TableCell>
                                     <TableCell style={{fontWeight: 'bold',fontSize: 14}}>
 
                                         Total No packets rejected on various grounds after opening B covers in accepted ballot papers
                                         receptacle :
                                     </TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        {/*<TextField*/}
-                                        {/*id="outlined-dense"*/}
-                                        {/*margin="dense"*/}
-                                        {/*variant="outlined"*/}
-                                        {/*/>*/}
-                                    </TableCell>
+
                                     <TableCell style={{fontSize: 13}}>
                                         <TextField
                                             id="outlined-dense"
                                             margin="dense"
                                             variant="outlined"
                                             autoComplete='off'
+                                            name="numberOfValidBallotPapers"
+                                            onChange={this.handleInputChange}
                                         />
                                     </TableCell>
 
                                 </TableRow>
 
                                 <TableRow>
+                                    <TableCell
+                                        style={{width: '6%', fontSize: 13}}></TableCell>
+                                    <TableCell
+                                        style={{fontSize: 13}}></TableCell>
                                     <TableCell style={{fontWeight: 'bold',fontSize: 14}}>
 
                                         No of postal ballot papers for the count in the receptable for accepted ballot papers
@@ -294,17 +421,32 @@ class CE201PVEntry extends Component {
                                     </TableCell>
                                     <TableCell style={{fontSize: 13}}>
                                         {/*<TextField*/}
-                                        {/*id="outlined-dense"*/}
-                                        {/*margin="dense"*/}
-                                        {/*variant="outlined"*/}
+                                            {/*id="outlined-dense"*/}
+                                            {/*margin="dense"*/}
+                                            {/*variant="outlined"*/}
+                                            {/*autoComplete='off'*/}
                                         {/*/>*/}
+                                    </TableCell>
+
+                                </TableRow>
+
+                                <TableRow>
+                                    <TableCell
+                                        style={{width: '6%', fontSize: 13}}></TableCell>
+                                    <TableCell
+                                        style={{fontSize: 13}}></TableCell>
+                                    <TableCell style={{fontWeight: 'bold',fontSize: 14}}>
+
+                                     Situation :
                                     </TableCell>
                                     <TableCell style={{fontSize: 13}}>
                                         <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                            autoComplete='off'
+                                        id="outlined-dense"
+                                        name="lastName"
+                                        margin="dense"
+                                        variant="outlined"
+                                        autoComplete='off'
+                                        onChange={this.handleInputChange}
                                         />
                                     </TableCell>
 
@@ -315,11 +457,7 @@ class CE201PVEntry extends Component {
                     </Paper>
 
                 </div>
-                {/*<div style={{marginTop: '2%', marginBottom: '2%'}}>*/}
-                {/*<Typography variant="body2" gutterBottom>*/}
-                {/*The Total 2 :*/}
-                {/*</Typography>*/}
-                {/*</div>*/}
+
                 <div style={{marginLeft:'80%',marginTop:'2%'}}>
 
                     <Button style={{borderRadius: 18,color:'white',marginRight: '4%'}}   onClick={this.handleBack} className="button">Back</Button>
@@ -329,27 +467,7 @@ class CE201PVEntry extends Component {
                 {/*<Button variant="outlined" color="primary" onClick={this.handleClickOpen}>*/}
                 {/*Open alert dialog*/}
                 {/*</Button>*/}
-                <Dialog
-                    open={this.state.open}
-                    onClose={this.handleClose}
-                    aria-labelledby="alert-dialog-title"
-                    aria-describedby="alert-dialog-description"
-                >
-                    <DialogTitle id="alert-dialog-title">{"Invalid Ballot Count Confirmation "}</DialogTitle>
-                    <DialogContent>
-                        <DialogContentText id="alert-dialog-description">
-                            Are you sure you that all the necessary data entered correctly ?
-                        </DialogContentText>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button color="primary">
-                            Confirm
-                        </Button>
-                        <Button onClick={this.handleClose} color="primary" autoFocus>
-                            Cancel
-                        </Button>
-                    </DialogActions>
-                </Dialog>
+
             </div>
         )
     }
