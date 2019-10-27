@@ -392,9 +392,12 @@ class PRE41New extends Component {
                             <Link color="inherit" href="/Home">
                                 Data Entry
                             </Link>
-                            <Link color="inherit">
+                            {this.state.pollingDivision !== null &&<Link color="inherit">
                                 Votes - PRE 41
-                            </Link>
+                            </Link>}
+                            {this.state.pollingDivision === null &&<Link color="inherit">
+                                Postal Votes - PRE 41
+                            </Link>}
                             <Link color="inherit">
                                 Tally Sheet
                             </Link>
@@ -403,9 +406,12 @@ class PRE41New extends Component {
                         <Typography variant="h4" gutterBottom>
                             Presidential Election 2019
                         </Typography>
-                        <Typography variant="h5" gutterBottom>
+                        {this.state.pollingDivision !== null && <Typography variant="h5" gutterBottom>
                             PRE 41
-                        </Typography>
+                        </Typography>}
+                        {this.state.pollingDivision === null && <Typography variant="h5" gutterBottom>
+                            PRE 41 - Postal Votes
+                        </Typography>}
                         <br/>
 
                         <Grid container spacing={3}>
