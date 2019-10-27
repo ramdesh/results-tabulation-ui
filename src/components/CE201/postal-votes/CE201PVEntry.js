@@ -12,7 +12,8 @@ import {
     TableBody,
     Paper,
     Breadcrumbs,
-    Link
+    Link,
+    Grid
 } from '@material-ui/core';
 class CE201PVEntry extends Component {
     constructor(props, context) {
@@ -28,7 +29,6 @@ class CE201PVEntry extends Component {
             setOpen: false,
             tallySheetId:0,
 
-
             ballotBoxId1:0,
             ballotBoxId2:0,
             ballotBoxId3:0,
@@ -43,7 +43,11 @@ class CE201PVEntry extends Component {
             numberOfBCoversRejected:0,
             numberOfValidBallotPapers:0,
 
+            pollingDivision: null,
+            electoralDistrict: null,
             area: null,
+            areaId:0
+
         };
     }
 
@@ -168,8 +172,6 @@ class CE201PVEntry extends Component {
             tallySheetId: tallySheetId
         })
 
-
-
         /** get tally sheet by ID **/
         axios.get('/tally-sheet/' + tallySheetId, {
             headers: {
@@ -184,6 +186,7 @@ class CE201PVEntry extends Component {
             this.setState({
                 latestVersionId: res.data.latestVersionId,
                 area: res.data.area,
+                areaId: res.data.area.areaId
             })
 
 
@@ -202,6 +205,39 @@ class CE201PVEntry extends Component {
         //     })
         })
             .catch((error) => console.log(error));
+
+
+        /** get electoral district name **/
+        axios.get('/area?limit=1000&offset=0&associatedAreaId=' + this.state.areaId + '&areaType=ElectoralDistrict', {
+            headers: {
+                'Authorization': "Bearer " + localStorage.getItem('token'),
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET',
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        }).then(res => {
+            this.setState({
+                electoralDistrict: res.data[0].areaName
+            })
+        }).catch((error) => console.log(error));
+
+        /** get polling division name **/
+        axios.get('/area?limit=1000&offset=0&associatedAreaId=' + this.state.areaId + '&areaType=PollingDivision', {
+            headers: {
+                'Authorization': "Bearer " + localStorage.getItem('token'),
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'GET',
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        }).then(res => {
+            this.setState({
+                pollingDivision: res.data[0].areaName
+            })
+        }).catch((error) => console.log(error));
+
+
     }
 
     render() {
@@ -230,14 +266,47 @@ class CE201PVEntry extends Component {
                         {/*<Typography color="textPrimary"></Typography>*/}
                     </Breadcrumbs>
 
+
+                    <Typography variant="h4" gutterBottom>
+                        Presidential Election 2019
+                    </Typography>
+                    <Typography variant="h5" gutterBottom>
+                        CE 201 - Postal Votes
+                    </Typography>
+                    <br/>
+
+                    <Grid container spacing={3}>
+                        <Grid item xs={4}>
+                            <Typography style={{fontWeight: 'bold'}} variant="h5" gutterBottom>
+                                Electoral District : {this.state.electoralDistrict}
+                            </Typography>
+                        </Grid>
+                        {this.state.pollingDivision !== null &&  <Grid item xs={4}>
+                            <Typography style={{fontWeight: 'bold'}} variant="h5" gutterBottom>
+                                Polling Division : {this.state.pollingDivision}
+                            </Typography>
+                        </Grid>}
+                        <Grid item xs={4}>
+                            <Typography style={{fontWeight: 'bold'}} variant="h5" gutterBottom>
+                                Counting Hall No : {this.getCountingCentreName()}
+
+                            </Typography>
+                        </Grid>
+                    </Grid>
+
+
                     <div style={{marginBottom: '3%'}}>
-                        <Typography variant="h4" gutterBottom>
-                            Presidential Election 2019
-                        </Typography>
-                        <Typography variant="h5" gutterBottom>
-                            CE 201 - Postal Votes / Counting Hall No : {this.getCountingCentreName()}
-                            {/*CE 201 - Postal Votes / Counting Hall No : {this.props.match.params.tallySheetVersionId}*/}
-                        </Typography>
+                        {/*<Typography variant="h4" gutterBottom>*/}
+                            {/*Presidential Election 2019*/}
+                        {/*</Typography>*/}
+                        {/*<Typography variant="h5" gutterBottom>*/}
+                            {/*CE 201 - Postal Votes / Counting Hall No : {this.getCountingCentreName()}*/}
+                        {/*</Typography>*/}
+
+
+
+
+
                     </div>
 
 
@@ -469,7 +538,7 @@ class CE201PVEntry extends Component {
                                         style={{fontSize: 13}}></TableCell>
                                     <TableCell style={{fontWeight: 'bold',fontSize: 14}}>
 
-                                     Situation :
+                                     Location :
                                     </TableCell>
                                     <TableCell style={{fontSize: 13}}>
                                         <TextField

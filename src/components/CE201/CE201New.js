@@ -237,8 +237,10 @@ class CE201New extends Component {
                         for (var i = 0; i < pollingStationWiseCounts.length; i++) {
                             let pollingStationWiseCount = pollingStationWiseCounts [i];
                             console.log("Loop" + pollingStationWiseCount.areaId + " - " + pollingStationWiseCount.ballotsIssued)
+                            console.log("Loop Count" + pollingStationWiseCount.areaId + " - " + pollingStationWiseCount.ordinaryBallotCountFromBoxCount)
                             this.setInputValue(pollingStationWiseCount.areaId, "ballotsIssued", pollingStationWiseCount.ballotsIssued);
                             this.setInputValue(pollingStationWiseCount.areaId, "ballotsReceived", pollingStationWiseCount.ballotsReceived);
+                            this.setInputValue(pollingStationWiseCount.areaId, "ordinaryBallotCountFromBoxCount", pollingStationWiseCount.ordinaryBallotCountFromBoxCount);
                             // this.setInputValue(pollingStationWiseCount.candidateId, "countInWords", candidateWiseCount.countInWords);
                         }
 
