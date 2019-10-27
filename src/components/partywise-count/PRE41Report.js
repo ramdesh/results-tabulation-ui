@@ -129,15 +129,11 @@ class PRE41Report extends Component {
 
     }
 
-    // submit the form data
+    /** Back > Edit **/
     handleBack() {
         console.log("Back API ");
         const {tallySheetId} = this.props.match.params
         const {tallySheetVersionId} = this.props.match.params
-        const {countingId} = this.props.match.params
-        // alert("Successfully Created the TallySheet - PRE 41")
-
-
         this.props.history.push('/PRE41Entry/' + tallySheetId + '/'+tallySheetVersionId)
     }
 
@@ -180,17 +176,17 @@ class PRE41Report extends Component {
                 {/*<iframe height="2700" width="1380" src={this.state.dataURI}>*/}
                 {/*</iframe>*/}
 
-                {this.state.isLocked===false && <div style={{margin: '4%', marginLeft: '76%'}}>
-                   <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleBack}
-                            className="button">Back</Button>
-                    <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleSubmit}
-                            className="button">Submit</Button>
+                {this.state.isLocked===false && <div style={{margin: '4%', marginLeft: '68%'}}>
+                   <Button style={{borderRadius: 18, color: 'white', margin:'2%',marginRight: '5%'}} onClick={this.handleBack}
+                            className="button">Edit</Button>
+                    <Button style={{width:'150px',borderRadius: 18, color: 'white',margin:'2%', marginRight: '4%'}} onClick={this.handleSubmit}
+                            className="button">Lock / Submit</Button>
                 </div>}
-                {this.state.isLocked===true && <div style={{margin: '4%', marginLeft: '76%'}}>
-                    <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleBackToPRE41}
-                            className="button">Back</Button>
-                    <Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleUnlock}
-                            className="button">Unlock</Button>
+                {this.state.isLocked===true && <div style={{margin: '4%', marginLeft: '68%'}}>
+                    <Button style={{borderRadius: 18, color: 'white',margin:'2%', marginRight: '5%'}} onClick={this.handleUnlock}
+                            className="button">Edit</Button>
+                    <Button style={{width:'150px',borderRadius: 18, color: 'white',margin:'2%', marginRight: '4%'}} onClick={this.handleSubmit }
+                            className="button">Lock / Submit</Button>
                 </div>}
             </div>
         )
