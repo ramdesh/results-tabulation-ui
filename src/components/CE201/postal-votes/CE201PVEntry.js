@@ -327,7 +327,7 @@ class CE201PVEntry extends Component {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                <TableRow>
+                                <TableRow style={{background: "#f6f6f6"}}>
                                     <TableCell
                                         style={{width: '6%', fontSize: 13}}>1</TableCell>
                                     <TableCell style={{fontSize: 13}}>
@@ -404,7 +404,7 @@ class CE201PVEntry extends Component {
 
                                 </TableRow>
 
-                                <TableRow>
+                                <TableRow style={{background: "#f6f6f6"}}>
                                     <TableCell
                                         style={{width: '6%', fontSize: 13}}>3</TableCell>
                                     <TableCell style={{fontSize: 13}}>
@@ -465,7 +465,7 @@ class CE201PVEntry extends Component {
 
                                 </TableRow>
 
-                                <TableRow>
+                                <TableRow style={{background: "#f6f6f6"}}>
                                     <TableCell
                                         style={{width: '6%', fontSize: 13}}></TableCell>
                                     <TableCell
@@ -531,7 +531,7 @@ class CE201PVEntry extends Component {
 
                                 {/*</TableRow>*/}
 
-                                <TableRow>
+                                <TableRow style={{background: "#f6f6f6"}}>
                                     <TableCell
                                         style={{width: '6%', fontSize: 13}}></TableCell>
                                     <TableCell
