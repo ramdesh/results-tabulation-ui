@@ -21,6 +21,8 @@ class CE201PVEntry extends Component {
         this.handleClose = this.handleClose.bind(this);
         this.handleClickOpen = this.handleClickOpen.bind(this);
         this.handleBack = this.handleBack.bind(this);
+
+
         this.state = {
             open: false,
             allUsers: [],
@@ -46,7 +48,8 @@ class CE201PVEntry extends Component {
             pollingDivision: null,
             electoralDistrict: null,
             area: null,
-            areaId:0
+            areaId:0,
+            time: "2017-05-24T10:30",
 
         };
     }
@@ -73,6 +76,14 @@ class CE201PVEntry extends Component {
             [event.target.name]: event.target.value
         })
     }
+
+     handleDateChange = date => {
+       console.log(date.target.value);
+
+         this.setState({
+             time: date.target.value
+         })
+    };
 
 
 
@@ -111,7 +122,7 @@ class CE201PVEntry extends Component {
                     "numberOfBCoversRejected": parseInt(this.state.numberOfBCoversRejected),
                     "numberOfValidBallotPapers": parseInt(this.state.numberOfValidBallotPapers),
                     "situation": "",
-                    "timeOfCommencementOfCount": "2019-10-25T15:21:18.405Z"
+                    "timeOfCommencementOfCount": this.state.time
                 }
             }
 
@@ -550,6 +561,33 @@ class CE201PVEntry extends Component {
                                         onChange={this.handleInputChange}
                                         />
                                     </TableCell>
+
+
+
+                                </TableRow>
+
+                                <TableRow style={{}}>
+                                    <TableCell
+                                        style={{width: '6%', fontSize: 13}}></TableCell>
+
+                                    <TableCell style={{fontWeight: 'bold',fontSize: 14}}>
+
+                                        Date :
+                                    </TableCell>
+                                    <TableCell style={{fontSize: 13}}>
+                                        <TextField
+                                            id="datetime-local"
+                                            label="Next appointment"
+                                            type="datetime-local"
+                                            defaultValue="2017-05-24T10:30"
+                                            onChange={this.handleDateChange}
+                                            InputLabelProps={{
+                                                shrink: true,
+                                            }}
+                                        />
+                                    </TableCell>
+
+
 
                                 </TableRow>
 
