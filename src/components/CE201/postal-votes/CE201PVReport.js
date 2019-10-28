@@ -190,7 +190,7 @@ class CE201PVReport extends Component {
                             className="button">Edit</Button>
                     <Button style={{width:'150px',borderRadius: 18, color: 'white',margin:'2%', marginRight: '4%'}} onClick={this.handleSubmit }
                             className="button">Lock / Submit</Button>
-                    
+
                 </div>}
             </div>
         )

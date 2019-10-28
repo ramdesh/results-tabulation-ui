@@ -20,6 +20,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import {getNumOrZero} from "../../utils";
 
 class CE201New extends Component {
     constructor(props, context) {
@@ -60,12 +61,13 @@ class CE201New extends Component {
 
     /** get Input value **/
     getInputValue(pollingStationId, property) {
-        const value = this.state.content[pollingStationId];
+        console.log("Check 1",pollingStationId, property)
+        const value = this.state.content[pollingStationId][property];
+        console.log("Check 2", value)
         if (value === null || value === undefined) {
             return undefined
         } else {
             return value
-            debugger;
         }
     }
 
@@ -308,6 +310,19 @@ class CE201New extends Component {
 
     }
 
+    getBoxCountTotal() {
+        let validVoteCountTotal = 0;
+
+        for (var pollingStationIndex = 0; pollingStationIndex < this.state.pollingStationsList.length; pollingStationIndex++) {
+            let pollingId = this.state.pollingStationsList[pollingStationIndex];
+            let validVoteCount = this.getInputValue(pollingId, "ordinaryBallotCountFromBoxCount");
+            // validVoteCount = getNumOrZero(validVoteCount);
+            validVoteCountTotal += validVoteCount;
+        }
+
+        return validVoteCountTotal
+    }
+
     handleInputChange = (pollingId, property) => (event) => {
 
         console.log("Polling ID", pollingId)
@@ -399,8 +414,15 @@ class CE201New extends Component {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {this.state.pollingStations.map((pollingStation, idx) => (
-                                    <TableRow style={idx % 2 ? {background: "white"} : {background: "#f6f6f6"}}>
+                                {/*{this.state.pollingStations.map((pollingStation, idx) => (*/}
+
+                                {this.state.pollingStationsList.map((pollingId, idx) => {
+
+                                    // var candidate = this.state.candidateMap[candidateId];
+                                    var pollingStation = this.state.pollingStationsMap[pollingId];
+
+                                    return   <TableRow style={idx % 2 ? {background: "white"} : {background: "#f6f6f6"}}>
+
                                         <TableCell style={{fontSize: 13, width: '10%'}}>
                                             {/*{pollingStation.pollingDistricts[0].areaId}*/}
                                             {
@@ -410,8 +432,9 @@ class CE201New extends Component {
                                             }
 
                                         </TableCell>
+
                                         <TableCell style={{fontSize: 13, width: '50%'}}>
-                                            {pollingStation.areaName + pollingStation.areaId}
+                                            {pollingStation.areaName }
                                         </TableCell>
 
                                         <TableCell style={{fontSize: 13, width: '20%'}}>
@@ -422,28 +445,35 @@ class CE201New extends Component {
                                                 variant="outlined"
                                                 label="Box Count"
                                                 type="number"
+                                                value={this.getInputValue(pollingStation.areaId, "ordinaryBallotCountFromBoxCount")}
                                                 autoComplete='off'
                                                 onChange={this.handleInputChange(pollingStation.areaId, "ordinaryBallotCountFromBoxCount")}
                                             />
                                         </TableCell>
                                     </TableRow>
-                                ))}
+                                })}
 
                                 <TableRow>
                                     <TableCell></TableCell>
                                     <TableCell style={{marginLeft:'30% ',fontSize: 15, color: 'black', fontWeight: 'bold'}}>
                                         Total Box Count : </TableCell>
 
+
                                     <TableCell
-                                        style={{width: '16%', fontSize: 14,}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                            type="number"
-                                            label="Total Box Count"
-                                            autoComplete='off'
-                                        /></TableCell>
+                                        style={{paddingLeft: '2%', width: '30%', fontSize: 16, fontWeight: 'bold'}}>
+                                        {this.getBoxCountTotal()}
+                                    </TableCell>
+
+                                    {/*<TableCell*/}
+                                        {/*style={{width: '16%', fontSize: 14,}}>*/}
+                                        {/*<TextField*/}
+                                            {/*id="outlined-dense"*/}
+                                            {/*margin="dense"*/}
+                                            {/*variant="outlined"*/}
+                                            {/*type="number"*/}
+                                            {/*label="Total Box Count"*/}
+                                            {/*autoComplete='off'*/}
+                                        {/*/></TableCell>*/}
 
                                 </TableRow>
 
