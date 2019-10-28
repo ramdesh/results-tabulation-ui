@@ -11,7 +11,6 @@ import PRE21PVEntry from "./components/invalid-ballots/postal-votes/PRE21PVEntry
 import PRE21PV from "./components/invalid-ballots/postal-votes/PRE21PV";
 import PRE41 from "./components/partywise-count/PRE41";
 import PRE41PV from "./components/partywise-count/postal-votes/PRE41PV";
-import PRE41PVEntry from "./components/partywise-count/postal-votes/PRE41PVEntry";
 import PRE34CO from "./components/preferences/PRE34CO";
 import PRE34COEntry from "./components/preferences/PRE34COEntry";
 import PRE34COPV from "./components/preferences/postal-votes/PRE34COPV";
@@ -67,6 +66,24 @@ function App() {
                 <ProtectedRoute path="/CE201Entry/:tallySheetId/:tallySheetVersionId" component={CE201New}/>
                 <ProtectedRoute exact path="/CE201Report/:tallySheetId/:tallySheetVersionId" component={CE201Report}/>
 
+                <ProtectedRoute exact path="/PRE41" component={PRE41}/>
+                <ProtectedRoute exact path="/PRE41PV" component={PRE41PV}/>
+                <ProtectedRoute path="/PRE41Entry/:tallySheetId/:tallySheetVersionId" component={PRE41New}/>
+                <ProtectedRoute exact path="/PRE41Report/:tallySheetId/:tallySheetVersionId/" component={PRE41Report}/>
+
+                <ProtectedRoute exact path="/CE201PV" component={CE201PV}/>
+                <ProtectedRoute exact path="/CE201PVEntry/:tallySheetId/:tallySheetVersionId" component={CE201PVEntry}/>
+                <ProtectedRoute exact path="/CE201PVReport/:tallySheetId/:tallySheetVersionId" component={CE201PVReport}/>
+
+                <ProtectedRoute exact path="/PRE34COPV" component={PRE34COPV}/>
+                <ProtectedRoute exact path="/PRE34COPV-Entry" component={PRE34COPVEntry}/>
+
+                <ProtectedRoute exact path="/PRE28A" component={PRE28A}/>
+                <ProtectedRoute path="/PRE28A-Entry/:name" component={PRE28AEntry}/>
+
+                <ProtectedRoute exact path="/PRE21PV" component={PRE21PV}/>
+                <ProtectedRoute exact path="/PRE21PV-Entry/:name/:name2" component={PRE21PVEntry}/>
+
                 <ProtectedRoute exact path="/PRE21" component={PRE21}/>
                 <ProtectedRoute exact path="/PRE21-Entry/:name/:name2" component={PRE21Entry}/>
 
@@ -75,26 +92,6 @@ function App() {
 
                 <ProtectedRoute exact path="/PRE28" component={PRE28}/>
                 <ProtectedRoute path="/PRE28-Entry/:name" component={PRE28Entry}/>
-
-                <ProtectedRoute exact path="/PRE41" component={PRE41}/>
-                <ProtectedRoute path="/PRE41Entry/:tallySheetId/:tallySheetVersionId" component={PRE41New}/>
-                <ProtectedRoute exact path="/PRE41Report/:tallySheetId/:tallySheetVersionId/" component={PRE41Report}/>
-
-                <ProtectedRoute exact path="/PRE28A" component={PRE28A}/>
-                <ProtectedRoute path="/PRE28A-Entry/:name" component={PRE28AEntry}/>
-
-                <ProtectedRoute exact path="/PRE21PV" component={PRE21PV}/>
-                <ProtectedRoute exact path="/PRE21PV-Entry/:name/:name2" component={PRE21PVEntry}/>
-
-                <ProtectedRoute exact path="/PRE41PV" component={PRE41PV}/>
-                <ProtectedRoute exact path="/PRE41PVEntry/:tallySheetId/:tallySheetVersionId" component={PRE41PVEntry}/>
-
-                <ProtectedRoute exact path="/CE201PV" component={CE201PV}/>
-                <ProtectedRoute exact path="/CE201PVEntry/:tallySheetId/:tallySheetVersionId" component={CE201PVEntry}/>
-                <ProtectedRoute exact path="/CE201PVReport/:tallySheetId/:tallySheetVersionId" component={CE201PVReport}/>
-
-                <ProtectedRoute exact path="/PRE34COPV" component={PRE34COPV}/>
-                <ProtectedRoute exact path="/PRE34COPV-Entry" component={PRE34COPVEntry}/>
             </Switch>
         </div>
     );
