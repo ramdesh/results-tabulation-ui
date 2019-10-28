@@ -129,3 +129,21 @@ ul.bread-crumb li.bread-crumb-list-item a:hover {
     color: #607D8B;
     font-size: 13px;
 }
+
+.election-list {
+    text-align: center;
+}
+
+.election-list a.election-list-item {
+    padding: 10px;
+    background-color: #e7e7e7;
+    margin: 26px;
+    /* margin-top: 50px; */
+    display: inline-block;
+    width: 400px;
+    color: #5178c8;
+    text-decoration: none;
+    border-radius: 7px;
+}
+
+
