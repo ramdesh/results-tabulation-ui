@@ -15,7 +15,6 @@ import PRE34CO from "./components/preferences/PRE34CO";
 import PRE34COEntry from "./components/preferences/PRE34COEntry";
 import PRE34COPV from "./components/preferences/postal-votes/PRE34COPV";
 import PRE34COPVEntry from "./components/preferences/postal-votes/PRE34COPVEntry";
-import CE201Entry from "./components/CE201/CE201Entry";
 import PRE28Entry from "./components/PRE28/PRE28Entry";
 import PRE28 from "./components/PRE28/PRE28";
 import ReportsEntry from "./components/report/ReportsEntry";
@@ -46,12 +45,10 @@ function App() {
                 <ProtectedRoute exact path="/Election" component={HomeElection}/>
                 <ProtectedRoute exact path="/Home" component={Home}/>
                 <ProtectedRoute exact path="/Main" component={HomeSelection}/>
-
                 <ProtectedRoute exact path="/ReportsEntry" component={ReportsEntry}/>
                 <ProtectedRoute exact path="/ReportView/:tallySheetId/:tallySheetVersionId" component={ReportView}/>
 
                 <ProtectedRoute exact path="/CE201" component={CE201}/>
-                <ProtectedRoute exact path="/CE201-Entry/:name/:name2/:countingId" component={CE201Entry}/>
                 <ProtectedRoute path="/CE201Entry/:tallySheetId/:tallySheetVersionId" component={CE201New}/>
                 <ProtectedRoute exact path="/CE201Report/:tallySheetId/:tallySheetVersionId" component={CE201Report}/>
 
