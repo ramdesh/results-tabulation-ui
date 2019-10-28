@@ -15,21 +15,14 @@ import {
     Paper,
     Grid
 } from '@material-ui/core';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import {getNumOrZero} from "../../utils";
 
 class CE201New extends Component {
     constructor(props, context) {
         super(props, context);
-        this.handleClose = this.handleClose.bind(this);
         this.handleBack = this.handleBack.bind(this);
         this.setElection = this.setElection.bind(this);
         this.state = {
-            open: false,
             selected: 'Select',
             pollingStationsList: [],
             pollingStationsMap: {},
@@ -45,10 +38,7 @@ class CE201New extends Component {
             areaId: 0,
             pollingDivision: null,
             electoralDistrict: null,
-
             latestVersionId: 0,
-            // ballotBoxes:[]
-            // tallySheetVersionId: 1,
         };
     }
 
@@ -61,7 +51,7 @@ class CE201New extends Component {
 
     /** get Input value **/
     getInputValue(pollingStationId, property) {
-        console.log("Check 1",pollingStationId, property)
+        console.log("Check 1", pollingStationId, property)
         const value = this.state.content[pollingStationId][property];
         console.log("Check 2", value)
         if (value === null || value === undefined) {
@@ -97,9 +87,7 @@ class CE201New extends Component {
                 "ballotBoxesIssued": [
                     "string"
                 ],
-                "ballotBoxesReceived": [
-
-                ],
+                "ballotBoxesReceived": [],
                 "ballotsIssued": 0,
                 "ballotsReceived": 0,
                 "ballotsSpoilt": 0,
@@ -120,11 +108,6 @@ class CE201New extends Component {
 
     handleBack() {
         this.props.history.goBack()
-    }
-
-    // modal controllers
-    handleClose() {
-        this.setState({open: false});
     }
 
     handleChange = event => {
@@ -214,7 +197,6 @@ class CE201New extends Component {
 
                     // const candidateWiseCounts = res.data.length;
 
-
                     axios.get('/tally-sheet/CE-201/' + tallySheetId + '/version/' + this.state.latestVersionId, {
                         headers: {
                             'Authorization': "Bearer " + localStorage.getItem('token'),
@@ -226,31 +208,14 @@ class CE201New extends Component {
                     }).then(res => {
                         console.log("201 RES" + res.data.content)
 
-
-                        // for (var i = 0; i < res.data.length; i++) {
-                        //     console.log("Issued"+res.data[i].ballotsIssued)
-                        //     // let candidateWiseCount = candidateWiseCounts[i];
-                        //     this.setInputValue(res.data[i].areaId, "ballotsIssued", res.data[i].ballotsIssued);
-                        //     // this.setInputValue(candidateWiseCount.areaId, "countInWords", candidateWiseCount.countInWords);
-                        // }
-
-
                         const pollingStationWiseCounts = res.data.content;
                         for (var i = 0; i < pollingStationWiseCounts.length; i++) {
                             let pollingStationWiseCount = pollingStationWiseCounts [i];
-                            console.log("Loop" + pollingStationWiseCount.areaId + " - " + pollingStationWiseCount.ballotsIssued)
-                            console.log("Loop Count" + pollingStationWiseCount.areaId + " - " + pollingStationWiseCount.ordinaryBallotCountFromBoxCount)
-                            this.setInputValue(pollingStationWiseCount.areaId, "ballotsIssued", pollingStationWiseCount.ballotsIssued);
-                            this.setInputValue(pollingStationWiseCount.areaId, "ballotsReceived", pollingStationWiseCount.ballotsReceived);
                             this.setInputValue(pollingStationWiseCount.areaId, "ordinaryBallotCountFromBoxCount", pollingStationWiseCount.ordinaryBallotCountFromBoxCount);
-                            // this.setInputValue(pollingStationWiseCount.candidateId, "countInWords", candidateWiseCount.countInWords);
                         }
-
                     }).catch((error) => console.log(error));
 
-
                 }).catch((error) => console.log(error));
-
 
             }
         })
@@ -276,9 +241,7 @@ class CE201New extends Component {
                         "ballotBoxesIssued": [
                             ""
                         ],
-                        "ballotBoxesReceived": [
-
-                        ],
+                        "ballotBoxesReceived": [],
                         "ballotsIssued": parseInt(this.state.content[pollingId].ballotsIssued),
                         "ballotsReceived": parseInt(this.state.content[pollingId].ballotsReceived),
                         "ballotsSpoilt": parseInt(this.state.content[pollingId].ballotsSpoilt),
@@ -421,7 +384,7 @@ class CE201New extends Component {
                                     // var candidate = this.state.candidateMap[candidateId];
                                     var pollingStation = this.state.pollingStationsMap[pollingId];
 
-                                    return   <TableRow style={idx % 2 ? {background: "white"} : {background: "#f6f6f6"}}>
+                                    return <TableRow style={idx % 2 ? {background: "white"} : {background: "#f6f6f6"}}>
 
                                         <TableCell style={{fontSize: 13, width: '10%'}}>
                                             {/*{pollingStation.pollingDistricts[0].areaId}*/}
@@ -434,7 +397,7 @@ class CE201New extends Component {
                                         </TableCell>
 
                                         <TableCell style={{fontSize: 13, width: '50%'}}>
-                                            {pollingStation.areaName }
+                                            {pollingStation.areaName}
                                         </TableCell>
 
                                         <TableCell style={{fontSize: 13, width: '20%'}}>
@@ -455,25 +418,13 @@ class CE201New extends Component {
 
                                 <TableRow>
                                     <TableCell></TableCell>
-                                    <TableCell style={{marginLeft:'30% ',fontSize: 15, color: 'black', fontWeight: 'bold'}}>
+                                    <TableCell
+                                        style={{marginLeft: '30% ', fontSize: 15, color: 'black', fontWeight: 'bold'}}>
                                         Total Box Count : </TableCell>
-
-
                                     <TableCell
                                         style={{paddingLeft: '2%', width: '30%', fontSize: 16, fontWeight: 'bold'}}>
                                         {this.getBoxCountTotal()}
                                     </TableCell>
-
-                                    {/*<TableCell*/}
-                                        {/*style={{width: '16%', fontSize: 14,}}>*/}
-                                        {/*<TextField*/}
-                                            {/*id="outlined-dense"*/}
-                                            {/*margin="dense"*/}
-                                            {/*variant="outlined"*/}
-                                            {/*type="number"*/}
-                                            {/*label="Total Box Count"*/}
-                                            {/*autoComplete='off'*/}
-                                        {/*/></TableCell>*/}
 
                                 </TableRow>
 
@@ -489,27 +440,6 @@ class CE201New extends Component {
                             className="button">Next</Button>
                 </div>
 
-                <Dialog
-                    open={this.state.open}
-                    onClose={this.handleClose}
-                    aria-labelledby="alert-dialog-title"
-                    aria-describedby="alert-dialog-description"
-                >
-                    <DialogTitle id="alert-dialog-title">{"Invalid Ballot Count Confirmation "}</DialogTitle>
-                    <DialogContent>
-                        <DialogContentText id="alert-dialog-description">
-                            Are you sure you that all the necessary data entered correctly ?
-                        </DialogContentText>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button color="primary">
-                            Confirm
-                        </Button>
-                        <Button onClick={this.handleClose} color="primary" autoFocus>
-                            Cancel
-                        </Button>
-                    </DialogActions>
-                </Dialog>
             </div>
         )
     }
