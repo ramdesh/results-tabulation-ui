@@ -19,6 +19,7 @@ import Processing from "./processing";
 import Error from "./error";
 import BreadCrumb from "../components/bread-crumb";
 import Button from "@material-ui/core/Button";
+import {getElectoralDistrictName, getPollingDivisionName} from "../utils/tallySheet";
 
 
 export default function DataEntryList(props) {
@@ -39,31 +40,6 @@ export default function DataEntryList(props) {
         })
     }, [])
 
-    const getPollingDivisionName = (tallySheet) => {
-        let pollingDivisionName = null;
-        if (tallySheet) {
-            const {pollingDivisions} = tallySheet.area;
-            if (pollingDivisions.length > 0) {
-                const {areaName} = pollingDivisions[0];
-                pollingDivisionName = areaName;
-            }
-        }
-
-        return pollingDivisionName;
-    };
-
-    const getElectoralDistrictName = (tallySheet) => {
-        let electoralDistrictName = null;
-        if (tallySheet) {
-            const {electoralDistricts} = tallySheet.area;
-            if (electoralDistricts.length > 0) {
-                const {areaName} = electoralDistricts[0];
-                electoralDistrictName = areaName;
-            }
-        }
-
-        return electoralDistrictName;
-    };
 
 
     function getTallySheetListJsx() {

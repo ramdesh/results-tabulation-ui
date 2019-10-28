@@ -30,6 +30,7 @@ import Processing from "../processing";
 import Error from "../error";
 import BreadCrumb from "../../components/bread-crumb";
 import Button from "@material-ui/core/Button";
+import {getElectoralDistrictName} from "../../utils/tallySheet";
 
 
 export default function ReportList(props) {
@@ -72,8 +73,8 @@ export default function ReportList(props) {
         return <Table aria-label="simple table">
             <TableHead>
                 <TableRow>
-                    <TableCell align="center">Electoral District</TableCell>
-                    <TableCell align="center">Polling Division</TableCell>
+                    <TableCell align="left">Electoral District</TableCell>
+                    <TableCell align="left">Polling Division</TableCell>
                     <TableCell align="center">Status</TableCell>
                     <TableCell align="center">Actions</TableCell>
                 </TableRow>
@@ -81,8 +82,8 @@ export default function ReportList(props) {
             <TableBody>
                 {tallySheets.map(tallySheet => {
                     return <TableRow key={tallySheet.tallySheetId}>
-                        <TableCell align="center"></TableCell>
-                        <TableCell align="center">{tallySheet.area.areaName}</TableCell>
+                        <TableCell align="left">{getElectoralDistrictName(tallySheet)}</TableCell>
+                        <TableCell align="left">{tallySheet.area.areaName}</TableCell>
                         <TableCell align="center">{tallySheet.tallySheetStatus}</TableCell>
                         <TableCell align="center">
                             <Button
@@ -122,7 +123,7 @@ export default function ReportList(props) {
         return <Table aria-label="simple table">
             <TableHead>
                 <TableRow>
-                    <TableCell align="center">Electoral District</TableCell>
+                    <TableCell align="left">Electoral District</TableCell>
                     <TableCell align="center">Status</TableCell>
                     <TableCell align="center">Actions</TableCell>
                 </TableRow>
@@ -130,7 +131,7 @@ export default function ReportList(props) {
             <TableBody>
                 {tallySheets.map(tallySheet => {
                     return <TableRow key={tallySheet.tallySheetId}>
-                        <TableCell align="center">{tallySheet.area.areaName}</TableCell>
+                        <TableCell align="left">{tallySheet.area.areaName}</TableCell>
                         <TableCell align="center">{tallySheet.tallySheetStatus}</TableCell>
                         <TableCell align="center">
                             <Button
