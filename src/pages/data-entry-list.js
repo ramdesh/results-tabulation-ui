@@ -39,6 +39,32 @@ export default function DataEntryList(props) {
         })
     }, [])
 
+    const getPollingDivisionName = (tallySheet) => {
+        let pollingDivisionName = null;
+        if (tallySheet) {
+            const {pollingDivisions} = tallySheet.area;
+            if (pollingDivisions.length > 0) {
+                const {areaName} = pollingDivisions[0];
+                pollingDivisionName = areaName;
+            }
+        }
+
+        return pollingDivisionName;
+    };
+
+    const getElectoralDistrictName = (tallySheet) => {
+        let electoralDistrictName = null;
+        if (tallySheet) {
+            const {electoralDistricts} = tallySheet.area;
+            if (electoralDistricts.length > 0) {
+                const {areaName} = electoralDistricts[0];
+                electoralDistrictName = areaName;
+            }
+        }
+
+        return electoralDistrictName;
+    };
+
 
     function getTallySheetListJsx() {
         if (processing) {
@@ -61,19 +87,31 @@ export default function DataEntryList(props) {
                 <TableBody>
                     {tallySheets.map(tallySheet => {
                         return <TableRow key={tallySheet.tallySheetId}>
-                            <TableCell align="center"></TableCell>
-                            <TableCell align="center"></TableCell>
+                            <TableCell align="center">{getElectoralDistrictName(tallySheet)}</TableCell>
+                            <TableCell align="center">{getPollingDivisionName(tallySheet)}</TableCell>
                             <TableCell align="center">{tallySheet.area.areaName}</TableCell>
                             <TableCell align="center">{tallySheet.tallySheetStatus}</TableCell>
                             <TableCell align="center">
-                                <Button
-                                    variant="outlined" color="default"
-                                    size="small"
-                                    disabled={!(tallySheet.tallySheetStatus === TALLY_SHEET_STATUS_ENUM.NOT_ENTERED || tallySheet.tallySheetStatus === TALLY_SHEET_STATUS_ENUM.ENTERED)}
-                                    onClick={() => history.push(PATH_ELECTION_DATA_ENTRY_EDIT(electionId, tallySheet.tallySheetId))}
-                                >
-                                    Enter
-                                </Button>
+                                {(() => {
+                                    if (tallySheet.tallySheetStatus === TALLY_SHEET_STATUS_ENUM.NOT_ENTERED) {
+                                        return <Button
+                                            variant="outlined" color="default"
+                                            size="small"
+                                            onClick={() => history.push(PATH_ELECTION_DATA_ENTRY_EDIT(electionId, tallySheet.tallySheetId))}
+                                        >
+                                            Enter
+                                        </Button>
+                                    } else {
+                                        return <Button
+                                            variant="outlined" color="default"
+                                            size="small"
+                                            disabled={!(tallySheet.tallySheetStatus === TALLY_SHEET_STATUS_ENUM.ENTERED)}
+                                            onClick={() => history.push(PATH_ELECTION_DATA_ENTRY_EDIT(electionId, tallySheet.tallySheetId))}
+                                        >
+                                            Edit
+                                        </Button>
+                                    }
+                                })()}
                                 <Button
                                     variant="outlined" color="default"
                                     disabled={!(tallySheet.tallySheetStatus === TALLY_SHEET_STATUS_ENUM.SUBMITTED)}
