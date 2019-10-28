@@ -105,7 +105,7 @@ export default function ReportView(props) {
                     </Button>
                     <Button
                         variant="contained" size="small" color="primary"
-                        disabled={tallySheetStatus.readyToLock}
+                        disabled={!tallySheetStatus.readyToLock}
                     >
                         Verify
                     </Button>

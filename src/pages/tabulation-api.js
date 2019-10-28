@@ -131,7 +131,7 @@ function getTallySheetStatus(tallySheet) {
             tallySheetStatus = TALLY_SHEET_STATUS_ENUM.VERIFIED;
         } else {
             tallySheetStatus = TALLY_SHEET_STATUS_ENUM.VIEWED;
-            readyToLock = false
+            readyToLock = true
         }
     }
 
