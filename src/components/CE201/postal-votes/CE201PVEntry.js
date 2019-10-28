@@ -91,17 +91,17 @@ class CE201PVEntry extends Component {
             {
                 "content": [
                     {
-                        "ballotBoxId": this.state.ballotBoxId1,
+                        "ballotBoxId": "",
                         "numberOfAPacketsFound": parseInt(this.state.numberOfAPacketsFound1),
                         "numberOfPacketsInserted": parseInt(this.state.numberOfPacketsInserted1)
                     },
                     {
-                        "ballotBoxId": this.state.ballotBoxId2,
+                        "ballotBoxId": "",
                         "numberOfAPacketsFound": parseInt(this.state.numberOfAPacketsFound2),
                         "numberOfPacketsInserted": parseInt(this.state.numberOfPacketsInserted2)
                     },
                     {
-                        "ballotBoxId": this.state.ballotBoxId3,
+                        "ballotBoxId": "",
                         "numberOfAPacketsFound": parseInt(this.state.numberOfAPacketsFound2),
                         "numberOfPacketsInserted": parseInt(this.state.numberOfPacketsInserted2)
                     }
@@ -318,8 +318,8 @@ class CE201PVEntry extends Component {
                                     <TableCell className="header"
                                                style={{color: 'white', fontSize: 13, fontWeight: 'bold'}}>
                                         No</TableCell>
-                                    <TableCell className="header"
-                                               style={{fontSize: 14, fontWeight: 'bold', color: 'white'}}>Serial No of Postal Votes Ballot Box</TableCell>
+                                    {/*<TableCell className="header"*/}
+                                               {/*style={{fontSize: 14, fontWeight: 'bold', color: 'white'}}>Serial No of Postal Votes Ballot Box</TableCell>*/}
                                     <TableCell className="header"
                                         style={{fontSize: 14, fontWeight: 'bold', color: 'white'}}>No of Packets inserted by the Returning Officer</TableCell>
                                     <TableCell className="header"
@@ -330,18 +330,20 @@ class CE201PVEntry extends Component {
                                 <TableRow style={{background: "#f6f6f6"}}>
                                     <TableCell
                                         style={{width: '6%', fontSize: 13}}>1</TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                            autoComplete='off'
-                                            name="ballotBoxId1"
-                                            onChange={this.handleInputChange}
 
 
-                                        />
-                                    </TableCell>
+                                    {/*<TableCell style={{fontSize: 13}}>*/}
+                                        {/*<TextField*/}
+                                            {/*id="outlined-dense"*/}
+                                            {/*margin="dense"*/}
+                                            {/*variant="outlined"*/}
+                                            {/*autoComplete='off'*/}
+                                            {/*name="ballotBoxId1"*/}
+                                            {/*onChange={this.handleInputChange}*/}
+
+
+                                        {/*/>*/}
+                                    {/*</TableCell>*/}
                                     <TableCell style={{fontSize: 13}}>
                                         <TextField
                                             id="outlined-dense"
@@ -368,17 +370,18 @@ class CE201PVEntry extends Component {
                                 <TableRow>
                                     <TableCell
                                         style={{width: '6%', fontSize: 13}}>2</TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                            autoComplete='off'
-                                            name="ballotBoxId2"
 
-                                            onChange={this.handleInputChange}
-                                        />
-                                    </TableCell>
+                                    {/*<TableCell style={{fontSize: 13}}>*/}
+                                        {/*<TextField*/}
+                                            {/*id="outlined-dense"*/}
+                                            {/*margin="dense"*/}
+                                            {/*variant="outlined"*/}
+                                            {/*autoComplete='off'*/}
+                                            {/*name="ballotBoxId2"*/}
+
+                                            {/*onChange={this.handleInputChange}*/}
+                                        {/*/>*/}
+                                    {/*</TableCell>*/}
                                     <TableCell style={{fontSize: 13}}>
                                         <TextField
                                             id="outlined-dense"
@@ -407,16 +410,17 @@ class CE201PVEntry extends Component {
                                 <TableRow style={{background: "#f6f6f6"}}>
                                     <TableCell
                                         style={{width: '6%', fontSize: 13}}>3</TableCell>
-                                    <TableCell style={{fontSize: 13}}>
-                                        <TextField
-                                            id="outlined-dense"
-                                            margin="dense"
-                                            variant="outlined"
-                                            autoComplete='off'
-                                            name="ballotBoxId3"
-                                            onChange={this.handleInputChange}
-                                        />
-                                    </TableCell>
+
+                                    {/*<TableCell style={{fontSize: 13}}>*/}
+                                        {/*<TextField*/}
+                                            {/*id="outlined-dense"*/}
+                                            {/*margin="dense"*/}
+                                            {/*variant="outlined"*/}
+                                            {/*autoComplete='off'*/}
+                                            {/*name="ballotBoxId3"*/}
+                                            {/*onChange={this.handleInputChange}*/}
+                                        {/*/>*/}
+                                    {/*</TableCell>*/}
                                     <TableCell style={{fontSize: 13}}>
                                         <TextField
                                             id="outlined-dense"
@@ -445,8 +449,7 @@ class CE201PVEntry extends Component {
                                 <TableRow>
                                     <TableCell
                                         style={{width: '6%', fontSize: 13}}></TableCell>
-                                    <TableCell
-                                        style={{fontSize: 13}}></TableCell>
+
                                     <TableCell style={{fontWeight: 'bold',fontSize: 14}}>
                                         Total No of PV-A packets found in the boxes :
                                     </TableCell>
@@ -468,8 +471,7 @@ class CE201PVEntry extends Component {
                                 <TableRow style={{background: "#f6f6f6"}}>
                                     <TableCell
                                         style={{width: '6%', fontSize: 13}}></TableCell>
-                                    <TableCell
-                                        style={{fontSize: 13}}></TableCell>
+
                                     <TableCell style={{fontWeight: 'bold',fontSize: 14}}>
 
                                         Total No packets rejected on various grounds after opening A covers :
@@ -493,8 +495,7 @@ class CE201PVEntry extends Component {
                                 <TableRow>
                                     <TableCell
                                         style={{width: '6%', fontSize: 13}}></TableCell>
-                                    <TableCell
-                                        style={{fontSize: 13}}></TableCell>
+
                                     <TableCell style={{fontWeight: 'bold',fontSize: 14}}>
 
                                         Total No packets rejected on various grounds after opening B covers in accepted ballot papers
@@ -534,8 +535,7 @@ class CE201PVEntry extends Component {
                                 <TableRow style={{background: "#f6f6f6"}}>
                                     <TableCell
                                         style={{width: '6%', fontSize: 13}}></TableCell>
-                                    <TableCell
-                                        style={{fontSize: 13}}></TableCell>
+
                                     <TableCell style={{fontWeight: 'bold',fontSize: 14}}>
 
                                      Location :
