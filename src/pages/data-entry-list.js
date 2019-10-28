@@ -6,8 +6,8 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
-import {getElections, getTallySheet, TALLY_SHEET_STATUS_ENUM} from "./tabulation-api";
-import {MessagesProvider, MessagesConsumer} from "./messages.provider";
+import {getElections, getTallySheet, TALLY_SHEET_STATUS_ENUM} from "../services/tabulation-api";
+import {MessagesProvider, MessagesConsumer} from "../services/messages.provider";
 import {
     PATH_ELECTION, PATH_ELECTION_BY_ID,
     PATH_ELECTION_DATA_ENTRY, PATH_ELECTION_DATA_ENTRY_EDIT, PATH_ELECTION_REPORT_VIEW,
@@ -15,17 +15,16 @@ import {
     TALLY_SHEET_CODE_CE_201_PV,
     TALLY_SHEET_CODE_PRE_41
 } from "../App";
-import Processing from "./processing";
-import Error from "./error";
+import Processing from "../components/processing";
+import Error from "../components/error";
 import BreadCrumb from "../components/bread-crumb";
 import Button from "@material-ui/core/Button";
 import {getElectoralDistrictName, getPollingDivisionName} from "../utils/tallySheet";
 
 
-export default function DataEntryList(props) {
-    const {history, election} = props;
+export default function DataEntryList({history, queryString, election}) {
     const {electionId, electionName} = election;
-    const {tallySheetCode} = props.queryString;
+    const {tallySheetCode} = queryString;
 
     const [tallySheets, setTallySheets] = useState([]);
     const [processing, setProcessing] = useState(true);
@@ -39,7 +38,6 @@ export default function DataEntryList(props) {
             setProcessing(false);
         })
     }, [])
-
 
 
     function getTallySheetListJsx() {

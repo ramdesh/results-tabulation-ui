@@ -9,10 +9,10 @@ import {
 } from "./constants";
 import {AUTH_APP_URL} from "../config";
 import Cookies from 'js-cookie';
-import {getElectionById, getElections, getTallySheetById} from "../pages/tabulation-api";
-import Error from "../pages/error";
-import Processing from "../pages/processing";
-import {MessagesConsumer, MessagesProvider} from "../pages/messages.provider"
+import {getElectionById, getElections, getTallySheetById} from "../services/tabulation-api";
+import Error from "../components/error";
+import Processing from "../components/processing";
+import {MessagesConsumer, MessagesProvider} from "../services/messages.provider"
 
 
 export function getAuthAppSignInUrl() {

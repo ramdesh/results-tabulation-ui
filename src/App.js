@@ -45,9 +45,18 @@ export const PATH_ELECTION_REPORT = (electionId, tallySheetCode) => {
 
     return path;
 };
+export const PATH_ELECTION_RESULTS_RELEASE = (electionId, tallySheetCode) => {
+    let path = `${ROUTER_PREFIX}/election/${electionId}/release`;
+    if (tallySheetCode) {
+        path += `?tallySheetCode=${tallySheetCode}`;
+    }
+
+    return path;
+};
 export const PATH_ELECTION_REPORT_VIEW = (electionId, tallySheetId) => {
     return `${ROUTER_PREFIX}/election/${electionId}/report/${tallySheetId}`;
 };
+
 // export const PATH_ELECTION_TALLY_SHEET_REVIEW = (electionId, tallySheetId) => {
 //     return `${ROUTER_PREFIX}/election/${electionId}/tallySheet-/${tallySheetId}`;
 // };
@@ -57,6 +66,8 @@ export const TALLY_SHEET_CODE_CE_201 = "CE-201";
 export const TALLY_SHEET_CODE_CE_201_PV = "CE-201-PV";
 export const TALLY_SHEET_CODE_PRE_30_PD = "PRE-30-PD";
 export const TALLY_SHEET_CODE_PRE_30_ED = "PRE-30-ED";
+export const TALLY_SHEET_CODE_PRE_ALL_ISLAND_RESULTS_BY_ELECTORAL_DISTRICTS = "PRE_ALL_ISLAND_RESULTS_BY_ELECTORAL_DISTRICTS";
+export const TALLY_SHEET_CODE_PRE_ALL_ISLAND_RESULTS = "PRE_ALL_ISLAND_RESULTS";
 
 function App() {
 

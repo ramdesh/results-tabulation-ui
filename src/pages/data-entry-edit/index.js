@@ -12,12 +12,12 @@ import DataEntryEdit_CE_201 from "./data-entry-edit-ce-201";
 import DataEntryEdit_CE_201_PV from "./data-entry-edit-ce-201-pv";
 
 
-export default function DataEntryEdit(props) {
-    const {election, tallySheet} = props;
+export default function DataEntryEdit({history, queryString, election, tallySheet, messages}) {
     const {tallySheetId, tallySheetCode} = tallySheet;
     const {electionId, electionName} = election;
 
     function getEditorJsx() {
+        const props = {history, queryString, election, tallySheet, messages};
         if (tallySheetCode === TALLY_SHEET_CODE_PRE_41) {
             return <DataEntryEdit_PRE_41 {...props} />
         } else if (tallySheetCode === TALLY_SHEET_CODE_CE_201) {

@@ -1,13 +1,19 @@
 import React, {Component, useEffect, useState} from "react";
 import {Link} from 'react-router-dom';
-import {getElections} from "./tabulation-api";
-import {MessagesProvider, MessagesConsumer} from "./messages.provider";
+import {getElections} from "../services/tabulation-api";
+import {MessagesProvider, MessagesConsumer} from "../services/messages.provider";
 import {
-    PATH_ELECTION, PATH_ELECTION_BY_ID,
-    PATH_ELECTION_DATA_ENTRY, PATH_ELECTION_REPORT,
+    PATH_ELECTION,
+    PATH_ELECTION_BY_ID,
+    PATH_ELECTION_DATA_ENTRY,
+    PATH_ELECTION_REPORT, PATH_ELECTION_RESULTS_RELEASE,
     TALLY_SHEET_CODE_CE_201,
-    TALLY_SHEET_CODE_CE_201_PV, TALLY_SHEET_CODE_PRE_30_ED, TALLY_SHEET_CODE_PRE_30_PD,
-    TALLY_SHEET_CODE_PRE_41
+    TALLY_SHEET_CODE_CE_201_PV,
+    TALLY_SHEET_CODE_PRE_30_ED,
+    TALLY_SHEET_CODE_PRE_30_PD,
+    TALLY_SHEET_CODE_PRE_41,
+    TALLY_SHEET_CODE_PRE_ALL_ISLAND_RESULTS,
+    TALLY_SHEET_CODE_PRE_ALL_ISLAND_RESULTS_BY_ELECTORAL_DISTRICTS
 } from "../App";
 import BreadCrumb from "../components/bread-crumb";
 
@@ -17,7 +23,7 @@ export default function Election(props) {
 
 
     const {electionId, electionName} = election;
-
+    //return <p></p>
 
     return <div className="page">
         <BreadCrumb
@@ -73,7 +79,23 @@ export default function Election(props) {
                         className="tally-sheet-code-list-item"
                         to={PATH_ELECTION_REPORT(electionId, TALLY_SHEET_CODE_PRE_30_ED)}
                     >
-                        PRe 30 ED
+                        PRE 30 ED
+                    </Link>
+                </li>
+                <li>
+                    <Link
+                        className="tally-sheet-code-list-item"
+                        to={PATH_ELECTION_REPORT(electionId, TALLY_SHEET_CODE_PRE_ALL_ISLAND_RESULTS_BY_ELECTORAL_DISTRICTS)}
+                    >
+                        All Island ED
+                    </Link>
+                </li>
+                <li>
+                    <Link
+                        className="tally-sheet-code-list-item"
+                        to={PATH_ELECTION_REPORT(electionId, TALLY_SHEET_CODE_PRE_ALL_ISLAND_RESULTS)}
+                    >
+                        All Island
                     </Link>
                 </li>
             </ul>
@@ -84,7 +106,7 @@ export default function Election(props) {
                 <li>
                     <Link
                         className="tally-sheet-code-list-item"
-                        to={PATH_ELECTION_DATA_ENTRY(electionId, TALLY_SHEET_CODE_PRE_30_PD)}
+                        to={PATH_ELECTION_RESULTS_RELEASE(electionId, TALLY_SHEET_CODE_PRE_30_PD)}
                     >
                         PRE 30 PD
                     </Link>
@@ -92,9 +114,25 @@ export default function Election(props) {
                 <li>
                     <Link
                         className="tally-sheet-code-list-item"
-                        to={PATH_ELECTION_DATA_ENTRY(electionId, TALLY_SHEET_CODE_PRE_30_ED)}
+                        to={PATH_ELECTION_RESULTS_RELEASE(electionId, TALLY_SHEET_CODE_PRE_30_ED)}
                     >
-                        PRe 30 ED
+                        PRE 30 ED
+                    </Link>
+                </li>
+                <li>
+                    <Link
+                        className="tally-sheet-code-list-item"
+                        to={PATH_ELECTION_RESULTS_RELEASE(electionId, TALLY_SHEET_CODE_PRE_ALL_ISLAND_RESULTS_BY_ELECTORAL_DISTRICTS)}
+                    >
+                        All Island ED
+                    </Link>
+                </li>
+                <li>
+                    <Link
+                        className="tally-sheet-code-list-item"
+                        to={PATH_ELECTION_RESULTS_RELEASE(electionId, TALLY_SHEET_CODE_PRE_ALL_ISLAND_RESULTS)}
+                    >
+                        All Island
                     </Link>
                 </li>
             </ul>

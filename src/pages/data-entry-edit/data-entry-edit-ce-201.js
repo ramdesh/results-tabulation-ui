@@ -6,8 +6,8 @@ import {
     getTallySheetById,
     getTallySheetVersionById,
     saveTallySheetVersion
-} from "../tabulation-api";
-import {MessagesProvider, MessagesConsumer} from "../messages.provider";
+} from "../../services/tabulation-api";
+import {MessagesProvider, MessagesConsumer} from "../../services/messages.provider";
 import {
     PATH_ELECTION, PATH_ELECTION_BY_ID,
     PATH_ELECTION_DATA_ENTRY, PATH_ELECTION_DATA_ENTRY_EDIT,
@@ -16,8 +16,8 @@ import {
     TALLY_SHEET_CODE_PRE_41
 } from "../../App";
 import BreadCrumb from "../../components/bread-crumb";
-import Processing from "../processing";
-import Error from "../error";
+import Processing from "../../components/processing";
+import Error from "../../components/error";
 import Table from "@material-ui/core/Table";
 import TableHead from "@material-ui/core/TableHead";
 import TableFooter from "@material-ui/core/TableFooter";
@@ -29,8 +29,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import {isNumeric, processNumericValue} from "../../utils";
 
-export default function DataEntryEdit_CE_201(props) {
-    const {history, election, tallySheet, messages} = props;
+export default function DataEntryEdit_CE_201({history, queryString, election, tallySheet, messages}) {
     const {tallySheetId, tallySheetCode} = tallySheet;
     const {electionId, electionName} = election;
 
@@ -125,7 +124,7 @@ export default function DataEntryEdit_CE_201(props) {
 
     };
 
-    const handleClickSubmit=()=> async (event)=>{
+    const handleClickSubmit = () => async (event) => {
         setSubmitted(true);
 
         setTimeout(() => {

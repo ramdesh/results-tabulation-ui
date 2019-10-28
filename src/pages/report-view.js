@@ -12,8 +12,8 @@ import {
     getTallySheetVersionHtml,
     saveTallySheetVersion,
     TALLY_SHEET_STATUS_ENUM
-} from "./tabulation-api";
-import {MessagesProvider, MessagesConsumer} from "./messages.provider";
+} from "../services/tabulation-api";
+import {MessagesProvider, MessagesConsumer} from "../services/messages.provider";
 import {
     PATH_ELECTION, PATH_ELECTION_BY_ID,
     PATH_ELECTION_DATA_ENTRY, PATH_ELECTION_DATA_ENTRY_EDIT,
@@ -21,14 +21,13 @@ import {
     TALLY_SHEET_CODE_CE_201_PV,
     TALLY_SHEET_CODE_PRE_41
 } from "../App";
-import Processing from "./processing";
-import Error from "./error";
+import Processing from "../components/processing";
+import Error from "../components/error";
 import BreadCrumb from "../components/bread-crumb";
 import Button from "@material-ui/core/Button";
 
 
-export default function ReportView(props) {
-    const {history, election, tallySheet} = props;
+export default function ReportView({history, election, tallySheet}) {
     const {electionId, electionName} = election;
     const {tallySheetId, tallySheetCode, latestVersionId, submittedVersionId, lockedVersionId, tallySheetStatus} = tallySheet;
 

@@ -17,26 +17,33 @@ import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
 
-import {generateReport, getElections, getTallySheet, TALLY_SHEET_STATUS_ENUM} from "../tabulation-api";
-import {MessagesProvider, MessagesConsumer} from "../messages.provider";
+import {generateReport, getElections, getTallySheet, TALLY_SHEET_STATUS_ENUM} from "../../services/tabulation-api";
+import {MessagesProvider, MessagesConsumer} from "../../services/messages.provider";
 import {
-    PATH_ELECTION, PATH_ELECTION_BY_ID,
-    PATH_ELECTION_DATA_ENTRY, PATH_ELECTION_DATA_ENTRY_EDIT, PATH_ELECTION_REPORT, PATH_ELECTION_REPORT_VIEW,
+    PATH_ELECTION,
+    PATH_ELECTION_BY_ID,
+    PATH_ELECTION_DATA_ENTRY,
+    PATH_ELECTION_DATA_ENTRY_EDIT,
+    PATH_ELECTION_REPORT,
+    PATH_ELECTION_REPORT_VIEW,
     TALLY_SHEET_CODE_CE_201,
-    TALLY_SHEET_CODE_CE_201_PV, TALLY_SHEET_CODE_PRE_30_ED, TALLY_SHEET_CODE_PRE_30_PD,
-    TALLY_SHEET_CODE_PRE_41
+    TALLY_SHEET_CODE_CE_201_PV,
+    TALLY_SHEET_CODE_PRE_30_ED,
+    TALLY_SHEET_CODE_PRE_30_PD,
+    TALLY_SHEET_CODE_PRE_41,
+    TALLY_SHEET_CODE_PRE_ALL_ISLAND_RESULTS,
+    TALLY_SHEET_CODE_PRE_ALL_ISLAND_RESULTS_BY_ELECTORAL_DISTRICTS
 } from "../../App";
-import Processing from "../processing";
-import Error from "../error";
+import Processing from "../../components/processing";
+import Error from "../../components/error";
 import BreadCrumb from "../../components/bread-crumb";
 import Button from "@material-ui/core/Button";
 import {getElectoralDistrictName} from "../../utils/tallySheet";
 
 
-export default function ReportList(props) {
-    const {history, election} = props;
+export default function ReportList({history, queryString, election}) {
     const {electionId, electionName} = election;
-    const {tallySheetCode} = props.queryString;
+    const {tallySheetCode} = queryString;
 
     const [tallySheets, setTallySheets] = useState([]);
     const [processing, setProcessing] = useState(true);
@@ -64,8 +71,38 @@ export default function ReportList(props) {
                 return getTallySheetListJsx_PRE_30_PD(tallySheets)
             } else if (tallySheetCode === TALLY_SHEET_CODE_PRE_30_ED) {
                 return getTallySheetListJsx_PRE_30_ED(tallySheets)
+            } else if (tallySheetCode === TALLY_SHEET_CODE_PRE_ALL_ISLAND_RESULTS || TALLY_SHEET_CODE_PRE_ALL_ISLAND_RESULTS_BY_ELECTORAL_DISTRICTS) {
+                return getTallySheetListJsx_AllIslandReports(tallySheets)
             }
         }
+    }
+
+    function getActions(tallySheet) {
+        return <TableCell align="center">
+            <Button
+                variant="outlined" color="default"
+                size="small"
+                disabled={!(tallySheet.tallySheetStatus !== TALLY_SHEET_STATUS_ENUM.VERIFIED)}
+
+                onClick={() => history.push(PATH_ELECTION_REPORT_VIEW(electionId, tallySheet.tallySheetId))}
+            >
+                Verify
+            </Button>
+            <Button
+                variant="outlined" color="default"
+                size="small"
+                onClick={() => history.push(PATH_ELECTION_REPORT_VIEW(electionId, tallySheet.tallySheetId))}
+            >
+                View
+            </Button>
+            <Button
+                variant="outlined" color="default"
+                disabled={!(tallySheet.tallySheetStatus === TALLY_SHEET_STATUS_ENUM.VERIFIED)}
+                size="small" disabled={tallySheet.lockedVersionId === null}
+            >
+                Unlock
+            </Button>
+        </TableCell>
     }
 
 
@@ -85,33 +122,7 @@ export default function ReportList(props) {
                         <TableCell align="left">{getElectoralDistrictName(tallySheet)}</TableCell>
                         <TableCell align="left">{tallySheet.area.areaName}</TableCell>
                         <TableCell align="center">{tallySheet.tallySheetStatus}</TableCell>
-                        <TableCell align="center">
-                            <Button
-                                tallySheet={tallySheet}
-                                variant="outlined" color="default"
-                                size="small"
-                                disabled={!(tallySheet.tallySheetStatus !== TALLY_SHEET_STATUS_ENUM.VERIFIED)}
-
-                                onClick={() => history.push(PATH_ELECTION_REPORT_VIEW(electionId, tallySheet.tallySheetId))}
-                            >
-                                Verify
-                            </Button>
-                            <Button
-                                tallySheet={tallySheet}
-                                variant="outlined" color="default"
-                                size="small"
-                                onClick={() => history.push(PATH_ELECTION_REPORT_VIEW(electionId, tallySheet.tallySheetId))}
-                            >
-                                View
-                            </Button>
-                            <Button
-                                variant="outlined" color="default"
-                                disabled={!(tallySheet.tallySheetStatus === TALLY_SHEET_STATUS_ENUM.VERIFIED)}
-                                size="small" disabled={tallySheet.lockedVersionId === null}
-                            >
-                                Unlock
-                            </Button>
-                        </TableCell>
+                        {getActions(tallySheet)}
                     </TableRow>
                 })}
             </TableBody>
@@ -133,32 +144,33 @@ export default function ReportList(props) {
                     return <TableRow key={tallySheet.tallySheetId}>
                         <TableCell align="left">{tallySheet.area.areaName}</TableCell>
                         <TableCell align="center">{tallySheet.tallySheetStatus}</TableCell>
-                        <TableCell align="center">
-                            <Button
-                                variant="outlined" color="default"
-                                size="small" disabled={tallySheet.lockedVersionId !== null}
-                            >
-                                Verify
-                            </Button>
-                            <Button
-                                variant="outlined" color="default"
-                                size="small"
-                            >
-                                View
-                            </Button>
-                            <Button
-                                variant="outlined" color="default"
-                                size="small" disabled={tallySheet.lockedVersionId === null}
-                            >
-                                Unlock
-                            </Button>
-                        </TableCell>
+                        {getActions(tallySheet)}
                     </TableRow>
                 })}
             </TableBody>
         </Table>
     }
 
+    function getTallySheetListJsx_AllIslandReports(tallySheets) {
+        return <Table aria-label="simple table">
+            <TableHead>
+                <TableRow>
+                    <TableCell align="left">Country</TableCell>
+                    <TableCell align="center">Status</TableCell>
+                    <TableCell align="center">Actions</TableCell>
+                </TableRow>
+            </TableHead>
+            <TableBody>
+                {tallySheets.map(tallySheet => {
+                    return <TableRow key={tallySheet.tallySheetId}>
+                        <TableCell align="left">{tallySheet.area.areaName}</TableCell>
+                        <TableCell align="center">{tallySheet.tallySheetStatus}</TableCell>
+                        {getActions(tallySheet)}
+                    </TableRow>
+                })}
+            </TableBody>
+        </Table>
+    }
 
     return <div className="page">
         <BreadCrumb
