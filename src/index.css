@@ -26,4 +26,106 @@ code {
     text-align: center;
 }
 
+.page {
+    padding-top: 63px;
+}
 
+.page .page-content {
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 30px;
+}
+
+
+ul.bread-crumb {
+    list-style: none;
+    background-color: #636667;
+    padding: 5px 10px;
+    padding-top: 2px;
+    color: white;
+    margin: 0px;
+    margin-bottom: 10px;
+}
+
+ul.bread-crumb li.bread-crumb-list-item {
+    display: inline;
+    padding: 0px;
+    line-height: 10px;
+}
+
+ul.bread-crumb li.bread-crumb-list-item a {
+    text-decoration: none;
+    color: white;
+    font-size: 13px;
+    line-height: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+ul.bread-crumb li.bread-crumb-list-item a:hover {
+    text-decoration: underline;
+}
+
+.tally-sheet-code-list {
+
+}
+
+.tally-sheet-code-list .tally-sheet-code-list-item {
+
+}
+
+.data-entry-edit-count-input {
+    text-align: right;
+    width: 100px;
+}
+
+.data-entry-edit-count-in-words-input {
+    width: 500px;
+}
+
+
+.data-entry-edit-header {
+    display: flex;
+    flex-direction: row;
+}
+
+.data-entry-edit-header .data-entry-edit-header-tally-sheet-code {
+    background-color: black;
+    border-radius: 3px;
+    padding: 11px;
+    color: white;
+    font-size: 20px;
+}
+
+.data-entry-edit-header .data-entry-edit-header-election-name {
+    flex: 1
+}
+
+.page-content .MuiButton-contained,
+.page-content .MuiButton-outlined {
+    margin-right: 10px;
+}
+
+.report-view-status .report-view-status-text {
+    background-color: #eeeeee;
+    padding: 10px;
+    border-radius: 5px;
+    color: #5178c8;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.report-view-status .report-view-status-actions {
+    text-align: right;
+}
+
+.tabulation-linear-progress-bar {
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+
+.tabulation-linear-progress-bar .tabulation-linear-progress-bar-label {
+    padding-bottom: 5px;
+    color: #607D8B;
+    font-size: 13px;
+}

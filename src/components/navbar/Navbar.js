@@ -35,16 +35,16 @@ class NavBar extends Component {
     render() {
         return (
             <div>
-                <AppBar position="static" style={{backgroundColor: '#5079c8'}}>
+                <AppBar position="fixed" style={{backgroundColor: '#5079c8'}}>
                     <Toolbar>
-                        <Typography style={{paddingLeft: '1.5%', flexGrow: 1}} variant="h7" gutterBottom>
+                        <Typography style={{paddingLeft: '1.5%', flexGrow: 1}} variant="h6" gutterBottom>
                             Election Result Tabulation
                         </Typography>
                         {/*<Typography variant="title" color='#4879d1'>*/}
                         {/*Election Result Tabulation*/}
                         {/*</Typography>*/}
 
-                        <Typography variant="h7" gutterBottom>
+                        <Typography variant="h6" gutterBottom>
                             |
                         </Typography>
                         <Button
