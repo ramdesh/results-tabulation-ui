@@ -175,24 +175,24 @@ class CE201Report extends Component {
 
                 {/*<iframe height="1700" width="1110" src={this.state.dataURI}>*/}
                 {/*</iframe>*/}
-                {this.state.isLocked === false && <div style={{margin: '4%', marginLeft: '80%'}}>
+                {this.state.isLocked === false && <div style={{margin: '3%', marginLeft: '75%'}}>
                     {/*<Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}} onClick={this.handleBack}*/}
                     {/*className="button">Back</Button>*/}
 
                     <Button style={{borderRadius: 18, color: 'white', margin:'2%',marginRight: '5%'}} onClick={this.handleBack}
                             className="button">Edit</Button>
-                    <Button style={{width:'150px',borderRadius: 18, color: 'white',margin:'2%', marginRight: '4%'}} onClick={this.handleSubmit}
+                    <Button style={{borderRadius: 18, color: 'white',margin:'2%', marginRight: '4%'}} onClick={this.handleSubmit}
                             className="button">Submit</Button>
 
                 </div>}
-                {this.state.isLocked === true && <div style={{margin: '4%', marginLeft: '70%'}}>
+                {this.state.isLocked === true && <div style={{margin: '3%', marginLeft: '75%'}}>
                     {/*<Button style={{borderRadius: 18, color: 'white', marginRight: '4%'}}*/}
                             {/*onClick={this.handleBackToCE201}*/}
                             {/*className="button">Back</Button>*/}
 
                     <Button style={{borderRadius: 18, color: 'white',margin:'2%', marginRight: '5%'}} onClick={this.handleUnlock}
                             className="button">Edit</Button>
-                    <Button style={{width:'150px',borderRadius: 18, color: 'white',margin:'2%', marginRight: '4%'}} onClick={this.handleSubmit }
+                    <Button style={{borderRadius: 18, color: 'white',margin:'2%', marginRight: '4%'}} onClick={this.handleSubmit }
                             className="button">Submit</Button>
                 </div>}
             </div>
