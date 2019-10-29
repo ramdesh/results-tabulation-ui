@@ -6,7 +6,8 @@ const MessagesContext = React.createContext([]);
 export const MESSAGE_TYPES = {
     SUCCESS: "success",
     ERROR: "error",
-    INFO: "info"
+    INFO: "info",
+    WARNING: "warning"
 };
 
 export function MessagesProvider(props) {
@@ -53,8 +54,9 @@ export function MessagesProvider(props) {
     >
         {state.messagesList.map((messageId) => {
             const message = state.messagesMap[messageId];
-            if (message.open && messageId===(state.messagesList.length-1)) {
-                return <CustomizedSnackbars title={message.messageTitle} content={message.messageBody}/>
+            if (message.open && messageId === (state.messagesList.length - 1)) {
+                return <CustomizedSnackbars title={message.messageTitle} type={message.messageType}
+                                            content={message.messageBody}/>
             }
         })}
         {props.children}
