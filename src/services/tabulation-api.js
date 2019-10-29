@@ -17,6 +17,8 @@ const ENDPOINT_PATH_TALLY_SHEET_VERSION_BY_ID = (tallySheetId, tallySheetCode, t
 };
 const ENDPOINT_PATH_TALLY_SHEET_LOCK = (tallySheetId) => `/tally-sheet/${tallySheetId}/lock`;
 const ENDPOINT_PATH_TALLY_SHEET_UNLOCK = (tallySheetId) => `/tally-sheet/${tallySheetId}/unlock`;
+const ENDPOINT_PATH_TALLY_SHEET_SUBMIT = (tallySheetId) => `/tally-sheet/${tallySheetId}/submit`;
+const ENDPOINT_PATH_TALLY_SHEET_REQUEST_EDIT = (tallySheetId) => `/tally-sheet/${tallySheetId}/request-edit`;
 const ENDPOINT_PATH_TALLY_SHEET_VERSION_HTML = (tallySheetId, tallySheetVersionId) => `/tally-sheet/${tallySheetId}/version/${tallySheetVersionId}/html`;
 
 
@@ -159,7 +161,7 @@ function refactorTallySheetObject(tallySheet) {
             tallySheetStatus = TALLY_SHEET_STATUS_ENUM.VERIFIED;
         } else {
             tallySheetStatus = TALLY_SHEET_STATUS_ENUM.VIEWED;
-            readyToLock = false
+            readyToLock = true
         }
     }
 
@@ -228,6 +230,29 @@ export function unlockTallySheet(tallySheetId, tallySheetVersionId) {
         data: {
             lockedVersionId: tallySheetVersionId
         }
+    }).then((tallySheet) => {
+        return refactorTallySheetObject(tallySheet);
+    })
+}
+
+
+export function submitTallySheet(tallySheetId, tallySheetVersionId) {
+    return request({
+        url: ENDPOINT_PATH_TALLY_SHEET_SUBMIT(tallySheetId),
+        method: 'put',
+        data: {
+            submittedVersionId: tallySheetVersionId
+        }
+    }).then((tallySheet) => {
+        return refactorTallySheetObject(tallySheet);
+    })
+}
+
+
+export function requestEditForTallySheet(tallySheetId) {
+    return request({
+        url: ENDPOINT_PATH_TALLY_SHEET_REQUEST_EDIT(tallySheetId),
+        method: 'put'
     }).then((tallySheet) => {
         return refactorTallySheetObject(tallySheet);
     })

@@ -9,7 +9,7 @@ import TableRow from '@material-ui/core/TableRow';
 import {
     getElections,
     getTallySheet,
-    getTallySheetVersionHtml,
+    getTallySheetVersionHtml, requestEditForTallySheet,
     saveTallySheetVersion,
     TALLY_SHEET_STATUS_ENUM
 } from "../services/tabulation-api";
@@ -27,17 +27,19 @@ import BreadCrumb from "../components/bread-crumb";
 import Button from "@material-ui/core/Button";
 
 
-export default function ReportView({history, election, tallySheet}) {
+export default function ReportView(props) {
+    const {history, election, messages} = props
     const {electionId, electionName} = election;
-    const {tallySheetId, tallySheetCode, latestVersionId, submittedVersionId, lockedVersionId, tallySheetStatus} = tallySheet;
-
+    const [tallySheet, setTallySheet] = useState(props.tallySheet);
     const [tallySheetVersionId, setTallySheetVersionId] = useState(null);
     const [tallySheetVersionHtml, setTallySheetVersionHtml] = useState("Processing ... ");
-    const [processing, setProcessing] = useState(true);
+    const [processing, setProcessing] = useState(false);
     const [error, setError] = useState(false);
     const [iframeHeight, setIframeHeight] = useState(600);
     const [iframeWidth, setIframeWidth] = useState("100%");
     const iframeRef = React.createRef();
+
+    const {tallySheetId, tallySheetCode, latestVersionId, submittedVersionId, lockedVersionId, tallySheetStatus} = tallySheet;
 
 
     const fetchTallySheetVersion = async () => {
@@ -84,6 +86,18 @@ export default function ReportView({history, election, tallySheet}) {
         iframeRef.current.contentWindow.print();
     }
 
+    const handleRequestEdit = () => async (evt) => {
+        setProcessing(true);
+        try {
+            const tallySheet = await requestEditForTallySheet(tallySheetId);
+            setTallySheet(tallySheet);
+            messages.push("Success", "Report was made editable successfully.");
+        } catch (e) {
+            messages.push("Error", "Unknown error occurred while updating the report.");
+        }
+        setProcessing(false);
+    };
+
     return <div className="page">
         <BreadCrumb
             links={[
@@ -104,13 +118,14 @@ export default function ReportView({history, election, tallySheet}) {
                     </Button>
                     <Button
                         variant="contained" size="small" color="primary"
-                        disabled={!tallySheetStatus.readyToLock}
+                        disabled={processing || !tallySheet.readyToLock}
                     >
                         Verify
                     </Button>
                     <Button
                         variant="contained" size="small" color="primary"
-                        disabled={tallySheetStatus !== TALLY_SHEET_STATUS_ENUM.VERIFIED}
+                        disabled={processing || !tallySheet.readyToLock}
+                        onClick={handleRequestEdit()}
                     >
                         Request Edit
                     </Button>
