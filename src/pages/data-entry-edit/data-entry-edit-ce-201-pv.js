@@ -38,7 +38,7 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
         numberOfBCoversRejected: 0,
         numberOfValidBallotPapers: 0,
         situation: "",
-        timeOfCommencementOfCount: null
+        timeOfCommencementOfCount: ""
     });
     const [ballotBoxList, setBallotBoxList] = useState([]);
     const [ballotBoxMap, setBallotBoxMap] = useState({});
@@ -78,16 +78,21 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
             if (tallySheet.latestVersionId) {
                 const latestVersion = await getTallySheetVersionById(tallySheetId, tallySheetCode, tallySheet.latestVersionId);
                 const {content, summary} = latestVersion;
+                let totalPV=0;
                 for (let i = 0; i < content.length; i++) {
                     let ballotBox = content[i];
                     ballotBox.refId = i;
+                    totalPV+=ballotBox.numberOfAPacketsFound;
                     addBallotBox(ballotBox);
                 }
                 for (let i = content.length; i < 6; i++) {
                     addBallotBox({refId: i});
                 }
+                console.log(latestVersion);
+                setTotalNumberOfPVPackets(totalPV);
+                setCountingCentreSummary({...summary});
+                console.log(summary);
 
-                setCountingCentreSummary({...summary, countingCentreSummary});
             }
         } catch (error) {
             messages.push("Error", "Tally sheet is not reachable.", MESSAGE_TYPES.ERROR);
@@ -103,7 +108,9 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
 
     const getTallySheetSaveRequestBody = () => {
         const content = [];
-        const summary = countingCentreSummary
+        const timeOfCommencement=countingCentreSummary.timeOfCommencementOfCount+":00+05:30";
+        countingCentreSummary.timeOfCommencementOfCount=timeOfCommencement;
+        const summary = countingCentreSummary;
 
         ballotBoxList.map(ballotBoxRefId => {
             const ballotBox = ballotBoxMap[ballotBoxRefId];
@@ -201,6 +208,42 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
         setTotalNumberOfPVPackets(processNumericValue(event.target.value));
     };
 
+    const handleNumberOfACoversRejectedChange = () => event => {
+        setCountingCentreSummary({
+            ...countingCentreSummary,
+            numberOfACoversRejected:processNumericValue(event.target.value)
+        });
+    };
+
+    const handleNumberOfBCoversRejectedChange = () => event => {
+        setCountingCentreSummary({
+            ...countingCentreSummary,
+            numberOfBCoversRejected:processNumericValue(event.target.value)
+        });
+    };
+
+    const handleNumberOfValidBallotPapersChange = () => event => {
+        setCountingCentreSummary({
+            ...countingCentreSummary,
+            numberOfValidBallotPapers:processNumericValue(event.target.value)
+        });
+    };
+
+    const handleSituationChange = () => event => {
+        setCountingCentreSummary({
+            ...countingCentreSummary,
+            situation:processNumericValue(event.target.value)
+        });
+    };
+
+    const handleTimeOfCommencementOfCountChange = () => event => {
+        console.log(event.target.value);
+        setCountingCentreSummary({
+            ...countingCentreSummary,
+            timeOfCommencementOfCount:event.target.value
+        });
+    };
+
     function calculateTotalNumberOfPVPackets() {
         let total = 0;
         for (let key in ballotBoxMap) {
@@ -241,7 +284,7 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
                             Total number of PV-A packets found in the Box/ Boxes
                         </TableCell>
                         <TableCell align="right">
-
+                            {totalNumberOfPVPackets}
                         </TableCell>
                     </TableRow>
                     <TableRow>
@@ -284,7 +327,7 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
                     <TableRow>
                         <TableCell align="right" colSpan={2}>
                             <strong>
-                                Time of commencement of the count fo Postal Votes ballot papers
+                                Time of commencement of the count of Postal Votes ballot papers
                             </strong>
                         </TableCell>
                         <TableCell align="right">
@@ -364,8 +407,8 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
                         <TableCell align="center">
                             <TextField
                                 required
-                                error={!isNumeric(totalNumberOfPVPackets)}
-                                helperText={!isNumeric(totalNumberOfPVPackets) ? "Only numeric values are valid" : ''}
+                                error={calculateTotalNumberOfPVPackets() !== totalNumberOfPVPackets}
+                                helperText={(calculateTotalNumberOfPVPackets() !== totalNumberOfPVPackets) ? "Total count mismatch" : ''}
                                 className={"data-entry-edit-count-input"}
                                 value={totalNumberOfPVPackets}
                                 margin="normal"
@@ -377,8 +420,16 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
                         <TableCell align="right" colSpan={2}>
                             Number of Packets rejected on various grounds after opening 'A' covers
                         </TableCell>
-                        <TableCell align="right">
-                            {numberOfACoversRejected}
+                        <TableCell align="center">
+                            <TextField
+                                required
+                                error={!isNumeric(numberOfACoversRejected)}
+                                helperText={!isNumeric(numberOfACoversRejected) ? "Only numeric values are valid" : ''}
+                                className={"data-entry-edit-count-input"}
+                                value={numberOfACoversRejected}
+                                margin="normal"
+                                onChange={handleNumberOfACoversRejectedChange()}
+                            />
                         </TableCell>
                     </TableRow>
                     <TableRow>
@@ -386,8 +437,16 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
                             <strong>No. of covers rejected on</strong>
                             various grounds after opening 'B' covers in accepted ballot papers receptacle
                         </TableCell>
-                        <TableCell align="right">
-                            {numberOfBCoversRejected}
+                        <TableCell align="center">
+                            <TextField
+                                required
+                                error={!isNumeric(numberOfBCoversRejected)}
+                                helperText={!isNumeric(numberOfBCoversRejected) ? "Only numeric values are valid" : ''}
+                                className={"data-entry-edit-count-input"}
+                                value={numberOfBCoversRejected}
+                                margin="normal"
+                                onChange={handleNumberOfBCoversRejectedChange()}
+                            />
                         </TableCell>
                     </TableRow>
                     <TableRow>
@@ -396,8 +455,16 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
                                 No of postal ballot papers for the count in the receptacle for accepted ballot papers.
                             </strong>
                         </TableCell>
-                        <TableCell align="right">
-                            {numberOfValidBallotPapers}
+                        <TableCell align="center">
+                            <TextField
+                                required
+                                error={!isNumeric(numberOfValidBallotPapers)}
+                                helperText={!isNumeric(numberOfValidBallotPapers) ? "Only numeric values are valid" : ''}
+                                className={"data-entry-edit-count-input"}
+                                value={numberOfValidBallotPapers}
+                                margin="normal"
+                                onChange={handleNumberOfValidBallotPapersChange()}
+                            />
                         </TableCell>
                     </TableRow>
                     <TableRow>
@@ -406,8 +473,14 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
                                 Situation of Postal Ballot Paper Counting Centre
                             </strong>
                         </TableCell>
-                        <TableCell align="right">
-                            {situation}
+                        <TableCell align="center">
+                            <TextField
+                                required
+                                className={"data-entry-edit-count-input"}
+                                value={situation}
+                                margin="normal"
+                                onChange={handleSituationChange()}
+                            />
                         </TableCell>
                     </TableRow>
                     <TableRow>
@@ -416,8 +489,14 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
                                 Time of commencement of the count fo Postal Votes ballot papers
                             </strong>
                         </TableCell>
-                        <TableCell align="right">
-                            {timeOfCommencementOfCount}
+                        <TableCell align="center">
+                            <TextField
+                                required
+                                type='datetime-local'
+                                value={timeOfCommencementOfCount}
+                                margin="normal"
+                                onChange={handleTimeOfCommencementOfCountChange()}
+                            />
                         </TableCell>
                     </TableRow>
                     <TableRow>
