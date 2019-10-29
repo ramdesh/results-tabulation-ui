@@ -13,7 +13,7 @@ import {
     saveTallySheetVersion,
     TALLY_SHEET_STATUS_ENUM
 } from "../services/tabulation-api";
-import {MessagesProvider, MessagesConsumer} from "../services/messages.provider";
+import {MessagesProvider, MessagesConsumer, MESSAGE_TYPES} from "../services/messages.provider";
 import {
     PATH_ELECTION, PATH_ELECTION_BY_ID,
     PATH_ELECTION_DATA_ENTRY, PATH_ELECTION_DATA_ENTRY_EDIT,
@@ -91,9 +91,9 @@ export default function ReportView(props) {
         try {
             const tallySheet = await requestEditForTallySheet(tallySheetId);
             setTallySheet(tallySheet);
-            messages.push("Success", "Report was made editable successfully.");
+            messages.push("Success", "Report was made editable successfully.", MESSAGE_TYPES.SUCCESS);
         } catch (e) {
-            messages.push("Error", "Unknown error occurred while updating the report.");
+            messages.push("Error", "Unknown error occurred while updating the report.", MESSAGE_TYPES.ERROR);
         }
         setProcessing(false);
     };

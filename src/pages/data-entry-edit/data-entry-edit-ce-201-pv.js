@@ -7,7 +7,7 @@ import {
     getTallySheetVersionById,
     saveTallySheetVersion, submitTallySheet
 } from "../../services/tabulation-api";
-import {MessagesProvider, MessagesConsumer} from "../../services/messages.provider";
+import {MessagesProvider, MessagesConsumer, MESSAGE_TYPES} from "../../services/messages.provider";
 import {
     PATH_ELECTION, PATH_ELECTION_BY_ID,
     PATH_ELECTION_DATA_ENTRY, PATH_ELECTION_DATA_ENTRY_EDIT,
@@ -95,7 +95,7 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
 
             }
         } catch (error) {
-            messages.push("Error", "Tally sheet is not reachable.");
+            messages.push("Error", "Tally sheet is not reachable.", MESSAGE_TYPES.ERROR);
         }
 
         setProcessing(false);
@@ -135,11 +135,11 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
 
                 setTallySheetVersion(tallySheetVersion);
             } catch (e) {
-                messages.push("Error", "Unknown error occurred while saving the tally sheet.");
+                messages.push("Error", "Unknown error occurred while saving the tally sheet.", MESSAGE_TYPES.ERROR);
             }
             setProcessing(false);
         } else {
-            messages.push("Error", "Please check the input values for errors")
+            messages.push("Error", "Please check the input values for errors", MESSAGE_TYPES.ERROR)
         }
     };
 
@@ -150,12 +150,12 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
             const {tallySheetVersionId} = tallySheetVersion;
             const tallySheet = await submitTallySheet(tallySheetId, tallySheetVersionId);
 
-            messages.push("Success", "PRE-41 tally sheet was submitted successfully");
+            messages.push("Success", "PRE-41 tally sheet was submitted successfully", MESSAGE_TYPES.SUCCESS);
             setTimeout(() => {
                 history.push(PATH_ELECTION_DATA_ENTRY(electionId, tallySheetCode));
             }, 1000)
         } catch (e) {
-            messages.push("Error", "Unknown error occurred while submitting the tally sheet.");
+            messages.push("Error", "Unknown error occurred while submitting the tally sheet.", MESSAGE_TYPES.ERROR);
         }
 
         setProcessing(false);
