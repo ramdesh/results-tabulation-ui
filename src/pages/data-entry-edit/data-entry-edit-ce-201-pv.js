@@ -88,9 +88,10 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
                 for (let i = content.length; i < 6; i++) {
                     addBallotBox({refId: i});
                 }
-
+                console.log(latestVersion);
                 setTotalNumberOfPVPackets(totalPV);
-                setCountingCentreSummary({...countingCentreSummary});
+                setCountingCentreSummary({...summary});
+                console.log(summary);
 
             }
         } catch (error) {
@@ -107,7 +108,9 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
 
     const getTallySheetSaveRequestBody = () => {
         const content = [];
-        const summary = countingCentreSummary
+        const timeOfCommencement=countingCentreSummary.timeOfCommencementOfCount+":00+05:30";
+        countingCentreSummary.timeOfCommencementOfCount=timeOfCommencement;
+        const summary = countingCentreSummary;
 
         ballotBoxList.map(ballotBoxRefId => {
             const ballotBox = ballotBoxMap[ballotBoxRefId];
@@ -234,9 +237,10 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
     };
 
     const handleTimeOfCommencementOfCountChange = () => event => {
+        console.log(event.target.value);
         setCountingCentreSummary({
             ...countingCentreSummary,
-            timeOfCommencementOfCount:processNumericValue(event.target.value)
+            timeOfCommencementOfCount:event.target.value
         });
     };
 
@@ -323,7 +327,7 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
                     <TableRow>
                         <TableCell align="right" colSpan={2}>
                             <strong>
-                                Time of commencement of the count fo Postal Votes ballot papers
+                                Time of commencement of the count of Postal Votes ballot papers
                             </strong>
                         </TableCell>
                         <TableCell align="right">
