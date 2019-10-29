@@ -66,12 +66,59 @@ ul.bread-crumb li.bread-crumb-list-item a:hover {
     text-decoration: underline;
 }
 
-.tally-sheet-code-list {
+.election-grid {
+    border-right: 1px solid #ccc;
+}
 
+.tally-sheet-vote-type {
+    padding-bottom: 0 !important;
+}
+
+.tally-sheet-code-list {
+    margin-top: 0;
+    padding-left: 5px;
+}
+
+.tally-sheet-grid div {
+    display: block;
+}
+
+.tally-sheet-code-list li {
+    list-style: none;
+    font-weight: bold;
+    margin-top: 25px;
+}
+
+.btn-select {
+    background: green;
+    border: 1px solid green;
+}
+
+.btn-list {
+    background: #bbb;
+    border: 1px solid bbb;
+}
+
+.tally-sheet-code-list li a {
+    text-decoration: none;
+    margin-left: 10px !important;
+    font-weight: normal;
+    color: #fff;
+    padding: 5px;
+    border-radius: 5px;
+    float: right;
+    margin-right: 10px;
+    width: 50px;
+    height: 20px;
+    text-align: center;
 }
 
 .tally-sheet-code-list .tally-sheet-code-list-item {
 
+}
+
+.tally-sheet-code-grid {
+    padding-top: 0 !important;
 }
 
 .data-entry-edit-count-input {
@@ -145,5 +192,3 @@ ul.bread-crumb li.bread-crumb-list-item a:hover {
     text-decoration: none;
     border-radius: 7px;
 }
-
-
