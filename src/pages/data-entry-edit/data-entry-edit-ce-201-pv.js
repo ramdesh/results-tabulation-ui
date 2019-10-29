@@ -5,7 +5,7 @@ import {
     getTallySheet,
     getTallySheetById,
     getTallySheetVersionById,
-    saveTallySheetVersion
+    saveTallySheetVersion, submitTallySheet
 } from "../../services/tabulation-api";
 import {MessagesProvider, MessagesConsumer} from "../../services/messages.provider";
 import {
@@ -43,9 +43,9 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
     const [ballotBoxList, setBallotBoxList] = useState([]);
     const [ballotBoxMap, setBallotBoxMap] = useState({});
     const [processing, setProcessing] = useState(true);
-    const [error, setError] = useState(false);
+    const [tallySheetVersion, setTallySheetVersion] = useState(null);
+    const [processingLabel, setProcessingLabel] = useState("Loading");
     const [saved, setSaved] = useState(false);
-    const [submitted, setSubmitted] = useState(false);
     const [totalNumberOfPVPackets, setTotalNumberOfPVPackets] = useState(0);
 
     const addBallotBox = ballotBox => {
@@ -78,7 +78,6 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
             if (tallySheet.latestVersionId) {
                 const latestVersion = await getTallySheetVersionById(tallySheetId, tallySheetCode, tallySheet.latestVersionId);
                 const {content, summary} = latestVersion;
-                debugger;
                 for (let i = 0; i < content.length; i++) {
                     let ballotBox = content[i];
                     ballotBox.refId = i;
@@ -91,7 +90,7 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
                 setCountingCentreSummary({...summary, countingCentreSummary});
             }
         } catch (error) {
-            setError(true)
+            messages.push("Error", "Tally sheet is not reachable.");
         }
 
         setProcessing(false);
@@ -102,28 +101,34 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
     }, []);
 
 
+    const getTallySheetSaveRequestBody = () => {
+        const content = [];
+        const summary = countingCentreSummary
+
+        ballotBoxList.map(ballotBoxRefId => {
+            const ballotBox = ballotBoxMap[ballotBoxRefId];
+            let {ballotBoxId, numberOfAPacketsFound, numberOfPacketsInserted} = ballotBox;
+            content.push({ballotBoxId, numberOfAPacketsFound, numberOfPacketsInserted});
+        });
+
+        return {
+            content: content,
+            summary: summary
+        };
+    };
+
     const handleClickNext = (saved = true) => async (event) => {
         if (validateAllValues()) {
-            setSaved(saved);
+            setSaved(saved)
             setProcessing(true);
+            setProcessingLabel("Saving");
             try {
-                const content = [];
-                const summary = countingCentreSummary
+                const body = getTallySheetSaveRequestBody();
+                const tallySheetVersion = await saveTallySheetVersion(tallySheetId, tallySheetCode, body);
 
-                ballotBoxList.map(ballotBoxRefId => {
-                    const ballotBox = ballotBoxMap[ballotBoxRefId];
-                    let {ballotBoxId, numberOfAPacketsFound, numberOfPacketsInserted} = ballotBox;
-                    content.push({ballotBoxId, numberOfAPacketsFound, numberOfPacketsInserted});
-                });
-
-                await saveTallySheetVersion(tallySheetId, tallySheetCode, {
-                    content: content,
-                    summary: summary
-                });
-
+                setTallySheetVersion(tallySheetVersion);
             } catch (e) {
-                debugger;
-                setError(true);
+                messages.push("Error", "Unknown error occurred while saving the tally sheet.");
             }
             setProcessing(false);
         } else {
@@ -132,11 +137,21 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
     };
 
     const handleClickSubmit = () => async (event) => {
-        setSubmitted(true);
+        setProcessing(true);
+        setProcessingLabel("Submitting");
+        try {
+            const {tallySheetVersionId} = tallySheetVersion;
+            const tallySheet = await submitTallySheet(tallySheetId, tallySheetVersionId);
 
-        setTimeout(() => {
-            history.push(PATH_ELECTION_DATA_ENTRY(electionId, tallySheetCode))
-        }, 10000);
+            messages.push("Success", "PRE-41 tally sheet was submitted successfully");
+            setTimeout(() => {
+                history.push(PATH_ELECTION_DATA_ENTRY(electionId, tallySheetCode));
+            }, 1000)
+        } catch (e) {
+            messages.push("Error", "Unknown error occurred while submitting the tally sheet.");
+        }
+
+        setProcessing(false);
     };
 
     function validateAllValues() {
@@ -197,23 +212,7 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
 
 
     function getTallySheetEditForm() {
-        if (processing) {
-            return <Processing/>
-        } else if (error) {
-            return <Error
-                title="Tally sheet is not accessible."
-            />
-        } else if (submitted) {
-            return <div class="">
-                <h4>Tally sheet was submitted successfully and waiting for verification.</h4>
-                <div>
-                    <Button variant="contained" color="default"
-                            onClick={() => history.push(PATH_ELECTION_DATA_ENTRY(electionId, tallySheetCode))}>
-                        Back to Data Entry
-                    </Button>
-                </div>
-            </div>
-        } else if (saved) {
+        if (saved) {
             const {numberOfACoversRejected, numberOfBCoversRejected, numberOfValidBallotPapers, situation, timeOfCommencementOfCount} = countingCentreSummary;
             return <Table aria-label="simple table" size={saved ? "small" : "medium"}>
                 <TableHead>
@@ -308,7 +307,7 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
                 </TableFooter>
 
             </Table>
-        } else {
+        } else if (!processing) {
             const {numberOfACoversRejected, numberOfBCoversRejected, numberOfValidBallotPapers, situation, timeOfCommencementOfCount} = countingCentreSummary;
             return <Table aria-label="simple table" size="medium">
                 <TableHead>
@@ -433,9 +432,14 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
                 </TableFooter>
 
             </Table>
+        } else {
+            return null;
         }
     }
 
-    return getTallySheetEditForm()
+
+    return <Processing showProgress={processing} label={processingLabel}>
+        {getTallySheetEditForm()}
+    </Processing>;
 
 }
