@@ -279,7 +279,7 @@ class CE201New extends Component {
         for (var pollingStationIndex = 0; pollingStationIndex < this.state.pollingStationsList.length; pollingStationIndex++) {
             let pollingId = this.state.pollingStationsList[pollingStationIndex];
             let validVoteCount = this.getInputValue(pollingId, "ordinaryBallotCountFromBoxCount");
-            // validVoteCount = getNumOrZero(validVoteCount);
+            validVoteCount = getNumOrZero(validVoteCount);
             validVoteCountTotal += validVoteCount;
         }
 
@@ -416,11 +416,11 @@ class CE201New extends Component {
                                     </TableRow>
                                 })}
 
-                                <TableRow>
+                                <TableRow style={{background: "#f6f6f6"}}>
                                     <TableCell></TableCell>
                                     <TableCell
                                         style={{marginLeft: '30% ', fontSize: 15, color: 'black', fontWeight: 'bold'}}>
-                                        Total Box Count : </TableCell>
+                                        මුළු එකතුව / Total Box Count : </TableCell>
                                     <TableCell
                                         style={{paddingLeft: '2%', width: '30%', fontSize: 16, fontWeight: 'bold'}}>
                                         {this.getBoxCountTotal()}
