@@ -5,16 +5,10 @@ COPY package*.json /app/
 COPY ./public /app/public
 WORKDIR /app
 RUN npm install
-ENV REACT_APP_BASE_PATH="tabulation"
-ENV REACT_APP_HOME_PATH="/home"
-ENV REACT_APP_LOGIN_PATH="/login"
-ENV REACT_APP_LOGOUT_PATH="/logout"
-ENV REACT_APP_IS_ENDPOINT="https://is.ecdev.opensource.lk"
-ENV REACT_APP_TABULATION_API_ENDPOINT="https://api.tabulation.ecdev.opensource.lk"
-ENV REACT_APP_CLIENT_ID="vNAlVemkxkxLJdhgfYsYyiRmN3Ma"
-ENV REACT_APP_CLIENT_HOST="https://results.ecdev.opensource.lk"
-ENV REACT_APP_LOGIN_CALLBACK_URL="https://results.ecdev.opensource.lk/tabulation/login"
-ENV REACT_APP_LOGOUT_CALLBACK_URL="https://results.ecdev.opensource.lk/tabulation/logout"
+
+ENV REACT_APP_AUTH_APP_URL="https://tabulations.ecdev.opensource.lk"
+ENV REACT_APP_TABULATION_API_URL="https://apim-gateway.ecdev.opensource.lk/tabulation/0.1.0"
+
 RUN npm run build
 
 FROM nginx:1.15

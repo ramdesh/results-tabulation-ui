@@ -1,4 +1,4 @@
-export * from "./authenticate";
+export * from "../auth";
 export * from "./history";
 
 export function getNumOrZero(num) {
@@ -14,4 +14,19 @@ export function getNumOrZero(num) {
     }
 
     return num
+}
+
+export function isNumeric(n) {
+    return !isNaN(parseInt(n)) && isFinite(n);
+}
+
+export function processNumericValue(value) {
+    if (value === "") {
+        return 0
+    }
+    if (isNumeric(value)) {
+        let val = parseInt(value);
+        return val > 0 ? val : val * (-1)
+    }
+    return value
 }

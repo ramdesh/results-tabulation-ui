@@ -5,15 +5,12 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import {BrowserRouter} from "react-router-dom";
 import {Router} from "react-router";
-import {AuthProvider} from "./contexts";
-import { history } from "./utils";
+import {history} from "./utils";
 
 ReactDOM.render(
     <BrowserRouter>
-        <Router history={ history }>
-            {/*<AuthProvider>*/}
-                <App />
-            {/*</AuthProvider>*/}
+        <Router history={history}>
+            <App/>
         </Router>
     </BrowserRouter>
     , document.getElementById('root')

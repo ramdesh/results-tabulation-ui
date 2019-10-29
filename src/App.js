@@ -1,102 +1,186 @@
 import React, {useContext} from 'react';
 import './App.css';
 import NavBar from "./components/navbar/Navbar";
-import { Route} from "react-router-dom";
-import CE201 from "./components/CE201/CE201";
-import PRE28A from "./components/PRE28A/PRE28A";
-import PRE28AEntry from "./components/PRE28A/PRE28AEntry";
-import PRE21 from "./components/invalid-ballots/PRE21";
-import PRE21Entry from "./components/invalid-ballots/PRE21Entry";
-import PRE21PVEntry from "./components/invalid-ballots/postal-votes/PRE21PVEntry";
-import PRE21PV from "./components/invalid-ballots/postal-votes/PRE21PV";
-import PRE41 from "./components/partywise-count/PRE41";
-import PRE41PV from "./components/partywise-count/postal-votes/PRE41PV";
-import PRE41PVEntry from "./components/partywise-count/postal-votes/PRE41PVEntry";
-import PRE34CO from "./components/preferences/PRE34CO";
-import PRE34COEntry from "./components/preferences/PRE34COEntry";
-import PRE34COPV from "./components/preferences/postal-votes/PRE34COPV";
-import PRE34COPVEntry from "./components/preferences/postal-votes/PRE34COPVEntry";
-import CE201Entry from "./components/CE201/CE201Entry";
-import PRE28Entry from "./components/PRE28/PRE28Entry";
-import PRE28 from "./components/PRE28/PRE28";
-import ReportsEntry from "./components/report/ReportsEntry";
-import Home from "./components/home/Home";
-import HomeSelection from "./components/home/HomeSelection";
-import HomeElection from "./components/home/HomeElection";
-import CE201PV from "./components/CE201/postal-votes/CE201PV";
-import CE201PVEntry from "./components/CE201/postal-votes/CE201PVEntry";
-import PRE41Report from "./components/partywise-count/PRE41Report";
-import ReportView from "./components/report/ReportView";
-import CE201Report from "./components/CE201/CE201Report";
-import {AuthContext} from "./contexts";
-import {Redirect, Switch} from "react-router";
-import {AppConfig} from "./configs";
-import {ProtectedRoute} from "./components/protected-route";
-import PRE41New from "./components/partywise-count/PRE41New";
-import CE201New from "./components/CE201/CE201New";
 
-const appConfig = new AppConfig();
+import {Redirect, Switch} from "react-router";
+import {ElectionProtectedRoute, ProtectedRoute, TallySheetProtectedRoute} from "./auth";
+
+import Home from "./pages/home"
+import Election from "./pages/election";
+import DataEntryList from "./pages/data-entry-list";
+import DataEntryEdit from "./pages/data-entry-edit";
+import ReportList from "./pages/report-list";
+import ReportView from "./pages/report-view";
+
+export const ROUTER_PREFIX = "";
+export const PATH_ELECTION = () => `${ROUTER_PREFIX}/election`;
+export const PATH_ELECTION_BY_ID = (electionId) => `${ROUTER_PREFIX}/election/${electionId}`;
+export const PATH_ELECTION_DATA_ENTRY = (electionId, tallySheetCode) => {
+    let path = `${ROUTER_PREFIX}/election/${electionId}/data-entry`;
+    if (tallySheetCode) {
+        path += `?tallySheetCode=${tallySheetCode}`;
+    }
+
+    return path;
+};
+export const PATH_ELECTION_DATA_ENTRY_EDIT = (electionId, tallySheetId, tallySheetVersionId) => {
+    let path = `${ROUTER_PREFIX}/election/${electionId}/data-entry/${tallySheetId}`;
+    if (tallySheetVersionId) {
+        path += `/${tallySheetVersionId}`
+    }
+
+    return path
+};
+export const PATH_ELECTION_VERIFICATION = (electionId, tallySheetCode) => {
+    return `${ROUTER_PREFIX}/election/${electionId}/verification?tallySheetCode=${tallySheetCode}`;
+};
+export const PATH_ELECTION_VERIFICATION_EDIT = (electionId, tallySheetId) => {
+    return `${ROUTER_PREFIX}/election/${electionId}/verification/${tallySheetId}`;
+};
+export const PATH_ELECTION_REPORT = (electionId, tallySheetCode) => {
+    let path = `${ROUTER_PREFIX}/election/${electionId}/report`;
+    if (tallySheetCode) {
+        path += `?tallySheetCode=${tallySheetCode}`;
+    }
+
+    return path;
+};
+export const PATH_ELECTION_RESULTS_RELEASE = (electionId, tallySheetCode) => {
+    let path = `${ROUTER_PREFIX}/election/${electionId}/release`;
+    if (tallySheetCode) {
+        path += `?tallySheetCode=${tallySheetCode}`;
+    }
+
+    return path;
+};
+export const PATH_ELECTION_REPORT_VIEW = (electionId, tallySheetId) => {
+    return `${ROUTER_PREFIX}/election/${electionId}/report/${tallySheetId}`;
+};
+
+// export const PATH_ELECTION_TALLY_SHEET_REVIEW = (electionId, tallySheetId) => {
+//     return `${ROUTER_PREFIX}/election/${electionId}/tallySheet-/${tallySheetId}`;
+// };
+
+export const TALLY_SHEET_CODE_PRE_41 = "PRE-41";
+export const TALLY_SHEET_CODE_CE_201 = "CE-201";
+export const TALLY_SHEET_CODE_CE_201_PV = "CE-201-PV";
+export const TALLY_SHEET_CODE_PRE_30_PD = "PRE-30-PD";
+export const TALLY_SHEET_CODE_PRE_30_ED = "PRE-30-ED";
+export const TALLY_SHEET_CODE_PRE_ALL_ISLAND_RESULTS_BY_ELECTORAL_DISTRICTS = "PRE_ALL_ISLAND_RESULTS_BY_ELECTORAL_DISTRICTS";
+export const TALLY_SHEET_CODE_PRE_ALL_ISLAND_RESULTS = "PRE_ALL_ISLAND_RESULTS";
 
 function App() {
-    // const {signIn, signOut} = useContext(AuthContext);
+
+    function getHeader() {
+        if (ProtectedRoute.isAuthenticated()) {
+            return <NavBar/>
+        } else {
+            return <div className="fixed-loading-page">
+                Loading ...
+            </div>
+        }
+    }
+
     return (
         <div>
-            <NavBar/>
+            {getHeader()}
             <Switch>
 
-                <Redirect exact path="/" to="/Election"/>
+                <Redirect exact path="/" to={PATH_ELECTION()}/>
 
-                {/*<Redirect exact path="/" to={ appConfig.loginPath }/>*/}
-                {/*<Route path={ appConfig.loginPath } render={ () => {*/}
-                {/*    signIn();*/}
-                {/*    return null;*/}
-                {/*} }/>*/}
-                {/*<Route path={ appConfig.logoutPath } render={ () => {*/}
-                {/*    signOut();*/}
-                {/*    return null;*/}
-                {/*} }/>*/}
 
-                <Route exact path="/Election" component={ HomeElection }/>
-                <Route exact path="/Home" component={ Home }/>
-                <Route exact path="/Main" component={ HomeSelection }/>
+                <ProtectedRoute
+                    exact
+                    path={PATH_ELECTION()}
+                    component={Home}
+                />
+                <ElectionProtectedRoute
+                    exact
+                    path={PATH_ELECTION_BY_ID(":electionId")}
+                    component={Election}
+                />
+                <ElectionProtectedRoute
+                    exact
+                    path={PATH_ELECTION_DATA_ENTRY(":electionId")}
+                    component={DataEntryList}
+                />
+                <TallySheetProtectedRoute
+                    exact
+                    path={PATH_ELECTION_DATA_ENTRY_EDIT(":electionId", ":tallySheetId", ":tallySheetVersionId?")}
+                    component={DataEntryEdit}
+                />
+                {/*<ProtectedRoute*/}
+                {/*    exact*/}
+                {/*    path={PATH_ELECTION_VERIFICATION(":electionId", ":tallySheetCode")}*/}
+                {/*    component={Home}*/}
+                {/*/>*/}
+                {/*<ProtectedRoute*/}
+                {/*    exact*/}
+                {/*    path={PATH_ELECTION_VERIFICATION_EDIT(":electionId", ":tallySheetId")}*/}
+                {/*    component={Home}*/}
+                {/*/>*/}
 
-                <Route exact path="/ReportsEntry" component={ ReportsEntry }/>
-                <Route exact path="/ReportView/:tallySheetId/:tallySheetVersionId" component={ ReportView }/>
+                <ElectionProtectedRoute
+                    exact
+                    path={PATH_ELECTION_REPORT(":electionId")}
+                    component={ReportList}
+                />
 
-                <Route exact path="/CE201" component={ CE201 }/>
-                <Route exact path="/CE201-Entry/:name/:name2/:countingId" component={ CE201Entry }/>
-                <Route path="/CE201Entry/:tallySheetId/:tallySheetVersionId" component={ CE201New }/>
-                <Route exact path="/CE201Report/:tallySheetId/:tallySheetVersionId" component={ CE201Report }/>
+                <TallySheetProtectedRoute
+                    exact
+                    path={PATH_ELECTION_REPORT_VIEW(":electionId", ":tallySheetId")}
+                    component={ReportView}
+                />
+                {/*<ProtectedRoute*/}
+                {/*    exact*/}
+                {/*    path={PATH_ELECTION_REPORT_VIEW(":electionId", ":tallySheetId")}*/}
+                {/*    component={Home}*/}
+                {/*/>*/}
 
-                <Route exact path="/PRE21" component={ PRE21 }/>
-                <Route exact path="/PRE21-Entry/:name/:name2" component={ PRE21Entry }/>
 
-                <Route exact path="/PRE34CO" component={ PRE34CO }/>
-                <Route exact path="/PRE34CO-Entry" component={ PRE34COEntry }/>
+                {/*<ProtectedRoute exact path="/Election" component={HomeElection}/>*/}
+                {/*<ProtectedRoute exact path="/Home" component={Home}/>*/}
+                {/*<ProtectedRoute exact path="/Main" component={HomeSelection}/>*/}
 
-                <Route exact path="/PRE28" component={ PRE28 }/>
-                <Route path="/PRE28-Entry/:name" component={ PRE28Entry }/>
+                {/*<ProtectedRoute exact path="/ReportsEntry" component={ReportsEntry}/>*/}
+                {/*<ProtectedRoute exact path="/ReportView/:tallySheetId/:tallySheetVersionId" component={ReportView}/>*/}
 
-                <Route exact path="/PRE41" component={ PRE41 }/>
-                <Route path="/PRE41Entry/:tallySheetId/:tallySheetVersionId" component={ PRE41New }/>
-                <Route exact path="/PRE41Report/:tallySheetId/:tallySheetVersionId/" component={ PRE41Report }/>
+                {/*<ProtectedRoute exact path="/CE201" component={CE201}/>*/}
+                {/*<ProtectedRoute exact path="/CE201-Entry/:name/:name2/:countingId" component={CE201Entry}/>*/}
+                {/*<ProtectedRoute path="/CE201Entry/:tallySheetId/:tallySheetVersionId" component={CE201New}/>*/}
+                {/*<ProtectedRoute exact path="/CE201Report/:tallySheetId/:tallySheetVersionId" component={CE201Report}/>*/}
 
-                <Route exact path="/PRE28A" component={ PRE28A }/>
-                <Route path="/PRE28A-Entry/:name" component={ PRE28AEntry }/>
+                {/*<ProtectedRoute exact path="/PRE21" component={PRE21}/>*/}
+                {/*<ProtectedRoute exact path="/PRE21-Entry/:name/:name2" component={PRE21Entry}/>*/}
 
-                <Route exact path="/PRE21PV" component={ PRE21PV }/>
-                <Route exact path="/PRE21PV-Entry/:name/:name2" component={ PRE21PVEntry }/>
+                {/*<ProtectedRoute exact path="/PRE34CO" component={PRE34CO}/>*/}
+                {/*<ProtectedRoute exact path="/PRE34CO-Entry" component={PRE34COEntry}/>*/}
 
-                <Route exact path="/PRE41PV" component={ PRE41PV }/>
-                <Route exact path="/PRE41PVEntry/:tallySheetId/:tallySheetVersionId" component={ PRE41PVEntry }/>
+                {/*<ProtectedRoute exact path="/PRE28" component={PRE28}/>*/}
+                {/*<ProtectedRoute path="/PRE28-Entry/:name" component={PRE28Entry}/>*/}
 
-                <Route exact path="/CE201PV" component={ CE201PV }/>
-                <Route exact path="/CE201PVEntry/:tallySheetId/:tallySheetVersionId" component={ CE201PVEntry }/>
+                {/*<ProtectedRoute exact path="/PRE41" component={PRE41}/>*/}
+                {/*<ProtectedRoute path="/PRE41Entry/:tallySheetId/:tallySheetVersionId" component={PRE41New}/>*/}
+                {/*<ProtectedRoute exact path="/PRE41Report/:tallySheetId/:tallySheetVersionId/" component={PRE41Report}/>*/}
 
-                <Route exact path="/PRE34COPV" component={ PRE34COPV }/>
-                <Route exact path="/PRE34COPV-Entry" component={ PRE34COPVEntry }/>
+                {/*<ProtectedRoute exact path="/PRE28A" component={PRE28A}/>*/}
+                {/*<ProtectedRoute path="/PRE28A-Entry/:name" component={PRE28AEntry}/>*/}
+
+                {/*<ProtectedRoute exact path="/PRE21PV" component={PRE21PV}/>*/}
+                {/*<ProtectedRoute exact path="/PRE21PV-Entry/:name/:name2" component={PRE21PVEntry}/>*/}
+
+                {/*<ProtectedRoute exact path="/PRE41PV" component={PRE41PV}/>*/}
+                {/*<ProtectedRoute exact path="/PRE41PVEntry/:tallySheetId/:tallySheetVersionId" component={PRE41PVEntry}/>*/}
+
+                {/*<ProtectedRoute exact path="/CE201PV" component={CE201PV}/>*/}
+                {/*<ProtectedRoute exact path="/CE201PVEntry/:tallySheetId/:tallySheetVersionId" component={CE201PVEntry}/>*/}
+                {/*<ProtectedRoute exact path="/CE201PVReport/:tallySheetId/:tallySheetVersionId" component={CE201PVReport}/>*/}
+
+                {/*<ProtectedRoute exact path="/PRE34COPV" component={PRE34COPV}/>*/}
+                {/*<ProtectedRoute exact path="/PRE34COPV-Entry" component={PRE34COPVEntry}/>*/}
             </Switch>
         </div>
     );
 }
+
 export default App;
