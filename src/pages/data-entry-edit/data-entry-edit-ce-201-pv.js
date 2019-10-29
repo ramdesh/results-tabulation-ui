@@ -46,7 +46,7 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
     const [error, setError] = useState(false);
     const [saved, setSaved] = useState(false);
     const [submitted, setSubmitted] = useState(false);
-    const [totalOrdinaryBallotCountFromBoxCount, setTotalOrdinaryBallotCountFromBoxCount] = useState(0);
+    const [totalNumberOfPVPackets, setTotalNumberOfPVPackets] = useState(0);
 
     const addBallotBox = ballotBox => {
         let {refId, ballotBoxId, numberOfAPacketsFound, numberOfPacketsInserted} = ballotBox;
@@ -82,7 +82,7 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
                 for (let i = 0; i < content.length; i++) {
                     let ballotBox = content[i];
                     ballotBox.refId = i;
-                    addBallotBox({});
+                    addBallotBox(ballotBox);
                 }
                 for (let i = content.length; i < 6; i++) {
                     addBallotBox({refId: i});
@@ -103,41 +103,97 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
 
 
     const handleClickNext = (saved = true) => async (event) => {
-        setProcessing(true);
-        setTimeout(() => {
-            setSaved(saved)
+        if (validateAllValues()) {
+            setSaved(saved);
+            setProcessing(true);
+            try {
+                const content = [];
+                const summary = countingCentreSummary
+
+                ballotBoxList.map(ballotBoxRefId => {
+                    const ballotBox = ballotBoxMap[ballotBoxRefId];
+                    let {ballotBoxId, numberOfAPacketsFound, numberOfPacketsInserted} = ballotBox;
+                    content.push({ballotBoxId, numberOfAPacketsFound, numberOfPacketsInserted});
+                });
+
+                await saveTallySheetVersion(tallySheetId, tallySheetCode, {
+                    content: content,
+                    summary: summary
+                });
+
+            } catch (e) {
+                debugger;
+                setError(true);
+            }
             setProcessing(false);
-        }, 300);
+        } else {
+            messages.push("Error", "Please check the input values for errors")
+        }
     };
 
     const handleClickSubmit = () => async (event) => {
-        setProcessing(true);
-        try {
-            const content = [];
-            const summary = countingCentreSummary
+        setSubmitted(true);
 
-            ballotBoxList.map(ballotBoxRefId => {
-                const ballotBox = ballotBoxMap[ballotBoxRefId];
-                let {ballotBoxId, numberOfAPacketsFound, numberOfPacketsInserted} = ballotBox;
-                content.push({ballotBoxId, numberOfAPacketsFound, numberOfPacketsInserted});
-            });
-
-            await saveTallySheetVersion(tallySheetId, tallySheetCode, {
-                content: content,
-                summary: summary
-            });
-
-            setSubmitted(true);
-
-            setTimeout(() => {
-                history.push(PATH_ELECTION_DATA_ENTRY(electionId, tallySheetCode))
-            }, 10000);
-        } catch (e) {
-            debugger;
-            setError(true);
-        }
-        setProcessing(false);
+        setTimeout(() => {
+            history.push(PATH_ELECTION_DATA_ENTRY(electionId, tallySheetCode))
+        }, 10000);
     };
+
+    function validateAllValues() {
+        for (let key in ballotBoxMap) {
+            if (!isNumeric(ballotBoxMap[key]["numberOfPacketsInserted"])) {
+                return false;
+            }
+            if (!isNumeric(ballotBoxMap[key]["numberOfAPacketsFound"])) {
+                return false;
+            }
+        }
+        return (calculateTotalNumberOfPVPackets() === totalNumberOfPVPackets)
+    }
+
+    const handleBallotBoxIdChange = ballotBoxRefId => event => {
+        setBallotBoxMap({
+            ...ballotBoxMap,
+            [ballotBoxRefId]: {
+                ...ballotBoxMap[ballotBoxRefId],
+                ballotBoxId: event.target.value
+            }
+        })
+    };
+
+    const handleNumberOfPacketsInsertedChange = ballotBoxRefId => event => {
+        setBallotBoxMap({
+            ...ballotBoxMap,
+            [ballotBoxRefId]: {
+                ...ballotBoxMap[ballotBoxRefId],
+                numberOfPacketsInserted: processNumericValue(event.target.value)
+            }
+        })
+    };
+
+    const handleNumberOfAPacketsFoundChange = ballotBoxRefId => event => {
+        console.log()
+        setBallotBoxMap({
+            ...ballotBoxMap,
+            [ballotBoxRefId]: {
+                ...ballotBoxMap[ballotBoxRefId],
+                numberOfAPacketsFound: processNumericValue(event.target.value)
+            }
+        })
+    };
+
+    const handleTotalNumberOfPVPacketsChange = () => event => {
+        setTotalNumberOfPVPackets(processNumericValue(event.target.value));
+    };
+
+    function calculateTotalNumberOfPVPackets() {
+        let total = 0;
+        for (let key in ballotBoxMap) {
+            total += parseInt(ballotBoxMap[key]["numberOfAPacketsFound"])
+        }
+        console.log(total);
+        return total;
+    }
 
 
     function getTallySheetEditForm() {
@@ -174,8 +230,8 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
                         let {ballotBoxId, numberOfAPacketsFound, numberOfPacketsInserted} = ballotBox;
                         return <TableRow key={ballotBoxRefId}>
                             <TableCell align="center">{ballotBoxId}</TableCell>
-                            <TableCell align="center">{numberOfAPacketsFound}</TableCell>
                             <TableCell align="center">{numberOfPacketsInserted}</TableCell>
+                            <TableCell align="center">{numberOfAPacketsFound}</TableCell>
                         </TableRow>
                     })}
                 </TableBody>
@@ -257,9 +313,10 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
             return <Table aria-label="simple table" size="medium">
                 <TableHead>
                     <TableRow>
-                        <TableCell align="center">Polling Districts</TableCell>
-                        <TableCell align="center">Polling Station</TableCell>
-                        <TableCell align="center">Ordinary Ballot Count</TableCell>
+                        <TableCell align="center">Serial Number of Postal Votes Ballot Box</TableCell>
+                        <TableCell align="center">No. of packets inserted by the Returning Officer</TableCell>
+                        <TableCell align="center">No. pf PV-A packets found inside the Ballot Box after the
+                            count</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -267,9 +324,35 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
                         const ballotBox = ballotBoxMap[ballotBoxRefId];
                         let {ballotBoxId, numberOfAPacketsFound, numberOfPacketsInserted} = ballotBox;
                         return <TableRow key={ballotBoxRefId}>
-                            <TableCell align="center">{ballotBoxId}</TableCell>
-                            <TableCell align="center">{numberOfAPacketsFound}</TableCell>
-                            <TableCell align="center">{numberOfPacketsInserted}</TableCell>
+                            <TableCell align="center">
+                                <TextField
+                                    value={ballotBoxId}
+                                    margin="normal"
+                                    onChange={handleBallotBoxIdChange(ballotBoxRefId)}
+                                />
+                            </TableCell>
+                            <TableCell align="center">
+                                <TextField
+                                    required
+                                    error={!isNumeric(numberOfPacketsInserted)}
+                                    helperText={!isNumeric(numberOfPacketsInserted) ? "Only numeric values are valid" : ''}
+                                    className={"data-entry-edit-count-input"}
+                                    value={numberOfPacketsInserted}
+                                    margin="normal"
+                                    onChange={handleNumberOfPacketsInsertedChange(ballotBoxRefId)}
+                                />
+                            </TableCell>
+                            <TableCell align="center">
+                                <TextField
+                                    required
+                                    error={!isNumeric(numberOfAPacketsFound)}
+                                    helperText={!isNumeric(numberOfAPacketsFound) ? "Only numeric values are valid" : ''}
+                                    className={"data-entry-edit-count-input"}
+                                    value={numberOfAPacketsFound}
+                                    margin="normal"
+                                    onChange={handleNumberOfAPacketsFoundChange(ballotBoxRefId)}
+                                />
+                            </TableCell>
                         </TableRow>
                     })}
                 </TableBody>
@@ -279,8 +362,16 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
                         <TableCell align="right" colSpan={2}>
                             Total number of PV-A packets found in the Box/ Boxes
                         </TableCell>
-                        <TableCell align="right">
-
+                        <TableCell align="center">
+                            <TextField
+                                required
+                                error={!isNumeric(totalNumberOfPVPackets)}
+                                helperText={!isNumeric(totalNumberOfPVPackets) ? "Only numeric values are valid" : ''}
+                                className={"data-entry-edit-count-input"}
+                                value={totalNumberOfPVPackets}
+                                margin="normal"
+                                onChange={handleTotalNumberOfPVPacketsChange()}
+                            />
                         </TableCell>
                     </TableRow>
                     <TableRow>
