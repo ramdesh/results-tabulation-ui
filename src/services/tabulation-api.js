@@ -225,7 +225,7 @@ export function lockTallySheet(tallySheetId, tallySheetVersionId) {
 
 export function unlockTallySheet(tallySheetId, tallySheetVersionId) {
     return request({
-        url: ENDPOINT_PATH_TALLY_SHEET_LOCK(tallySheetId),
+        url: ENDPOINT_PATH_TALLY_SHEET_UNLOCK(tallySheetId),
         method: 'put',
         data: {
             lockedVersionId: tallySheetVersionId

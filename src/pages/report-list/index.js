@@ -99,6 +99,7 @@ export default function ReportList({history, queryString, election}) {
                 variant="outlined" color="default"
                 disabled={!(tallySheet.tallySheetStatus === TALLY_SHEET_STATUS_ENUM.VERIFIED)}
                 size="small" disabled={tallySheet.lockedVersionId === null}
+                onClick={() => history.push(PATH_ELECTION_REPORT_VIEW(electionId, tallySheet.tallySheetId))}
             >
                 Unlock
             </Button>
