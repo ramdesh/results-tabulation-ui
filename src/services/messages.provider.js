@@ -3,13 +3,19 @@ import CustomizedSnackbars from "../components/snack-bar"
 
 const MessagesContext = React.createContext([]);
 
+export const MESSAGE_TYPES = {
+    SUCCESS: "success",
+    ERROR: "error",
+    INFO: "info"
+};
+
 export function MessagesProvider(props) {
     const [state, setState] = useState({
         messagesList: [],
         messagesMap: {}
     });
 
-    const push = function (messageTitle, messageBody, messageType = "Info") {
+    const push = function (messageTitle, messageBody, messageType = MESSAGE_TYPES.INFO) {
         const message = {messageId: state.messagesList.length, messageTitle, messageBody, messageType, open: true};
         setState({
             ...state,
