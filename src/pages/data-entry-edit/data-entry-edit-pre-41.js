@@ -6,7 +6,7 @@ import {
     getTallySheet,
     getTallySheetById,
     getTallySheetVersionById,
-    saveTallySheetVersion
+    saveTallySheetVersion, submitTallySheet
 } from "../../services/tabulation-api";
 import {MessagesProvider, MessagesConsumer} from "../../services/messages.provider";
 import {
@@ -38,9 +38,9 @@ export default function DataEntryEdit_PRE_41({history, queryString, election, ta
     const [totalValidVoteCount, setTotalValidVoteCount] = useState(0);
     const [totalVoteCount, setTotalVoteCount] = useState(0);
     const [processing, setProcessing] = useState(true);
-    const [error, setError] = useState(false);
+    const [tallySheetVersion, setTallySheetVersion] = useState(null);
+    const [processingLabel, setProcessingLabel] = useState("Loading");
     const [saved, setSaved] = useState(false);
-    const [submitted, setSubmitted] = useState(false);
 
     useEffect(() => {
         if (tallySheet.latestVersionId) {
@@ -63,7 +63,7 @@ export default function DataEntryEdit_PRE_41({history, queryString, election, ta
                 setCandidateWiseCounts(latestCandidateWiseCounts);
                 setProcessing(false);
             }).catch((error) => {
-                setError(true)
+                messages.push("Error", "Tally sheet is not reachable.");
                 setProcessing(false);
             })
         } else {
@@ -102,47 +102,63 @@ export default function DataEntryEdit_PRE_41({history, queryString, election, ta
         })
     };
 
+    const getTallySheetSaveRequestBody = () => {
+        const content = [];
+        election.parties.map(party => {
+            party.candidates.map(candidate => {
+                const {candidateId} = candidate;
+                const {validVoteCount, validVoteCountInWords} = candidateWiseCounts[candidateId];
+                content.push({
+                    candidateId: candidateId,
+                    count: validVoteCount,
+                    countInWords: validVoteCountInWords
+                })
+            })
+        });
+
+        return {
+            content: content,
+            summary: {
+                rejectedVoteCount
+            }
+        }
+    };
+
     const handleClickNext = (saved = true) => async (event) => {
         if (validateAllValues()) {
             setSaved(saved)
             setProcessing(true);
+            setProcessingLabel("Saving");
             try {
-                const content = [];
+                const body = getTallySheetSaveRequestBody();
+                const tallySheetVersion = await saveTallySheetVersion(tallySheetId, tallySheetCode, body);
 
-                election.parties.map(party => {
-                    party.candidates.map(candidate => {
-                        const {candidateId} = candidate;
-                        const {validVoteCount, validVoteCountInWords} = candidateWiseCounts[candidateId];
-                        content.push({
-                            candidateId: candidateId,
-                            count: validVoteCount,
-                            countInWords: validVoteCountInWords
-                        })
-                    })
-                });
-
-                await saveTallySheetVersion(tallySheetId, tallySheetCode, {
-                    content: content,
-                    summary: {
-                        rejectedVoteCount
-                    }
-                });
-
+                setTallySheetVersion(tallySheetVersion);
             } catch (e) {
-                setError(true);
+                messages.push("Error", "Unknown error occurred while saving the tally sheet.");
             }
             setProcessing(false);
         } else {
             messages.push("Error", "Please check the input values for errors")
         }
-
     };
-    const handleClickSubmit = () => async (event) => {
-        setSubmitted(true);
 
-        setTimeout(() => {
-            history.push(PATH_ELECTION_DATA_ENTRY(electionId, tallySheetCode))
-        }, 10000);
+    const handleClickSubmit = () => async (event) => {
+        setProcessing(true);
+        setProcessingLabel("Submitting");
+        try {
+            const {tallySheetVersionId} = tallySheetVersion;
+            const tallySheet = await submitTallySheet(tallySheetId, tallySheetVersionId);
+
+            messages.push("Success", "PRE-41 tally sheet was submitted successfully");
+            setTimeout(() => {
+                history.push(PATH_ELECTION_DATA_ENTRY(electionId, tallySheetCode));
+            }, 1000)
+        } catch (e) {
+            messages.push("Error", "Unknown error occurred while submitting the tally sheet.");
+        }
+
+        setProcessing(false);
     };
 
     function calculateTotalValidVoteCount() {
@@ -185,32 +201,7 @@ export default function DataEntryEdit_PRE_41({history, queryString, election, ta
     };
 
     function getTallySheetEditForm() {
-        if (processing) {
-            return <Processing/>
-        } else if (error) {
-            return <Error
-                title="Tally sheet is not accessible."
-            />
-        } else if (submitted) {
-            return <div class="">
-                <h4>Tally sheet was submitted successfully and waiting for verification.</h4>
-                <div>
-                    {/*<Button variant="contained" color="default"*/}
-                    {/*        onClick={() => history.push(PATH_ELECTION_DATA_ENTRY_EDIT(electionId, tallySheetId))}>*/}
-                    {/*    Edit*/}
-                    {/*</Button>*/}
-
-                    {/*<Button variant="contained" color="default"*/}
-                    {/*        onClick={}>*/}
-                    {/*</Button>*/}
-                    <Button variant="contained" color="default"
-                            onClick={() => history.push(PATH_ELECTION_DATA_ENTRY(electionId, tallySheetCode))}>
-                        Back to Data Entry
-                    </Button>
-
-                </div>
-            </div>
-        } else if (saved) {
+        if (saved) {
             return <Table aria-label="simple table" size={saved ? "small" : "medium"}>
                 <TableHead>
                     <TableRow>
@@ -253,10 +244,16 @@ export default function DataEntryEdit_PRE_41({history, queryString, election, ta
                     <TableRow>
                         <TableCell align="right" colSpan={4}>
                             <div className="page-bottom-fixed-action-bar">
-                                <Button variant="contained" color="default" onClick={handleClickNext(false)}>
+                                <Button
+                                    variant="contained" color="default" onClick={handleClickNext(false)}
+                                    disabled={processing}
+                                >
                                     Edit
                                 </Button>
-                                <Button variant="contained" color="primary" onClick={handleClickSubmit()}>
+                                <Button
+                                    variant="contained" color="primary" onClick={handleClickSubmit()}
+                                    disabled={processing}
+                                >
                                     Submit
                                 </Button>
                             </div>
@@ -266,7 +263,7 @@ export default function DataEntryEdit_PRE_41({history, queryString, election, ta
                 </TableFooter>
 
             </Table>
-        } else {
+        } else if (!processing) {
             return <Table aria-label="simple table" size={saved ? "small" : "medium"}>
                 <TableHead>
                     <TableRow>
@@ -355,8 +352,11 @@ export default function DataEntryEdit_PRE_41({history, queryString, election, ta
                     <TableRow>
                         <TableCell align="right" colSpan={4}>
                             <div className="page-bottom-fixed-action-bar">
-                                <Button variant="contained" color="default" onClick={handleClickNext()}>
-                                    Next
+                                <Button
+                                    variant="contained" color="default" onClick={handleClickNext()}
+                                    disabled={processing}
+                                >
+                                    Save & Next
                                 </Button>
                             </div>
                         </TableCell>
@@ -365,9 +365,13 @@ export default function DataEntryEdit_PRE_41({history, queryString, election, ta
                 </TableFooter>
 
             </Table>
+        } else {
+            return null;
         }
     }
 
-    return getTallySheetEditForm()
 
+    return <Processing showProgress={processing} label={processingLabel}>
+        {getTallySheetEditForm()}
+    </Processing>;
 }
