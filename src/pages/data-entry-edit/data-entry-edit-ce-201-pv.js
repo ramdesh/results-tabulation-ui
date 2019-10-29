@@ -78,16 +78,20 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
             if (tallySheet.latestVersionId) {
                 const latestVersion = await getTallySheetVersionById(tallySheetId, tallySheetCode, tallySheet.latestVersionId);
                 const {content, summary} = latestVersion;
+                let totalPV=0;
                 for (let i = 0; i < content.length; i++) {
                     let ballotBox = content[i];
                     ballotBox.refId = i;
+                    totalPV+=ballotBox.numberOfAPacketsFound;
                     addBallotBox(ballotBox);
                 }
                 for (let i = content.length; i < 6; i++) {
                     addBallotBox({refId: i});
                 }
 
-                setCountingCentreSummary({...countingCentreSummary, ...summary});
+                setTotalNumberOfPVPackets(totalPV);
+                setCountingCentreSummary({...countingCentreSummary});
+
             }
         } catch (error) {
             messages.push("Error", "Tally sheet is not reachable.");
