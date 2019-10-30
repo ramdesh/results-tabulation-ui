@@ -94,9 +94,13 @@ export default function ReportView(props) {
             const tallySheet = await requestEditForTallySheet(tallySheetId);
             setTallySheet(tallySheet);
             messages.push("Success", "Report was made editable successfully.", MESSAGE_TYPES.SUCCESS);
+            setTimeout(() => {
+                history.push(PATH_ELECTION_DATA_ENTRY_EDIT(electionId, tallySheetId))
+            }, 1000)
         } catch (e) {
             messages.push("Error", "Unknown error occurred while updating the report.", MESSAGE_TYPES.ERROR);
         }
+
         setProcessing(false);
     };
 
@@ -157,15 +161,19 @@ export default function ReportView(props) {
                             disabled={processing || !tallySheet.readyToLock}
                             onClick={handleVerify()}
                         >
-                            Verify
+                            Confirm
                         </Button>
-                        <Button
-                            variant="contained" size="small" color="primary"
-                            disabled={processing || !tallySheet.readyToLock}
-                            onClick={handleRequestEdit()}
-                        >
-                            Request Edit
-                        </Button>
+                        {(() => {console.log("TALLY_SHEET_CODE_PRE_41", `${tallySheetCode}-`);
+                            if (tallySheetCode === TALLY_SHEET_CODE_PRE_41 || tallySheetCode === TALLY_SHEET_CODE_CE_201 || tallySheetCode === TALLY_SHEET_CODE_CE_201_PV) {
+                                return <Button
+                                    variant="contained" size="small" color="primary"
+                                    disabled={processing || !tallySheet.readyToLock}
+                                    onClick={handleRequestEdit()}
+                                >
+                                    Edit
+                                </Button>
+                            }
+                        })()}
                         <Button
                             variant="contained" size="small" color="primary"
                             disabled={!(tallySheetStatus === TALLY_SHEET_STATUS_ENUM.VERIFIED)}
