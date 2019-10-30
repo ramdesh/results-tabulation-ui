@@ -55,7 +55,7 @@ export function MessagesProvider(props) {
         {state.messagesList.map((messageId) => {
             const message = state.messagesMap[messageId];
             if (message.open && messageId === (state.messagesList.length - 1)) {
-                return <CustomizedSnackbars title={message.messageTitle} type={message.messageType}
+                return <CustomizedSnackbars key={messageId} title={message.messageTitle} type={message.messageType}
                                             content={message.messageBody}/>
             }
         })}
