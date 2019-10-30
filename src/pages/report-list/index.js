@@ -43,13 +43,18 @@ import {getElectoralDistrictName} from "../../utils/tallySheet";
 
 export default function ReportList({history, queryString, election}) {
     const {electionId, electionName} = election;
-    const {tallySheetCode} = queryString;
+    const {tallySheetCode, subElectionId} = queryString;
 
     const [tallySheets, setTallySheets] = useState([]);
     const [processing, setProcessing] = useState(true);
     const [error, setError] = useState(false);
     useEffect(() => {
-        getTallySheet({tallySheetCode}).then((tallySheets, limit = 3000, offset = 0) => {
+        getTallySheet({
+            electionId: subElectionId ? subElectionId : electionId,
+            tallySheetCode,
+            limit: 3000,
+            offset: 0
+        }).then((tallySheets) => {
             setTallySheets(tallySheets);
             setProcessing(false);
         }).catch((error) => {

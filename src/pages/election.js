@@ -39,86 +39,64 @@ export default function Election(props) {
             <Grid container spacing={3}>
                 <Grid item xs={4} className="election-grid">
                     <Grid item xs={12}><h4>Data Entry</h4></Grid>
-                    <Grid item xs={12}><h5>Ordinary Votes</h5></Grid>
-                    <Grid item xs={12}>
-                        <ul className="tally-sheet-code-list">
-                            <li>PRE 41
-                                <Link
-                                    className="tally-sheet-code-list-item btn-select"
-                                    to={PATH_ELECTION_DATA_ENTRY(electionId, TALLY_SHEET_CODE_PRE_41)}
-                                >
-                                    Select
-                                </Link>
-                                <Link
-                                    className="tally-sheet-code-list-item btn-list"
-                                    to={PATH_ELECTION_DATA_ENTRY(electionId, TALLY_SHEET_CODE_PRE_41)}
-                                >
-                                    List
-                                </Link>
-                            </li>
-                            <li>CE 201
-                                <Link
-                                    className="tally-sheet-code-list-item btn-select"
-                                    to={PATH_ELECTION_DATA_ENTRY(electionId, TALLY_SHEET_CODE_PRE_41)}
-                                >
-                                    Select
-                                </Link>
-                                <Link
-                                    className="tally-sheet-code-list-item btn-list"
-                                    to={PATH_ELECTION_DATA_ENTRY(electionId, TALLY_SHEET_CODE_CE_201)}
-                                >
-                                    List
-                                </Link>
+                    {election.subElections.map((subElection) => {
+                        const subElectionId = subElection.electionId;
+                        let subElectionSuffix = "";
+                        let subElectionTitle = "Ordinary Votes";
+                        let tallySheetCodes = [TALLY_SHEET_CODE_CE_201, TALLY_SHEET_CODE_PRE_41];
+                        let tallySheetCodeLabels = ["CE 201", "PRE 41"];
+                        if (subElection.voteType === "Postal") {
+                            subElectionTitle = "Postal Votes";
+                            tallySheetCodes = [TALLY_SHEET_CODE_CE_201_PV, TALLY_SHEET_CODE_PRE_41];
+                            tallySheetCodeLabels = ["CE 201 PV", "PRE 41 PV"];
+                        }
+                        return <Grid item xs={12} key={{subElectionId}}>
+                            <Grid item xs={12}><h5>{subElectionTitle}</h5></Grid>
+                            <Grid item xs={12}>
+                                <ul className="tally-sheet-code-list">
+                                    {tallySheetCodes.map((tallySheetCode, tallySheetCodeIndex) => {
+                                        return <li>{tallySheetCodeLabels[tallySheetCodeIndex]}
+                                            <Link
+                                                className="tally-sheet-code-list-item btn-select"
+                                                to={PATH_ELECTION_DATA_ENTRY(electionId, tallySheetCode, subElectionId)}
+                                            >
+                                                Select
+                                            </Link>
+                                            <Link
+                                                className="tally-sheet-code-list-item btn-list"
+                                                to={PATH_ELECTION_DATA_ENTRY(electionId, tallySheetCode, subElectionId)}
+                                            >
+                                                List
+                                            </Link>
 
-                            </li>
-                        </ul>
-                    </Grid>
-                    <Grid item xs={12}><h5>Postal Votes</h5></Grid>
-                    <Grid item xs={12}>
-                        <ul className="tally-sheet-code-list">
-                            <li>PRE 41
-                                <Link
-                                    className="tally-sheet-code-list-item btn-select"
-                                    to={PATH_ELECTION_DATA_ENTRY(electionId, TALLY_SHEET_CODE_PRE_41)}
-                                >
-                                    Select
-                                </Link>
-                                <Link
-                                    className="tally-sheet-code-list-item btn-list"
-                                    to={PATH_ELECTION_DATA_ENTRY(electionId, TALLY_SHEET_CODE_PRE_41)}
-                                >
-                                    List
-                                </Link>
-                            </li>
-                            <li>CE 201 PV
-                                <Link
-                                    className="tally-sheet-code-list-item btn-select"
-                                    to={PATH_ELECTION_DATA_ENTRY(electionId, TALLY_SHEET_CODE_PRE_41)}
-                                >
-                                    Select
-                                </Link>
-                                <Link
-                                    className="tally-sheet-code-list-item btn-list"
-                                    to={PATH_ELECTION_DATA_ENTRY(electionId, TALLY_SHEET_CODE_CE_201_PV)}
-                                >
-                                    List
-                                </Link>
-                            </li>
-                        </ul>
-                    </Grid>
+                                        </li>
+                                    })}
+                                </ul>
+                            </Grid>
+                        </Grid>
+                    })}
                 </Grid>
                 <Grid item xs={4} className="election-grid">
                     <Grid item xs={12}><h4>Reports</h4></Grid>
                     <Grid item xs={12}>
                         <ul className="tally-sheet-code-list">
-                            <li>PRE 30 PD
-                                <Link
-                                    className="tally-sheet-code-list-item btn-list"
-                                    to={PATH_ELECTION_REPORT(electionId, TALLY_SHEET_CODE_PRE_30_PD)}
-                                >
-                                    List
-                                </Link>
-                            </li>
+                            {election.subElections.map((subElection) => {
+                                const subElectionId = subElection.electionId;
+                                let tallySheetCode = TALLY_SHEET_CODE_PRE_30_PD;
+                                let tallySheetCodeLabel = "PRE 30 PD";
+                                if (subElection.voteType === "Postal") {
+                                    tallySheetCodeLabel = "PRE 30 PV";
+                                }
+
+                                return <li key={subElectionId}>{tallySheetCodeLabel}
+                                    <Link
+                                        className="tally-sheet-code-list-item btn-list"
+                                        to={PATH_ELECTION_REPORT(electionId, tallySheetCode, subElectionId)}
+                                    >
+                                        List
+                                    </Link>
+                                </li>
+                            })}
                             <li>PRE 30 ED
                                 <Link
                                     className="tally-sheet-code-list-item btn-list"

@@ -153,7 +153,8 @@ export default function DataEntryEdit_PRE_41({history, queryString, election, ta
 
             messages.push("Success",MESSAGES_EN.success_pre41_submit, MESSAGE_TYPES.SUCCESS);
             setTimeout(() => {
-                history.push(PATH_ELECTION_DATA_ENTRY(electionId, tallySheetCode));
+                const subElectionId = tallySheet.electionId;
+                history.push(PATH_ELECTION_DATA_ENTRY(electionId, tallySheetCode, subElectionId));
             }, 1000)
         } catch (e) {
             messages.push("Error", MESSAGES_EN.error_tallysheet_submit, MESSAGE_TYPES.ERROR);

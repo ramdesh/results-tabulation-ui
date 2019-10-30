@@ -24,13 +24,19 @@ import {getElectoralDistrictName, getPollingDivisionName} from "../utils/tallySh
 
 export default function DataEntryList({history, queryString, election}) {
     const {electionId, electionName} = election;
-    const {tallySheetCode} = queryString;
+    const {tallySheetCode, subElectionId} = queryString;
 
     const [tallySheets, setTallySheets] = useState([]);
     const [processing, setProcessing] = useState(true);
     const [error, setError] = useState(false);
     useEffect(() => {
-        getTallySheet({tallySheetCode}).then((tallySheets, limit = 3000, offset = 0) => {
+        getTallySheet({
+            electionId: subElectionId,
+            tallySheetCode,
+            subElectionId,
+            limit: 3000,
+            offset: 0
+        }).then((tallySheets) => {
             setTallySheets(tallySheets);
             setProcessing(false);
         }).catch((error) => {
@@ -91,7 +97,7 @@ export default function DataEntryList({history, queryString, election}) {
                                     size="small"
                                     onClick={() => history.push(PATH_ELECTION_REPORT_VIEW(electionId, tallySheet.tallySheetId))}
                                 >
-                                    Verify
+                                    Confirm
                                 </Button>
                                 <Button
                                     variant="outlined" color="default" disabled={tallySheet.latestVersionId === null}
@@ -122,7 +128,10 @@ export default function DataEntryList({history, queryString, election}) {
             links={[
                 {label: "elections", to: PATH_ELECTION()},
                 {label: electionName, to: PATH_ELECTION_BY_ID(electionId)},
-                {label: tallySheetCode.toLowerCase(), to: PATH_ELECTION_DATA_ENTRY(electionId, tallySheetCode)},
+                {
+                    label: tallySheetCode.toLowerCase(),
+                    to: PATH_ELECTION_DATA_ENTRY(electionId, tallySheetCode, subElectionId)
+                },
             ]}
         />
         <div className="page-content">

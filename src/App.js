@@ -11,14 +11,19 @@ import DataEntryList from "./pages/data-entry-list";
 import DataEntryEdit from "./pages/data-entry-edit";
 import ReportList from "./pages/report-list";
 import ReportView from "./pages/report-view";
+import Processing from "./components/processing";
 
 export const ROUTER_PREFIX = "";
 export const PATH_ELECTION = () => `${ROUTER_PREFIX}/election`;
 export const PATH_ELECTION_BY_ID = (electionId) => `${ROUTER_PREFIX}/election/${electionId}`;
-export const PATH_ELECTION_DATA_ENTRY = (electionId, tallySheetCode) => {
+export const PATH_ELECTION_DATA_ENTRY = (electionId, tallySheetCode = null, subElectionId = null) => {
     let path = `${ROUTER_PREFIX}/election/${electionId}/data-entry`;
     if (tallySheetCode) {
-        path += `?tallySheetCode=${tallySheetCode}`;
+        path += `?tallySheetCode=${tallySheetCode}&`;
+    }
+
+    if (subElectionId) {
+        path += `subElectionId=${subElectionId}&`;
     }
 
     return path;
@@ -37,10 +42,14 @@ export const PATH_ELECTION_VERIFICATION = (electionId, tallySheetCode) => {
 export const PATH_ELECTION_VERIFICATION_EDIT = (electionId, tallySheetId) => {
     return `${ROUTER_PREFIX}/election/${electionId}/verification/${tallySheetId}`;
 };
-export const PATH_ELECTION_REPORT = (electionId, tallySheetCode) => {
+export const PATH_ELECTION_REPORT = (electionId, tallySheetCode, subElectionId) => {
     let path = `${ROUTER_PREFIX}/election/${electionId}/report`;
     if (tallySheetCode) {
-        path += `?tallySheetCode=${tallySheetCode}`;
+        path += `?tallySheetCode=${tallySheetCode}&`;
+    }
+
+    if (subElectionId) {
+        path += `subElectionId=${subElectionId}&`;
     }
 
     return path;

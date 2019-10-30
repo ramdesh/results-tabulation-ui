@@ -1,6 +1,7 @@
 import axios from 'axios';
 import {TABULATION_API_URL} from "../config";
 import {TALLY_SHEET_CODE_CE_201, TALLY_SHEET_CODE_CE_201_PV, TALLY_SHEET_CODE_PRE_41} from "../App";
+import {getAccessToken} from "../auth";
 
 const ENDPOINT_PATH_ELECTIONS = () => "/election";
 const ENDPOINT_PATH_ELECTIONS_BY_ID = (electionId) => `/election/${electionId}`;
@@ -25,34 +26,16 @@ const ENDPOINT_PATH_TALLY_SHEET_VERSION_HTML = (tallySheetId, tallySheetVersionI
 const axiosInstance = axios.create({
     baseURL: TABULATION_API_URL,
     headers: {
-        'Authorization': "Bearer " + localStorage.getItem('token'),
+        'Authorization': "Bearer " + getAccessToken(),
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Headers': 'Content-Type',
         'X-Requested-With': 'XMLHttpRequest'
     }
 });
 
-//
 function request(config) {
     return axiosInstance.request(config).then((res) => res.data)
-    // return new Promise((resolve, reject) => {
-    //
-    //     axios.request({
-    //         url: '/user',
-    //         method: 'get', // default,
-    //     }).then(res => {
-    //         resolve(res.data);
-    //     }).catch((error) => {
-    //         resolve(error);
-    //     });
-    // });
 }
-
-//
-// function post(path, params, body) {
-//
-// }
-
 
 export function getElections() {
     return request({
@@ -69,7 +52,7 @@ export function getElectionById(electionId) {
 }
 
 
-export function getAreas(areaType = null, associatedAreaId = null) {
+export function getAreas(electionId, areaType = null, associatedAreaId = null) {
     const params = {};
 
     if (areaType) {
@@ -87,19 +70,19 @@ export function getAreas(areaType = null, associatedAreaId = null) {
     })
 }
 
-export function getCountingCentres(associatedAreaId = null) {
+export function getCountingCentres(electionId, associatedAreaId = null) {
     return getAreas("CountingCentre", associatedAreaId)
 }
 
-export function getElectoralDistricts(associatedAreaId = null) {
+export function getElectoralDistricts(electionId, associatedAreaId = null) {
     return getAreas("ElectoralDistrict", associatedAreaId)
 }
 
-export function getPollingDivisions(associatedAreaId = null) {
+export function getPollingDivisions(electionId, associatedAreaId = null) {
     return getAreas("PollingDivision", associatedAreaId)
 }
 
-export function getPollingStations(associatedAreaId = null) {
+export function getPollingStations(electionId, associatedAreaId = null) {
     return getAreas("PollingStation", associatedAreaId)
 }
 
@@ -171,11 +154,11 @@ function refactorTallySheetObject(tallySheet) {
     return tallySheet
 }
 
-export function getTallySheet({areaId, tallySheetCode, limit = 20, offset = 0}) {
+export function getTallySheet({electionId, areaId, tallySheetCode, limit = 20, offset = 0}) {
     return request({
         url: ENDPOINT_PATH_TALLY_SHEETS(),
         method: 'get',
-        params: {areaId, tallySheetCode}
+        params: {electionId, areaId, tallySheetCode}
     }).then((tallySheets) => {
         return tallySheets.map((tallySheet) => {
             return refactorTallySheetObject(tallySheet);

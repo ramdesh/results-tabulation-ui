@@ -14,6 +14,7 @@ import DataEntryEdit_CE_201_PV from "./data-entry-edit-ce-201-pv";
 
 export default function DataEntryEdit({history, queryString, election, tallySheet, messages}) {
     const {tallySheetId, tallySheetCode} = tallySheet;
+    const subElectionId = tallySheet.electionId;
     const {electionId, electionName} = election;
 
     function getEditorJsx() {
@@ -34,7 +35,10 @@ export default function DataEntryEdit({history, queryString, election, tallyShee
             links={[
                 {label: "elections", to: PATH_ELECTION()},
                 {label: electionName, to: PATH_ELECTION_BY_ID(electionId)},
-                {label: tallySheetCode.toLowerCase(), to: PATH_ELECTION_DATA_ENTRY(electionId, tallySheetCode)},
+                {
+                    label: tallySheetCode.toLowerCase(),
+                    to: PATH_ELECTION_DATA_ENTRY(electionId, tallySheetCode, subElectionId)
+                },
                 {
                     label: tallySheet.area.areaName,
                     to: PATH_ELECTION_DATA_ENTRY_EDIT(electionId, tallySheet.tallySheetId)

@@ -21,7 +21,6 @@ export function getAuthAppSignInUrl() {
 
 export function getAccessToken() {
     const tabulationAccessToken = Cookies.get(API_ACCESS_TOKEN_KEY);
-    localStorage.setItem('token', tabulationAccessToken);
 
     return tabulationAccessToken;
 }
@@ -66,7 +65,6 @@ export function logout() {
     Cookies.remove('userinfo');
     Cookies.remove('tabulation_access_token');
 
-    localStorage.clear();
     window.location.reload();
 }
 
@@ -90,7 +88,7 @@ export class ProtectedRoute extends Component {
                 component={(props) => {
                     return <MessagesProvider>
                         <MessagesConsumer>
-                            {(messages) => {//debugger;
+                            {(messages) => {
                                 return <this.props.component {...props} messages={messages}/>
                             }}
 
@@ -126,7 +124,6 @@ function LoadElectionAndThen(props) {
             </div>
         </div>
     } else if (error) {
-        debugger;
         return <Error
             title={"Election not found"}
         />
@@ -163,7 +160,6 @@ function LoadTallySheetAndThen(props) {
             </div>
         </div>
     } else if (error) {
-        debugger;
         return <Error
             title={"Tally sheet not found"}
         />
