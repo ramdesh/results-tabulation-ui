@@ -129,13 +129,17 @@ export default function ReportView(props) {
 
     const getReportViewJsx = () => {
         const {tallySheetCode, tallySheetStatus} = tallySheet;
+        const subElectionId = tallySheet.electionId;
 
         return <div className="page">
             <BreadCrumb
                 links={[
                     {label: "elections", to: PATH_ELECTION()},
                     {label: electionName, to: PATH_ELECTION_BY_ID(electionId)},
-                    {label: tallySheetCode.toLowerCase(), to: PATH_ELECTION_DATA_ENTRY(electionId, tallySheetCode)},
+                    {
+                        label: tallySheetCode.toLowerCase(),
+                        to: PATH_ELECTION_DATA_ENTRY(electionId, tallySheetCode, subElectionId)
+                    },
                 ]}
             />
             <div className="page-content">

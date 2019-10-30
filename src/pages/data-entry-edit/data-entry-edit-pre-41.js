@@ -152,7 +152,8 @@ export default function DataEntryEdit_PRE_41({history, queryString, election, ta
 
             messages.push("Success", "PRE-41 tally sheet was submitted successfully", MESSAGE_TYPES.SUCCESS);
             setTimeout(() => {
-                history.push(PATH_ELECTION_DATA_ENTRY(electionId, tallySheetCode));
+                const subElectionId = tallySheet.electionId;
+                history.push(PATH_ELECTION_DATA_ENTRY(electionId, tallySheetCode, subElectionId));
             }, 1000)
         } catch (e) {
             messages.push("Error", "Unknown error occurred while submitting the tally sheet.", MESSAGE_TYPES.ERROR);

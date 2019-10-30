@@ -152,7 +152,8 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
 
             messages.push("Success", "PRE-41 tally sheet was submitted successfully", MESSAGE_TYPES.SUCCESS);
             setTimeout(() => {
-                history.push(PATH_ELECTION_DATA_ENTRY(electionId, tallySheetCode));
+                const subElectionId = tallySheet.electionId;
+                history.push(PATH_ELECTION_DATA_ENTRY(electionId, tallySheetCode, subElectionId));
             }, 1000)
         } catch (e) {
             messages.push("Error", "Unknown error occurred while submitting the tally sheet.", MESSAGE_TYPES.ERROR);
@@ -503,7 +504,7 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
                         <TableCell align="right" colSpan={3}>
                             <div className="page-bottom-fixed-action-bar">
                                 <Button variant="contained" color="default" onClick={handleClickNext()}>
-                                    Next
+                                    Save & Next
                                 </Button>
                             </div>
                         </TableCell>
