@@ -49,7 +49,12 @@ export default function ReportList({history, queryString, election}) {
     const [processing, setProcessing] = useState(true);
     const [error, setError] = useState(false);
     useEffect(() => {
-        getTallySheet({electionId: subElectionId, tallySheetCode, limit: 3000, offset: 0}).then((tallySheets) => {
+        getTallySheet({
+            electionId: subElectionId ? subElectionId : electionId,
+            tallySheetCode,
+            limit: 3000,
+            offset: 0
+        }).then((tallySheets) => {
             setTallySheets(tallySheets);
             setProcessing(false);
         }).catch((error) => {
