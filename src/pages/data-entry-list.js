@@ -20,6 +20,8 @@ import Error from "../components/error";
 import BreadCrumb from "../components/bread-crumb";
 import Button from "@material-ui/core/Button";
 import {getElectoralDistrictName, getPollingDivisionName} from "../utils/tallySheet";
+import TextField from "@material-ui/core/TextField/TextField";
+import {fieldMatch} from "../utils";
 
 
 export default function DataEntryList({history, queryString, election}) {
@@ -29,6 +31,18 @@ export default function DataEntryList({history, queryString, election}) {
     const [tallySheets, setTallySheets] = useState([]);
     const [processing, setProcessing] = useState(true);
     const [error, setError] = useState(false);
+
+    const [searchParameters, setSearchParameters] = React.useState({
+        electoralDistrict: '',
+        pollingDivision: '',
+        countingCentre: '',
+        status:''
+    });
+
+    const handleChange = name => event => {
+        setSearchParameters({...searchParameters, [name]: event.target.value});
+    };
+
     useEffect(() => {
         getTallySheet({
             electionId: subElectionId,
@@ -56,6 +70,45 @@ export default function DataEntryList({history, queryString, election}) {
             return <Table aria-label="simple table">
                 <TableHead>
                     <TableRow>
+                        <TableCell align="center" style={{width: "20%"}}>
+                            <TextField
+                                value={searchParameters.electoralDistrict}
+                                margin="dense"
+                                variant="outlined"
+                                placeholder="Electoral District"
+                                onChange={handleChange('electoralDistrict')}
+                            />
+                        </TableCell>
+                        <TableCell align="center" style={{width: "20%"}}>
+                            <TextField
+                                value={searchParameters.pollingDivision}
+                                margin="dense"
+                                variant="outlined"
+                                placeholder="Polling Division"
+                                onChange={handleChange('pollingDivision')}
+                            />
+                        </TableCell>
+                        <TableCell align="center" style={{width: "10%"}}>
+                            <TextField
+                                value={searchParameters.countingCentre}
+                                margin="dense"
+                                variant="outlined"
+                                placeholder="Centre"
+                                onChange={handleChange('countingCentre')}
+                            />
+                        </TableCell>
+                        <TableCell align="center">
+                            <TextField
+                                value={searchParameters.status}
+                                margin="dense"
+                                variant="outlined"
+                                placeholder="Status"
+                                onChange={handleChange('status')}
+                            />
+                        </TableCell>
+                        <TableCell align="center"></TableCell>
+                    </TableRow>
+                    <TableRow>
                         <TableCell align="center">Electoral District</TableCell>
                         <TableCell align="center">Polling Division</TableCell>
                         <TableCell align="center">Counting Centre</TableCell>
@@ -65,58 +118,65 @@ export default function DataEntryList({history, queryString, election}) {
                 </TableHead>
                 <TableBody>
                     {tallySheets.map(tallySheet => {
-                        return <TableRow key={tallySheet.tallySheetId}>
-                            <TableCell align="center">{getElectoralDistrictName(tallySheet)}</TableCell>
-                            <TableCell align="center">{getPollingDivisionName(tallySheet)}</TableCell>
-                            <TableCell align="center">{tallySheet.area.areaName}</TableCell>
-                            <TableCell align="center">{tallySheet.tallySheetStatus}</TableCell>
-                            <TableCell align="center">
-                                {(() => {
-                                    if (tallySheet.tallySheetStatus === TALLY_SHEET_STATUS_ENUM.NOT_ENTERED) {
-                                        return <Button
-                                            variant="outlined" color="default"
-                                            size="small"
-                                            onClick={() => history.push(PATH_ELECTION_DATA_ENTRY_EDIT(electionId, tallySheet.tallySheetId))}
-                                        >
-                                            Enter
-                                        </Button>
-                                    } else {
-                                        return <Button
-                                            variant="outlined" color="default"
-                                            size="small"
-                                            disabled={!(tallySheet.tallySheetStatus === TALLY_SHEET_STATUS_ENUM.ENTERED)}
-                                            onClick={() => history.push(PATH_ELECTION_DATA_ENTRY_EDIT(electionId, tallySheet.tallySheetId))}
-                                        >
-                                            Edit
-                                        </Button>
-                                    }
-                                })()}
-                                <Button
-                                    variant="outlined" color="default"
-                                    disabled={!(tallySheet.tallySheetStatus === TALLY_SHEET_STATUS_ENUM.SUBMITTED)}
-                                    size="small"
-                                    onClick={() => history.push(PATH_ELECTION_REPORT_VIEW(electionId, tallySheet.tallySheetId))}
-                                >
-                                    Confirm
-                                </Button>
-                                <Button
-                                    variant="outlined" color="default" disabled={tallySheet.latestVersionId === null}
-                                    size="small"
-                                    disabled={!(tallySheet.tallySheetStatus !== TALLY_SHEET_STATUS_ENUM.NOT_ENTERED)}
-                                    onClick={() => history.push(PATH_ELECTION_REPORT_VIEW(electionId, tallySheet.tallySheetId))}
-                                >
-                                    View
-                                </Button>
-                                <Button
-                                    variant="outlined" color="default" disabled={tallySheet.lockedVersionId === null}
-                                    size="small"
-                                    disabled={!(tallySheet.tallySheetStatus === TALLY_SHEET_STATUS_ENUM.VERIFIED)}
-                                    onClick={() => history.push(PATH_ELECTION_REPORT_VIEW(electionId, tallySheet.tallySheetId))}
-                                >
-                                    Unlock
-                                </Button>
-                            </TableCell>
-                        </TableRow>
+                        if (fieldMatch(tallySheet.area.areaName, searchParameters.countingCentre) &&
+                            fieldMatch(getElectoralDistrictName(tallySheet), searchParameters.electoralDistrict) &&
+                            fieldMatch(tallySheet.tallySheetStatus, searchParameters.status) &&
+                            fieldMatch(getPollingDivisionName(tallySheet), searchParameters.pollingDivision)) {
+                            return <TableRow key={tallySheet.tallySheetId}>
+                                <TableCell align="center">{getElectoralDistrictName(tallySheet)}</TableCell>
+                                <TableCell align="center">{getPollingDivisionName(tallySheet)}</TableCell>
+                                <TableCell align="center">{tallySheet.area.areaName}</TableCell>
+                                <TableCell align="center">{tallySheet.tallySheetStatus}</TableCell>
+                                <TableCell align="center">
+                                    {(() => {
+                                        if (tallySheet.tallySheetStatus === TALLY_SHEET_STATUS_ENUM.NOT_ENTERED) {
+                                            return <Button
+                                                variant="outlined" color="default"
+                                                size="small"
+                                                onClick={() => history.push(PATH_ELECTION_DATA_ENTRY_EDIT(electionId, tallySheet.tallySheetId))}
+                                            >
+                                                Enter
+                                            </Button>
+                                        } else {
+                                            return <Button
+                                                variant="outlined" color="default"
+                                                size="small"
+                                                disabled={!(tallySheet.tallySheetStatus === TALLY_SHEET_STATUS_ENUM.ENTERED)}
+                                                onClick={() => history.push(PATH_ELECTION_DATA_ENTRY_EDIT(electionId, tallySheet.tallySheetId))}
+                                            >
+                                                Edit
+                                            </Button>
+                                        }
+                                    })()}
+                                    <Button
+                                        variant="outlined" color="default"
+                                        disabled={!(tallySheet.tallySheetStatus === TALLY_SHEET_STATUS_ENUM.SUBMITTED)}
+                                        size="small"
+                                        onClick={() => history.push(PATH_ELECTION_REPORT_VIEW(electionId, tallySheet.tallySheetId))}
+                                    >
+                                        Confirm
+                                    </Button>
+                                    <Button
+                                        variant="outlined" color="default"
+                                        disabled={tallySheet.latestVersionId === null}
+                                        size="small"
+                                        disabled={!(tallySheet.tallySheetStatus !== TALLY_SHEET_STATUS_ENUM.NOT_ENTERED)}
+                                        onClick={() => history.push(PATH_ELECTION_REPORT_VIEW(electionId, tallySheet.tallySheetId))}
+                                    >
+                                        View
+                                    </Button>
+                                    <Button
+                                        variant="outlined" color="default"
+                                        disabled={tallySheet.lockedVersionId === null}
+                                        size="small"
+                                        disabled={!(tallySheet.tallySheetStatus === TALLY_SHEET_STATUS_ENUM.VERIFIED)}
+                                        onClick={() => history.push(PATH_ELECTION_REPORT_VIEW(electionId, tallySheet.tallySheetId))}
+                                    >
+                                        Unlock
+                                    </Button>
+                                </TableCell>
+                            </TableRow>
+                        }
                     })}
                 </TableBody>
             </Table>

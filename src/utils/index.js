@@ -30,3 +30,10 @@ export function processNumericValue(value) {
     }
     return value
 }
+
+export function fieldMatch(key, value) {
+    if (key === null || value === null) {
+        return true
+    }
+    return key.toLowerCase().includes(value.toLowerCase());
+}
