@@ -1,5 +1,6 @@
 import React, {Component, useEffect, useState} from "react";
-import {Link} from 'react-router-dom';
+import Moment from 'moment';
+
 import {
     getElections, getPollingStations,
     getTallySheet,
@@ -38,7 +39,7 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
         numberOfBCoversRejected: 0,
         numberOfValidBallotPapers: 0,
         situation: "",
-        timeOfCommencementOfCount: ""
+        timeOfCommencementOfCount: "",
     });
     const [ballotBoxList, setBallotBoxList] = useState([]);
     const [ballotBoxMap, setBallotBoxMap] = useState({});
@@ -78,11 +79,11 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
             if (tallySheet.latestVersionId) {
                 const latestVersion = await getTallySheetVersionById(tallySheetId, tallySheetCode, tallySheet.latestVersionId);
                 const {content, summary} = latestVersion;
-                let totalPV=0;
+                let totalPV = 0;
                 for (let i = 0; i < content.length; i++) {
                     let ballotBox = content[i];
                     ballotBox.refId = i;
-                    totalPV+=ballotBox.numberOfAPacketsFound;
+                    totalPV += ballotBox.numberOfAPacketsFound;
                     addBallotBox(ballotBox);
                 }
                 for (let i = content.length; i < 6; i++) {
@@ -90,6 +91,8 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
                 }
                 console.log(latestVersion);
                 setTotalNumberOfPVPackets(totalPV);
+                // TODO: temporary fix for timezone issues, once the api does the timezone conversion right this can be resolved
+                summary["timeOfCommencementOfCount"] = Moment(summary.timeOfCommencementOfCount).format('YYYY-MM-DDThh:mm:00+11:00');
                 setCountingCentreSummary({...summary});
                 console.log(summary);
 
@@ -108,8 +111,11 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
 
     const getTallySheetSaveRequestBody = () => {
         const content = [];
-        const timeOfCommencement=countingCentreSummary.timeOfCommencementOfCount+":00+05:30";
-        countingCentreSummary.timeOfCommencementOfCount=timeOfCommencement;
+        let timeOfCommencement = countingCentreSummary.timeOfCommencementOfCount;
+        if (!timeOfCommencement.includes("+")) {
+            timeOfCommencement = countingCentreSummary.timeOfCommencementOfCount + ":00+05:30";
+        }
+        countingCentreSummary.timeOfCommencementOfCount = timeOfCommencement;
         const summary = countingCentreSummary;
 
         ballotBoxList.map(ballotBoxRefId => {
@@ -212,28 +218,28 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
     const handleNumberOfACoversRejectedChange = () => event => {
         setCountingCentreSummary({
             ...countingCentreSummary,
-            numberOfACoversRejected:processNumericValue(event.target.value)
+            numberOfACoversRejected: processNumericValue(event.target.value)
         });
     };
 
     const handleNumberOfBCoversRejectedChange = () => event => {
         setCountingCentreSummary({
             ...countingCentreSummary,
-            numberOfBCoversRejected:processNumericValue(event.target.value)
+            numberOfBCoversRejected: processNumericValue(event.target.value)
         });
     };
 
     const handleNumberOfValidBallotPapersChange = () => event => {
         setCountingCentreSummary({
             ...countingCentreSummary,
-            numberOfValidBallotPapers:processNumericValue(event.target.value)
+            numberOfValidBallotPapers: processNumericValue(event.target.value)
         });
     };
 
     const handleSituationChange = () => event => {
         setCountingCentreSummary({
             ...countingCentreSummary,
-            situation:processNumericValue(event.target.value)
+            situation: processNumericValue(event.target.value)
         });
     };
 
@@ -241,7 +247,7 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
         console.log(event.target.value);
         setCountingCentreSummary({
             ...countingCentreSummary,
-            timeOfCommencementOfCount:event.target.value
+            timeOfCommencementOfCount: event.target.value
         });
     };
 
@@ -318,7 +324,7 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
                     <TableRow>
                         <TableCell align="right" colSpan={2}>
                             <strong>
-                                Situation of Postal Ballot Paper Counting Centre
+                                Location of Postal Ballot Paper Counting Centre
                             </strong>
                         </TableCell>
                         <TableCell align="right">
@@ -332,7 +338,7 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
                             </strong>
                         </TableCell>
                         <TableCell align="right">
-                            {timeOfCommencementOfCount}
+                            {Moment(timeOfCommencementOfCount).format('DD-MM-YYYY h:mm A')}
                         </TableCell>
                     </TableRow>
                     <TableRow>
@@ -471,7 +477,7 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
                     <TableRow>
                         <TableCell align="right" colSpan={2}>
                             <strong>
-                                Situation of Postal Ballot Paper Counting Centre
+                                Location of Postal Ballot Paper Counting Centre
                             </strong>
                         </TableCell>
                         <TableCell align="center">
@@ -487,14 +493,13 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
                     <TableRow>
                         <TableCell align="right" colSpan={2}>
                             <strong>
-                                Time of commencement of the count fo Postal Votes ballot papers
+                                Time of commencement of the count of Postal Votes ballot papers
                             </strong>
                         </TableCell>
                         <TableCell align="center">
                             <TextField
-                                required
                                 type='datetime-local'
-                                value={timeOfCommencementOfCount}
+                                defaultValue={(timeOfCommencementOfCount==null ? "": Moment(timeOfCommencementOfCount).format('YYYY-MM-DDTHH:mm'))}
                                 margin="normal"
                                 onChange={handleTimeOfCommencementOfCountChange()}
                             />
