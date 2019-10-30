@@ -9,9 +9,9 @@ import TableRow from '@material-ui/core/TableRow';
 import {
     getElections,
     getTallySheet,
-    getTallySheetVersionHtml, requestEditForTallySheet,
+    getTallySheetVersionHtml, lockTallySheet, requestEditForTallySheet,
     saveTallySheetVersion,
-    TALLY_SHEET_STATUS_ENUM
+    TALLY_SHEET_STATUS_ENUM, unlockTallySheet
 } from "../services/tabulation-api";
 import {MessagesProvider, MessagesConsumer, MESSAGE_TYPES} from "../services/messages.provider";
 import {
@@ -32,17 +32,16 @@ export default function ReportView(props) {
     const {electionId, electionName} = election;
     const [tallySheet, setTallySheet] = useState(props.tallySheet);
     const [tallySheetVersionId, setTallySheetVersionId] = useState(null);
-    const [tallySheetVersionHtml, setTallySheetVersionHtml] = useState("Processing ... ");
+    const [tallySheetVersionHtml, setTallySheetVersionHtml] = useState("");
     const [processing, setProcessing] = useState(false);
     const [error, setError] = useState(false);
     const [iframeHeight, setIframeHeight] = useState(600);
     const [iframeWidth, setIframeWidth] = useState("100%");
     const iframeRef = React.createRef();
 
-    const {tallySheetId, tallySheetCode, latestVersionId, submittedVersionId, lockedVersionId, tallySheetStatus} = tallySheet;
-
 
     const fetchTallySheetVersion = async () => {
+        const {tallySheetId, tallySheetCode, latestVersionId, submittedVersionId, lockedVersionId, tallySheetStatus} = tallySheet;
         let tallySheetVersionId = null;
         if (tallySheetCode === TALLY_SHEET_CODE_PRE_41 || tallySheetCode === TALLY_SHEET_CODE_CE_201 || tallySheetCode === TALLY_SHEET_CODE_CE_201_PV) {
             if (lockedVersionId) {
@@ -65,6 +64,8 @@ export default function ReportView(props) {
     };
 
     const fetchTallySheetVersionHtml = async () => {
+        setTallySheetVersionHtml("Processing ... ");
+        const {tallySheetId} = tallySheet;
         const tallySheetVersionHtml = await getTallySheetVersionHtml(tallySheetId, tallySheetVersionId);
 
         setTallySheetVersionHtml(tallySheetVersionHtml)
@@ -72,7 +73,7 @@ export default function ReportView(props) {
 
     useEffect(() => {
         fetchTallySheetVersion();
-    }, []);
+    }, [tallySheet]);
 
     useEffect(() => {
         tallySheetVersionId && fetchTallySheetVersionHtml();
@@ -88,6 +89,7 @@ export default function ReportView(props) {
 
     const handleRequestEdit = () => async (evt) => {
         setProcessing(true);
+        const {tallySheetId} = tallySheet;
         try {
             const tallySheet = await requestEditForTallySheet(tallySheetId);
             setTallySheet(tallySheet);
@@ -98,65 +100,106 @@ export default function ReportView(props) {
         setProcessing(false);
     };
 
-    return <div className="page">
-        <BreadCrumb
-            links={[
-                {label: "elections", to: PATH_ELECTION()},
-                {label: electionName, to: PATH_ELECTION_BY_ID(electionId)},
-                {label: tallySheetCode.toLowerCase(), to: PATH_ELECTION_DATA_ENTRY(electionId, tallySheetCode)},
-            ]}
-        />
-        <div className="page-content">
-            <div>{electionName}</div>
-            <div>{tallySheetCode}</div>
+    const handleVerify = () => async (evt) => {
+        setProcessing(true);
+        const {tallySheetId} = tallySheet;
+        try {
+            const tallySheet = await lockTallySheet(tallySheetId, tallySheetVersionId);
+            setTallySheet(tallySheet);
+            messages.push("Success", "Report was verified successfully.", MESSAGE_TYPES.SUCCESS);
+        } catch (e) {
+            messages.push("Error", "Unknown error occurred while verifying the report.", MESSAGE_TYPES.ERROR);
+        }
+        setProcessing(false);
+    };
+
+    const handleUnlock = () => async (evt) => {
+        setProcessing(true);
+        const {tallySheetId} = tallySheet;
+        try {
+            const tallySheet = await unlockTallySheet(tallySheetId);
+            await setTallySheet(tallySheet);
+            messages.push("Success", "Report was unlocked successfully.", MESSAGE_TYPES.SUCCESS);
+            //fetchTallySheetVersion();
+        } catch (e) {
+            messages.push("Error", "Unknown error occurred while unlocking the report.", MESSAGE_TYPES.ERROR);
+        }
+        setProcessing(false);
+    };
+
+    const getReportViewJsx = () => {
+        const {tallySheetCode, tallySheetStatus} = tallySheet;
+
+        return <div className="page">
+            <BreadCrumb
+                links={[
+                    {label: "elections", to: PATH_ELECTION()},
+                    {label: electionName, to: PATH_ELECTION_BY_ID(electionId)},
+                    {label: tallySheetCode.toLowerCase(), to: PATH_ELECTION_DATA_ENTRY(electionId, tallySheetCode)},
+                ]}
+            />
+            <div className="page-content">
+                <div>{electionName}</div>
+                <div>{tallySheetCode}</div>
 
 
-            <div className="report-view-status">
-                <div className="report-view-status-actions">
-                    <Button variant="contained" size="small" color="default" onClick={handlePrint()}>
-                        Print
-                    </Button>
-                    <Button
-                        variant="contained" size="small" color="primary"
-                        disabled={processing || !tallySheet.readyToLock}
-                    >
-                        Verify
-                    </Button>
-                    <Button
-                        variant="contained" size="small" color="primary"
-                        disabled={processing || !tallySheet.readyToLock}
-                        onClick={handleRequestEdit()}
-                    >
-                        Request Edit
-                    </Button>
+                <div className="report-view-status">
+                    <div className="report-view-status-actions">
+                        <Button variant="contained" size="small" color="default" onClick={handlePrint()}>
+                            Print
+                        </Button>
+                        <Button
+                            variant="contained" size="small" color="primary"
+                            disabled={processing || !tallySheet.readyToLock}
+                            onClick={handleVerify()}
+                        >
+                            Verify
+                        </Button>
+                        <Button
+                            variant="contained" size="small" color="primary"
+                            disabled={processing || !tallySheet.readyToLock}
+                            onClick={handleRequestEdit()}
+                        >
+                            Request Edit
+                        </Button>
+                        <Button
+                            variant="contained" size="small" color="primary"
+                            disabled={!(tallySheetStatus === TALLY_SHEET_STATUS_ENUM.VERIFIED)}
+                            onClick={handleUnlock()}
+                        >
+                            Unlock
+                        </Button>
+                    </div>
+                    <div className="report-view-status-text">
+                        {(() => {
+                            if (tallySheetStatus == TALLY_SHEET_STATUS_ENUM.SUBMITTED) {
+                                return "This report has been submitted to the system and waiting for verification";
+                            } else if (tallySheetStatus == TALLY_SHEET_STATUS_ENUM.VIEWED) {
+                                return "This report has been not verified yet";
+                            } else if (tallySheetStatus == TALLY_SHEET_STATUS_ENUM.ENTERED) {
+                                return "This report has no submitted or verified information. The editing is still in progress.";
+                            } else if (tallySheetStatus == TALLY_SHEET_STATUS_ENUM.VERIFIED) {
+                                return "This report has been verified.";
+                            } else if (tallySheetStatus == TALLY_SHEET_STATUS_ENUM.RELEASED) {
+                                return "This report has been released.";
+                            }
+                        })()}
+                    </div>
                 </div>
-                <div className="report-view-status-text">
-                    {(() => {
-                        if (tallySheetStatus == TALLY_SHEET_STATUS_ENUM.SUBMITTED) {
-                            return "This report has been submitted to the system and waiting for verification";
-                        } else if (tallySheetStatus == TALLY_SHEET_STATUS_ENUM.VIEWED) {
-                            return "This report has been not verified yet";
-                        } else if (tallySheetStatus == TALLY_SHEET_STATUS_ENUM.ENTERED) {
-                            return "This report has no submitted or verified information. The editing is still in progress.";
-                        } else if (tallySheetStatus == TALLY_SHEET_STATUS_ENUM.VERIFIED) {
-                            return "This report has been verified.";
-                        } else if (tallySheetStatus == TALLY_SHEET_STATUS_ENUM.RELEASED) {
-                            return "This report has been released.";
-                        }
-                    })()}
-                </div>
+
+
+                <iframe
+                    style={{border: "none", width: "100%"}}
+                    height={iframeHeight}
+                    width={iframeWidth}
+                    srcDoc={tallySheetVersionHtml}
+                    onLoad={handleIframeHeight()}
+                    ref={iframeRef}
+                >
+                </iframe>
             </div>
-
-
-            <iframe
-                style={{border: "none", width: "100%"}}
-                height={iframeHeight}
-                width={iframeWidth}
-                srcDoc={tallySheetVersionHtml}
-                onLoad={handleIframeHeight()}
-                ref={iframeRef}
-            >
-            </iframe>
         </div>
-    </div>
+    }
+
+    return getReportViewJsx()
 }
