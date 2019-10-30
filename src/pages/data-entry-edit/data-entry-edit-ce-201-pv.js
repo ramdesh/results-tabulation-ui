@@ -29,6 +29,7 @@ import TextField from '@material-ui/core/TextField';
 
 import Button from '@material-ui/core/Button';
 import {isNumeric, processNumericValue} from "../../utils";
+import {MESSAGES_EN} from "../../locale/messages_en";
 
 export default function DataEntryEdit_CE_201_PV({history, queryString, election, tallySheet, messages}) {
     const {tallySheetId, tallySheetCode} = tallySheet;
@@ -98,7 +99,7 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
 
             }
         } catch (error) {
-            messages.push("Error", "Tally sheet is not reachable.", MESSAGE_TYPES.ERROR);
+            messages.push("Error", MESSAGES_EN.error_tallysheet_not_reachable, MESSAGE_TYPES.ERROR);
         }
 
         setProcessing(false);
@@ -141,11 +142,11 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
 
                 setTallySheetVersion(tallySheetVersion);
             } catch (e) {
-                messages.push("Error", "Unknown error occurred while saving the tally sheet.", MESSAGE_TYPES.ERROR);
+                messages.push("Error", MESSAGES_EN.error_tallysheet_save, MESSAGE_TYPES.ERROR);
             }
             setProcessing(false);
         } else {
-            messages.push("Error", "Please check the input values for errors", MESSAGE_TYPES.ERROR)
+            messages.push("Error", MESSAGES_EN.error_input, MESSAGE_TYPES.ERROR)
         }
     };
 
@@ -156,12 +157,12 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
             const {tallySheetVersionId} = tallySheetVersion;
             const tallySheet = await submitTallySheet(tallySheetId, tallySheetVersionId);
 
-            messages.push("Success", "PRE-41 tally sheet was submitted successfully", MESSAGE_TYPES.SUCCESS);
+            messages.push("Success", MESSAGES_EN.success_pre41_submit, MESSAGE_TYPES.SUCCESS);
             setTimeout(() => {
                 history.push(PATH_ELECTION_DATA_ENTRY(electionId, tallySheetCode));
             }, 1000)
         } catch (e) {
-            messages.push("Error", "Unknown error occurred while submitting the tally sheet.", MESSAGE_TYPES.ERROR);
+            messages.push("Error", MESSAGES_EN.error_tallysheet_submit, MESSAGE_TYPES.ERROR);
         }
 
         setProcessing(false);
@@ -498,7 +499,7 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
                         <TableCell align="center">
                             <TextField
                                 type='datetime-local'
-                                defaultValue={(timeOfCommencementOfCount==null ? "": Moment(timeOfCommencementOfCount).format('YYYY-MM-DDTHH:mm'))}
+                                defaultValue={(timeOfCommencementOfCount == null ? "" : Moment(timeOfCommencementOfCount).format('YYYY-MM-DDTHH:mm'))}
                                 margin="normal"
                                 onChange={handleTimeOfCommencementOfCountChange()}
                             />

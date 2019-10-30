@@ -25,6 +25,7 @@ import Processing from "../components/processing";
 import Error from "../components/error";
 import BreadCrumb from "../components/bread-crumb";
 import Button from "@material-ui/core/Button";
+import {MESSAGES_EN} from "../locale/messages_en";
 
 
 export default function ReportView(props) {
@@ -93,9 +94,9 @@ export default function ReportView(props) {
         try {
             const tallySheet = await requestEditForTallySheet(tallySheetId);
             setTallySheet(tallySheet);
-            messages.push("Success", "Report was made editable successfully.", MESSAGE_TYPES.SUCCESS);
+            messages.push("Success", MESSAGES_EN.success_report_editable, MESSAGE_TYPES.SUCCESS);
         } catch (e) {
-            messages.push("Error", "Unknown error occurred while updating the report.", MESSAGE_TYPES.ERROR);
+            messages.push("Error", MESSAGES_EN.error_updating_report, MESSAGE_TYPES.ERROR);
         }
         setProcessing(false);
     };
@@ -106,9 +107,9 @@ export default function ReportView(props) {
         try {
             const tallySheet = await lockTallySheet(tallySheetId, tallySheetVersionId);
             setTallySheet(tallySheet);
-            messages.push("Success", "Report was verified successfully.", MESSAGE_TYPES.SUCCESS);
+            messages.push("Success", MESSAGES_EN.success_report_verify, MESSAGE_TYPES.SUCCESS);
         } catch (e) {
-            messages.push("Error", "Unknown error occurred while verifying the report.", MESSAGE_TYPES.ERROR);
+            messages.push("Error", MESSAGES_EN.error_verifying_report, MESSAGE_TYPES.ERROR);
         }
         setProcessing(false);
     };
@@ -119,10 +120,10 @@ export default function ReportView(props) {
         try {
             const tallySheet = await unlockTallySheet(tallySheetId);
             await setTallySheet(tallySheet);
-            messages.push("Success", "Report was unlocked successfully.", MESSAGE_TYPES.SUCCESS);
+            messages.push("Success", MESSAGES_EN.success_report_unlock, MESSAGE_TYPES.SUCCESS);
             //fetchTallySheetVersion();
         } catch (e) {
-            messages.push("Error", "Unknown error occurred while unlocking the report.", MESSAGE_TYPES.ERROR);
+            messages.push("Error", MESSAGES_EN.error_unlock_report, MESSAGE_TYPES.ERROR);
         }
         setProcessing(false);
     };
