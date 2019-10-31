@@ -1,9 +1,17 @@
 import axios from 'axios';
 import {TABULATION_API_URL} from "../../config";
-import {TALLY_SHEET_CODE_CE_201, TALLY_SHEET_CODE_CE_201_PV, TALLY_SHEET_CODE_PRE_41} from "../../App";
+import {
+    TALLY_SHEET_CODE_CE_201,
+    TALLY_SHEET_CODE_CE_201_PV, TALLY_SHEET_CODE_PRE_30_ED,
+    TALLY_SHEET_CODE_PRE_30_PD,
+    TALLY_SHEET_CODE_PRE_41,
+    COUNTING_CENTRE_WISE_DATA_ENTRY_TALLY_SHEET_CODES,
+    ALL_ISLAND_TALLY_SHEET_CODES
+} from "../../App";
 import {getAccessToken} from "../../auth";
 import {AreaEntity} from "./entities/area.entity";
-import {ElectionEntity} from "./entities/election.entity";
+import {ElectionEntity, VOTE_TYPE} from "./entities/election.entity";
+import {getFirstOrNull} from "../../utils";
 
 export const ENDPOINT_PATH_ELECTIONS = () => "/election";
 export const ENDPOINT_PATH_ELECTION_AREA = (electionId) => `/election/${electionId}/area`;
@@ -131,7 +139,7 @@ async function refactorTallySheetObject(tallySheet) {
     const {tallySheetCode, lockedVersionId, submittedVersionId, latestVersionId} = tallySheet;
     let tallySheetStatus = "";
     let readyToLock = false;
-    if (tallySheetCode === TALLY_SHEET_CODE_PRE_41 || tallySheetCode === TALLY_SHEET_CODE_CE_201 || tallySheetCode === TALLY_SHEET_CODE_CE_201_PV) {
+    if (COUNTING_CENTRE_WISE_DATA_ENTRY_TALLY_SHEET_CODES.indexOf(tallySheetCode) >= 0) {
         if (lockedVersionId) {
             tallySheetStatus = TALLY_SHEET_STATUS_ENUM.VERIFIED;
         } else if (submittedVersionId) {
@@ -154,6 +162,37 @@ async function refactorTallySheetObject(tallySheet) {
     tallySheet.tallySheetStatus = tallySheetStatus;
     tallySheet.readyToLock = readyToLock;
     tallySheet.area = await areaEntity.getById(tallySheet.areaId);
+    tallySheet.election = await electionEntity.getById(tallySheet.electionId);
+    if (COUNTING_CENTRE_WISE_DATA_ENTRY_TALLY_SHEET_CODES.indexOf(tallySheetCode) >= 0) {
+        if (tallySheet.election.voteType === VOTE_TYPE.POSTAL) {
+            const countingCentre = tallySheet.area;
+            const electoralDistrict = getFirstOrNull(countingCentre.electoralDistricts);
+            tallySheet.countingCentre = countingCentre;
+            tallySheet.electoralDistrict = electoralDistrict;
+        } else {
+            const countingCentre = tallySheet.area;
+            const pollingStation = getFirstOrNull(countingCentre.pollingStations);
+            const pollingDistrict = getFirstOrNull(pollingStation.pollingDistricts);
+            const pollingDivision = getFirstOrNull(pollingDistrict.pollingDivisions);
+            const electoralDistrict = getFirstOrNull(pollingDivision.electoralDistricts);
+            tallySheet.countingCentre = countingCentre;
+            tallySheet.pollingDivision = pollingDivision;
+            tallySheet.electoralDistrict = electoralDistrict;
+        }
+    } else if (tallySheetCode === TALLY_SHEET_CODE_PRE_30_PD) {
+        if (tallySheet.election.voteType === VOTE_TYPE.POSTAL) {
+            tallySheet.electoralDistrict = tallySheet.area;
+        } else {
+            const pollingDivision = tallySheet.area;
+            const electoralDistrict = getFirstOrNull(pollingDivision.electoralDistricts);
+            tallySheet.pollingDivision = pollingDivision;
+            tallySheet.electoralDistrict = electoralDistrict;
+        }
+    } else if (tallySheetCode === TALLY_SHEET_CODE_PRE_30_ED) {
+        tallySheet.electoralDistrict = tallySheet.area;
+    } else if (ALL_ISLAND_TALLY_SHEET_CODES.indexOf(tallySheetCode) >= 0) {
+        tallySheet.country = tallySheet.area;
+    }
 
     return tallySheet
 }

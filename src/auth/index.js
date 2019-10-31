@@ -102,15 +102,22 @@ export class ProtectedRoute extends Component {
 }
 
 function LoadElectionAndThen(props) {
-    const {then, electionId} = props;
+    const {then, electionId, subElectionId} = props;
     const [processing, setProcessing] = useState(true);
     const [error, setError] = useState(false);
     const [election, setElection] = useState(null);
+    const [subElection, setSubElection] = useState(null);
 
     const fetchData = async () => {
         try {
             const election = await getElectionById(electionId);
+            let subElection = null;
+            if (subElectionId) {
+                subElection = await getElectionById(subElectionId);
+            }
+
             setElection(election);
+            setSubElection(subElection)
         } catch (e) {
             setError(true);
         }
@@ -133,7 +140,7 @@ function LoadElectionAndThen(props) {
             title={"Election not found"}
         />
     } else {
-        return then(election);
+        return then({election, subElection});
     }
 }
 
@@ -184,13 +191,15 @@ export class ElectionProtectedRoute extends Component {
             {...this.props}
             component={(props) => {
                 const {electionId} = props.match.params;
+                const queryString = getQueryStringObject(this.props.location.search);
                 return <LoadElectionAndThen
                     electionId={electionId}
-                    then={(election) => {
+                    subElectionId={queryString.subElectionId}
+                    then={(electionProps) => {
                         return <this.props.component
                             {...props}
-                            election={election}
-                            queryString={getQueryStringObject(this.props.location.search)}
+                            {...electionProps}
+                            queryString={queryString}
                         />
                     }}
                 />

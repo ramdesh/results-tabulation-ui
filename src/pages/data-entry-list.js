@@ -19,14 +19,16 @@ import Processing from "../components/processing";
 import Error from "../components/error";
 import BreadCrumb from "../components/bread-crumb";
 import Button from "@material-ui/core/Button";
-import {getElectoralDistrictName, getPollingDivisionName} from "../utils/tallySheet";
+import {getAreaName, getElectoralDistrictName, getPollingDivisionName, getTallySheetCodeStr} from "../utils/tallySheet";
 import TextField from "@material-ui/core/TextField/TextField";
 import {fieldMatch, getFirstOrNull} from "../utils";
 
+import {VOTE_TYPE} from "../services/tabulation-api/entities/election.entity";
 
-export default function DataEntryList({history, queryString, election}) {
+
+export default function DataEntryList({history, queryString, election, subElection}) {
     const {electionId, electionName} = election;
-    const {tallySheetCode, subElectionId} = queryString;
+    const {tallySheetCode} = queryString;
 
     const [tallySheets, setTallySheets] = useState([]);
     const [processing, setProcessing] = useState(true);
@@ -36,7 +38,7 @@ export default function DataEntryList({history, queryString, election}) {
         electoralDistrict: '',
         pollingDivision: '',
         countingCentre: '',
-        status:''
+        status: ''
     });
 
     const handleChange = name => event => {
@@ -45,9 +47,8 @@ export default function DataEntryList({history, queryString, election}) {
 
     useEffect(() => {
         getTallySheet({
-            electionId: subElectionId,
+            electionId: getElection().electionId,
             tallySheetCode,
-            subElectionId,
             limit: 3000,
             offset: 0
         }).then((tallySheets) => {
@@ -59,46 +60,10 @@ export default function DataEntryList({history, queryString, election}) {
         })
     }, []);
 
-
-    //TODO refactor and generalize to a common utility.
-    function getElectoralDivision(tallySheet) {
-        const countingCentre = tallySheet.area;
-        const pollingStation = getFirstOrNull(countingCentre.pollingStations);
-        const pollingDistrict = getFirstOrNull(pollingStation.pollingDistricts);
-        const pollingDivision = getFirstOrNull(pollingDistrict.pollingDivisions);
-
-        return pollingDivision
+    function getElection() {
+        return subElection ? subElection : election;
     }
 
-    //TODO refactor and generalize to a common utility.
-    function getElectoralDistrict(tallySheet) {
-        const countingCentre = tallySheet.area;
-        const pollingStation = getFirstOrNull(countingCentre.pollingStations);
-        let electoralDistrict = null;
-        if (pollingStation) {
-            const pollingDistrict = getFirstOrNull(pollingStation.pollingDistricts);
-            const pollingDivision = getFirstOrNull(pollingDistrict.pollingDivisions);
-            electoralDistrict = getFirstOrNull(pollingDivision.electoralDistricts);
-        } else {
-            electoralDistrict = getFirstOrNull(countingCentre.electoralDistricts);
-        }
-
-        return electoralDistrict;
-    }
-
-    function getElectoralDistrictName(tallySheet) {
-        const electoralDistrict = getElectoralDistrict(tallySheet);
-        if (electoralDistrict) {
-            return electoralDistrict.areaName;
-        }
-    }
-
-    function getPollingDivisionName(tallySheet) {
-        const electoralDistrict = getElectoralDivision(tallySheet);
-        if (electoralDistrict) {
-            return electoralDistrict.areaName;
-        }
-    }
 
     function getTallySheetListJsx() {
         if (processing) {
@@ -159,14 +124,14 @@ export default function DataEntryList({history, queryString, election}) {
                 </TableHead>
                 <TableBody>
                     {tallySheets.map(tallySheet => {
-                        if (fieldMatch(tallySheet.area.areaName, searchParameters.countingCentre) &&
-                            fieldMatch(getElectoralDistrictName(tallySheet), searchParameters.electoralDistrict) &&
+                        if (fieldMatch(getAreaName(tallySheet.countingCentre), searchParameters.countingCentre) &&
+                            fieldMatch(getAreaName(tallySheet.electoralDistrict), searchParameters.electoralDistrict) &&
                             fieldMatch(tallySheet.tallySheetStatus, searchParameters.status) &&
-                            fieldMatch(getPollingDivisionName(tallySheet), searchParameters.pollingDivision)) {
+                            fieldMatch(getAreaName(tallySheet.pollingDivision), searchParameters.pollingDivision)) {
                             return <TableRow key={tallySheet.tallySheetId}>
-                                <TableCell align="center">{getElectoralDistrictName(tallySheet)}</TableCell>
-                                <TableCell align="center">{getPollingDivisionName(tallySheet)}</TableCell>
-                                <TableCell align="center">{tallySheet.area.areaName}</TableCell>
+                                <TableCell align="center">{getAreaName(tallySheet.electoralDistrict)}</TableCell>
+                                <TableCell align="center">{getAreaName(tallySheet.pollingDivision)}</TableCell>
+                                <TableCell align="center">{getAreaName(tallySheet.countingCentre)}</TableCell>
                                 <TableCell align="center">{tallySheet.tallySheetStatus}</TableCell>
                                 <TableCell align="center">
                                     {(() => {
@@ -230,14 +195,14 @@ export default function DataEntryList({history, queryString, election}) {
                 {label: "elections", to: PATH_ELECTION()},
                 {label: electionName, to: PATH_ELECTION_BY_ID(electionId)},
                 {
-                    label: tallySheetCode.toLowerCase(),
-                    to: PATH_ELECTION_DATA_ENTRY(electionId, tallySheetCode, subElectionId)
+                    label: getTallySheetCodeStr({tallySheetCode, election: getElection()}).toLowerCase(),
+                    to: PATH_ELECTION_DATA_ENTRY(electionId, tallySheetCode, getElection().electionId)
                 },
             ]}
         />
         <div className="page-content">
             <div>{electionName}</div>
-            <div>{tallySheetCode}</div>
+            <div>{getTallySheetCodeStr({tallySheetCode, election: getElection()})}</div>
             {getTallySheetListJsx()}
         </div>
     </div>
