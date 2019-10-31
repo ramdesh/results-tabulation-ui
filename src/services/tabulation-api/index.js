@@ -62,42 +62,6 @@ export function getElectionById(electionId) {
     return electionEntity.getById(electionId)
 }
 
-
-export function getAreas(electionId, areaType = null, associatedAreaId = null) {
-    const params = {};
-
-    if (areaType) {
-        params["areaType"] = areaType;
-    }
-
-    if (associatedAreaId) {
-        params["associatedAreaId"] = associatedAreaId;
-    }
-
-    return request({
-        url: ENDPOINT_PATH_AREAS(),
-        method: 'get',
-        params: params
-    })
-}
-
-export function getCountingCentres(electionId, associatedAreaId = null) {
-    return getAreas("CountingCentre", associatedAreaId)
-}
-
-export function getElectoralDistricts(electionId, associatedAreaId = null) {
-    return getAreas("ElectoralDistrict", associatedAreaId)
-}
-
-export function getPollingDivisions(electionId, associatedAreaId = null) {
-    return getAreas("PollingDivision", associatedAreaId)
-}
-
-export function getPollingStations(electionId, associatedAreaId = null) {
-    return getAreas("PollingStation", associatedAreaId)
-}
-
-
 export const TALLY_SHEET_STATUS_ENUM = {
     NOT_ENTERED: "Not Entered",
     SUBMITTED: "Submitted",
@@ -107,32 +71,6 @@ export const TALLY_SHEET_STATUS_ENUM = {
     RELEASED: "Released"
 };
 
-function getTallySheetStatus(tallySheet) {
-    const {tallySheetCode, lockedVersionId, submittedVersionId, latestVersionId} = tallySheet;
-    let tallySheetStatus = "";
-    let readyToLock = false;
-    if (tallySheetCode === TALLY_SHEET_CODE_PRE_41 || tallySheetCode === TALLY_SHEET_CODE_CE_201 || tallySheetCode === TALLY_SHEET_CODE_CE_201_PV) {
-        if (lockedVersionId) {
-            tallySheetStatus = TALLY_SHEET_STATUS_ENUM.VERIFIED;
-        } else if (submittedVersionId) {
-            tallySheetStatus = TALLY_SHEET_STATUS_ENUM.SUBMITTED;
-            readyToLock = true;
-        } else if (latestVersionId) {
-            tallySheetStatus = TALLY_SHEET_STATUS_ENUM.ENTERED;
-        } else {
-            tallySheetStatus = TALLY_SHEET_STATUS_ENUM.NOT_ENTERED;
-        }
-    } else {
-        if (lockedVersionId) {
-            tallySheetStatus = TALLY_SHEET_STATUS_ENUM.VERIFIED;
-        } else {
-            tallySheetStatus = TALLY_SHEET_STATUS_ENUM.VIEWED;
-            readyToLock = true
-        }
-    }
-
-    return tallySheetStatus;
-}
 
 async function refactorTallySheetObject(tallySheet) {
     tallySheet.tallySheetCode = tallySheet.tallySheetCode.replace(/_/g, "-");
