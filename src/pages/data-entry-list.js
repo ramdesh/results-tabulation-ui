@@ -19,7 +19,7 @@ import Processing from "../components/processing";
 import Error from "../components/error";
 import BreadCrumb from "../components/bread-crumb";
 import Button from "@material-ui/core/Button";
-import {getElectoralDistrictName, getPollingDivisionName} from "../utils/tallySheet";
+import {getFirstOrNull} from "../utils";
 
 
 export default function DataEntryList({history, queryString, election}) {
@@ -44,6 +44,47 @@ export default function DataEntryList({history, queryString, election}) {
             setProcessing(false);
         })
     }, []);
+
+
+    //TODO refactor and generalize to a common utility.
+    function getElectoralDivision(tallySheet) {
+        const countingCentre = tallySheet.area;
+        const pollingStation = getFirstOrNull(countingCentre.pollingStations);
+        const pollingDistrict = getFirstOrNull(pollingStation.pollingDistricts);
+        const pollingDivision = getFirstOrNull(pollingDistrict.pollingDivisions);
+
+        return pollingDivision
+    }
+
+    //TODO refactor and generalize to a common utility.
+    function getElectoralDistrict(tallySheet) {
+        const countingCentre = tallySheet.area;
+        const pollingStation = getFirstOrNull(countingCentre.pollingStations);
+        let electoralDistrict = null;
+        if (pollingStation) {
+            const pollingDistrict = getFirstOrNull(pollingStation.pollingDistricts);
+            const pollingDivision = getFirstOrNull(pollingDistrict.pollingDivisions);
+            electoralDistrict = getFirstOrNull(pollingDivision.electoralDistricts);
+        } else {
+            electoralDistrict = getFirstOrNull(countingCentre.electoralDistricts);
+        }
+
+        return electoralDistrict;
+    }
+
+    function getElectoralDistrictName(tallySheet) {
+        const electoralDistrict = getElectoralDistrict(tallySheet);
+        if (electoralDistrict) {
+            return electoralDistrict.areaName;
+        }
+    }
+
+    function getPollingDivisionName(tallySheet) {
+        const electoralDistrict = getElectoralDivision(tallySheet);
+        if (electoralDistrict) {
+            return electoralDistrict.areaName;
+        }
+    }
 
     function getTallySheetListJsx() {
         if (processing) {

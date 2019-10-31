@@ -105,16 +105,21 @@ function LoadElectionAndThen(props) {
     const {then, electionId} = props;
     const [processing, setProcessing] = useState(true);
     const [error, setError] = useState(false);
-    const [election, setElection] = useState(null)
+    const [election, setElection] = useState(null);
+
+    const fetchData = async () => {
+        try {
+            const election = await getElectionById(electionId);
+            setElection(election);
+        } catch (e) {
+            setError(true);
+        }
+
+        setProcessing(false);
+    };
 
     useEffect(() => {
-        getElectionById(electionId).then((election) => {
-            setElection(election);
-            setProcessing(false);
-        }).catch((error) => {
-            setError(true);
-            setProcessing(false);
-        })
+        fetchData();
     }, []);
 
     if (processing) {

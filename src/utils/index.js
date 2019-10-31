@@ -30,3 +30,11 @@ export function processNumericValue(value) {
     }
     return value
 }
+
+export function getFirstOrNull(list) {
+    if (list && list.length > 0) {
+        return list[0];
+    }
+
+    return 0;
+}
