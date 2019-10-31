@@ -40,7 +40,7 @@ import BreadCrumb from "../../components/bread-crumb";
 import Button from "@material-ui/core/Button";
 import {getElectoralDistrictName, getPollingDivisionName} from "../../utils/tallySheet";
 import TextField from "@material-ui/core/TextField/TextField";
-import {fieldMatch} from "../../utils";
+import {fieldMatch, getFirstOrNull} from "../../utils";
 
 
 export default function ReportList({history, queryString, election}) {
@@ -127,6 +127,21 @@ export default function ReportList({history, queryString, election}) {
 
 
     function getTallySheetListJsx_PRE_30_PD(tallySheets) {
+        //TODO refactor and generalize to a common utility.
+        function getElectoralDistrict(tallySheet) {
+            const pollingDivision = tallySheet.area;
+            const electoralDistrict = getFirstOrNull(pollingDivision.electoralDistricts);
+
+            return electoralDistrict;
+        }
+
+        function getElectoralDistrictName(tallySheet) {
+            const electoralDistrict = getElectoralDistrict(tallySheet);
+            if (electoralDistrict) {
+                return electoralDistrict.areaName;
+            }
+        }
+
         return <Table aria-label="simple table">
             <TableHead>
                 <TableRow>
