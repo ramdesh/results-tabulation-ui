@@ -163,7 +163,7 @@ export default function ReportList({history, queryString, election}) {
                             onChange={handleChange('pollingDivision')}
                         />
                     </TableCell>
-                    <TableCell align="center">
+                    <TableCell align="center" style={{width: "10%"}}>
                         <TextField
                             value={searchParameters.status}
                             margin="dense"
@@ -213,7 +213,7 @@ export default function ReportList({history, queryString, election}) {
                             onChange={handleChange('electoralDistrict')}
                         />
                     </TableCell>
-                    <TableCell align="center">
+                    <TableCell align="center" style={{width: "10%"}}>
                         <TextField
                             value={searchParameters.status}
                             margin="dense"

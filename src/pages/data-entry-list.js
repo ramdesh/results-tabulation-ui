@@ -138,7 +138,7 @@ export default function DataEntryList({history, queryString, election}) {
                                 onChange={handleChange('countingCentre')}
                             />
                         </TableCell>
-                        <TableCell align="center">
+                        <TableCell align="center" style={{width: "20%"}}>
                             <TextField
                                 value={searchParameters.status}
                                 margin="dense"

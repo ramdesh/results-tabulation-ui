@@ -19,7 +19,8 @@ import {
     PATH_ELECTION_DATA_ENTRY, PATH_ELECTION_DATA_ENTRY_EDIT,
     TALLY_SHEET_CODE_CE_201,
     TALLY_SHEET_CODE_CE_201_PV,
-    TALLY_SHEET_CODE_PRE_41
+    TALLY_SHEET_CODE_PRE_41,
+    TALLY_SHEET_CODE_PRE_34_CO
 } from "../App";
 import Processing from "../components/processing";
 import Error from "../components/error";
@@ -44,7 +45,7 @@ export default function ReportView(props) {
     const fetchTallySheetVersion = async () => {
         const {tallySheetId, tallySheetCode, latestVersionId, submittedVersionId, lockedVersionId, tallySheetStatus} = tallySheet;
         let tallySheetVersionId = null;
-        if (tallySheetCode === TALLY_SHEET_CODE_PRE_41 || tallySheetCode === TALLY_SHEET_CODE_CE_201 || tallySheetCode === TALLY_SHEET_CODE_CE_201_PV) {
+        if (tallySheetCode === TALLY_SHEET_CODE_PRE_41 || TALLY_SHEET_CODE_PRE_34_CO|| tallySheetCode === TALLY_SHEET_CODE_CE_201 || tallySheetCode === TALLY_SHEET_CODE_CE_201_PV) {
             if (lockedVersionId) {
                 tallySheetVersionId = lockedVersionId;
             } else if (submittedVersionId) {

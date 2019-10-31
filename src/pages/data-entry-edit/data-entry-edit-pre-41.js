@@ -46,6 +46,7 @@ export default function DataEntryEdit_PRE_41({history, queryString, election, ta
     useEffect(() => {
         if (tallySheet.latestVersionId) {
             getTallySheetVersionById(tallySheetId, tallySheetCode, tallySheet.latestVersionId).then((tallySheetVersion) => {
+                console.log("hello", tallySheetVersion);
                 const latestCandidateWiseCounts = {};
                 const {content, summary} = tallySheetVersion;
                 let validTotal = 0;
@@ -74,7 +75,7 @@ export default function DataEntryEdit_PRE_41({history, queryString, election, ta
                     initialCandidateWiseCounts[candidate.candidateId] = {
                         candidateId: candidate.candidateId,
                         validVoteCount: 0,
-                        validVoteCountInWords: 0
+                        validVoteCountInWords: ""
                     };
                 });
             });

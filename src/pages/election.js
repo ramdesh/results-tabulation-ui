@@ -7,6 +7,7 @@ import {
     PATH_ELECTION_BY_ID,
     PATH_ELECTION_DATA_ENTRY,
     PATH_ELECTION_REPORT, PATH_ELECTION_RESULTS_RELEASE,
+    TALLY_SHEET_CODE_PRE_34_CO,
     TALLY_SHEET_CODE_CE_201,
     TALLY_SHEET_CODE_CE_201_PV,
     TALLY_SHEET_CODE_PRE_30_ED,
@@ -43,8 +44,8 @@ export default function Election(props) {
                         const subElectionId = subElection.electionId;
                         let subElectionSuffix = "";
                         let subElectionTitle = "Ordinary Votes";
-                        let tallySheetCodes = [TALLY_SHEET_CODE_CE_201, TALLY_SHEET_CODE_PRE_41];
-                        let tallySheetCodeLabels = ["CE 201", "PRE 41"];
+                        let tallySheetCodes = [TALLY_SHEET_CODE_CE_201, TALLY_SHEET_CODE_PRE_41, TALLY_SHEET_CODE_PRE_34_CO];
+                        let tallySheetCodeLabels = ["CE 201", "PRE 41", "PRE 34 CO"];
                         if (subElection.voteType === "Postal") {
                             subElectionTitle = "Postal Votes";
                             tallySheetCodes = [TALLY_SHEET_CODE_CE_201_PV, TALLY_SHEET_CODE_PRE_41];
