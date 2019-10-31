@@ -28,6 +28,7 @@ import TableBody from "@material-ui/core/TableBody";
 import TextField from '@material-ui/core/TextField';
 
 import Button from '@material-ui/core/Button';
+import {MESSAGES_EN} from "../../locale/messages_en";
 
 export default function DataEntryEdit_PRE_41({history, queryString, election, tallySheet, messages}) {
     const {tallySheetId, tallySheetCode} = tallySheet;
@@ -63,7 +64,7 @@ export default function DataEntryEdit_PRE_41({history, queryString, election, ta
                 setCandidateWiseCounts(latestCandidateWiseCounts);
                 setProcessing(false);
             }).catch((error) => {
-                messages.push("Error", "Tally sheet is not reachable.", MESSAGE_TYPES.ERROR);
+                messages.push("Error", MESSAGES_EN.error_tallysheet_not_reachable, MESSAGE_TYPES.ERROR);
                 setProcessing(false);
             })
         } else {
@@ -135,11 +136,11 @@ export default function DataEntryEdit_PRE_41({history, queryString, election, ta
 
                 setTallySheetVersion(tallySheetVersion);
             } catch (e) {
-                messages.push("Error", "Unknown error occurred while saving the tally sheet.", MESSAGE_TYPES.ERROR);
+                messages.push("Error", MESSAGES_EN.error_tallysheet_save, MESSAGE_TYPES.ERROR);
             }
             setProcessing(false);
         } else {
-            messages.push("Error", "Please check the input values for errors", MESSAGE_TYPES.ERROR)
+            messages.push("Error", MESSAGES_EN.error_input, MESSAGE_TYPES.ERROR)
         }
     };
 
@@ -150,13 +151,13 @@ export default function DataEntryEdit_PRE_41({history, queryString, election, ta
             const {tallySheetVersionId} = tallySheetVersion;
             const tallySheet = await submitTallySheet(tallySheetId, tallySheetVersionId);
 
-            messages.push("Success", "PRE-41 tally sheet was submitted successfully", MESSAGE_TYPES.SUCCESS);
+            messages.push("Success",MESSAGES_EN.success_pre41_submit, MESSAGE_TYPES.SUCCESS);
             setTimeout(() => {
                 const subElectionId = tallySheet.electionId;
                 history.push(PATH_ELECTION_DATA_ENTRY(electionId, tallySheetCode, subElectionId));
             }, 1000)
         } catch (e) {
-            messages.push("Error", "Unknown error occurred while submitting the tally sheet.", MESSAGE_TYPES.ERROR);
+            messages.push("Error", MESSAGES_EN.error_tallysheet_submit, MESSAGE_TYPES.ERROR);
         }
 
         setProcessing(false);

@@ -38,3 +38,10 @@ export function getFirstOrNull(list) {
 
     return 0;
 }
+
+export function fieldMatch(key, value) {
+    if (!key || !value) {
+        return true
+    }
+    return key.toLowerCase().includes(value.toLowerCase());
+}
