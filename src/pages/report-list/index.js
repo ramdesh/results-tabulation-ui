@@ -38,7 +38,9 @@ import Processing from "../../components/processing";
 import Error from "../../components/error";
 import BreadCrumb from "../../components/bread-crumb";
 import Button from "@material-ui/core/Button";
-import {getElectoralDistrictName} from "../../utils/tallySheet";
+import {getElectoralDistrictName, getPollingDivisionName} from "../../utils/tallySheet";
+import TextField from "@material-ui/core/TextField/TextField";
+import {fieldMatch, getFirstOrNull} from "../../utils";
 
 
 export default function ReportList({history, queryString, election}) {
@@ -48,6 +50,19 @@ export default function ReportList({history, queryString, election}) {
     const [tallySheets, setTallySheets] = useState([]);
     const [processing, setProcessing] = useState(true);
     const [error, setError] = useState(false);
+
+    const [searchParameters, setSearchParameters] = React.useState({
+        electoralDistrict: '',
+        pollingDivision: '',
+        countingCentre: '',
+        status: ''
+    });
+
+    const handleChange = name => event => {
+        setSearchParameters({...searchParameters, [name]: event.target.value});
+    };
+
+
     useEffect(() => {
         getTallySheet({
             electionId: subElectionId ? subElectionId : electionId,
@@ -62,7 +77,6 @@ export default function ReportList({history, queryString, election}) {
             setProcessing(false);
         })
     }, [])
-
 
     function getTallySheetListJsx() {
         if (processing) {
@@ -113,8 +127,54 @@ export default function ReportList({history, queryString, election}) {
 
 
     function getTallySheetListJsx_PRE_30_PD(tallySheets) {
+        //TODO refactor and generalize to a common utility.
+        function getElectoralDistrict(tallySheet) {
+            const pollingDivision = tallySheet.area;
+            const electoralDistrict = getFirstOrNull(pollingDivision.electoralDistricts);
+
+            return electoralDistrict;
+        }
+
+        function getElectoralDistrictName(tallySheet) {
+            const electoralDistrict = getElectoralDistrict(tallySheet);
+            if (electoralDistrict) {
+                return electoralDistrict.areaName;
+            }
+        }
+
         return <Table aria-label="simple table">
             <TableHead>
+                <TableRow>
+                    <TableCell align="center" style={{width: "20%"}}>
+                        <TextField
+                            value={searchParameters.electoralDistrict}
+                            margin="dense"
+                            variant="outlined"
+                            placeholder="Search Electoral District"
+                            onChange={handleChange('electoralDistrict')}
+                        />
+                    </TableCell>
+                    <TableCell align="center" style={{width: "20%"}}>
+                        <TextField
+                            value={searchParameters.pollingDivision}
+                            margin="dense"
+                            variant="outlined"
+                            placeholder="Search Polling Division"
+                            onChange={handleChange('pollingDivision')}
+                        />
+                    </TableCell>
+                    <TableCell align="center">
+                        <TextField
+                            value={searchParameters.status}
+                            margin="dense"
+                            variant="outlined"
+                            placeholder="Status"
+                            onChange={handleChange('status')}
+                        />
+                    </TableCell>
+                    <TableCell align="left"></TableCell>
+                    <TableCell align="center"></TableCell>
+                </TableRow>
                 <TableRow>
                     <TableCell align="left">Electoral District</TableCell>
                     <TableCell align="left">Polling Division</TableCell>
@@ -124,12 +184,16 @@ export default function ReportList({history, queryString, election}) {
             </TableHead>
             <TableBody>
                 {tallySheets.map(tallySheet => {
-                    return <TableRow key={tallySheet.tallySheetId}>
-                        <TableCell align="left">{getElectoralDistrictName(tallySheet)}</TableCell>
-                        <TableCell align="left">{tallySheet.area.areaName}</TableCell>
-                        <TableCell align="center">{tallySheet.tallySheetStatus}</TableCell>
-                        {getActions(tallySheet)}
-                    </TableRow>
+                    if (fieldMatch(getElectoralDistrictName(tallySheet), searchParameters.electoralDistrict) &&
+                        fieldMatch(tallySheet.tallySheetStatus, searchParameters.status) &&
+                        fieldMatch(getPollingDivisionName(tallySheet), searchParameters.pollingDivision)) {
+                        return <TableRow key={tallySheet.tallySheetId}>
+                            <TableCell align="left">{getElectoralDistrictName(tallySheet)}</TableCell>
+                            <TableCell align="left">{tallySheet.area.areaName}</TableCell>
+                            <TableCell align="center">{tallySheet.tallySheetStatus}</TableCell>
+                            {getActions(tallySheet)}
+                        </TableRow>
+                    }
                 })}
             </TableBody>
         </Table>
@@ -140,6 +204,28 @@ export default function ReportList({history, queryString, election}) {
         return <Table aria-label="simple table">
             <TableHead>
                 <TableRow>
+                    <TableCell align="center" style={{width: "20%"}}>
+                        <TextField
+                            value={searchParameters.electoralDistrict}
+                            margin="dense"
+                            variant="outlined"
+                            placeholder="Search Electoral District"
+                            onChange={handleChange('electoralDistrict')}
+                        />
+                    </TableCell>
+                    <TableCell align="center">
+                        <TextField
+                            value={searchParameters.status}
+                            margin="dense"
+                            variant="outlined"
+                            placeholder="Status"
+                            onChange={handleChange('status')}
+                        />
+                    </TableCell>
+                    <TableCell align="left"></TableCell>
+                    <TableCell align="center"></TableCell>
+                </TableRow>
+                <TableRow>
                     <TableCell align="left">Electoral District</TableCell>
                     <TableCell align="center">Status</TableCell>
                     <TableCell align="center">Actions</TableCell>
@@ -147,11 +233,14 @@ export default function ReportList({history, queryString, election}) {
             </TableHead>
             <TableBody>
                 {tallySheets.map(tallySheet => {
-                    return <TableRow key={tallySheet.tallySheetId}>
-                        <TableCell align="left">{tallySheet.area.areaName}</TableCell>
-                        <TableCell align="center">{tallySheet.tallySheetStatus}</TableCell>
-                        {getActions(tallySheet)}
-                    </TableRow>
+                    if (fieldMatch(getElectoralDistrictName(tallySheet), searchParameters.electoralDistrict) &&
+                        fieldMatch(tallySheet.tallySheetStatus, searchParameters.status)) {
+                        return <TableRow key={tallySheet.tallySheetId}>
+                            <TableCell align="left">{tallySheet.area.areaName}</TableCell>
+                            <TableCell align="center">{tallySheet.tallySheetStatus}</TableCell>
+                            {getActions(tallySheet)}
+                        </TableRow>
+                    }
                 })}
             </TableBody>
         </Table>

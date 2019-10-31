@@ -30,3 +30,18 @@ export function processNumericValue(value) {
     }
     return value
 }
+
+export function getFirstOrNull(list) {
+    if (list && list.length > 0) {
+        return list[0];
+    }
+
+    return 0;
+}
+
+export function fieldMatch(key, value) {
+    if (!key || !value) {
+        return true
+    }
+    return key.toLowerCase().includes(value.toLowerCase());
+}
