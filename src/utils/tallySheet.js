@@ -1,3 +1,11 @@
+import {VOTE_TYPE} from "../services/tabulation-api/entities/election.entity";
+import {
+    TALLY_SHEET_CODE_CE_201,
+    TALLY_SHEET_CODE_CE_201_PV,
+    TALLY_SHEET_CODE_PRE_30_PD,
+    TALLY_SHEET_CODE_PRE_30_PV
+} from "../App";
+
 export const getPollingDivisionName = (tallySheet) => {
     let pollingDivisionName = null;
     if (tallySheet) {
@@ -23,3 +31,27 @@ export const getElectoralDistrictName = (tallySheet) => {
 
     return electoralDistrictName;
 };
+
+export function getTallySheetCodeStr({tallySheetCode, election}) {
+    let tallySheetCodeStr = tallySheetCode;
+    if (tallySheetCode && election && election.voteType === VOTE_TYPE.POSTAL) {
+        if (tallySheetCode === TALLY_SHEET_CODE_PRE_30_PD) {
+            tallySheetCodeStr = TALLY_SHEET_CODE_PRE_30_PV
+        } else if (tallySheetCode === TALLY_SHEET_CODE_CE_201_PV || tallySheetCode === TALLY_SHEET_CODE_CE_201) {
+            tallySheetCodeStr = tallySheetCode
+        } else {
+            tallySheetCodeStr = tallySheetCode + "-PV"
+        }
+    }
+
+    return tallySheetCodeStr;
+}
+
+export function getAreaName(area) {
+    let areaName = null;
+    if (area) {
+        areaName = area.areaName;
+    }
+
+    return areaName;
+}

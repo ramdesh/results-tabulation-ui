@@ -11,6 +11,7 @@ import DataEntryEdit_PRE_41 from "./data-entry-edit-pre-41";
 import DataEntryEdit_CE_201 from "./data-entry-edit-ce-201";
 import DataEntryEdit_CE_201_PV from "./data-entry-edit-ce-201-pv";
 import DataEntryEdit_PRE_34_CO from "./data-entry-edit-pre-34-co";
+import {getTallySheetCodeStr} from "../../utils/tallySheet";
 
 
 export default function DataEntryEdit({history, queryString, election, tallySheet, messages}) {
@@ -39,7 +40,7 @@ export default function DataEntryEdit({history, queryString, election, tallyShee
                 {label: "elections", to: PATH_ELECTION()},
                 {label: electionName, to: PATH_ELECTION_BY_ID(electionId)},
                 {
-                    label: tallySheetCode.toLowerCase(),
+                    label: getTallySheetCodeStr(tallySheet).toLowerCase(),
                     to: PATH_ELECTION_DATA_ENTRY(electionId, tallySheetCode, subElectionId)
                 },
                 {
@@ -51,7 +52,7 @@ export default function DataEntryEdit({history, queryString, election, tallyShee
         <div className="page-content">
             <div className="data-entry-edit-header">
                 <div className="data-entry-edit-header-election-name">{electionName}</div>
-                <div className="data-entry-edit-header-tally-sheet-code">{tallySheetCode}</div>
+                <div className="data-entry-edit-header-tally-sheet-code">{getTallySheetCodeStr(tallySheet)}</div>
             </div>
             {getEditorJsx()}
         </div>

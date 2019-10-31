@@ -38,14 +38,16 @@ import Processing from "../../components/processing";
 import Error from "../../components/error";
 import BreadCrumb from "../../components/bread-crumb";
 import Button from "@material-ui/core/Button";
-import {getElectoralDistrictName, getPollingDivisionName} from "../../utils/tallySheet";
+import {getTallySheetCodeStr} from "../../utils/tallySheet";
 import TextField from "@material-ui/core/TextField/TextField";
 import {fieldMatch, getFirstOrNull} from "../../utils";
+import {getAreaName} from "../../utils/tallySheet";
+import {VOTE_TYPE} from "../../services/tabulation-api/entities/election.entity";
 
 
-export default function ReportList({history, queryString, election}) {
+export default function ReportList({history, queryString, election, subElection}) {
     const {electionId, electionName} = election;
-    const {tallySheetCode, subElectionId} = queryString;
+    const {tallySheetCode} = queryString;
 
     const [tallySheets, setTallySheets] = useState([]);
     const [processing, setProcessing] = useState(true);
@@ -62,10 +64,14 @@ export default function ReportList({history, queryString, election}) {
         setSearchParameters({...searchParameters, [name]: event.target.value});
     };
 
+    function getElection() {
+        return subElection ? subElection : election;
+    }
+
 
     useEffect(() => {
         getTallySheet({
-            electionId: subElectionId ? subElectionId : electionId,
+            electionId: getElection().electionId,
             tallySheetCode,
             limit: 3000,
             offset: 0
@@ -127,21 +133,6 @@ export default function ReportList({history, queryString, election}) {
 
 
     function getTallySheetListJsx_PRE_30_PD(tallySheets) {
-        //TODO refactor and generalize to a common utility.
-        function getElectoralDistrict(tallySheet) {
-            const pollingDivision = tallySheet.area;
-            const electoralDistrict = getFirstOrNull(pollingDivision.electoralDistricts);
-
-            return electoralDistrict;
-        }
-
-        function getElectoralDistrictName(tallySheet) {
-            const electoralDistrict = getElectoralDistrict(tallySheet);
-            if (electoralDistrict) {
-                return electoralDistrict.areaName;
-            }
-        }
-
         return <Table aria-label="simple table">
             <TableHead>
                 <TableRow>
@@ -184,12 +175,12 @@ export default function ReportList({history, queryString, election}) {
             </TableHead>
             <TableBody>
                 {tallySheets.map(tallySheet => {
-                    if (fieldMatch(getElectoralDistrictName(tallySheet), searchParameters.electoralDistrict) &&
+                    if (fieldMatch(getAreaName(tallySheet.electoralDistrict), searchParameters.electoralDistrict) &&
                         fieldMatch(tallySheet.tallySheetStatus, searchParameters.status) &&
-                        fieldMatch(getPollingDivisionName(tallySheet), searchParameters.pollingDivision)) {
+                        fieldMatch(getAreaName(tallySheet.pollingDivision), searchParameters.pollingDivision)) {
                         return <TableRow key={tallySheet.tallySheetId}>
-                            <TableCell align="left">{getElectoralDistrictName(tallySheet)}</TableCell>
-                            <TableCell align="left">{tallySheet.area.areaName}</TableCell>
+                            <TableCell align="left">{getAreaName(tallySheet.electoralDistrict)}</TableCell>
+                            <TableCell align="left">{getAreaName(tallySheet.pollingDivision)}</TableCell>
                             <TableCell align="center">{tallySheet.tallySheetStatus}</TableCell>
                             {getActions(tallySheet)}
                         </TableRow>
@@ -233,10 +224,10 @@ export default function ReportList({history, queryString, election}) {
             </TableHead>
             <TableBody>
                 {tallySheets.map(tallySheet => {
-                    if (fieldMatch(getElectoralDistrictName(tallySheet), searchParameters.electoralDistrict) &&
+                    if (fieldMatch(getAreaName(tallySheet), searchParameters.electoralDistrict) &&
                         fieldMatch(tallySheet.tallySheetStatus, searchParameters.status)) {
                         return <TableRow key={tallySheet.tallySheetId}>
-                            <TableCell align="left">{tallySheet.area.areaName}</TableCell>
+                            <TableCell align="left">{getAreaName(tallySheet.electoralDistrict)}</TableCell>
                             <TableCell align="center">{tallySheet.tallySheetStatus}</TableCell>
                             {getActions(tallySheet)}
                         </TableRow>
@@ -258,7 +249,7 @@ export default function ReportList({history, queryString, election}) {
             <TableBody>
                 {tallySheets.map(tallySheet => {
                     return <TableRow key={tallySheet.tallySheetId}>
-                        <TableCell align="left">{tallySheet.area.areaName}</TableCell>
+                        <TableCell align="left">{getAreaName(tallySheet.country)}</TableCell>
                         <TableCell align="center">{tallySheet.tallySheetStatus}</TableCell>
                         {getActions(tallySheet)}
                     </TableRow>
@@ -272,71 +263,17 @@ export default function ReportList({history, queryString, election}) {
             links={[
                 {label: "elections", to: PATH_ELECTION()},
                 {label: electionName, to: PATH_ELECTION_BY_ID(electionId)},
-                {label: tallySheetCode.toLowerCase(), to: PATH_ELECTION_REPORT(electionId, tallySheetCode)},
+                {
+                    label: getTallySheetCodeStr({tallySheetCode, election: getElection()}).toLowerCase(),
+                    to: PATH_ELECTION_REPORT(electionId, tallySheetCode)
+                },
             ]}
         />
         <div className="page-content">
             <div>{electionName}</div>
-            <div>{tallySheetCode}</div>
+            <div>{getTallySheetCodeStr({tallySheetCode, election: getElection()})}</div>
             {getTallySheetListJsx()}
         </div>
     </div>
 }
 
-export function ReportViewButton(props) {
-    const {tallySheet} = props;
-
-    const [open, setOpen] = React.useState(false);
-
-    useEffect(() => {
-        if (open && tallySheet) {
-            const {tallySheetId, tallySheetCode} = tallySheet;
-            generateReport(tallySheetId, tallySheetCode)
-        }
-        // getTallySheetVersionHtml
-    }, [open, tallySheet])
-
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
-
-    const handleClose = () => {
-        setOpen(false);
-    };
-    const Transition = React.forwardRef(function Transition(props, ref) {
-        return <Slide direction="up" ref={ref} {...props} />;
-    });
-
-
-    if (open) {
-        return <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
-            <AppBar>
-                <Toolbar>
-                    <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
-                        <CloseIcon/>
-                    </IconButton>
-                    <Typography variant="h6">
-                        Sound
-                    </Typography>
-                    <Button color="inherit" onClick={handleClose}>
-                        save
-                    </Button>
-                </Toolbar>
-            </AppBar>
-            <div>
-
-            </div>
-        </Dialog>
-    } else {
-        return <Button
-            {...props}
-            onClick={(event) => {
-                handleClickOpen();
-                props.onClick && props.onClick(event);
-            }}
-        >
-            {props.children}
-        </Button>
-    }
-
-}
