@@ -4,12 +4,13 @@ import {
     PATH_ELECTION, PATH_ELECTION_BY_ID,
     PATH_ELECTION_DATA_ENTRY, PATH_ELECTION_DATA_ENTRY_EDIT,
     TALLY_SHEET_CODE_CE_201, TALLY_SHEET_CODE_CE_201_PV,
-    TALLY_SHEET_CODE_PRE_41
+    TALLY_SHEET_CODE_PRE_41, TALLY_SHEET_CODE_PRE_34_CO
 } from "../../App";
 import BreadCrumb from "../../components/bread-crumb";
 import DataEntryEdit_PRE_41 from "./data-entry-edit-pre-41";
 import DataEntryEdit_CE_201 from "./data-entry-edit-ce-201";
 import DataEntryEdit_CE_201_PV from "./data-entry-edit-ce-201-pv";
+import DataEntryEdit_PRE_34_CO from "./data-entry-edit-pre-34-co";
 import {getTallySheetCodeStr} from "../../utils/tallySheet";
 
 
@@ -26,6 +27,8 @@ export default function DataEntryEdit({history, queryString, election, tallyShee
             return <DataEntryEdit_CE_201 {...props} />
         } else if (tallySheetCode === TALLY_SHEET_CODE_CE_201_PV) {
             return <DataEntryEdit_CE_201_PV {...props} />
+        } else if (tallySheetCode === TALLY_SHEET_CODE_PRE_34_CO) {
+            return <DataEntryEdit_PRE_34_CO {...props} />
         } else {
             return null;
         }
