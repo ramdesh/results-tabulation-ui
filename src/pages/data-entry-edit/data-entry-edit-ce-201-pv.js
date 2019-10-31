@@ -90,6 +90,7 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
                 for (let i = content.length; i < 6; i++) {
                     addBallotBox({refId: i});
                 }
+
                 console.log(latestVersion);
                 setTotalNumberOfPVPackets(totalPV);
                 // TODO: temporary fix for timezone issues, once the api does the timezone conversion right this can be resolved
@@ -97,6 +98,10 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
                 setCountingCentreSummary({...summary});
                 console.log(summary);
 
+            } else {
+                for (let i = 0; i < 6; i++) {
+                    addBallotBox({refId: i});
+                }
             }
         } catch (error) {
             messages.push("Error", MESSAGES_EN.error_tallysheet_not_reachable, MESSAGE_TYPES.ERROR);
