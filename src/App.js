@@ -70,7 +70,7 @@ export const PATH_ELECTION_REPORT_VIEW = (electionId, tallySheetId) => {
 //     return `${ROUTER_PREFIX}/election/${electionId}/tallySheet-/${tallySheetId}`;
 // };
 
-export const TALLY_SHEET_CODE_PRE_34 = "PRE-34";
+export const TALLY_SHEET_CODE_PRE_34_CO = "PRE-34-CO";
 export const TALLY_SHEET_CODE_PRE_41 = "PRE-41";
 export const TALLY_SHEET_CODE_CE_201 = "CE-201";
 export const TALLY_SHEET_CODE_CE_201_PV = "CE-201-PV";
