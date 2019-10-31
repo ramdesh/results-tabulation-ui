@@ -7,7 +7,7 @@ WORKDIR /app
 RUN npm install
 
 ENV REACT_APP_AUTH_APP_URL="https://tabulations.ecstag.opensource.lk"
-ENV REACT_APP_TABULATION_API_URL="https://api.tabulation.ecstag.opensource.lk"
+ENV REACT_APP_TABULATION_API_URL="https://apim-gw.ecstag.opensource.lk/tabulation/0.1.0"
 
 RUN npm run build
 
