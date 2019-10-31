@@ -44,13 +44,14 @@ export default function DataEntryEdit_CE_201({history, queryString, election, ta
 
     const fetchData = async () => {
         try {
-            const pollingStations = await getPollingStations(tallySheet.area.areaId);
+            const pollingStations = tallySheet.area.pollingStations;
             const pollingStationMap = {};
 
             pollingStations.map((pollingStation) => {
                 pollingStationMap[pollingStation.areaId] = {
                     areaId: pollingStation.areaId,
-                    ordinaryBallotCountFromBoxCount: 0
+                    ordinaryBallotCountFromBoxCount: 0,
+                    pollingDistricts: pollingStation.pollingDistricts
                 };
             });
 
@@ -185,8 +186,8 @@ export default function DataEntryEdit_CE_201({history, queryString, election, ta
             return <Table aria-label="simple table" size={saved ? "small" : "medium"}>
                 <TableHead>
                     <TableRow>
-                        <TableCell align="center">Polling Districts</TableCell>
-                        <TableCell align="center">Polling Station</TableCell>
+                        <TableCell align="left">Polling Districts</TableCell>
+                        <TableCell align="left">Polling Station</TableCell>
                         <TableCell align="center">Ordinary Ballot Count</TableCell>
                     </TableRow>
                 </TableHead>
@@ -196,8 +197,8 @@ export default function DataEntryEdit_CE_201({history, queryString, election, ta
                         const {ordinaryBallotCountFromBoxCount} = pollingStationMap[areaId];
                         const pollingDistrictsStr = pollingDistricts.map(pollingDistrict => pollingDistrict.areaName).join(", ");
                         return <TableRow key={areaId}>
-                            <TableCell align="center">{pollingDistrictsStr}</TableCell>
-                            <TableCell align="center">{areaName}</TableCell>
+                            <TableCell align="left">{pollingDistrictsStr}</TableCell>
+                            <TableCell align="left">{areaName}</TableCell>
                             <TableCell align="center">{ordinaryBallotCountFromBoxCount}</TableCell>
                         </TableRow>
                     })}
@@ -228,8 +229,8 @@ export default function DataEntryEdit_CE_201({history, queryString, election, ta
             return <Table aria-label="simple table" size="medium">
                 <TableHead>
                     <TableRow>
-                        <TableCell align="center">Polling Districts</TableCell>
-                        <TableCell align="center">Polling Station</TableCell>
+                        <TableCell align="left">Polling Districts</TableCell>
+                        <TableCell align="left">Polling Station</TableCell>
                         <TableCell align="center">Ordinary Ballot Count</TableCell>
                     </TableRow>
                 </TableHead>
@@ -243,8 +244,8 @@ export default function DataEntryEdit_CE_201({history, queryString, election, ta
                         const pollingDistrictsStr = pollingDistricts.map(pollingDistrict => pollingDistrict.areaName).join(", ");
 
                         return <TableRow key={areaId}>
-                            <TableCell align="center">{pollingDistrictsStr}</TableCell>
-                            <TableCell align="center">{areaName}</TableCell>
+                            <TableCell align="left">{pollingDistrictsStr}</TableCell>
+                            <TableCell align="left">{areaName}</TableCell>
                             <TableCell align="right">
                                 <TextField
                                     required
