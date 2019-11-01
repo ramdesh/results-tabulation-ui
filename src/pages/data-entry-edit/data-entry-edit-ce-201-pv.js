@@ -381,31 +381,47 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
                         return <TableRow key={ballotBoxRefId}>
                             <TableCell align="center">
                                 <TextField
+                                    variant="outlined"
                                     value={ballotBoxId}
                                     margin="normal"
                                     onChange={handleBallotBoxIdChange(ballotBoxRefId)}
+                                    inputProps={{
+                                        style: {
+                                          height: '10px'
+                                        },
+                                    }}
                                 />
                             </TableCell>
                             <TableCell align="center">
                                 <TextField
                                     required
+                                    variant="outlined"
                                     error={!isNumeric(numberOfPacketsInserted)}
                                     helperText={!isNumeric(numberOfPacketsInserted) ? "Only numeric values are valid" : ''}
-                                    className={"data-entry-edit-count-input"}
                                     value={numberOfPacketsInserted}
                                     margin="normal"
                                     onChange={handleNumberOfPacketsInsertedChange(ballotBoxRefId)}
+                                    inputProps={{
+                                        style: {
+                                          height: '10px'
+                                        },
+                                    }}
                                 />
                             </TableCell>
                             <TableCell align="center">
                                 <TextField
                                     required
+                                    variant="outlined"
                                     error={!isNumeric(numberOfAPacketsFound)}
                                     helperText={!isNumeric(numberOfAPacketsFound) ? "Only numeric values are valid" : ''}
-                                    className={"data-entry-edit-count-input"}
                                     value={numberOfAPacketsFound}
                                     margin="normal"
                                     onChange={handleNumberOfAPacketsFoundChange(ballotBoxRefId)}
+                                    inputProps={{
+                                        style: {
+                                          height: '10px'
+                                        },
+                                    }}
                                 />
                             </TableCell>
                         </TableRow>
@@ -420,12 +436,17 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
                         <TableCell align="center">
                             <TextField
                                 required
+                                variant="outlined"
                                 error={calculateTotalNumberOfPVPackets() !== totalNumberOfPVPackets}
                                 helperText={(calculateTotalNumberOfPVPackets() !== totalNumberOfPVPackets) ? "Total count mismatch" : ''}
-                                className={"data-entry-edit-count-input"}
                                 value={totalNumberOfPVPackets}
                                 margin="normal"
                                 onChange={handleTotalNumberOfPVPacketsChange()}
+                                inputProps={{
+                                    style: {
+                                      height: '10px'
+                                    },
+                                }}
                             />
                         </TableCell>
                     </TableRow>
@@ -436,12 +457,17 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
                         <TableCell align="center">
                             <TextField
                                 required
+                                variant="outlined"
                                 error={!isNumeric(numberOfACoversRejected)}
                                 helperText={!isNumeric(numberOfACoversRejected) ? "Only numeric values are valid" : ''}
-                                className={"data-entry-edit-count-input"}
                                 value={numberOfACoversRejected}
                                 margin="normal"
                                 onChange={handleNumberOfACoversRejectedChange()}
+                                inputProps={{
+                                    style: {
+                                      height: '10px'
+                                    },
+                                }}
                             />
                         </TableCell>
                     </TableRow>
@@ -453,12 +479,17 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
                         <TableCell align="center">
                             <TextField
                                 required
+                                variant="outlined"
                                 error={!isNumeric(numberOfBCoversRejected)}
                                 helperText={!isNumeric(numberOfBCoversRejected) ? "Only numeric values are valid" : ''}
-                                className={"data-entry-edit-count-input"}
                                 value={numberOfBCoversRejected}
                                 margin="normal"
                                 onChange={handleNumberOfBCoversRejectedChange()}
+                                inputProps={{
+                                    style: {
+                                      height: '10px'
+                                    },
+                                }}
                             />
                         </TableCell>
                     </TableRow>
@@ -471,12 +502,17 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
                         <TableCell align="center">
                             <TextField
                                 required
+                                variant="outlined"
                                 error={!isNumeric(numberOfValidBallotPapers)}
                                 helperText={!isNumeric(numberOfValidBallotPapers) ? "Only numeric values are valid" : ''}
-                                className={"data-entry-edit-count-input"}
                                 value={numberOfValidBallotPapers}
                                 margin="normal"
                                 onChange={handleNumberOfValidBallotPapersChange()}
+                                inputProps={{
+                                    style: {
+                                      height: '10px'
+                                    },
+                                }}
                             />
                         </TableCell>
                     </TableRow>
@@ -489,10 +525,15 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
                         <TableCell align="center">
                             <TextField
                                 required
-                                className={"data-entry-edit-count-input"}
+                                variant="outlined"
                                 value={situation}
                                 margin="normal"
                                 onChange={handleSituationChange()}
+                                inputProps={{
+                                    style: {
+                                      height: '10px'
+                                    },
+                                }}
                             />
                         </TableCell>
                     </TableRow>
@@ -504,10 +545,16 @@ export default function DataEntryEdit_CE_201_PV({history, queryString, election,
                         </TableCell>
                         <TableCell align="center">
                             <TextField
+                                variant="outlined"
                                 type='datetime-local'
                                 defaultValue={(timeOfCommencementOfCount == null ? "" : Moment(timeOfCommencementOfCount).format('YYYY-MM-DDTHH:mm'))}
                                 margin="normal"
                                 onChange={handleTimeOfCommencementOfCountChange()}
+                                inputProps={{
+                                    style: {
+                                      height: '10px'
+                                    },
+                                }}
                             />
                         </TableCell>
                     </TableRow>

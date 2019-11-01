@@ -289,21 +289,32 @@ export default function DataEntryEdit_PRE_41({history, queryString, election, ta
                                 <TableCell align="center">
                                     <TextField
                                         required
+                                        variant="outlined"
                                         className={"data-entry-edit-count-in-words-input"}
                                         value={validVoteCountInWords}
                                         margin="normal"
                                         onChange={handleValidVoteCountInWordsChange(candidateId)}
+                                        inputProps={{
+                                            style: {
+                                              height: '10px'
+                                            },
+                                        }}
                                     />
                                 </TableCell>
                                 <TableCell align="center">
                                     <TextField
                                         required
+                                        variant="outlined"
                                         error={!isNumeric(validVoteCount)}
                                         helperText={!isNumeric(validVoteCount) ? "Only numeric values are valid" : ''}
-                                        className={"data-entry-edit-count-input"}
                                         value={validVoteCount}
                                         margin="normal"
                                         onChange={handleValidVoteCountChange(candidateId)}
+                                        inputProps={{
+                                            style: {
+                                              height: '10px'
+                                            },
+                                        }}
                                     />
                                 </TableCell>
                             </TableRow>
@@ -319,7 +330,6 @@ export default function DataEntryEdit_PRE_41({history, queryString, election, ta
                                 required
                                 error={calculateTotalValidVoteCount() !== totalValidVoteCount}
                                 helperText={calculateTotalValidVoteCount() !== totalValidVoteCount ? 'Total valid vote count mismatch!' : ' '}
-                                className={"data-entry-edit-count-input"}
                                 value={totalValidVoteCount}
                                 margin="normal"
                                 onChange={handleTotalValidVoteCountChange()}
@@ -332,7 +342,6 @@ export default function DataEntryEdit_PRE_41({history, queryString, election, ta
                             required
                             error={!isNumeric(rejectedVoteCount)}
                             helperText={!isNumeric(rejectedVoteCount) ? "Only numeric values are valid" : ''}
-                            className={"data-entry-edit-count-input"}
                             value={rejectedVoteCount}
                             margin="normal"
                             onChange={handleRejectedVoteCountChange()}
@@ -345,7 +354,6 @@ export default function DataEntryEdit_PRE_41({history, queryString, election, ta
                                 required
                                 error={calculateTotalVoteCount() !== totalVoteCount}
                                 helperText={calculateTotalVoteCount() !== totalVoteCount ? 'Total vote count mismatch!' : ' '}
-                                className={"data-entry-edit-count-input"}
                                 value={totalVoteCount}
                                 margin="normal"
                                 onChange={handleTotalVoteCountChange()}
