@@ -20,7 +20,7 @@ import {
     TALLY_SHEET_CODE_CE_201,
     TALLY_SHEET_CODE_CE_201_PV,
     TALLY_SHEET_CODE_PRE_41,
-    TALLY_SHEET_CODE_PRE_34_CO
+    TALLY_SHEET_CODE_PRE_34_CO, COUNTING_CENTRE_WISE_DATA_ENTRY_TALLY_SHEET_CODES, PATH_ELECTION_REPORT
 } from "../App";
 import Processing from "../components/processing";
 import Error from "../components/error";
@@ -45,7 +45,7 @@ export default function ReportView(props) {
     const fetchTallySheetVersion = async () => {
         const {tallySheetId, tallySheetCode, latestVersionId, submittedVersionId, lockedVersionId, tallySheetStatus} = tallySheet;
         let tallySheetVersionId = null;
-        if (tallySheetCode === TALLY_SHEET_CODE_PRE_41 || TALLY_SHEET_CODE_PRE_34_CO|| tallySheetCode === TALLY_SHEET_CODE_CE_201 || tallySheetCode === TALLY_SHEET_CODE_CE_201_PV) {
+        if (tallySheetCode === TALLY_SHEET_CODE_PRE_41 || TALLY_SHEET_CODE_PRE_34_CO || tallySheetCode === TALLY_SHEET_CODE_CE_201 || tallySheetCode === TALLY_SHEET_CODE_CE_201_PV) {
             if (lockedVersionId) {
                 tallySheetVersionId = lockedVersionId;
             } else if (submittedVersionId) {
@@ -136,16 +136,25 @@ export default function ReportView(props) {
         const {tallySheetCode, tallySheetStatus} = tallySheet;
         const subElectionId = tallySheet.electionId;
 
+        const breadCrumbLinkList = [
+            {label: "elections", to: PATH_ELECTION()},
+            {label: electionName, to: PATH_ELECTION_BY_ID(electionId)}
+        ];
+        if (COUNTING_CENTRE_WISE_DATA_ENTRY_TALLY_SHEET_CODES.indexOf(tallySheetCode) >= 0) {
+            breadCrumbLinkList.push({
+                label: tallySheetCode.toLowerCase(),
+                to: PATH_ELECTION_DATA_ENTRY(electionId, tallySheetCode, subElectionId)
+            })
+        } else {
+            breadCrumbLinkList.push({
+                label: tallySheetCode.toLowerCase(),
+                to: PATH_ELECTION_REPORT(electionId, tallySheetCode, subElectionId)
+            })
+        }
+
         return <div className="page">
             <BreadCrumb
-                links={[
-                    {label: "elections", to: PATH_ELECTION()},
-                    {label: electionName, to: PATH_ELECTION_BY_ID(electionId)},
-                    {
-                        label: tallySheetCode.toLowerCase(),
-                        to: PATH_ELECTION_DATA_ENTRY(electionId, tallySheetCode, subElectionId)
-                    },
-                ]}
+                links={breadCrumbLinkList}
             />
             <div className="page-content">
                 <div>{electionName}</div>
@@ -164,7 +173,8 @@ export default function ReportView(props) {
                         >
                             Confirm
                         </Button>
-                        {(() => {console.log("TALLY_SHEET_CODE_PRE_41", `${tallySheetCode}-`);
+                        {(() => {
+                            console.log("TALLY_SHEET_CODE_PRE_41", `${tallySheetCode}-`);
                             if (tallySheetCode === TALLY_SHEET_CODE_PRE_41 || tallySheetCode === TALLY_SHEET_CODE_CE_201 || tallySheetCode === TALLY_SHEET_CODE_CE_201_PV) {
                                 return <Button
                                     variant="contained" size="small" color="primary"

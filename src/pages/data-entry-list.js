@@ -160,7 +160,7 @@ export default function DataEntryList({history, queryString, election, subElecti
                                         size="small"
                                         onClick={() => history.push(PATH_ELECTION_REPORT_VIEW(electionId, tallySheet.tallySheetId))}
                                     >
-                                        Confirm
+                                        Verify
                                     </Button>
                                     <Button
                                         variant="outlined" color="default"
