@@ -43,16 +43,13 @@ export default function Election(props) {
                     {election.subElections.map((subElection) => {
                         const subElectionId = subElection.electionId;
                         let subElectionSuffix = "";
-                        let subElectionTitle = "Ordinary Votes";
                         let tallySheetCodes = [TALLY_SHEET_CODE_CE_201, TALLY_SHEET_CODE_PRE_41, TALLY_SHEET_CODE_PRE_34_CO];
                         let tallySheetCodeLabels = ["CE 201", "PRE 41", "PRE 34 CO"];
                         if (subElection.voteType === "Postal") {
-                            subElectionTitle = "Postal Votes";
                             tallySheetCodes = [TALLY_SHEET_CODE_CE_201_PV, TALLY_SHEET_CODE_PRE_41];
                             tallySheetCodeLabels = ["CE 201 PV", "PRE 41 PV"];
                         }
                         return <Grid item xs={12} key={{subElectionId}}>
-                            <Grid item xs={12}><h5>{subElectionTitle}</h5></Grid>
                             <Grid item xs={12}>
                                 <ul className="tally-sheet-code-list">
                                     {tallySheetCodes.map((tallySheetCode, tallySheetCodeIndex) => {
