@@ -51,12 +51,12 @@ export default function Election(props) {
                             tallySheetCodes = [TALLY_SHEET_CODE_CE_201_PV, TALLY_SHEET_CODE_PRE_41, TALLY_SHEET_CODE_PRE_34_CO];
                             tallySheetCodeLabels = ["CE 201 PV", "PRE 41 PV", "PRE 34 CO PV"];
                         }
-                        return <Grid item xs={12} key={{subElectionId}}>
+                        return <Grid item xs={12} key={subElectionId}>
                             <Grid item xs={12}><h5>{subElectionTitle}</h5></Grid>
                             <Grid item xs={12}>
                                 <ul className="tally-sheet-code-list">
                                     {tallySheetCodes.map((tallySheetCode, tallySheetCodeIndex) => {
-                                        return <li>{tallySheetCodeLabels[tallySheetCodeIndex]}
+                                        return <li key={tallySheetCodeIndex}>{tallySheetCodeLabels[tallySheetCodeIndex]}
                                             <Link
                                                 className="tally-sheet-code-list-item btn-select"
                                                 to={PATH_ELECTION_DATA_ENTRY(electionId, tallySheetCode, subElectionId)}

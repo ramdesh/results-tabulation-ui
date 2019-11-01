@@ -76,6 +76,7 @@ export default function DataEntryEdit_PRE_34_CO({history, queryString, election,
         } else {
             const initialCandidateWiseCounts = {};
             election.parties.map(party => {
+                console.log(party.candidates[0]);
                 party.candidates.map(candidate => {
                     initialCandidateWiseCounts[candidate.candidateId] = {
                         candidateId: candidate.candidateId,
@@ -195,9 +196,9 @@ export default function DataEntryEdit_PRE_34_CO({history, queryString, election,
                     <TableRow>
                         <TableCell align="center">Candidate Name</TableCell>
                         <TableCell align="center">Party Symbol</TableCell>
-                        <TableCell align="center">No of 2nd Preferences</TableCell>
-                        <TableCell align="center">No of 3rd Preferences</TableCell>
-                        <TableCell align="center">Total</TableCell>
+                        <TableCell align="center">Total No of 2nd Preferences</TableCell>
+                        <TableCell align="center">Total No of 3rd Preferences</TableCell>
+                        <TableCell align="center">Grand Total</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -249,9 +250,9 @@ export default function DataEntryEdit_PRE_34_CO({history, queryString, election,
                     <TableRow>
                         <TableCell align="center">Candidate Name</TableCell>
                         <TableCell align="center">Party Symbol</TableCell>
-                        <TableCell align="center">No of 2nd Preferences</TableCell>
-                        <TableCell align="center">No of 3rd Preferences</TableCell>
-                        <TableCell align="center">Total</TableCell>
+                        <TableCell align="center">Total No of 2nd Preferences</TableCell>
+                        <TableCell align="center">Total No of 3rd Preferences</TableCell>
+                        <TableCell align="center">Grand Total</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
