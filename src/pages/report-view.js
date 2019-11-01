@@ -20,7 +20,7 @@ import {
     TALLY_SHEET_CODE_CE_201,
     TALLY_SHEET_CODE_CE_201_PV,
     TALLY_SHEET_CODE_PRE_41,
-    TALLY_SHEET_CODE_PRE_34_CO
+    TALLY_SHEET_CODE_PRE_34_CO, COUNTING_CENTRE_WISE_DATA_ENTRY_TALLY_SHEET_CODES
 } from "../App";
 import Processing from "../components/processing";
 import Error from "../components/error";
@@ -164,8 +164,8 @@ export default function ReportView(props) {
                         >
                             Confirm
                         </Button>
-                        {(() => {console.log("TALLY_SHEET_CODE_PRE_41", `${tallySheetCode}-`);
-                            if (tallySheetCode === TALLY_SHEET_CODE_PRE_41 || tallySheetCode === TALLY_SHEET_CODE_CE_201 || tallySheetCode === TALLY_SHEET_CODE_CE_201_PV) {
+                        {(() => {
+                            if (COUNTING_CENTRE_WISE_DATA_ENTRY_TALLY_SHEET_CODES.indexOf(tallySheetCode) > 0) {
                                 return <Button
                                     variant="contained" size="small" color="primary"
                                     disabled={processing || !tallySheet.readyToLock}
