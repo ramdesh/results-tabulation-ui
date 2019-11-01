@@ -79,11 +79,9 @@ export default function DataEntryEdit_PRE_34_CO({history, queryString, election,
             })
         } else {
             const initialCandidateWiseCounts = {};
-            let candidateCount = 0;
             election.parties.map(party => {
                 party.candidates.map(candidate => {
-                    if (candidateCount < 2) {
-                        console.log(initialCandidateWiseCounts[candidate.candidateId]);
+                    if (candidate.qualifiedForPreferences) {
                         initialCandidateWiseCounts[candidate.candidateId] = {
                             candidateId: candidate.candidateId,
                             candidateName: candidate.candidateName,
@@ -91,7 +89,7 @@ export default function DataEntryEdit_PRE_34_CO({history, queryString, election,
                             thirdPreferenceCount: 0,
                             totalCount: 0
                         };
-                        candidateCount++;
+                        candidateIds.push(candidate.candidateId);
                     }
                 });
             });
@@ -201,33 +199,38 @@ export default function DataEntryEdit_PRE_34_CO({history, queryString, election,
     function getTallySheetEditForm() {
         if (saved) {
             return <Table aria-label="simple table" size={saved ? "small" : "medium"}>
-                <TableHead>
-                    <TableRow>
-                        <TableCell colSpan={3} align="center">Candidate 1
-                            - {candidateWiseCounts[candidateIds[0]].candidateName}</TableCell>
-                        <TableCell colSpan={3} align="center">Candidate 2
-                            - {candidateWiseCounts[candidateIds[1]].candidateName}</TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell align="center">Total No of 2nd Preferences</TableCell>
-                        <TableCell align="center">Total No of 3rd Preferences</TableCell>
-                        <TableCell align="center">Grand Total</TableCell>
-                        <TableCell align="center">Total No of 2nd Preferences</TableCell>
-                        <TableCell align="center">Total No of 3rd Preferences</TableCell>
-                        <TableCell align="center">Grand Total</TableCell>
-                    </TableRow>
-                </TableHead>
                 <TableBody>
                     <TableRow>
-                        <TableCell align="center">{candidateWiseCounts[candidateIds[0]].secondPreferenceCount}</TableCell>
-                        <TableCell align="center">{candidateWiseCounts[candidateIds[0]].thirdPreferenceCount}</TableCell>
-                        <TableCell align="center">{candidateWiseCounts[candidateIds[0]].totalCount}</TableCell>
-                        <TableCell align="center">{candidateWiseCounts[candidateIds[1]].secondPreferenceCount}</TableCell>
-                        <TableCell align="center">{candidateWiseCounts[candidateIds[1]].thirdPreferenceCount}</TableCell>
-                        <TableCell align="center">{candidateWiseCounts[candidateIds[1]].totalCount}</TableCell>
+                        {candidateIds.map(candidateId => {
+                            const candidate = candidateWiseCounts[candidateId];
+                            return <TableCell key={candidateId}>
+                                <Table>
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell colSpan={3} align="center">Candidate
+                                                - {candidate.candidateName}</TableCell>
+                                        </TableRow>
+                                        <TableRow>
+                                            <TableCell align="center">Total No of 2nd Preferences</TableCell>
+                                            <TableCell align="center">Total No of 3rd Preferences</TableCell>
+                                            <TableCell align="center">Grand Total</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        <TableRow>
+                                            <TableCell
+                                                align="center">{candidate.secondPreferenceCount}</TableCell>
+                                            <TableCell
+                                                align="center">{candidate.thirdPreferenceCount}</TableCell>
+                                            <TableCell
+                                                align="center">{candidate.totalCount}</TableCell>
+                                        </TableRow>
+                                    </TableBody>
+                                </Table>
+                            </TableCell>
+                        })}
                     </TableRow>
                 </TableBody>
-
                 <TableFooter>
                     <TableRow>
                         <TableCell align="right" colSpan={6}>
@@ -253,94 +256,65 @@ export default function DataEntryEdit_PRE_34_CO({history, queryString, election,
             </Table>
         } else if (!processing) {
             return <Table aria-label="simple table" size={saved ? "small" : "medium"}>
-                <TableHead>
-                    <TableRow>
-                        <TableCell colSpan={3} align="center" borderRight={1}>Candidate 1
-                            - {candidateWiseCounts[candidateIds[0]].candidateName}</TableCell>
-                        <TableCell colSpan={3} align="center">Candidate 2
-                            - {candidateWiseCounts[candidateIds[1]].candidateName}</TableCell>
-                    </TableRow>
-                    <TableRow>
-                        <TableCell align="center">Total No of 2nd Preferences</TableCell>
-                        <TableCell align="center">Total No of 3rd Preferences</TableCell>
-                        <TableCell align="center">Grand Total</TableCell>
-                        <TableCell align="center">Total No of 2nd Preferences</TableCell>
-                        <TableCell align="center">Total No of 3rd Preferences</TableCell>
-                        <TableCell align="center">Grand Total</TableCell>
-                    </TableRow>
-                </TableHead>
                 <TableBody>
                     <TableRow>
-                        <TableCell align="center">
-                            <TextField
-                                required
-                                error={!isNumeric(candidateWiseCounts[candidateIds[0]].secondPreferenceCount)}
-                                helperText={!isNumeric(candidateWiseCounts[candidateIds[0]].secondPreferenceCount) ? "Only numeric values are valid" : ''}
-                                className={"data-entry-edit-count-input"}
-                                value={candidateWiseCounts[candidateIds[0]].secondPreferenceCount}
-                                margin="normal"
-                                onChange={handleCountChange(candidateWiseCounts[candidateIds[0]].candidateId, "secondPreferenceCount")}
-                            />
-                        </TableCell>
-                        <TableCell align="center">
-                            <TextField
-                                required
-                                error={!isNumeric(candidateWiseCounts[candidateIds[0]].thirdPreferenceCount)}
-                                helperText={!isNumeric(candidateWiseCounts[candidateIds[0]].thirdPreferenceCount) ? "Only numeric values are valid" : ''}
-                                className={"data-entry-edit-count-input"}
-                                value={candidateWiseCounts[candidateIds[0]].thirdPreferenceCount}
-                                margin="normal"
-                                onChange={handleCountChange(candidateWiseCounts[candidateIds[0]].candidateId, "thirdPreferenceCount")}
-                            />
-                        </TableCell>
-                        <TableCell align="center">
-                            <TextField
-                                required
-                                error={candidateWiseCounts[candidateIds[0]].totalCount !== candidateWiseCounts[candidateIds[0]].secondPreferenceCount + candidateWiseCounts[candidateIds[0]].thirdPreferenceCount}
-                                helperText={candidateWiseCounts[candidateIds[0]].totalCount !== candidateWiseCounts[candidateIds[0]].secondPreferenceCount + candidateWiseCounts[candidateIds[0]].thirdPreferenceCount ? "Total is incorrect" : ''}
-                                className={"data-entry-edit-count-input"}
-                                value={candidateWiseCounts[candidateIds[0]].totalCount}
-                                margin="normal"
-                                onChange={handleCountChange(candidateWiseCounts[candidateIds[0]].candidateId, "totalCount")}
-                            />
-                        </TableCell>
-                        {/*second candidate from here*/}
-                        <TableCell align="center">
-                            <TextField
-                                required
-                                error={!isNumeric(candidateWiseCounts[candidateIds[1]].secondPreferenceCount)}
-                                helperText={!isNumeric(candidateWiseCounts[candidateIds[1]].secondPreferenceCount) ? "Only numeric values are valid" : ''}
-                                className={"data-entry-edit-count-input"}
-                                value={candidateWiseCounts[candidateIds[1]].secondPreferenceCount}
-                                margin="normal"
-                                onChange={handleCountChange(candidateWiseCounts[candidateIds[1]].candidateId, "secondPreferenceCount")}
-                            />
-                        </TableCell>
-                        <TableCell align="center">
-                            <TextField
-                                required
-                                error={!isNumeric(candidateWiseCounts[candidateIds[1]].thirdPreferenceCount)}
-                                helperText={!isNumeric(candidateWiseCounts[candidateIds[1]].thirdPreferenceCount) ? "Only numeric values are valid" : ''}
-                                className={"data-entry-edit-count-input"}
-                                value={candidateWiseCounts[candidateIds[1]].thirdPreferenceCount}
-                                margin="normal"
-                                onChange={handleCountChange(candidateWiseCounts[candidateIds[1]].candidateId, "thirdPreferenceCount")}
-                            />
-                        </TableCell>
-                        <TableCell align="center">
-                            <TextField
-                                required
-                                error={candidateWiseCounts[candidateIds[1]].totalCount !== candidateWiseCounts[candidateIds[1]].secondPreferenceCount + candidateWiseCounts[candidateIds[1]].thirdPreferenceCount}
-                                helperText={candidateWiseCounts[candidateIds[1]].totalCount !== candidateWiseCounts[candidateIds[1]].secondPreferenceCount + candidateWiseCounts[candidateIds[1]].thirdPreferenceCount ? "Total is incorrect" : ''}
-                                className={"data-entry-edit-count-input"}
-                                value={candidateWiseCounts[candidateIds[1]].totalCount}
-                                margin="normal"
-                                onChange={handleCountChange(candidateWiseCounts[candidateIds[1]].candidateId, "totalCount")}
-                            />
-                        </TableCell>
+                        {candidateIds.map(candidateId => {
+                            const candidate = candidateWiseCounts[candidateId];
+                            return <TableCell key={candidateId}>
+                                <Table>
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell colSpan={3} align="center">Candidate
+                                                - {candidate.candidateName}</TableCell>
+                                        </TableRow>
+                                        <TableRow>
+                                            <TableCell align="center">Total No of 2nd Preferences</TableCell>
+                                            <TableCell align="center">Total No of 3rd Preferences</TableCell>
+                                            <TableCell align="center">Grand Total</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        <TableRow>
+                                            <TableCell align="center">
+                                                <TextField
+                                                    required
+                                                    error={!isNumeric(candidate.secondPreferenceCount)}
+                                                    helperText={!isNumeric(candidate.secondPreferenceCount) ? "Only numeric values are valid" : ''}
+                                                    className={"data-entry-edit-count-input"}
+                                                    value={candidate.secondPreferenceCount}
+                                                    margin="normal"
+                                                    onChange={handleCountChange(candidate.candidateId, "secondPreferenceCount")}
+                                                />
+                                            </TableCell>
+                                            <TableCell align="center">
+                                                <TextField
+                                                    required
+                                                    error={!isNumeric(candidate.thirdPreferenceCount)}
+                                                    helperText={!isNumeric(candidate.thirdPreferenceCount) ? "Only numeric values are valid" : ''}
+                                                    className={"data-entry-edit-count-input"}
+                                                    value={candidate.thirdPreferenceCount}
+                                                    margin="normal"
+                                                    onChange={handleCountChange(candidate.candidateId, "thirdPreferenceCount")}
+                                                />
+                                            </TableCell>
+                                            <TableCell align="center">
+                                                <TextField
+                                                    required
+                                                    error={candidate.totalCount !== candidate.secondPreferenceCount + candidate.thirdPreferenceCount}
+                                                    helperText={candidate.totalCount !== candidate.secondPreferenceCount + candidate.thirdPreferenceCount ? "Total is incorrect" : ''}
+                                                    className={"data-entry-edit-count-input"}
+                                                    value={candidate.totalCount}
+                                                    margin="normal"
+                                                    onChange={handleCountChange(candidate.candidateId, "totalCount")}
+                                                />
+                                            </TableCell>
+                                        </TableRow>
+                                    </TableBody>
+                                </Table>
+                            </TableCell>
+                        })}
                     </TableRow>
                 </TableBody>
-
                 <TableFooter>
                     <TableRow>
                         <TableCell align="right" colSpan={6}>
@@ -354,7 +328,6 @@ export default function DataEntryEdit_PRE_34_CO({history, queryString, election,
                             </div>
                         </TableCell>
                     </TableRow>
-
                 </TableFooter>
 
             </Table>
