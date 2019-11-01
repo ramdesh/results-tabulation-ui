@@ -45,7 +45,7 @@ export default function ReportView(props) {
     const fetchTallySheetVersion = async () => {
         const {tallySheetId, tallySheetCode, latestVersionId, submittedVersionId, lockedVersionId, tallySheetStatus} = tallySheet;
         let tallySheetVersionId = null;
-        if (tallySheetCode === TALLY_SHEET_CODE_PRE_41 || TALLY_SHEET_CODE_PRE_34_CO || tallySheetCode === TALLY_SHEET_CODE_CE_201 || tallySheetCode === TALLY_SHEET_CODE_CE_201_PV) {
+        if (COUNTING_CENTRE_WISE_DATA_ENTRY_TALLY_SHEET_CODES.indexOf(tallySheetCode) >= 0) {
             if (lockedVersionId) {
                 tallySheetVersionId = lockedVersionId;
             } else if (submittedVersionId) {
