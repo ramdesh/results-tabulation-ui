@@ -140,7 +140,7 @@ export async function getTallySheet({electionId, areaId, tallySheetCode, limit =
     const tallySheets = await request({
         url: ENDPOINT_PATH_TALLY_SHEETS(),
         method: 'get',
-        params: {electionId, areaId, tallySheetCode}
+        params: {electionId, areaId, tallySheetCode, limit, offset}
     });
 
     for (let i = 0; i < tallySheets.length; i++) {
