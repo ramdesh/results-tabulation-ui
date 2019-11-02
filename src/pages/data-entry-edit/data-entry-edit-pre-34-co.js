@@ -34,6 +34,7 @@ export default function DataEntryEdit_PRE_34_CO({history, queryString, election,
     const {tallySheetId, tallySheetCode} = tallySheet;
     const {electionId} = election;
 
+    const [candidateIds, setCandidateIds] = useState([]);
     const [candidateWiseCounts, setCandidateWiseCounts] = useState({});
     const [processing, setProcessing] = useState(true);
     const [tallySheetVersion, setTallySheetVersion] = useState(null);
@@ -55,16 +56,19 @@ export default function DataEntryEdit_PRE_34_CO({history, queryString, election,
                     }
                     if (contentRow.preferenceNumber == 2) {
                         preferenceNo = "secondPreferenceCount"
+                        candidateIds.push(contentRow.candidateId);
                     } else if (contentRow.preferenceNumber == 3) {
                         preferenceNo = "thirdPreferenceCount"
                     }
                     latestCandidateWiseCounts[contentRow.candidateId] = {
                         ...latestCandidateWiseCounts[contentRow.candidateId],
                         candidateId: contentRow.candidateId,
+                        candidateName: contentRow.candidateName,
                         [preferenceNo]: contentRow.preferenceCount,
                         totalCount: total + contentRow.preferenceCount
                     };
                 }
+                console.log("latest", candidateIds);
                 console.log("latest", latestCandidateWiseCounts);
                 setCandidateWiseCounts(latestCandidateWiseCounts);
                 setProcessing(false);
@@ -77,12 +81,16 @@ export default function DataEntryEdit_PRE_34_CO({history, queryString, election,
             const initialCandidateWiseCounts = {};
             election.parties.map(party => {
                 party.candidates.map(candidate => {
-                    initialCandidateWiseCounts[candidate.candidateId] = {
-                        candidateId: candidate.candidateId,
-                        secondPreferenceCount: 0,
-                        thirdPreferenceCount: 0,
-                        totalCount: 0
-                    };
+                    if (candidate.qualifiedForPreferences) {
+                        initialCandidateWiseCounts[candidate.candidateId] = {
+                            candidateId: candidate.candidateId,
+                            candidateName: candidate.candidateName,
+                            secondPreferenceCount: 0,
+                            thirdPreferenceCount: 0,
+                            totalCount: 0
+                        };
+                        candidateIds.push(candidate.candidateId);
+                    }
                 });
             });
             setCandidateWiseCounts(initialCandidateWiseCounts);
@@ -191,38 +199,41 @@ export default function DataEntryEdit_PRE_34_CO({history, queryString, election,
     function getTallySheetEditForm() {
         if (saved) {
             return <Table aria-label="simple table" size={saved ? "small" : "medium"}>
-                <TableHead>
-                    <TableRow>
-                        <TableCell align="center">Candidate Name</TableCell>
-                        <TableCell align="center">Party Symbol</TableCell>
-                        <TableCell align="center">No of 2nd Preferences</TableCell>
-                        <TableCell align="center">No of 3rd Preferences</TableCell>
-                        <TableCell align="center">Total</TableCell>
-                    </TableRow>
-                </TableHead>
                 <TableBody>
-                    {election.parties.map(party => {
-                        return party.candidates.map(candidate => {
-                            const {candidateId, candidateName} = candidate;
-                            const {partySymbol} = party;
-                            const candidateWiseCount = candidateWiseCounts[candidateId];
-                            if (candidateWiseCount !== undefined) {
-                                const {secondPreferenceCount, thirdPreferenceCount, totalCount} = candidateWiseCount;
-                                return <TableRow key={candidateId}>
-                                    <TableCell align="center">{candidateName}</TableCell>
-                                    <TableCell align="center">{partySymbol}</TableCell>
-                                    <TableCell align="center">{secondPreferenceCount}</TableCell>
-                                    <TableCell align="right">{thirdPreferenceCount}</TableCell>
-                                    <TableCell align="right">{totalCount}</TableCell>
-                                </TableRow>
-                            }
-                        });
-                    })}
+                    <TableRow>
+                        {candidateIds.map(candidateId => {
+                            const candidate = candidateWiseCounts[candidateId];
+                            return <TableCell key={candidateId}>
+                                <Table>
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell colSpan={3} align="center">Candidate
+                                                - {candidate.candidateName}</TableCell>
+                                        </TableRow>
+                                        <TableRow>
+                                            <TableCell align="center">Total No of 2nd Preferences</TableCell>
+                                            <TableCell align="center">Total No of 3rd Preferences</TableCell>
+                                            <TableCell align="center">Grand Total</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        <TableRow>
+                                            <TableCell
+                                                align="center">{candidate.secondPreferenceCount}</TableCell>
+                                            <TableCell
+                                                align="center">{candidate.thirdPreferenceCount}</TableCell>
+                                            <TableCell
+                                                align="center">{candidate.totalCount}</TableCell>
+                                        </TableRow>
+                                    </TableBody>
+                                </Table>
+                            </TableCell>
+                        })}
+                    </TableRow>
                 </TableBody>
-
                 <TableFooter>
                     <TableRow>
-                        <TableCell align="right" colSpan={4}>
+                        <TableCell align="right" colSpan={6}>
                             <div className="page-bottom-fixed-action-bar">
                                 <Button
                                     variant="contained" color="default" onClick={handleClickNext(false)}
@@ -245,71 +256,68 @@ export default function DataEntryEdit_PRE_34_CO({history, queryString, election,
             </Table>
         } else if (!processing) {
             return <Table aria-label="simple table" size={saved ? "small" : "medium"}>
-                <TableHead>
-                    <TableRow>
-                        <TableCell align="center">Candidate Name</TableCell>
-                        <TableCell align="center">Party Symbol</TableCell>
-                        <TableCell align="center">No of 2nd Preferences</TableCell>
-                        <TableCell align="center">No of 3rd Preferences</TableCell>
-                        <TableCell align="center">Total</TableCell>
-                    </TableRow>
-                </TableHead>
                 <TableBody>
-                    {election.parties.map(party => {
-                        return party.candidates.map(candidate => {
-                            const {candidateId, candidateName} = candidate;
-                            const {partySymbol} = party;
-                            const candidateWiseCount = candidateWiseCounts[candidateId];
-                            if (candidateWiseCount !== undefined) {
-                                const {secondPreferenceCount, thirdPreferenceCount, totalCount} = candidateWiseCount;
-                                return <TableRow key={candidateId}>
-                                    <TableCell align="center">{candidateName}</TableCell>
-                                    <TableCell align="center">{partySymbol}</TableCell>
-                                    <TableCell align="center">
-                                        <TextField
-                                            required
-                                            error={!isNumeric(secondPreferenceCount)}
-                                            helperText={!isNumeric(secondPreferenceCount) ? "Only numeric values are valid" : ''}
-                                            className={"data-entry-edit-count-input"}
-                                            value={secondPreferenceCount}
-                                            margin="normal"
-                                            onChange={handleCountChange(candidateId, "secondPreferenceCount")}
-                                        />
-                                    </TableCell>
-                                    <TableCell align="center">
-                                        <TextField
-                                            required
-                                            error={!isNumeric(thirdPreferenceCount)}
-                                            helperText={!isNumeric(thirdPreferenceCount) ? "Only numeric values are valid" : ''}
-                                            className={"data-entry-edit-count-input"}
-                                            value={thirdPreferenceCount}
-                                            margin="normal"
-                                            onChange={handleCountChange(candidateId, "thirdPreferenceCount")}
-                                        />
-                                    </TableCell>
-                                    <TableCell align="center">
-                                        <TextField
-                                            required
-                                            error={totalCount !== secondPreferenceCount + thirdPreferenceCount}
-                                            helperText={totalCount !== secondPreferenceCount + thirdPreferenceCount ? "Total is incorrect" : ''}
-                                            className={"data-entry-edit-count-input"}
-                                            value={totalCount}
-                                            margin="normal"
-                                            onChange={handleCountChange(candidateId, "totalCount")}
-                                        />
-                                    </TableCell>
-                                </TableRow>
-                            }
-                            else {
-                                return null
-                            }
-                        });
-                    })}
+                    <TableRow>
+                        {candidateIds.map(candidateId => {
+                            const candidate = candidateWiseCounts[candidateId];
+                            return <TableCell key={candidateId}>
+                                <Table>
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell colSpan={3} align="center">Candidate
+                                                - {candidate.candidateName}</TableCell>
+                                        </TableRow>
+                                        <TableRow>
+                                            <TableCell align="center">Total No of 2nd Preferences</TableCell>
+                                            <TableCell align="center">Total No of 3rd Preferences</TableCell>
+                                            <TableCell align="center">Grand Total</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        <TableRow>
+                                            <TableCell align="center">
+                                                <TextField
+                                                    required
+                                                    error={!isNumeric(candidate.secondPreferenceCount)}
+                                                    helperText={!isNumeric(candidate.secondPreferenceCount) ? "Only numeric values are valid" : ''}
+                                                    className={"data-entry-edit-count-input"}
+                                                    value={candidate.secondPreferenceCount}
+                                                    margin="normal"
+                                                    onChange={handleCountChange(candidate.candidateId, "secondPreferenceCount")}
+                                                />
+                                            </TableCell>
+                                            <TableCell align="center">
+                                                <TextField
+                                                    required
+                                                    error={!isNumeric(candidate.thirdPreferenceCount)}
+                                                    helperText={!isNumeric(candidate.thirdPreferenceCount) ? "Only numeric values are valid" : ''}
+                                                    className={"data-entry-edit-count-input"}
+                                                    value={candidate.thirdPreferenceCount}
+                                                    margin="normal"
+                                                    onChange={handleCountChange(candidate.candidateId, "thirdPreferenceCount")}
+                                                />
+                                            </TableCell>
+                                            <TableCell align="center">
+                                                <TextField
+                                                    required
+                                                    error={candidate.totalCount !== candidate.secondPreferenceCount + candidate.thirdPreferenceCount}
+                                                    helperText={candidate.totalCount !== candidate.secondPreferenceCount + candidate.thirdPreferenceCount ? "Total is incorrect" : ''}
+                                                    className={"data-entry-edit-count-input"}
+                                                    value={candidate.totalCount}
+                                                    margin="normal"
+                                                    onChange={handleCountChange(candidate.candidateId, "totalCount")}
+                                                />
+                                            </TableCell>
+                                        </TableRow>
+                                    </TableBody>
+                                </Table>
+                            </TableCell>
+                        })}
+                    </TableRow>
                 </TableBody>
-
                 <TableFooter>
                     <TableRow>
-                        <TableCell align="right" colSpan={5}>
+                        <TableCell align="right" colSpan={6}>
                             <div className="page-bottom-fixed-action-bar">
                                 <Button
                                     variant="contained" color="default" onClick={handleClickNext()}
@@ -320,7 +328,6 @@ export default function DataEntryEdit_PRE_34_CO({history, queryString, election,
                             </div>
                         </TableCell>
                     </TableRow>
-
                 </TableFooter>
 
             </Table>

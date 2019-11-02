@@ -53,7 +53,7 @@ export default function DataEntryList({history, queryString, election, subElecti
             offset: 0
         }).then((tallySheets) => {
             setTallySheets(tallySheets);
-            setProcessing(false);
+            setProcessing(false);debugger;
         }).catch((error) => {
             setError(true);
             setProcessing(false);

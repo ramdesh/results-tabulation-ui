@@ -7,6 +7,9 @@ import {
     PATH_ELECTION_BY_ID,
     PATH_ELECTION_DATA_ENTRY,
     PATH_ELECTION_REPORT, PATH_ELECTION_RESULTS_RELEASE,
+    TALLY_SHEET_CODE_PRE_34,
+    TALLY_SHEET_CODE_PRE_34_I_RO,
+    TALLY_SHEET_CODE_PRE_34_II_RO,
     TALLY_SHEET_CODE_PRE_34_CO,
     TALLY_SHEET_CODE_CE_201,
     TALLY_SHEET_CODE_CE_201_PV,
@@ -48,18 +51,14 @@ export default function Election(props) {
                         if (subElection.voteType === "Postal") {
                             tallySheetCodes = [TALLY_SHEET_CODE_CE_201_PV, TALLY_SHEET_CODE_PRE_41];
                             tallySheetCodeLabels = ["CE 201 PV", "PRE 41 PV"];
+                            tallySheetCodes = [TALLY_SHEET_CODE_CE_201_PV, TALLY_SHEET_CODE_PRE_41, TALLY_SHEET_CODE_PRE_34_CO];
+                            tallySheetCodeLabels = ["CE 201 PV", "PRE 41 PV", "PRE 34 CO PV"];
                         }
-                        return <Grid item xs={12} key={{subElectionId}}>
+                        return <Grid item xs={12} key={subElectionId}>
                             <Grid item xs={12}>
                                 <ul className="tally-sheet-code-list">
                                     {tallySheetCodes.map((tallySheetCode, tallySheetCodeIndex) => {
-                                        return <li>{tallySheetCodeLabels[tallySheetCodeIndex]}
-                                            <Link
-                                                className="tally-sheet-code-list-item btn-select"
-                                                to={PATH_ELECTION_DATA_ENTRY(electionId, tallySheetCode, subElectionId)}
-                                            >
-                                                Select
-                                            </Link>
+                                        return <li key={tallySheetCodeIndex}>{tallySheetCodeLabels[tallySheetCodeIndex]}
                                             <Link
                                                 className="tally-sheet-code-list-item btn-list"
                                                 to={PATH_ELECTION_DATA_ENTRY(electionId, tallySheetCode, subElectionId)}
@@ -99,6 +98,30 @@ export default function Election(props) {
                                 <Link
                                     className="tally-sheet-code-list-item btn-list"
                                     to={PATH_ELECTION_REPORT(electionId, TALLY_SHEET_CODE_PRE_30_ED)}
+                                >
+                                    List
+                                </Link>
+                            </li>
+                            <li>PRE 34 I RO
+                                <Link
+                                    className="tally-sheet-code-list-item btn-list"
+                                    to={PATH_ELECTION_REPORT(electionId, TALLY_SHEET_CODE_PRE_34_I_RO)}
+                                >
+                                    List
+                                </Link>
+                            </li>
+                            <li>PRE 34 II RO
+                                <Link
+                                    className="tally-sheet-code-list-item btn-list"
+                                    to={PATH_ELECTION_REPORT(electionId, TALLY_SHEET_CODE_PRE_34_II_RO)}
+                                >
+                                    List
+                                </Link>
+                            </li>
+                            <li>PRE 34
+                                <Link
+                                    className="tally-sheet-code-list-item btn-list"
+                                    to={PATH_ELECTION_REPORT(electionId, TALLY_SHEET_CODE_PRE_34)}
                                 >
                                     List
                                 </Link>
