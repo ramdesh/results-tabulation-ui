@@ -149,14 +149,23 @@ export default function Election(props) {
                     <Grid item xs={12}><h4>Release</h4></Grid>
                     <Grid item xs={12}>
                         <ul className="tally-sheet-code-list">
-                            <li>PRE 30 PD
-                                <Link
-                                    className="tally-sheet-code-list-item btn-list"
-                                    to={PATH_ELECTION_RESULTS_RELEASE(electionId, TALLY_SHEET_CODE_PRE_30_PD)}
-                                >
-                                    List
-                                </Link>
-                            </li>
+                            {election.subElections.map((subElection) => {
+                                const subElectionId = subElection.electionId;
+                                let tallySheetCode = TALLY_SHEET_CODE_PRE_30_PD;
+                                let tallySheetCodeLabel = "PRE 30 PD";
+                                if (subElection.voteType === "Postal") {
+                                    tallySheetCodeLabel = "PRE 30 PV";
+                                }
+
+                                return <li key={subElectionId}>{tallySheetCodeLabel}
+                                    <Link
+                                        className="tally-sheet-code-list-item btn-list"
+                                        to={PATH_ELECTION_RESULTS_RELEASE(electionId, tallySheetCode, subElectionId)}
+                                    >
+                                        List
+                                    </Link>
+                                </li>
+                            })}
                             <li>PRE 30 ED
                                 <Link
                                     className="tally-sheet-code-list-item btn-list"

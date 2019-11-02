@@ -3,6 +3,8 @@ export const MESSAGES_EN = {
     error_updating_report: "Unknown error occurred while updating the report.",
     error_verifying_report: "Unknown error occurred while verifying the report.",
     error_unlock_report: "Unknown error occurred while unlocking the report.",
+    error_upload: "Unknown error occurred while uploading proof.",
+    error_release: "Unknown error occurred while releasing.",
     error_tallysheet_not_reachable: "Tally sheet is not reachable.",
     error_tallysheet_save: "Unknown error occurred while saving the tally sheet.",
     error_tallysheet_submit: "Unknown error occurred while submitting the tally sheet.",
@@ -11,4 +13,6 @@ export const MESSAGES_EN = {
     success_report_verify: "Report was verified successfully.",
     success_report_unlock: "Report was unlocked successfully.",
     success_pre41_submit:"Tally sheet was submitted successfully",
+    success_upload:"Proof sheet was submitted successfully",
+    success_release: "Report released successfully.",
 };
