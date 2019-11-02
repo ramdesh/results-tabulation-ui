@@ -11,6 +11,8 @@ import DataEntryList from "./pages/data-entry-list";
 import DataEntryEdit from "./pages/data-entry-edit";
 import ReportList from "./pages/report-list";
 import ReportView from "./pages/report-view";
+import ReleaseView from "./pages/release-view";
+import ReleaseList from "./pages/release-list";
 import Processing from "./components/processing";
 
 export const ROUTER_PREFIX = "";
@@ -54,14 +56,31 @@ export const PATH_ELECTION_REPORT = (electionId, tallySheetCode, subElectionId) 
 
     return path;
 };
-export const PATH_ELECTION_RESULTS_RELEASE = (electionId, tallySheetCode) => {
+export const PATH_ELECTION_RESULTS_RELEASE = (electionId, tallySheetCode, subElectionId) => {
     let path = `${ROUTER_PREFIX}/election/${electionId}/release`;
+    if (tallySheetCode || subElectionId) {
+        path += '?';
+    }
+
     if (tallySheetCode) {
-        path += `?tallySheetCode=${tallySheetCode}`;
+        path += `tallySheetCode=${tallySheetCode}`;
+    }
+
+    if (tallySheetCode && subElectionId) {
+        path += '&';
+    }
+
+    if (subElectionId) {
+        path += `subElectionId=${subElectionId}`;
     }
 
     return path;
 };
+
+export const PATH_ELECTION_RESULTS_RELEASE_VIEW = (electionId, tallySheetId) => {
+    return `${ROUTER_PREFIX}/election/${electionId}/release/${tallySheetId}`;
+};
+
 export const PATH_ELECTION_REPORT_VIEW = (electionId, tallySheetId) => {
     return `${ROUTER_PREFIX}/election/${electionId}/report/${tallySheetId}`;
 };
@@ -150,6 +169,19 @@ function App() {
                     path={PATH_ELECTION_REPORT_VIEW(":electionId", ":tallySheetId")}
                     component={ReportView}
                 />
+
+                <ElectionProtectedRoute
+                    exact
+                    path={PATH_ELECTION_RESULTS_RELEASE(":electionId")}
+                    component={ReleaseList}
+                />
+
+                <TallySheetProtectedRoute
+                    exact
+                    path={PATH_ELECTION_RESULTS_RELEASE_VIEW(":electionId", ":tallySheetId")}
+                    component={ReleaseView}
+                />
+
             </Switch>
         </div>
     );

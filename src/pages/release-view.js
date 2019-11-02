@@ -1,40 +1,47 @@
-import React, {Component, useEffect, useState} from "react";
-import {Link} from 'react-router-dom';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
+import React, { Component, useEffect, useState } from "react";
 
 import {
-    getElections,
-    getTallySheet,
-    getTallySheetVersionHtml, lockTallySheet, requestEditForTallySheet,
+    getTallySheetProof, getProofImage,
+    getTallySheetVersionHtml, lockTallySheet, finalizeProof,
     saveTallySheetVersion,
-    TALLY_SHEET_STATUS_ENUM, unlockTallySheet
+    TALLY_SHEET_STATUS_ENUM, unlockTallySheet, uploadTallySheetProof
 } from "../services/tabulation-api";
-import {MessagesProvider, MessagesConsumer, MESSAGE_TYPES} from "../services/messages.provider";
+import { MESSAGE_TYPES } from "../services/messages.provider";
 import {
     PATH_ELECTION, PATH_ELECTION_BY_ID,
-    PATH_ELECTION_DATA_ENTRY, PATH_ELECTION_DATA_ENTRY_EDIT,
-    TALLY_SHEET_CODE_CE_201,
-    TALLY_SHEET_CODE_CE_201_PV,
-    TALLY_SHEET_CODE_PRE_41,
-    TALLY_SHEET_CODE_PRE_34_CO, COUNTING_CENTRE_WISE_DATA_ENTRY_TALLY_SHEET_CODES, PATH_ELECTION_REPORT
+    COUNTING_CENTRE_WISE_DATA_ENTRY_TALLY_SHEET_CODES, PATH_ELECTION_RESULTS_RELEASE
 } from "../App";
 import Processing from "../components/processing";
 import Error from "../components/error";
 import BreadCrumb from "../components/bread-crumb";
 import Button from "@material-ui/core/Button";
-import {MESSAGES_EN} from "../locale/messages_en";
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { MESSAGES_EN } from "../locale/messages_en";
 
 
-export default function ReportView(props) {
-    const {history, election, messages} = props
-    const {electionId, electionName} = election;
+export default function ReleaseView(props) {
+    const PROOF_STATUS_ENUM = {
+        PROOF_NOT_LOADED: -4,
+        PROOF_LOADING: -3,
+        PROOF_NOT_UPLOADED: -2,
+    };
+
+    const RELEASE_STATUS_ENUM = {
+        RELEASE_STATE_NOT_LOADED: -4,
+        RELEASE_STATE_LOADING: -3,
+        RELEASE_UNFINISHED : 0,
+        RELEASE_FINISHED : 1,
+    };
+
+    const { history, election, messages } = props
+    const { electionId, electionName } = election;
     const [tallySheet, setTallySheet] = useState(props.tallySheet);
     const [tallySheetVersionId, setTallySheetVersionId] = useState(null);
     const [tallySheetVersionHtml, setTallySheetVersionHtml] = useState("");
+    const [tallySheetProof, setTallySheetProof] = useState("");
+    const [latestProofId, setLatestProofId] = useState(PROOF_STATUS_ENUM.PROOF_NOT_LOADED);
+    const [releaseState, setReleaseState] = useState(RELEASE_STATUS_ENUM.RELEASE_STATE_NOT_LOADED);
+    const [progress, setProgress] = useState(-1);
     const [processing, setProcessing] = useState(false);
     const [error, setError] = useState(false);
     const [iframeHeight, setIframeHeight] = useState(600);
@@ -43,7 +50,7 @@ export default function ReportView(props) {
 
 
     const fetchTallySheetVersion = async () => {
-        const {tallySheetId, tallySheetCode, latestVersionId, submittedVersionId, lockedVersionId, tallySheetStatus} = tallySheet;
+        const { tallySheetId, tallySheetCode, latestVersionId, submittedVersionId, lockedVersionId, tallySheetStatus } = tallySheet;
         let tallySheetVersionId = null;
         if (COUNTING_CENTRE_WISE_DATA_ENTRY_TALLY_SHEET_CODES.indexOf(tallySheetCode) >= 0) {
             if (lockedVersionId) {
@@ -67,14 +74,45 @@ export default function ReportView(props) {
 
     const fetchTallySheetVersionHtml = async () => {
         setTallySheetVersionHtml("Processing ... ");
-        const {tallySheetId} = tallySheet;
+        const { tallySheetId } = tallySheet;
         const tallySheetVersionHtml = await getTallySheetVersionHtml(tallySheetId, tallySheetVersionId);
 
         setTallySheetVersionHtml(tallySheetVersionHtml)
     };
 
+    const fetchProofStatus = async () => {
+        setLatestProofId(PROOF_STATUS_ENUM.PROOF_LOADING);
+        setReleaseState(RELEASE_STATUS_ENUM.RELEASE_STATE_LOADING);
+        const { submissionProofId } = tallySheet;
+        const proofStatus = await getTallySheetProof(submissionProofId);
+        updateProofStatus(proofStatus);
+    }
+
+    const updateProofStatus = (proofStatus) => {
+        const { scannedFiles, finished } = proofStatus;
+        setReleaseState(finished ? RELEASE_STATUS_ENUM.RELEASE_FINISHED : RELEASE_STATUS_ENUM.RELEASE_UNFINISHED);
+        if (scannedFiles.length > 0) {
+            const latestProof = scannedFiles[scannedFiles.length - 1].fileId;
+            setLatestProofId(latestProof);
+        } else {
+            setLatestProofId(PROOF_STATUS_ENUM.PROOF_NOT_UPLOADED);
+        }
+    }
+
+    const fetchProofImage = async () => {
+        setTallySheetProof("Loading proof image ...");
+        const proofImgArray = await getProofImage(latestProofId);
+        var proofImgBlob = new Blob([proofImgArray], { type: "image/jpeg" });
+        const proofImgDataUrl = URL.createObjectURL(proofImgBlob);
+        setTallySheetProof(proofImgDataUrl)
+    };
+
     useEffect(() => {
-        fetchTallySheetVersion();
+        latestProofId >= 0 && fetchProofImage();
+    }, [latestProofId]);
+
+    useEffect(() => {
+        fetchTallySheetVersion() && fetchProofStatus();
     }, [tallySheet]);
 
     useEffect(() => {
@@ -85,71 +123,69 @@ export default function ReportView(props) {
         setIframeHeight(evt.target.contentDocument.documentElement.scrollHeight + 50);
     };
 
-    const handlePrint = () => (evt) => {
-        iframeRef.current.contentWindow.print();
-    }
-
-    const handleRequestEdit = () => async (evt) => {
+    const handleRelease = () => async (evt) => {
         setProcessing(true);
         const {tallySheetId} = tallySheet;
         try {
-            const tallySheet = await requestEditForTallySheet(tallySheetId);
-            setTallySheet(tallySheet);
-            messages.push("Success", MESSAGES_EN.success_report_editable, MESSAGE_TYPES.SUCCESS);
-            setTimeout(() => {
-                history.push(PATH_ELECTION_DATA_ENTRY_EDIT(electionId, tallySheetId))
-            }, 1000)
+            await finalizeProof(tallySheetId);
+            await fetchProofStatus();
+            messages.push("Success", MESSAGES_EN.success_release, MESSAGE_TYPES.SUCCESS);
         } catch (e) {
             messages.push("Error", MESSAGES_EN.error_updating_report, MESSAGE_TYPES.ERROR);
         }
         setProcessing(false);
     };
 
-    const handleVerify = () => async (evt) => {
+    const handleUpload = () => async (evt) => {
         setProcessing(true);
-        const {tallySheetId} = tallySheet;
         try {
-            const tallySheet = await lockTallySheet(tallySheetId, tallySheetVersionId);
-            setTallySheet(tallySheet);
-            messages.push("Success", MESSAGES_EN.success_report_verify, MESSAGE_TYPES.SUCCESS);
+            const { submissionProofId } = tallySheet;
+            var formData = new FormData();
+            formData.append("proofId", submissionProofId);
+            formData.append("scannedFile", evt.target.files[0]);
+            const proofStatus  = await uploadTallySheetProof(formData, progressEvent => setProgress(100*progressEvent.loaded/progressEvent.total));
+            updateProofStatus(proofStatus);
+            messages.push("Success", MESSAGES_EN.success_upload, MESSAGE_TYPES.SUCCESS);
+            setProgress(-1)
         } catch (e) {
-            messages.push("Error", MESSAGES_EN.error_verifying_report, MESSAGE_TYPES.ERROR);
-        }
-        setProcessing(false);
-    };
-
-    const handleUnlock = () => async (evt) => {
-        setProcessing(true);
-        const {tallySheetId} = tallySheet;
-        try {
-            const tallySheet = await unlockTallySheet(tallySheetId);
-            await setTallySheet(tallySheet);
-            messages.push("Success", MESSAGES_EN.success_report_unlock, MESSAGE_TYPES.SUCCESS);
-            //fetchTallySheetVersion();
-        } catch (e) {
-            messages.push("Error", MESSAGES_EN.error_unlock_report, MESSAGE_TYPES.ERROR);
+            messages.push("Error", MESSAGES_EN.error_upload, MESSAGE_TYPES.ERROR);
         }
         setProcessing(false);
     };
 
     const getReportViewJsx = () => {
-        const {tallySheetCode, tallySheetStatus} = tallySheet;
+        const { tallySheetCode, tallySheetStatus } = tallySheet;
         const subElectionId = tallySheet.electionId;
 
         const breadCrumbLinkList = [
-            {label: "elections", to: PATH_ELECTION()},
-            {label: electionName, to: PATH_ELECTION_BY_ID(electionId)}
+            { label: "elections", to: PATH_ELECTION() },
+            { label: electionName, to: PATH_ELECTION_BY_ID(electionId) }
         ];
-        if (COUNTING_CENTRE_WISE_DATA_ENTRY_TALLY_SHEET_CODES.indexOf(tallySheetCode) >= 0) {
-            breadCrumbLinkList.push({
-                label: tallySheetCode.toLowerCase(),
-                to: PATH_ELECTION_DATA_ENTRY(electionId, tallySheetCode, subElectionId)
-            })
-        } else {
-            breadCrumbLinkList.push({
-                label: tallySheetCode.toLowerCase(),
-                to: PATH_ELECTION_REPORT(electionId, tallySheetCode, subElectionId)
-            })
+        breadCrumbLinkList.push({
+            label: tallySheetCode.toLowerCase() + " release",
+            to: PATH_ELECTION_RESULTS_RELEASE(electionId, tallySheetCode, subElectionId)
+        })
+        let leftPlane;
+
+        if (latestProofId === PROOF_STATUS_ENUM.PROOF_LOADING) {
+            leftPlane = <div style={{ float: "right", width: "50%", textAlign: "center" }}>Loading proof status ...</div>;
+        } else if (latestProofId === PROOF_STATUS_ENUM.PROOF_NOT_UPLOADED) {
+            leftPlane = <div style={{ float: "right", width: "50%", textAlign: "center" }}>Proof not uploaded</div>;
+        } else if (latestProofId >= 0) {
+            if (tallySheetProof.startsWith('blob:')) {
+                leftPlane = <img src={tallySheetProof} style={{ float: "right", width: "50%" }} />;
+            } else {
+                leftPlane = <div style={{ float: "right", width: "50%", textAlign: "center" }}>{tallySheetProof}</div>;
+            }
+        }
+
+        const isUploadDisabled = tallySheet.tallySheetStatus !== TALLY_SHEET_STATUS_ENUM.VERIFIED || 
+                                 releaseState !== RELEASE_STATUS_ENUM.RELEASE_UNFINISHED;
+        const isReleaseDisabled =  isUploadDisabled || latestProofId < 0;
+        const imageTitle = releaseState === RELEASE_STATUS_ENUM.RELEASE_FINISHED ? "Released proof" : "Signed draft";
+        const progressStyle = {};
+        if (progress<0) {
+            progressStyle.visibility = "hidden";
         }
 
         return <div className="page">
@@ -163,62 +199,43 @@ export default function ReportView(props) {
 
                 <div className="report-view-status">
                     <div className="report-view-status-actions">
-                        <Button variant="contained" size="small" color="default" onClick={handlePrint()}>
-                            Print
+
+                        <Button variant="contained" component="label" size="small" disabled={isUploadDisabled || progress > 0} >
+                            Upload Proof
+                            <div style={progressStyle} id="upload-progress">
+                                <CircularProgress variant="static" size={20} value={progress} />
+                            </div>
+                            <input accept="image/*" type="file" style={{ display: 'none' }} onChange={handleUpload()} />
                         </Button>
-                        <Button
-                            variant="contained" size="small" color="primary"
-                            disabled={processing || !tallySheet.readyToLock}
-                            onClick={handleVerify()}
-                        >
-                            Confirm
+
+                        <Button variant="contained" size="small" disabled={isReleaseDisabled} onClick={handleRelease()}>
+                            Release
                         </Button>
-                        {(() => {
-                            console.log("TALLY_SHEET_CODE_PRE_41", `${tallySheetCode}-`);
-                            if (tallySheetCode === TALLY_SHEET_CODE_PRE_41 || tallySheetCode === TALLY_SHEET_CODE_CE_201 || tallySheetCode === TALLY_SHEET_CODE_CE_201_PV) {
-                                return <Button
-                                    variant="contained" size="small" color="primary"
-                                    disabled={processing || !tallySheet.readyToLock}
-                                    onClick={handleRequestEdit()}
-                                >
-                                    Edit
-                                </Button>
-                            }
-                        })()}
-                        <Button
-                            variant="contained" size="small" color="primary"
-                            disabled={!(tallySheetStatus === TALLY_SHEET_STATUS_ENUM.VERIFIED)}
-                            onClick={handleUnlock()}
-                        >
-                            Unlock
-                        </Button>
-                    </div>
-                    <div className="report-view-status-text">
-                        {(() => {
-                            if (tallySheetStatus == TALLY_SHEET_STATUS_ENUM.SUBMITTED) {
-                                return "This report has been submitted to the system and waiting for verification";
-                            } else if (tallySheetStatus == TALLY_SHEET_STATUS_ENUM.VIEWED) {
-                                return "This report has been not verified yet";
-                            } else if (tallySheetStatus == TALLY_SHEET_STATUS_ENUM.ENTERED) {
-                                return "This report has no submitted or verified information. The editing is still in progress.";
-                            } else if (tallySheetStatus == TALLY_SHEET_STATUS_ENUM.VERIFIED) {
-                                return "This report has been verified.";
-                            } else if (tallySheetStatus == TALLY_SHEET_STATUS_ENUM.RELEASED) {
-                                return "This report has been released.";
-                            }
-                        })()}
                     </div>
                 </div>
 
+                <div id="realease-header">
+                    <div id="realease-header-content">
+                        <div>
+                            <h4> Digital copy </h4>
+                        </div>
+                        <div>
+                            <h4> {imageTitle} </h4>
+                        </div>
+                    </div>
+                </div>
 
+                {leftPlane}
                 <iframe
-                    style={{border: "none", width: "100%"}}
+                    id="framehalf"
+                    style={{ border: "none", width: "100%" }}
                     height={iframeHeight}
                     width={iframeWidth}
                     srcDoc={tallySheetVersionHtml}
                     onLoad={handleIframeHeight()}
                     ref={iframeRef}
                 >
+
                 </iframe>
             </div>
         </div>

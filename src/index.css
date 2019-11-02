@@ -192,3 +192,39 @@ ul.bread-crumb li.bread-crumb-list-item a:hover {
     text-decoration: none;
     border-radius: 7px;
 }
+
+#wraphalf { 
+    width: 600px;
+    height: 390px;
+    padding: 0;
+    overflow: hidden;
+ }
+#framehalf {
+    position: absolute;
+    float: right;
+    -ms-zoom: 0.5;
+    -moz-transform: scale(0.50);
+    -moz-transform-origin: 0 0;
+    -o-transform: scale(0.50);
+    -o-transform-origin: 0 0;
+    -webkit-transform: scale(0.50);
+    -webkit-transform-origin: 0 0;
+}
+
+#realease-header{
+    display:table;
+    width: 100%;
+}
+
+#realease-header-content{
+    display:table-row;
+}
+
+#realease-header-content>div{
+    display:table-cell;
+    text-align: center;
+}
+#upload-progress{
+    margin-bottom: -7px;
+    padding-left: 6px;
+}

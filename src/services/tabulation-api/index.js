@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {TABULATION_API_URL} from "../../config";
+import { TABULATION_API_URL } from "../../config";
 import {
     TALLY_SHEET_CODE_CE_201,
     TALLY_SHEET_CODE_CE_201_PV, TALLY_SHEET_CODE_PRE_30_ED,
@@ -9,10 +9,10 @@ import {
     COUNTING_CENTRE_WISE_DATA_ENTRY_TALLY_SHEET_CODES,
     ALL_ISLAND_TALLY_SHEET_CODES
 } from "../../App";
-import {getAccessToken} from "../../auth";
-import {AreaEntity} from "./entities/area.entity";
-import {ElectionEntity, VOTE_TYPE} from "./entities/election.entity";
-import {getFirstOrNull} from "../../utils";
+import { getAccessToken } from "../../auth";
+import { AreaEntity } from "./entities/area.entity";
+import { ElectionEntity, VOTE_TYPE } from "./entities/election.entity";
+import { getFirstOrNull } from "../../utils";
 
 export const ENDPOINT_PATH_ELECTIONS = () => "/election";
 export const ENDPOINT_PATH_ELECTION_AREA = (electionId) => `/election/${electionId}/area`;
@@ -33,6 +33,11 @@ export const ENDPOINT_PATH_TALLY_SHEET_UNLOCK = (tallySheetId) => `/tally-sheet/
 export const ENDPOINT_PATH_TALLY_SHEET_SUBMIT = (tallySheetId) => `/tally-sheet/${tallySheetId}/submit`;
 export const ENDPOINT_PATH_TALLY_SHEET_REQUEST_EDIT = (tallySheetId) => `/tally-sheet/${tallySheetId}/request-edit`;
 export const ENDPOINT_PATH_TALLY_SHEET_VERSION_HTML = (tallySheetId, tallySheetVersionId) => `/tally-sheet/${tallySheetId}/version/${tallySheetVersionId}/html`;
+
+export const ENDPOINT_PATH_TALLY_SHEET_PROOF = (proofId) => `/proof/${proofId}`;
+export const ENDPOINT_PATH_TALLY_SHEET_PROOF_FINISH = (proofId) => `/proof/${proofId}/finish`;
+export const ENDPOINT_PATH_FILE = (proofId) => `/file/${proofId}/download`;
+
 
 const areaEntity = new AreaEntity();
 const electionEntity = new ElectionEntity();
@@ -75,7 +80,7 @@ export const TALLY_SHEET_STATUS_ENUM = {
 
 async function refactorTallySheetObject(tallySheet) {
     tallySheet.tallySheetCode = tallySheet.tallySheetCode.replace(/_/g, "-");
-    const {tallySheetCode, lockedVersionId, submittedVersionId, latestVersionId} = tallySheet;
+    const { tallySheetCode, lockedVersionId, submittedVersionId, latestVersionId } = tallySheet;
     let tallySheetStatus = "";
     let readyToLock = false;
     if (COUNTING_CENTRE_WISE_DATA_ENTRY_TALLY_SHEET_CODES.indexOf(tallySheetCode) >= 0) {
@@ -136,11 +141,11 @@ async function refactorTallySheetObject(tallySheet) {
     return tallySheet
 }
 
-export async function getTallySheet({electionId, areaId, tallySheetCode, limit = 20, offset = 0}) {
+export async function getTallySheet({ electionId, areaId, tallySheetCode, limit = 20, offset = 0 }) {
     const tallySheets = await request({
         url: ENDPOINT_PATH_TALLY_SHEETS(),
         method: 'get',
-        params: {electionId, areaId, tallySheetCode, limit, offset}
+        params: { electionId, areaId, tallySheetCode, limit, offset }
     });
 
     for (let i = 0; i < tallySheets.length; i++) {
@@ -191,6 +196,15 @@ export function lockTallySheet(tallySheetId, tallySheetVersionId) {
 }
 
 
+export function uploadTallySheetProof(formData, onUploadProgress) {
+    return request({
+        url: `/proof/upload`,
+        method: 'put',
+        data: formData,
+        onUploadProgress
+    });
+}
+
 export function unlockTallySheet(tallySheetId, tallySheetVersionId) {
     return request({
         url: ENDPOINT_PATH_TALLY_SHEET_UNLOCK(tallySheetId),
@@ -202,7 +216,6 @@ export function unlockTallySheet(tallySheetId, tallySheetVersionId) {
         return refactorTallySheetObject(tallySheet);
     })
 }
-
 
 export function submitTallySheet(tallySheetId, tallySheetVersionId) {
     return request({
@@ -232,6 +245,29 @@ export function getTallySheetVersionHtml(tallySheetId, tallySheetVersionId) {
         url: ENDPOINT_PATH_TALLY_SHEET_VERSION_HTML(tallySheetId, tallySheetVersionId),
         method: 'get'
     })
+}
+
+
+export function getTallySheetProof(proofId) {
+    return request({
+        url: ENDPOINT_PATH_TALLY_SHEET_PROOF(proofId),
+        method: 'get'
+    });
+}
+
+export function finalizeProof(proofId) {
+    return request({
+        url: ENDPOINT_PATH_TALLY_SHEET_PROOF_FINISH(proofId),
+        method: 'put'
+    });
+}
+
+export function getProofImage(fileId) {
+    return request({
+        url: ENDPOINT_PATH_FILE(fileId),
+        method: 'get',
+        responseType: 'arraybuffer'
+    });
 }
 
 export function generateReport(tallySheetId, tallySheetVersionId) {
