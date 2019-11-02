@@ -9,5 +9,5 @@ export const MESSAGES_EN = {
     success_report_editable: "Report was made editable successfully.",
     success_report_verify: "Report was verified successfully.",
     success_report_unlock: "Report was unlocked successfully.",
-    success_pre41_submit:"PRE-41 tally sheet was submitted successfully",
+    success_pre41_submit:"Tally sheet was submitted successfully",
 };

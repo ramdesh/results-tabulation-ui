@@ -249,12 +249,17 @@ export default function DataEntryEdit_CE_201({history, queryString, election, ta
                             <TableCell align="right">
                                 <TextField
                                     required
+                                    variant="outlined"
                                     error={!isNumeric(ordinaryBallotCountFromBoxCount)}
                                     helperText={!isNumeric(ordinaryBallotCountFromBoxCount) ? "Only numeric values are valid" : ''}
-                                    className={"data-entry-edit-count-input"}
                                     value={ordinaryBallotCountFromBoxCount}
                                     margin="normal"
                                     onChange={handleOrdinaryBallotCountFromBoxCountChange(areaId)}
+                                    inputProps={{
+                                        style: {
+                                          height: '10px'
+                                        },
+                                    }}
                                 />
                             </TableCell>
                         </TableRow>
@@ -269,7 +274,6 @@ export default function DataEntryEdit_CE_201({history, queryString, election, ta
                                 required
                                 error={calculateTotalOrdinaryBallotCountFromBoxCount() !== totalOrdinaryBallotCountFromBoxCount}
                                 helperText={calculateTotalOrdinaryBallotCountFromBoxCount() !== totalOrdinaryBallotCountFromBoxCount ? 'Total ballot count mismatch!' : ' '}
-                                className={"data-entry-edit-count-input"}
                                 value={totalOrdinaryBallotCountFromBoxCount}
                                 margin="normal"
                                 onChange={handleTotalOrdinaryBallotCountFromBoxCountChange()}
