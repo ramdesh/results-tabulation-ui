@@ -116,7 +116,16 @@ export default function ReportView(props) {
                 history.push(getTallySheetListLink())
             }, 500)
         } catch (e) {
-            messages.push("Error", MESSAGES_EN.error_verifying_report, MESSAGE_TYPES.ERROR);
+            debugger;
+            let errorMessage = MESSAGES_EN.error_verifying_report;
+            if (e && e.response && e.response.data && e.response.data.code) {
+                const code = e.response.data.code;
+                if (code === 20) {
+                    errorMessage = MESSAGES_EN.error_tally_sheet_same_user_cannot_submit_and_lock_tally_sheet
+                }
+            }
+
+            messages.push("Error", errorMessage, MESSAGE_TYPES.ERROR);
         }
         setProcessing(false);
     };
