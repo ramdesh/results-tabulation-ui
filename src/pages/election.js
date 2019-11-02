@@ -110,7 +110,7 @@ export default function Election(props) {
                             <li>PRE 34 II RO
                                 <Link
                                     className="tally-sheet-code-list-item btn-list"
-                                    to={PATH_ELECTION_REPORT(electionId, TALLY_SHEET_CODE_PRE_34_I_RO)}
+                                    to={PATH_ELECTION_REPORT(electionId, TALLY_SHEET_CODE_PRE_34_II_RO)}
                                 >
                                     List
                                 </Link>

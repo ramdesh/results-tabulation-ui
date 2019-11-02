@@ -29,7 +29,8 @@ import {
     TALLY_SHEET_CODE_CE_201,
     TALLY_SHEET_CODE_CE_201_PV,
     TALLY_SHEET_CODE_PRE_30_ED,
-    TALLY_SHEET_CODE_PRE_30_PD,
+    TALLY_SHEET_CODE_PRE_30_PD, TALLY_SHEET_CODE_PRE_34_I_RO, TALLY_SHEET_CODE_PRE_34_II_RO,
+    TALLY_SHEET_CODE_PRE_34,
     TALLY_SHEET_CODE_PRE_41,
     TALLY_SHEET_CODE_PRE_ALL_ISLAND_RESULTS,
     TALLY_SHEET_CODE_PRE_ALL_ISLAND_RESULTS_BY_ELECTORAL_DISTRICTS
@@ -85,6 +86,7 @@ export default function ReportList({history, queryString, election, subElection}
     }, [])
 
     function getTallySheetListJsx() {
+        console.log("processing", processing)
         if (processing) {
             return <Processing/>
         } else if (error) {
@@ -96,7 +98,12 @@ export default function ReportList({history, queryString, election, subElection}
                 return getTallySheetListJsx_PRE_30_PD(tallySheets)
             } else if (tallySheetCode === TALLY_SHEET_CODE_PRE_30_ED) {
                 return getTallySheetListJsx_PRE_30_ED(tallySheets)
-            } else if (tallySheetCode === TALLY_SHEET_CODE_PRE_ALL_ISLAND_RESULTS || TALLY_SHEET_CODE_PRE_ALL_ISLAND_RESULTS_BY_ELECTORAL_DISTRICTS) {
+            } else if (tallySheetCode === TALLY_SHEET_CODE_PRE_34_I_RO ||
+                tallySheetCode === TALLY_SHEET_CODE_PRE_34_II_RO ||
+                tallySheetCode === TALLY_SHEET_CODE_PRE_34) {
+                return getTallySheetListJsx_PRE_30_PD(tallySheets)
+            } else if (tallySheetCode === TALLY_SHEET_CODE_PRE_ALL_ISLAND_RESULTS ||
+                tallySheetCode === TALLY_SHEET_CODE_PRE_ALL_ISLAND_RESULTS_BY_ELECTORAL_DISTRICTS) {
                 return getTallySheetListJsx_AllIslandReports(tallySheets)
             }
         }
@@ -123,14 +130,13 @@ export default function ReportList({history, queryString, election, subElection}
             <Button
                 variant="outlined" color="default"
                 disabled={!(tallySheet.tallySheetStatus === TALLY_SHEET_STATUS_ENUM.VERIFIED)}
-                size="small" disabled={tallySheet.lockedVersionId === null}
+                size="small"
                 onClick={() => history.push(PATH_ELECTION_REPORT_VIEW(electionId, tallySheet.tallySheetId))}
             >
                 Unlock
             </Button>
         </TableCell>
     }
-
 
     function getTallySheetListJsx_PRE_30_PD(tallySheets) {
         return <Table aria-label="simple table">
@@ -163,8 +169,8 @@ export default function ReportList({history, queryString, election, subElection}
                             onChange={handleChange('status')}
                         />
                     </TableCell>
-                    <TableCell align="left"></TableCell>
-                    <TableCell align="center"></TableCell>
+                    <TableCell align="left"> </TableCell>
+                    <TableCell align="center"> </TableCell>
                 </TableRow>
                 <TableRow>
                     <TableCell align="left">Electoral District</TableCell>
@@ -213,8 +219,8 @@ export default function ReportList({history, queryString, election, subElection}
                             onChange={handleChange('status')}
                         />
                     </TableCell>
-                    <TableCell align="left"></TableCell>
-                    <TableCell align="center"></TableCell>
+                    <TableCell align="left"> </TableCell>
+                    <TableCell align="center"> </TableCell>
                 </TableRow>
                 <TableRow>
                     <TableCell align="left">Electoral District</TableCell>
