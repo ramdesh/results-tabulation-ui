@@ -112,6 +112,9 @@ export default function ReportView(props) {
             const tallySheet = await lockTallySheet(tallySheetId, tallySheetVersionId);
             setTallySheet(tallySheet);
             messages.push("Success", MESSAGES_EN.success_report_verify, MESSAGE_TYPES.SUCCESS);
+            setTimeout(() => {
+                history.push(getTallySheetListLink())
+            }, 500)
         } catch (e) {
             messages.push("Error", MESSAGES_EN.error_verifying_report, MESSAGE_TYPES.ERROR);
         }
@@ -125,32 +128,37 @@ export default function ReportView(props) {
             const tallySheet = await unlockTallySheet(tallySheetId);
             await setTallySheet(tallySheet);
             messages.push("Success", MESSAGES_EN.success_report_unlock, MESSAGE_TYPES.SUCCESS);
-            //fetchTallySheetVersion();
+            setTimeout(() => {
+                history.push(getTallySheetListLink())
+            }, 500)
         } catch (e) {
             messages.push("Error", MESSAGES_EN.error_unlock_report, MESSAGE_TYPES.ERROR);
         }
         setProcessing(false);
     };
 
+    function getTallySheetListLink() {
+        const {tallySheetCode} = tallySheet;
+        const subElectionId = tallySheet.electionId;
+
+        if (COUNTING_CENTRE_WISE_DATA_ENTRY_TALLY_SHEET_CODES.indexOf(tallySheetCode) >= 0) {
+            return PATH_ELECTION_DATA_ENTRY(electionId, tallySheetCode, subElectionId)
+        } else {
+            return PATH_ELECTION_REPORT(electionId, tallySheetCode, subElectionId)
+        }
+    }
+
     const getReportViewJsx = () => {
         const {tallySheetCode, tallySheetStatus} = tallySheet;
-        const subElectionId = tallySheet.electionId;
 
         const breadCrumbLinkList = [
             {label: "elections", to: PATH_ELECTION()},
-            {label: electionName, to: PATH_ELECTION_BY_ID(electionId)}
+            {label: electionName, to: PATH_ELECTION_BY_ID(electionId)},
+            {
+                label: tallySheetCode.toLowerCase(),
+                to: getTallySheetListLink()
+            }
         ];
-        if (COUNTING_CENTRE_WISE_DATA_ENTRY_TALLY_SHEET_CODES.indexOf(tallySheetCode) >= 0) {
-            breadCrumbLinkList.push({
-                label: tallySheetCode.toLowerCase(),
-                to: PATH_ELECTION_DATA_ENTRY(electionId, tallySheetCode, subElectionId)
-            })
-        } else {
-            breadCrumbLinkList.push({
-                label: tallySheetCode.toLowerCase(),
-                to: PATH_ELECTION_REPORT(electionId, tallySheetCode, subElectionId)
-            })
-        }
 
         return <div className="page">
             <BreadCrumb
