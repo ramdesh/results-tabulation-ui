@@ -85,22 +85,15 @@ export default function ReportList({history, queryString, election, subElection}
     }, [])
 
     function getTallySheetListJsx() {
-        if (processing) {
-            return <Processing/>
-        } else if (error) {
-            return <Error
-                title="Tally sheet list cannot be accessed"
-            />
-        } else {
-            if (tallySheetCode === TALLY_SHEET_CODE_PRE_30_PD) {
-                return getTallySheetListJsx_PRE_30_PD(tallySheets)
-            } else if (tallySheetCode === TALLY_SHEET_CODE_PRE_30_ED) {
-                return getTallySheetListJsx_PRE_30_ED(tallySheets)
-            } else if (tallySheetCode === TALLY_SHEET_CODE_PRE_ALL_ISLAND_RESULTS || TALLY_SHEET_CODE_PRE_ALL_ISLAND_RESULTS_BY_ELECTORAL_DISTRICTS) {
-                return getTallySheetListJsx_AllIslandReports(tallySheets)
-            }
+        if (tallySheetCode === TALLY_SHEET_CODE_PRE_30_PD) {
+            return getTallySheetListJsx_PRE_30_PD(tallySheets)
+        } else if (tallySheetCode === TALLY_SHEET_CODE_PRE_30_ED) {
+            return getTallySheetListJsx_PRE_30_ED(tallySheets)
+        } else if (tallySheetCode === TALLY_SHEET_CODE_PRE_ALL_ISLAND_RESULTS || TALLY_SHEET_CODE_PRE_ALL_ISLAND_RESULTS_BY_ELECTORAL_DISTRICTS) {
+            return getTallySheetListJsx_AllIslandReports(tallySheets)
         }
     }
+
 
     function getActions(tallySheet) {
         return <TableCell align="center">
@@ -134,24 +127,38 @@ export default function ReportList({history, queryString, election, subElection}
 
     function getTallySheetListJsx_PRE_30_PD(tallySheets) {
         let tallySheetRows = [];
-        for (let i = 0; i < tallySheets.length; i++) {
-            const tallySheet = tallySheets[i];
-            if (fieldMatch(getAreaName(tallySheet.electoralDistrict), searchParameters.electoralDistrict) &&
-                fieldMatch(tallySheet.tallySheetStatus, searchParameters.status) &&
-                fieldMatch(getAreaName(tallySheet.pollingDivision), searchParameters.pollingDivision)) {
-                tallySheetRows.push(<TableRow key={tallySheet.tallySheetId}>
-                    <TableCell align="left">{getAreaName(tallySheet.electoralDistrict)}</TableCell>
-                    <TableCell align="left">{getAreaName(tallySheet.pollingDivision)}</TableCell>
-                    <TableCell align="center">{tallySheet.tallySheetStatus}</TableCell>
-                    {getActions(tallySheet)}
-                </TableRow>)
-            }
-        }
-
-        if (tallySheetRows.length === 0) {
+        if (processing) {
             tallySheetRows = <TableRow>
-                <TableCell colSpan={4} align="center">No reports available or authorized to access.</TableCell>
+                <TableCell colSpan={4} align="center">
+                    <Processing/>
+                </TableCell>
             </TableRow>
+        } else if (!tallySheets || error) {
+            tallySheetRows = <TableRow>
+                <TableCell colSpan={4} align="center">
+                    Tally sheet list cannot be accessed
+                </TableCell>
+            </TableRow>
+        } else if (tallySheets) {
+            if (tallySheets.length === 0) {
+                tallySheetRows = <TableRow>
+                    <TableCell colSpan={4} align="center">No reports available or authorized to access.</TableCell>
+                </TableRow>
+            } else {
+                for (let i = 0; i < tallySheets.length; i++) {
+                    const tallySheet = tallySheets[i];
+                    if (fieldMatch(getAreaName(tallySheet.electoralDistrict), searchParameters.electoralDistrict) &&
+                        fieldMatch(tallySheet.tallySheetStatus, searchParameters.status) &&
+                        fieldMatch(getAreaName(tallySheet.pollingDivision), searchParameters.pollingDivision)) {
+                        tallySheetRows.push(<TableRow key={tallySheet.tallySheetId}>
+                            <TableCell align="left">{getAreaName(tallySheet.electoralDistrict)}</TableCell>
+                            <TableCell align="left">{getAreaName(tallySheet.pollingDivision)}</TableCell>
+                            <TableCell align="center">{tallySheet.tallySheetStatus}</TableCell>
+                            {getActions(tallySheet)}
+                        </TableRow>)
+                    }
+                }
+            }
         }
 
         return <Table aria-label="simple table">
@@ -206,23 +213,38 @@ export default function ReportList({history, queryString, election, subElection}
 
     function getTallySheetListJsx_PRE_30_ED(tallySheets) {
         let tallySheetRows = [];
-        for (let i = 0; i < tallySheets.length; i++) {
-            const tallySheet = tallySheets[i];
-            if (fieldMatch(getAreaName(tallySheet), searchParameters.electoralDistrict) &&
-                fieldMatch(tallySheet.tallySheetStatus, searchParameters.status)) {
-                tallySheetRows.push(<TableRow key={tallySheet.tallySheetId}>
-                    <TableCell align="left">{getAreaName(tallySheet.electoralDistrict)}</TableCell>
-                    <TableCell align="center">{tallySheet.tallySheetStatus}</TableCell>
-                    {getActions(tallySheet)}
-                </TableRow>)
+        if (processing) {
+            tallySheetRows = <TableRow>
+                <TableCell colSpan={3} align="center">
+                    <Processing/>
+                </TableCell>
+            </TableRow>
+        } else if (!tallySheetRows || error) {
+            tallySheetRows = <TableRow>
+                <TableCell colSpan={3} align="center">
+                    Tally sheet list cannot be accessed
+                </TableCell>
+            </TableRow>
+        } else if (tallySheets) {
+            if (tallySheets.length === 0) {
+                tallySheetRows = <TableRow>
+                    <TableCell colSpan={3} align="center">No reports available or authorized to access.</TableCell>
+                </TableRow>
+            } else {
+                for (let i = 0; i < tallySheets.length; i++) {
+                    const tallySheet = tallySheets[i];
+                    if (fieldMatch(getAreaName(tallySheet), searchParameters.electoralDistrict) &&
+                        fieldMatch(tallySheet.tallySheetStatus, searchParameters.status)) {
+                        tallySheetRows.push(<TableRow key={tallySheet.tallySheetId}>
+                            <TableCell align="left">{getAreaName(tallySheet.electoralDistrict)}</TableCell>
+                            <TableCell align="center">{tallySheet.tallySheetStatus}</TableCell>
+                            {getActions(tallySheet)}
+                        </TableRow>)
+                    }
+                }
             }
         }
 
-        if (tallySheetRows.length === 0) {
-            tallySheetRows = <TableRow>
-                <TableCell colSpan={3} align="center">No reports available or authorized to access.</TableCell>
-            </TableRow>
-        }
 
         return <Table aria-label="simple table">
             <TableHead>
@@ -262,19 +284,36 @@ export default function ReportList({history, queryString, election, subElection}
     }
 
     function getTallySheetListJsx_AllIslandReports(tallySheets) {
-        let tallySheetRows = tallySheets.map(tallySheet => {
-            return <TableRow key={tallySheet.tallySheetId}>
-                <TableCell align="left">{getAreaName(tallySheet.country)}</TableCell>
-                <TableCell align="center">{tallySheet.tallySheetStatus}</TableCell>
-                {getActions(tallySheet)}
-            </TableRow>
-        });
-
-        if (tallySheetRows.length === 0) {
+        let tallySheetRows = [];
+        if (processing) {
             tallySheetRows = <TableRow>
-                <TableCell colSpan={3} align="center">No reports available or authorized to access.</TableCell>
+                <TableCell colSpan={3} align="center">
+                    <Processing/>
+                </TableCell>
             </TableRow>
+        } else if (!tallySheetRows || error) {
+            tallySheetRows = <TableRow>
+                <TableCell colSpan={3} align="center">
+                    Tally sheet list cannot be accessed
+                </TableCell>
+            </TableRow>
+        } else if (tallySheets) {
+            if (tallySheets.length === 0) {
+                tallySheetRows = <TableRow>
+                    <TableCell colSpan={3} align="center">No reports available or authorized to access.</TableCell>
+                </TableRow>
+            } else {
+                for (let i = 0; i < tallySheets.length; i++) {
+                    const tallySheet = tallySheets[i];
+                    tallySheetRows.push(<TableRow key={tallySheet.tallySheetId}>
+                        <TableCell align="left">{getAreaName(tallySheet.country)}</TableCell>
+                        <TableCell align="center">{tallySheet.tallySheetStatus}</TableCell>
+                        {getActions(tallySheet)}
+                    </TableRow>)
+                }
+            }
         }
+
 
         return <Table aria-label="simple table">
             <TableHead>
