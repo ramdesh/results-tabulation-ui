@@ -191,7 +191,7 @@ export default function ReportView(props) {
                             Confirm
                         </Button>
                         {(() => {
-                            if (COUNTING_CENTRE_WISE_DATA_ENTRY_TALLY_SHEET_CODES.indexOf(tallySheetCode) > 0) {
+                            if (COUNTING_CENTRE_WISE_DATA_ENTRY_TALLY_SHEET_CODES.indexOf(tallySheetCode) >= 0) {
                                 return <Button
                                     variant="contained" size="small" color="primary"
                                     disabled={processing || !tallySheet.readyToLock}
