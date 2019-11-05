@@ -27,6 +27,7 @@ import Error from "../components/error";
 import BreadCrumb from "../components/bread-crumb";
 import Button from "@material-ui/core/Button";
 import {MESSAGES_EN} from "../locale/messages_en";
+import {getTallySheetCodeStr} from "../utils/tallySheet";
 
 
 export default function ReportView(props) {
@@ -116,7 +117,6 @@ export default function ReportView(props) {
                 history.push(getTallySheetListLink())
             }, 500)
         } catch (e) {
-            debugger;
             let errorMessage = MESSAGES_EN.error_verifying_report;
             if (e && e.response && e.response.data && e.response.data.code) {
                 const code = e.response.data.code;
@@ -157,14 +157,16 @@ export default function ReportView(props) {
         }
     }
 
+
     const getReportViewJsx = () => {
         const {tallySheetCode, tallySheetStatus} = tallySheet;
+        const subElection = tallySheet.election;
 
         const breadCrumbLinkList = [
             {label: "elections", to: PATH_ELECTION()},
             {label: electionName, to: PATH_ELECTION_BY_ID(electionId)},
             {
-                label: tallySheetCode.toLowerCase(),
+                label: getTallySheetCodeStr({tallySheetCode, election: subElection}).toLowerCase(),
                 to: getTallySheetListLink()
             }
         ];
@@ -175,7 +177,7 @@ export default function ReportView(props) {
             />
             <div className="page-content">
                 <div>{electionName}</div>
-                <div>{tallySheetCode}</div>
+                <div>{getTallySheetCodeStr({tallySheetCode, election: subElection})}</div>
 
 
                 <div className="report-view-status">

@@ -333,20 +333,22 @@ export default function ReportList({history, queryString, election, subElection}
         </Table>
     }
 
+    const tallySheetCodeStr = getTallySheetCodeStr({tallySheetCode, election: getElection()});
+
     return <div className="page">
         <BreadCrumb
             links={[
                 {label: "elections", to: PATH_ELECTION()},
                 {label: electionName, to: PATH_ELECTION_BY_ID(electionId)},
                 {
-                    label: getTallySheetCodeStr({tallySheetCode, election: getElection()}).toLowerCase(),
+                    label: tallySheetCodeStr.toLowerCase(),
                     to: PATH_ELECTION_REPORT(electionId, tallySheetCode)
                 },
             ]}
         />
         <div className="page-content">
             <div>{electionName}</div>
-            <div>{getTallySheetCodeStr({tallySheetCode, election: getElection()})}</div>
+            <div>{tallySheetCodeStr}</div>
             {getTallySheetListJsx()}
         </div>
     </div>
