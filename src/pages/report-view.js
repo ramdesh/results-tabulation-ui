@@ -15,12 +15,17 @@ import {
 } from "../services/tabulation-api";
 import {MessagesProvider, MessagesConsumer, MESSAGE_TYPES} from "../services/messages.provider";
 import {
-    PATH_ELECTION, PATH_ELECTION_BY_ID,
-    PATH_ELECTION_DATA_ENTRY, PATH_ELECTION_DATA_ENTRY_EDIT,
+    PATH_ELECTION,
+    PATH_ELECTION_BY_ID,
+    PATH_ELECTION_DATA_ENTRY,
+    PATH_ELECTION_DATA_ENTRY_EDIT,
     TALLY_SHEET_CODE_CE_201,
     TALLY_SHEET_CODE_CE_201_PV,
     TALLY_SHEET_CODE_PRE_41,
-    TALLY_SHEET_CODE_PRE_34_CO, COUNTING_CENTRE_WISE_DATA_ENTRY_TALLY_SHEET_CODES, PATH_ELECTION_REPORT
+    TALLY_SHEET_CODE_PRE_34_CO,
+    COUNTING_CENTRE_WISE_DATA_ENTRY_TALLY_SHEET_CODES,
+    PATH_ELECTION_REPORT,
+    PATH_ELECTION_REPORT_VIEW
 } from "../App";
 import Processing from "../components/processing";
 import Error from "../components/error";
@@ -159,7 +164,8 @@ export default function ReportView(props) {
 
 
     const getReportViewJsx = () => {
-        const {tallySheetCode, tallySheetStatus} = tallySheet;
+        const {tallySheetCode, tallySheetStatus, area, tallySheetId} = tallySheet;
+        const {areaName} = area;
         const subElection = tallySheet.election;
 
         const breadCrumbLinkList = [
@@ -168,6 +174,10 @@ export default function ReportView(props) {
             {
                 label: getTallySheetCodeStr({tallySheetCode, election: subElection}).toLowerCase(),
                 to: getTallySheetListLink()
+            },
+            {
+                label: areaName.toLowerCase(),
+                to: PATH_ELECTION_REPORT_VIEW(electionId, tallySheetId)
             }
         ];
 
