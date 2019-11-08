@@ -86,14 +86,11 @@ export default function ReportList({history, queryString, election, subElection}
     }, [])
 
     function getTallySheetListJsx() {
-        if (tallySheetCode === TALLY_SHEET_CODE_PRE_30_PD) {
+        if (tallySheetCode === TALLY_SHEET_CODE_PRE_30_PD || tallySheetCode === TALLY_SHEET_CODE_PRE_34_I_RO) {
             return getTallySheetListJsx_PRE_30_PD(tallySheets)
-        } else if (tallySheetCode === TALLY_SHEET_CODE_PRE_30_ED) {
-            return getTallySheetListJsx_PRE_30_ED(tallySheets)
-        } else if (tallySheetCode === TALLY_SHEET_CODE_PRE_34_I_RO ||
-            tallySheetCode === TALLY_SHEET_CODE_PRE_34_II_RO ||
+        } else if (tallySheetCode === TALLY_SHEET_CODE_PRE_30_ED || tallySheetCode === TALLY_SHEET_CODE_PRE_34_II_RO ||
             tallySheetCode === TALLY_SHEET_CODE_PRE_34) {
-            return getTallySheetListJsx_PRE_30_PD(tallySheets)
+            return getTallySheetListJsx_PRE_30_ED(tallySheets)
         } else if (tallySheetCode === TALLY_SHEET_CODE_PRE_ALL_ISLAND_RESULTS ||
             tallySheetCode === TALLY_SHEET_CODE_PRE_ALL_ISLAND_RESULTS_BY_ELECTORAL_DISTRICTS) {
             return getTallySheetListJsx_AllIslandReports(tallySheets)
