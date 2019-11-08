@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { TABULATION_API_URL } from "../../config";
+import {TABULATION_API_URL} from "../../config";
 import {
     TALLY_SHEET_CODE_CE_201,
     TALLY_SHEET_CODE_CE_201_PV, TALLY_SHEET_CODE_PRE_30_ED,
@@ -7,12 +7,12 @@ import {
     TALLY_SHEET_CODE_PRE_41,
     TALLY_SHEET_CODE_PRE_34_CO,
     COUNTING_CENTRE_WISE_DATA_ENTRY_TALLY_SHEET_CODES,
-    ALL_ISLAND_TALLY_SHEET_CODES
+    ALL_ISLAND_TALLY_SHEET_CODES, TALLY_SHEET_CODE_PRE_34_I_RO, TALLY_SHEET_CODE_PRE_34_II_RO, TALLY_SHEET_CODE_PRE_34
 } from "../../App";
-import { getAccessToken } from "../../auth";
-import { AreaEntity } from "./entities/area.entity";
-import { ElectionEntity, VOTE_TYPE } from "./entities/election.entity";
-import { getFirstOrNull } from "../../utils";
+import {getAccessToken} from "../../auth";
+import {AreaEntity} from "./entities/area.entity";
+import {ElectionEntity, VOTE_TYPE} from "./entities/election.entity";
+import {getFirstOrNull} from "../../utils";
 
 export const ENDPOINT_PATH_ELECTIONS = () => "/election";
 export const ENDPOINT_PATH_ELECTION_AREA = (electionId) => `/election/${electionId}/area`;
@@ -80,7 +80,7 @@ export const TALLY_SHEET_STATUS_ENUM = {
 
 async function refactorTallySheetObject(tallySheet) {
     tallySheet.tallySheetCode = tallySheet.tallySheetCode.replace(/_/g, "-");
-    const { tallySheetCode, lockedVersionId, submittedVersionId, latestVersionId } = tallySheet;
+    const {tallySheetCode, lockedVersionId, submittedVersionId, latestVersionId} = tallySheet;
     let tallySheetStatus = "";
     let readyToLock = false;
     if (COUNTING_CENTRE_WISE_DATA_ENTRY_TALLY_SHEET_CODES.indexOf(tallySheetCode) >= 0) {
@@ -123,7 +123,7 @@ async function refactorTallySheetObject(tallySheet) {
             tallySheet.pollingDivision = pollingDivision;
             tallySheet.electoralDistrict = electoralDistrict;
         }
-    } else if (tallySheetCode === TALLY_SHEET_CODE_PRE_30_PD) {
+    } else if (tallySheetCode === TALLY_SHEET_CODE_PRE_30_PD || tallySheetCode === TALLY_SHEET_CODE_PRE_34_I_RO) {
         if (tallySheet.election.voteType === VOTE_TYPE.POSTAL) {
             tallySheet.electoralDistrict = tallySheet.area;
         } else {
@@ -132,7 +132,7 @@ async function refactorTallySheetObject(tallySheet) {
             tallySheet.pollingDivision = pollingDivision;
             tallySheet.electoralDistrict = electoralDistrict;
         }
-    } else if (tallySheetCode === TALLY_SHEET_CODE_PRE_30_ED) {
+    } else if (tallySheetCode === TALLY_SHEET_CODE_PRE_30_ED || tallySheetCode === TALLY_SHEET_CODE_PRE_34_II_RO || tallySheetCode === TALLY_SHEET_CODE_PRE_34) {
         tallySheet.electoralDistrict = tallySheet.area;
     } else if (ALL_ISLAND_TALLY_SHEET_CODES.indexOf(tallySheetCode) >= 0) {
         tallySheet.country = tallySheet.area;
@@ -141,11 +141,11 @@ async function refactorTallySheetObject(tallySheet) {
     return tallySheet
 }
 
-export async function getTallySheet({ electionId, areaId, tallySheetCode, limit = 20, offset = 0 }) {
+export async function getTallySheet({electionId, areaId, tallySheetCode, limit = 20, offset = 0}) {
     const tallySheets = await request({
         url: ENDPOINT_PATH_TALLY_SHEETS(),
         method: 'get',
-        params: { electionId, areaId, tallySheetCode, limit, offset }
+        params: {electionId, areaId, tallySheetCode, limit, offset}
     });
 
     for (let i = 0; i < tallySheets.length; i++) {

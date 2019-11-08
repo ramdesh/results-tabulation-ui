@@ -15,18 +15,24 @@ import {
 } from "../services/tabulation-api";
 import {MessagesProvider, MessagesConsumer, MESSAGE_TYPES} from "../services/messages.provider";
 import {
-    PATH_ELECTION, PATH_ELECTION_BY_ID,
-    PATH_ELECTION_DATA_ENTRY, PATH_ELECTION_DATA_ENTRY_EDIT,
+    PATH_ELECTION,
+    PATH_ELECTION_BY_ID,
+    PATH_ELECTION_DATA_ENTRY,
+    PATH_ELECTION_DATA_ENTRY_EDIT,
     TALLY_SHEET_CODE_CE_201,
     TALLY_SHEET_CODE_CE_201_PV,
     TALLY_SHEET_CODE_PRE_41,
-    TALLY_SHEET_CODE_PRE_34_CO, COUNTING_CENTRE_WISE_DATA_ENTRY_TALLY_SHEET_CODES, PATH_ELECTION_REPORT
+    TALLY_SHEET_CODE_PRE_34_CO,
+    COUNTING_CENTRE_WISE_DATA_ENTRY_TALLY_SHEET_CODES,
+    PATH_ELECTION_REPORT,
+    PATH_ELECTION_REPORT_VIEW
 } from "../App";
 import Processing from "../components/processing";
 import Error from "../components/error";
 import BreadCrumb from "../components/bread-crumb";
 import Button from "@material-ui/core/Button";
 import {MESSAGES_EN} from "../locale/messages_en";
+import {getTallySheetCodeStr} from "../utils/tallySheet";
 
 
 export default function ReportView(props) {
@@ -116,7 +122,6 @@ export default function ReportView(props) {
                 history.push(getTallySheetListLink())
             }, 500)
         } catch (e) {
-            debugger;
             let errorMessage = MESSAGES_EN.error_verifying_report;
             if (e && e.response && e.response.data && e.response.data.code) {
                 const code = e.response.data.code;
@@ -157,15 +162,22 @@ export default function ReportView(props) {
         }
     }
 
+
     const getReportViewJsx = () => {
-        const {tallySheetCode, tallySheetStatus} = tallySheet;
+        const {tallySheetCode, tallySheetStatus, area, tallySheetId} = tallySheet;
+        const {areaName} = area;
+        const subElection = tallySheet.election;
 
         const breadCrumbLinkList = [
             {label: "elections", to: PATH_ELECTION()},
             {label: electionName, to: PATH_ELECTION_BY_ID(electionId)},
             {
-                label: tallySheetCode.toLowerCase(),
+                label: getTallySheetCodeStr({tallySheetCode, election: subElection}).toLowerCase(),
                 to: getTallySheetListLink()
+            },
+            {
+                label: areaName.toLowerCase(),
+                to: PATH_ELECTION_REPORT_VIEW(electionId, tallySheetId)
             }
         ];
 
@@ -175,7 +187,7 @@ export default function ReportView(props) {
             />
             <div className="page-content">
                 <div>{electionName}</div>
-                <div>{tallySheetCode}</div>
+                <div>{getTallySheetCodeStr({tallySheetCode, election: subElection})}</div>
 
 
                 <div className="report-view-status">
