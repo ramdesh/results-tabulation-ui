@@ -17,7 +17,7 @@ import {
     TALLY_SHEET_CODE_PRE_30_PD,
     TALLY_SHEET_CODE_PRE_41,
     TALLY_SHEET_CODE_PRE_ALL_ISLAND_RESULTS,
-    TALLY_SHEET_CODE_PRE_ALL_ISLAND_RESULTS_BY_ELECTORAL_DISTRICTS
+    TALLY_SHEET_CODE_PRE_ALL_ISLAND_RESULTS_BY_ELECTORAL_DISTRICTS, TALLY_SHEET_CODE_PRE_34_PD
 } from "../App";
 import Grid from '@material-ui/core/Grid';
 import BreadCrumb from "../components/bread-crumb";
@@ -121,23 +121,42 @@ export default function Election(props) {
                                 </li>
                             })}
 
-                            <li>PRE 34 II RO
-                                <Link
-                                    className="tally-sheet-code-list-item btn-list"
-                                    to={PATH_ELECTION_REPORT(electionId, TALLY_SHEET_CODE_PRE_34_II_RO)}
-                                >
-                                    List
-                                </Link>
-                            </li>
 
-                            <li>PRE 34
-                                <Link
-                                    className="tally-sheet-code-list-item btn-list"
-                                    to={PATH_ELECTION_REPORT(electionId, TALLY_SHEET_CODE_PRE_34)}
-                                >
-                                    List
-                                </Link>
-                            </li>
+                            {election.subElections.map((subElection) => {
+                                const subElectionId = subElection.electionId;
+                                let tallySheetCode = TALLY_SHEET_CODE_PRE_34_PD;
+                                let tallySheetCodeLabel = "PRE 34 PD";
+                                if (subElection.voteType === "Postal") {
+                                    tallySheetCodeLabel = "PRE 34 PV";
+                                }
+
+                                return <li key={subElectionId}>{tallySheetCodeLabel}
+                                    <Link
+                                        className="tally-sheet-code-list-item btn-list"
+                                        to={PATH_ELECTION_REPORT(electionId, tallySheetCode, subElectionId)}
+                                    >
+                                        List
+                                    </Link>
+                                </li>
+                            })}
+
+                            {/*<li>PRE 34 II RO*/}
+                            {/*    <Link*/}
+                            {/*        className="tally-sheet-code-list-item btn-list"*/}
+                            {/*        to={PATH_ELECTION_REPORT(electionId, TALLY_SHEET_CODE_PRE_34_II_RO)}*/}
+                            {/*    >*/}
+                            {/*        List*/}
+                            {/*    </Link>*/}
+                            {/*</li>*/}
+
+                            {/*<li>PRE 34*/}
+                            {/*    <Link*/}
+                            {/*        className="tally-sheet-code-list-item btn-list"*/}
+                            {/*        to={PATH_ELECTION_REPORT(electionId, TALLY_SHEET_CODE_PRE_34)}*/}
+                            {/*    >*/}
+                            {/*        List*/}
+                            {/*    </Link>*/}
+                            {/*</li>*/}
 
                             <li>All Island ED
                                 <Link

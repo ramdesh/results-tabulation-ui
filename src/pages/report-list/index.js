@@ -33,7 +33,7 @@ import {
     TALLY_SHEET_CODE_PRE_34,
     TALLY_SHEET_CODE_PRE_41,
     TALLY_SHEET_CODE_PRE_ALL_ISLAND_RESULTS,
-    TALLY_SHEET_CODE_PRE_ALL_ISLAND_RESULTS_BY_ELECTORAL_DISTRICTS
+    TALLY_SHEET_CODE_PRE_ALL_ISLAND_RESULTS_BY_ELECTORAL_DISTRICTS, TALLY_SHEET_CODE_PRE_34_PD
 } from "../../App";
 import Processing from "../../components/processing";
 import Error from "../../components/error";
@@ -86,7 +86,7 @@ export default function ReportList({history, queryString, election, subElection}
     }, [])
 
     function getTallySheetListJsx() {
-        if (tallySheetCode === TALLY_SHEET_CODE_PRE_30_PD || tallySheetCode === TALLY_SHEET_CODE_PRE_34_I_RO) {
+        if (tallySheetCode === TALLY_SHEET_CODE_PRE_30_PD || tallySheetCode === TALLY_SHEET_CODE_PRE_34_I_RO || tallySheetCode === TALLY_SHEET_CODE_PRE_34_PD) {
             return getTallySheetListJsx_PRE_30_PD(tallySheets)
         } else if (tallySheetCode === TALLY_SHEET_CODE_PRE_30_ED || tallySheetCode === TALLY_SHEET_CODE_PRE_34_II_RO ||
             tallySheetCode === TALLY_SHEET_CODE_PRE_34) {
