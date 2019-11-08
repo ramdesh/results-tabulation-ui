@@ -234,7 +234,7 @@ export default function ReportList({history, queryString, election, subElection}
             } else {
                 for (let i = 0; i < tallySheets.length; i++) {
                     const tallySheet = tallySheets[i];
-                    if (fieldMatch(getAreaName(tallySheet), searchParameters.electoralDistrict) &&
+                    if (fieldMatch(getAreaName(tallySheet.electoralDistrict), searchParameters.electoralDistrict) &&
                         fieldMatch(tallySheet.tallySheetStatus, searchParameters.status)) {
                         tallySheetRows.push(<TableRow key={tallySheet.tallySheetId}>
                             <TableCell align="left">{getAreaName(tallySheet.electoralDistrict)}</TableCell>
