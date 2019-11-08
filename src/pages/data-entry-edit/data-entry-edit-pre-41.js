@@ -46,7 +46,6 @@ export default function DataEntryEdit_PRE_41({history, queryString, election, ta
     useEffect(() => {
         if (tallySheet.latestVersionId) {
             getTallySheetVersionById(tallySheetId, tallySheetCode, tallySheet.latestVersionId).then((tallySheetVersion) => {
-                console.log("hello", tallySheetVersion);
                 const latestCandidateWiseCounts = {};
                 const {content, summary} = tallySheetVersion;
                 let validTotal = 0;
@@ -152,7 +151,7 @@ export default function DataEntryEdit_PRE_41({history, queryString, election, ta
             const {tallySheetVersionId} = tallySheetVersion;
             const tallySheet = await submitTallySheet(tallySheetId, tallySheetVersionId);
 
-            messages.push("Success",MESSAGES_EN.success_pre41_submit, MESSAGE_TYPES.SUCCESS);
+            messages.push("Success", MESSAGES_EN.success_pre41_submit, MESSAGE_TYPES.SUCCESS);
             setTimeout(() => {
                 const subElectionId = tallySheet.electionId;
                 history.push(PATH_ELECTION_DATA_ENTRY(electionId, tallySheetCode, subElectionId));
@@ -169,7 +168,7 @@ export default function DataEntryEdit_PRE_41({history, queryString, election, ta
         for (let key in candidateWiseCounts) {
             total += parseInt(candidateWiseCounts[key]["validVoteCount"])
         }
-        console.log(total);
+
         return total;
     }
 
@@ -296,7 +295,7 @@ export default function DataEntryEdit_PRE_41({history, queryString, election, ta
                                         onChange={handleValidVoteCountInWordsChange(candidateId)}
                                         inputProps={{
                                             style: {
-                                              height: '10px'
+                                                height: '10px'
                                             },
                                         }}
                                     />
@@ -312,7 +311,7 @@ export default function DataEntryEdit_PRE_41({history, queryString, election, ta
                                         onChange={handleValidVoteCountChange(candidateId)}
                                         inputProps={{
                                             style: {
-                                              height: '10px'
+                                                height: '10px'
                                             },
                                         }}
                                     />

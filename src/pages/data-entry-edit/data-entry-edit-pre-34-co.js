@@ -41,8 +41,31 @@ export default function DataEntryEdit_PRE_34_CO({history, queryString, election,
     const [processingLabel, setProcessingLabel] = useState("Loading");
     const [saved, setSaved] = useState(false);
 
+    function getQualifiedParties() {
+        const qualifiedParties = election.parties.filter(party => {
+            for (let i = 0; i < party.candidates.length; i++) {
+                let candidate = party.candidates[i];
+                if (candidate.qualifiedForPreferences) {
+                    return true;
+                }
+            }
+
+            return false;
+        });
+
+        return qualifiedParties
+    }
+
     useEffect(() => {
-        if (tallySheet.latestVersionId) {
+        const subElectionId = tallySheet.electionId;
+        const qualifiedParties = getQualifiedParties();
+
+        if (qualifiedParties.length === 0) {
+            messages.push("Error", MESSAGES_EN.error_preferences_not_enabled_yet, MESSAGE_TYPES.ERROR);
+            setTimeout(() => {
+                history.push(PATH_ELECTION_DATA_ENTRY(electionId, tallySheetCode, subElectionId));
+            }, 5000);
+        } else if (tallySheet.latestVersionId) {
             getTallySheetVersionById(tallySheetId, tallySheetCode, tallySheet.latestVersionId).then((tallySheetVersion) => {
                 const latestCandidateWiseCounts = {};
                 const {content} = tallySheetVersion;
