@@ -29,11 +29,15 @@ import {
     TALLY_SHEET_CODE_CE_201,
     TALLY_SHEET_CODE_CE_201_PV,
     TALLY_SHEET_CODE_PRE_30_ED,
-    TALLY_SHEET_CODE_PRE_30_PD, TALLY_SHEET_CODE_PRE_34_I_RO, TALLY_SHEET_CODE_PRE_34_II_RO,
+    TALLY_SHEET_CODE_PRE_30_PD,
+    TALLY_SHEET_CODE_PRE_34_I_RO,
+    TALLY_SHEET_CODE_PRE_34_II_RO,
     TALLY_SHEET_CODE_PRE_34,
     TALLY_SHEET_CODE_PRE_41,
     TALLY_SHEET_CODE_PRE_ALL_ISLAND_RESULTS,
-    TALLY_SHEET_CODE_PRE_ALL_ISLAND_RESULTS_BY_ELECTORAL_DISTRICTS, TALLY_SHEET_CODE_PRE_34_PD
+    TALLY_SHEET_CODE_PRE_ALL_ISLAND_RESULTS_BY_ELECTORAL_DISTRICTS,
+    TALLY_SHEET_CODE_PRE_34_PD,
+    TALLY_SHEET_CODE_PRE_34_ED
 } from "../../App";
 import Processing from "../../components/processing";
 import Error from "../../components/error";
@@ -89,7 +93,7 @@ export default function ReportList({history, queryString, election, subElection}
         if (tallySheetCode === TALLY_SHEET_CODE_PRE_30_PD || tallySheetCode === TALLY_SHEET_CODE_PRE_34_I_RO || tallySheetCode === TALLY_SHEET_CODE_PRE_34_PD) {
             return getTallySheetListJsx_PRE_30_PD(tallySheets)
         } else if (tallySheetCode === TALLY_SHEET_CODE_PRE_30_ED || tallySheetCode === TALLY_SHEET_CODE_PRE_34_II_RO ||
-            tallySheetCode === TALLY_SHEET_CODE_PRE_34) {
+            tallySheetCode === TALLY_SHEET_CODE_PRE_34 || tallySheetCode=== TALLY_SHEET_CODE_PRE_34_ED) {
             return getTallySheetListJsx_PRE_30_ED(tallySheets)
         } else if (tallySheetCode === TALLY_SHEET_CODE_PRE_ALL_ISLAND_RESULTS ||
             tallySheetCode === TALLY_SHEET_CODE_PRE_ALL_ISLAND_RESULTS_BY_ELECTORAL_DISTRICTS) {

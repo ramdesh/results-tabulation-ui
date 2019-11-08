@@ -6,7 +6,8 @@ import {
     PATH_ELECTION,
     PATH_ELECTION_BY_ID,
     PATH_ELECTION_DATA_ENTRY,
-    PATH_ELECTION_REPORT, PATH_ELECTION_RESULTS_RELEASE,
+    PATH_ELECTION_REPORT,
+    PATH_ELECTION_RESULTS_RELEASE,
     TALLY_SHEET_CODE_PRE_34,
     TALLY_SHEET_CODE_PRE_34_I_RO,
     TALLY_SHEET_CODE_PRE_34_II_RO,
@@ -17,7 +18,9 @@ import {
     TALLY_SHEET_CODE_PRE_30_PD,
     TALLY_SHEET_CODE_PRE_41,
     TALLY_SHEET_CODE_PRE_ALL_ISLAND_RESULTS,
-    TALLY_SHEET_CODE_PRE_ALL_ISLAND_RESULTS_BY_ELECTORAL_DISTRICTS, TALLY_SHEET_CODE_PRE_34_PD
+    TALLY_SHEET_CODE_PRE_ALL_ISLAND_RESULTS_BY_ELECTORAL_DISTRICTS,
+    TALLY_SHEET_CODE_PRE_34_PD,
+    TALLY_SHEET_CODE_PRE_34_ED, TALLY_SHEET_CODE_PRE_34_AI
 } from "../App";
 import Grid from '@material-ui/core/Grid';
 import BreadCrumb from "../components/bread-crumb";
@@ -157,6 +160,26 @@ export default function Election(props) {
                             {/*        List*/}
                             {/*    </Link>*/}
                             {/*</li>*/}
+
+
+                            <li>PRE 34 ED
+                                <Link
+                                    className="tally-sheet-code-list-item btn-list"
+                                    to={PATH_ELECTION_REPORT(electionId, TALLY_SHEET_CODE_PRE_34_ED)}
+                                >
+                                    List
+                                </Link>
+                            </li>
+
+
+                            <li>PRE 34 AI
+                                <Link
+                                    className="tally-sheet-code-list-item btn-list"
+                                    to={PATH_ELECTION_REPORT(electionId, TALLY_SHEET_CODE_PRE_34_AI)}
+                                >
+                                    List
+                                </Link>
+                            </li>
 
                             <li>All Island ED
                                 <Link
