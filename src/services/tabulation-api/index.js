@@ -2,12 +2,17 @@ import axios from 'axios';
 import {TABULATION_API_URL} from "../../config";
 import {
     TALLY_SHEET_CODE_CE_201,
-    TALLY_SHEET_CODE_CE_201_PV, TALLY_SHEET_CODE_PRE_30_ED,
+    TALLY_SHEET_CODE_CE_201_PV,
+    TALLY_SHEET_CODE_PRE_30_ED,
     TALLY_SHEET_CODE_PRE_30_PD,
     TALLY_SHEET_CODE_PRE_41,
     TALLY_SHEET_CODE_PRE_34_CO,
     COUNTING_CENTRE_WISE_DATA_ENTRY_TALLY_SHEET_CODES,
-    ALL_ISLAND_TALLY_SHEET_CODES, TALLY_SHEET_CODE_PRE_34_I_RO, TALLY_SHEET_CODE_PRE_34_II_RO, TALLY_SHEET_CODE_PRE_34
+    ALL_ISLAND_TALLY_SHEET_CODES,
+    TALLY_SHEET_CODE_PRE_34_I_RO,
+    TALLY_SHEET_CODE_PRE_34_II_RO,
+    TALLY_SHEET_CODE_PRE_34,
+    TALLY_SHEET_CODE_PRE_34_PD, TALLY_SHEET_CODE_PRE_34_ED
 } from "../../App";
 import {getAccessToken} from "../../auth";
 import {AreaEntity} from "./entities/area.entity";
@@ -123,7 +128,7 @@ async function refactorTallySheetObject(tallySheet) {
             tallySheet.pollingDivision = pollingDivision;
             tallySheet.electoralDistrict = electoralDistrict;
         }
-    } else if (tallySheetCode === TALLY_SHEET_CODE_PRE_30_PD || tallySheetCode === TALLY_SHEET_CODE_PRE_34_I_RO) {
+    } else if (tallySheetCode === TALLY_SHEET_CODE_PRE_30_PD || tallySheetCode === TALLY_SHEET_CODE_PRE_34_I_RO || tallySheetCode === TALLY_SHEET_CODE_PRE_34_PD) {
         if (tallySheet.election.voteType === VOTE_TYPE.POSTAL) {
             tallySheet.electoralDistrict = tallySheet.area;
         } else {
@@ -132,7 +137,7 @@ async function refactorTallySheetObject(tallySheet) {
             tallySheet.pollingDivision = pollingDivision;
             tallySheet.electoralDistrict = electoralDistrict;
         }
-    } else if (tallySheetCode === TALLY_SHEET_CODE_PRE_30_ED || tallySheetCode === TALLY_SHEET_CODE_PRE_34_II_RO || tallySheetCode === TALLY_SHEET_CODE_PRE_34) {
+    } else if (tallySheetCode === TALLY_SHEET_CODE_PRE_30_ED || tallySheetCode === TALLY_SHEET_CODE_PRE_34_II_RO || tallySheetCode === TALLY_SHEET_CODE_PRE_34 || tallySheetCode === TALLY_SHEET_CODE_PRE_34_ED) {
         tallySheet.electoralDistrict = tallySheet.area;
     } else if (ALL_ISLAND_TALLY_SHEET_CODES.indexOf(tallySheetCode) >= 0) {
         tallySheet.country = tallySheet.area;
