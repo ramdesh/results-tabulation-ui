@@ -40,8 +40,8 @@ export default function ReportView(props) {
     const {electionId, electionName} = election;
     const [tallySheet, setTallySheet] = useState(props.tallySheet);
     const [tallySheetVersionId, setTallySheetVersionId] = useState(null);
-    const [tallySheetVersionHtml, setTallySheetVersionHtml] = useState("");
-    const [processing, setProcessing] = useState(false);
+    const [tallySheetVersionHtml, setTallySheetVersionHtml] = useState(null);
+    const [processing, setProcessing] = useState(true);
     const [error, setError] = useState(false);
     const [iframeHeight, setIframeHeight] = useState(600);
     const [iframeWidth, setIframeWidth] = useState("100%");
@@ -69,23 +69,21 @@ export default function ReportView(props) {
         }
 
         setTallySheetVersionId(tallySheetVersionId);
+
+        if (tallySheetVersionId) {
+            const tallySheetVersionHtml = await getTallySheetVersionHtml(tallySheetId, tallySheetVersionId);
+
+            setTallySheetVersionHtml(tallySheetVersionHtml)
+        }
+
+        setProcessing(false);
     };
 
-    const fetchTallySheetVersionHtml = async () => {
-        setTallySheetVersionHtml("Processing ... ");
-        const {tallySheetId} = tallySheet;
-        const tallySheetVersionHtml = await getTallySheetVersionHtml(tallySheetId, tallySheetVersionId);
-
-        setTallySheetVersionHtml(tallySheetVersionHtml)
-    };
 
     useEffect(() => {
         fetchTallySheetVersion();
     }, [tallySheet]);
 
-    useEffect(() => {
-        tallySheetVersionId && fetchTallySheetVersionHtml();
-    }, [tallySheetVersionId]);
 
     const handleIframeHeight = () => (evt) => {
         setIframeHeight(evt.target.contentDocument.documentElement.scrollHeight + 50);
@@ -238,16 +236,17 @@ export default function ReportView(props) {
                     </div>
                 </div>
 
-
-                <iframe
-                    style={{border: "none", width: "100%"}}
-                    height={iframeHeight}
-                    width={iframeWidth}
-                    srcDoc={tallySheetVersionHtml}
-                    onLoad={handleIframeHeight()}
-                    ref={iframeRef}
-                >
-                </iframe>
+                <Processing showProgress={processing}>
+                    <iframe
+                        style={{border: "none", width: "100%"}}
+                        height={iframeHeight}
+                        width={iframeWidth}
+                        srcDoc={tallySheetVersionHtml}
+                        onLoad={handleIframeHeight()}
+                        ref={iframeRef}
+                    >
+                    </iframe>
+                </Processing>
             </div>
         </div>
     }
