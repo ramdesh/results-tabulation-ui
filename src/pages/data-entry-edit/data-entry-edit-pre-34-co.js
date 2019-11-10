@@ -40,6 +40,7 @@ export default function DataEntryEdit_PRE_34_CO({history, queryString, election,
     const [tallySheetVersion, setTallySheetVersion] = useState(null);
     const [processingLabel, setProcessingLabel] = useState("Loading");
     const [saved, setSaved] = useState(false);
+    const [summary, setSummary] = useState([]);
 
     function getQualifiedParties() {
         const qualifiedParties = election.parties.filter(party => {
@@ -77,10 +78,10 @@ export default function DataEntryEdit_PRE_34_CO({history, queryString, election,
                     if (total === undefined) {
                         total = 0;
                     }
-                    if (contentRow.preferenceNumber == 2) {
+                    if (contentRow.preferenceNumber === 2) {
                         preferenceNo = "secondPreferenceCount"
                         candidateIds.push(contentRow.candidateId);
-                    } else if (contentRow.preferenceNumber == 3) {
+                    } else if (contentRow.preferenceNumber === 3) {
                         preferenceNo = "thirdPreferenceCount"
                     }
                     latestCandidateWiseCounts[contentRow.candidateId] = {
@@ -94,6 +95,11 @@ export default function DataEntryEdit_PRE_34_CO({history, queryString, election,
                 console.log("latest", candidateIds);
                 console.log("latest", latestCandidateWiseCounts);
                 setCandidateWiseCounts(latestCandidateWiseCounts);
+                setSummary({
+                    ballotPapersNotCounted: tallySheetVersion.summary.ballotPapersNotCounted,
+                    remainingBallotPapers: tallySheetVersion.summary.remainingBallotPapers,
+                    total: tallySheetVersion.summary.ballotPapersNotCounted + tallySheetVersion.summary.remainingBallotPapers
+                });
                 setProcessing(false);
             }).catch((error) => {
                 console.log("error:", error);
@@ -117,6 +123,11 @@ export default function DataEntryEdit_PRE_34_CO({history, queryString, election,
                 });
             });
             setCandidateWiseCounts(initialCandidateWiseCounts);
+            setSummary({
+                ballotPapersNotCounted: 0,
+                remainingBallotPapers: 0,
+                total: 0
+            });
             setProcessing(false);
         }
     }, []);
@@ -128,6 +139,13 @@ export default function DataEntryEdit_PRE_34_CO({history, queryString, election,
                 ...candidateWiseCounts[candidateId],
                 [preference]: processNumericValue(event.target.value)
             }
+        })
+    };
+
+    const handleSummaryChange = (key) => event => {
+        setSummary({
+            ...summary,
+            [key]: processNumericValue(event.target.value)
         })
     };
 
@@ -154,6 +172,7 @@ export default function DataEntryEdit_PRE_34_CO({history, queryString, election,
 
         return {
             content: content,
+            summary: summary
         }
     };
 
@@ -216,7 +235,7 @@ export default function DataEntryEdit_PRE_34_CO({history, queryString, election,
                 return false;
             }
         }
-        return true;
+        return (summary.ballotPapersNotCounted + summary.remainingBallotPapers === summary.total)
     }
 
     function getTallySheetEditForm() {
@@ -236,7 +255,7 @@ export default function DataEntryEdit_PRE_34_CO({history, queryString, election,
                                         <TableRow>
                                             <TableCell align="center">Total No of 2nd Preferences</TableCell>
                                             <TableCell align="center">Total No of 3rd Preferences</TableCell>
-                                            <TableCell align="center">Grand Total</TableCell>
+                                            <TableCell align="center">Total</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
@@ -252,6 +271,18 @@ export default function DataEntryEdit_PRE_34_CO({history, queryString, election,
                                 </Table>
                             </TableCell>
                         })}
+                    </TableRow>
+                    <TableRow>
+                        <TableCell align="right" colSpan={1}>[3] Ballot Papers Not Counted Section 58(2)</TableCell>
+                        <TableCell align="right">{summary.ballotPapersNotCounted}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell align="right" colSpan={1}>[4] Remaining Ballot Papers</TableCell>
+                        <TableCell align="right">{summary.remainingBallotPapers}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell align="right" colSpan={1}>[5] Total [3] + [4]</TableCell>
+                        <TableCell align="right">{summary.total}</TableCell>
                     </TableRow>
                 </TableBody>
                 <TableFooter>
@@ -293,7 +324,7 @@ export default function DataEntryEdit_PRE_34_CO({history, queryString, election,
                                         <TableRow>
                                             <TableCell align="center">Total No of 2nd Preferences</TableCell>
                                             <TableCell align="center">Total No of 3rd Preferences</TableCell>
-                                            <TableCell align="center">Grand Total</TableCell>
+                                            <TableCell align="center">Total</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
@@ -336,6 +367,48 @@ export default function DataEntryEdit_PRE_34_CO({history, queryString, election,
                                 </Table>
                             </TableCell>
                         })}
+                    </TableRow>
+                    <TableRow>
+                        <TableCell align="right" colSpan={1}>[3] Ballot Papers Not Counted Section 58(2)</TableCell>
+                        <TableCell align="right">
+                            <TextField
+                                required
+                                error={!isNumeric(summary.ballotPapersNotCounted)}
+                                helperText={!isNumeric(summary.ballotPapersNotCounted) ? "Only numeric values are valid" : ''}
+                                className={"data-entry-edit-count-input"}
+                                value={summary.ballotPapersNotCounted}
+                                margin="normal"
+                                onChange={handleSummaryChange("ballotPapersNotCounted")}
+                            />
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell align="right" colSpan={1}>[4] Remaining Ballot Papers</TableCell>
+                        <TableCell align="right">
+                            <TextField
+                                required
+                                error={!isNumeric(summary.remainingBallotPapers)}
+                                helperText={!isNumeric(summary.remainingBallotPapers) ? "Only numeric values are valid" : ''}
+                                className={"data-entry-edit-count-input"}
+                                value={summary.remainingBallotPapers}
+                                margin="normal"
+                                onChange={handleSummaryChange("remainingBallotPapers")}
+                            />
+                        </TableCell>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell align="right" colSpan={1}>[5] Total [3] + [4]</TableCell>
+                        <TableCell align="right">
+                            <TextField
+                                required
+                                error={summary.total !== summary.ballotPapersNotCounted + summary.remainingBallotPapers}
+                                helperText={summary.total !== summary.ballotPapersNotCounted + summary.remainingBallotPapers ? "Total is incorrect" : ''}
+                                className={"data-entry-edit-count-input"}
+                                value={summary.total}
+                                margin="normal"
+                                onChange={handleSummaryChange("total")}
+                            />
+                        </TableCell>
                     </TableRow>
                 </TableBody>
                 <TableFooter>
