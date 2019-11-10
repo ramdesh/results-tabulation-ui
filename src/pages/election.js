@@ -233,15 +233,6 @@ export default function Election(props) {
                                 </Link>
                             </li>
 
-
-                            {/*<li>PRE 34 AI*/}
-                                {/*<Link*/}
-                                    {/*className="tally-sheet-code-list-item btn-list"*/}
-                                    {/*to={PATH_ELECTION_REPORT(electionId, TALLY_SHEET_CODE_PRE_34_AI)}*/}
-                                {/*>*/}
-                                    {/*List*/}
-                                {/*</Link>*/}
-                            {/*</li>*/}
                         </ul>
                     </Grid>
                 </Grid>
