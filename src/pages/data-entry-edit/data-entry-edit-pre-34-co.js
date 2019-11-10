@@ -172,8 +172,7 @@ export default function DataEntryEdit_PRE_34_CO({history, queryString, election,
 
         return {
             content: content,
-            ballotPapersNotCounted: summary.ballotPapersNotCounted,
-            remainingBallotPapers: summary.remainingBallotPapers
+            summary: summary
         }
     };
 
