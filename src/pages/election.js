@@ -120,7 +120,7 @@ export default function Election(props) {
                                 let tallySheetCode = TALLY_SHEET_CODE_PRE_30_PD;
                                 let tallySheetCodeLabel = "PRE 30 PD";
                                 if (subElection.voteType === "Postal") {
-                                    tallySheetCodeLabel = "PRE 30 PV";
+                                    tallySheetCodeLabel = "PRE 30 PV (Postal)";
                                 }
 
                                 return <li key={subElectionId}>{tallySheetCodeLabel}
@@ -173,7 +173,7 @@ export default function Election(props) {
                                 let tallySheetCode = TALLY_SHEET_CODE_PRE_34_I_RO;
                                 let tallySheetCodeLabel = "PRE 34 I RO";
                                 if (subElection.voteType === "Postal") {
-                                    tallySheetCodeLabel = "PRE 34 I RO PV";
+                                    tallySheetCodeLabel = "PRE 34 I RO PV (Postal)";
                                 }
 
                                 return <li key={subElectionId}>{tallySheetCodeLabel}
@@ -212,7 +212,7 @@ export default function Election(props) {
                                 let tallySheetCode = TALLY_SHEET_CODE_PRE_34_PD;
                                 let tallySheetCodeLabel = "Revised 30 PD";
                                 if (subElection.voteType === "Postal") {
-                                    tallySheetCodeLabel = "Revised 30 PV";
+                                    tallySheetCodeLabel = "Revised 30 PV (Postal)";
                                 }
 
                                 return <li key={subElectionId}>{tallySheetCodeLabel}
