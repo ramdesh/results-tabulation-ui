@@ -258,54 +258,54 @@ export default function Election(props) {
                     </Grid>
                 </Grid>
 
-                {/*<Grid item xs={4} className="election-grid">*/}
-                {/*    <Grid item xs={12}><h4>Release</h4></Grid>*/}
-                {/*    <Grid item xs={12}>*/}
-                {/*        <ul className="tally-sheet-code-list">*/}
-                {/*            {election.subElections.map((subElection) => {*/}
-                {/*                const subElectionId = subElection.electionId;*/}
-                {/*                let tallySheetCode = TALLY_SHEET_CODE_PRE_30_PD;*/}
-                {/*                let tallySheetCodeLabel = "PRE 30 PD";*/}
-                {/*                if (subElection.voteType === "Postal") {*/}
-                {/*                    tallySheetCodeLabel = "PRE 30 PV";*/}
-                {/*                }*/}
+                <Grid item xs={4} className="election-grid">
+                    <Grid item xs={12}><h4>Release</h4></Grid>
+                    <Grid item xs={12}>
+                        <ul className="tally-sheet-code-list">
+                            {election.subElections.map((subElection) => {
+                                const subElectionId = subElection.electionId;
+                                let tallySheetCode = TALLY_SHEET_CODE_PRE_30_PD;
+                                let tallySheetCodeLabel = "PRE 30 PD";
+                                if (subElection.voteType === "Postal") {
+                                    tallySheetCodeLabel = "PRE 30 PV";
+                                }
 
-                {/*                return <li key={subElectionId}>{tallySheetCodeLabel}*/}
-                {/*                    <Link*/}
-                {/*                        className="tally-sheet-code-list-item btn-list"*/}
-                {/*                        to={PATH_ELECTION_RESULTS_RELEASE(electionId, tallySheetCode, subElectionId)}*/}
-                {/*                    >*/}
-                {/*                        List*/}
-                {/*                    </Link>*/}
-                {/*                </li>*/}
-                {/*            })}*/}
-                {/*            <li>PRE 30 ED*/}
-                {/*                <Link*/}
-                {/*                    className="tally-sheet-code-list-item btn-list"*/}
-                {/*                    to={PATH_ELECTION_RESULTS_RELEASE(electionId, TALLY_SHEET_CODE_PRE_30_ED)}*/}
-                {/*                >*/}
-                {/*                    List*/}
-                {/*                </Link>*/}
-                {/*            </li>*/}
-                {/*            <li>All Island ED*/}
-                {/*                <Link*/}
-                {/*                    className="tally-sheet-code-list-item btn-list"*/}
-                {/*                    to={PATH_ELECTION_RESULTS_RELEASE(electionId, TALLY_SHEET_CODE_PRE_ALL_ISLAND_RESULTS_BY_ELECTORAL_DISTRICTS)}*/}
-                {/*                >*/}
-                {/*                    List*/}
-                {/*                </Link>*/}
-                {/*            </li>*/}
-                {/*            <li>All Island*/}
-                {/*                <Link*/}
-                {/*                    className="tally-sheet-code-list-item btn-list"*/}
-                {/*                    to={PATH_ELECTION_RESULTS_RELEASE(electionId, TALLY_SHEET_CODE_PRE_ALL_ISLAND_RESULTS)}*/}
-                {/*                >*/}
-                {/*                    List*/}
-                {/*                </Link>*/}
-                {/*            </li>*/}
-                {/*        </ul>*/}
-                {/*    </Grid>*/}
-                {/*</Grid>*/}
+                                return <li key={subElectionId}>{tallySheetCodeLabel}
+                                    <Link
+                                        className="tally-sheet-code-list-item btn-list"
+                                        to={PATH_ELECTION_RESULTS_RELEASE(electionId, tallySheetCode, subElectionId)}
+                                    >
+                                        List
+                                    </Link>
+                                </li>
+                            })}
+                            <li>PRE 30 ED
+                                <Link
+                                    className="tally-sheet-code-list-item btn-list"
+                                    to={PATH_ELECTION_RESULTS_RELEASE(electionId, TALLY_SHEET_CODE_PRE_30_ED)}
+                                >
+                                    List
+                                </Link>
+                            </li>
+                            <li>All Island ED
+                                <Link
+                                    className="tally-sheet-code-list-item btn-list"
+                                    to={PATH_ELECTION_RESULTS_RELEASE(electionId, TALLY_SHEET_CODE_PRE_ALL_ISLAND_RESULTS_BY_ELECTORAL_DISTRICTS)}
+                                >
+                                    List
+                                </Link>
+                            </li>
+                            <li>All Island
+                                <Link
+                                    className="tally-sheet-code-list-item btn-list"
+                                    to={PATH_ELECTION_RESULTS_RELEASE(electionId, TALLY_SHEET_CODE_PRE_ALL_ISLAND_RESULTS)}
+                                >
+                                    List
+                                </Link>
+                            </li>
+                        </ul>
+                    </Grid>
+                </Grid>
 
             </Grid>
 
