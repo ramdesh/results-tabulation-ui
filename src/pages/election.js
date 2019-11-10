@@ -57,9 +57,7 @@ export default function Election(props) {
                         let tallySheetCodeLabels = ["CE 201", "PRE 41"];
                         if (subElection.voteType === "Postal") {
                             tallySheetCodes = [TALLY_SHEET_CODE_CE_201_PV, TALLY_SHEET_CODE_PRE_41];
-                            tallySheetCodeLabels = ["CE 201 PV", "PRE 41 PV"];
-                            tallySheetCodes = [TALLY_SHEET_CODE_CE_201_PV, TALLY_SHEET_CODE_PRE_41];
-                            tallySheetCodeLabels = ["CE 201 PV", "PRE 41 PV"];
+                            tallySheetCodeLabels = ["CE 201 PV (Postal)", "PRE 41 PV (Postal)"];
                         }
                         return <Grid item xs={12} key={subElectionId}>
                             <Grid item xs={12}>
@@ -80,6 +78,7 @@ export default function Election(props) {
                         </Grid>
                     })}
 
+                    <br/>
                     <Divider/>
 
                     <Grid item xs={12}><small>Preferences</small></Grid>
@@ -90,7 +89,7 @@ export default function Election(props) {
                         let tallySheetCodeLabels = ["PRE 34 CO"];
                         if (subElection.voteType === "Postal") {
                             tallySheetCodes = [TALLY_SHEET_CODE_PRE_34_CO];
-                            tallySheetCodeLabels = ["PRE 34 CO PV"];
+                            tallySheetCodeLabels = ["PRE 34 CO PV (Postal)"];
                         }
                         return <Grid item xs={12} key={subElectionId}>
                             <Grid item xs={12}>
@@ -121,7 +120,7 @@ export default function Election(props) {
                                 let tallySheetCode = TALLY_SHEET_CODE_PRE_30_PD;
                                 let tallySheetCodeLabel = "PRE 30 PD";
                                 if (subElection.voteType === "Postal") {
-                                    tallySheetCodeLabel = "PRE 30 PV";
+                                    tallySheetCodeLabel = "PRE 30 PV (Postal)";
                                 }
 
                                 return <li key={subElectionId}>{tallySheetCodeLabel}
@@ -162,6 +161,7 @@ export default function Election(props) {
                         </ul>
                     </Grid>
 
+                    <br/>
                     <Divider/>
 
                     <Grid item xs={12}><small>Preferences</small></Grid>
@@ -173,7 +173,7 @@ export default function Election(props) {
                                 let tallySheetCode = TALLY_SHEET_CODE_PRE_34_I_RO;
                                 let tallySheetCodeLabel = "PRE 34 I RO";
                                 if (subElection.voteType === "Postal") {
-                                    tallySheetCodeLabel = "PRE 34 I RO PV";
+                                    tallySheetCodeLabel = "PRE 34 I RO PV (Postal)";
                                 }
 
                                 return <li key={subElectionId}>{tallySheetCodeLabel}
@@ -186,16 +186,6 @@ export default function Election(props) {
                                 </li>
                             })}
 
-
-                            <li>PRE 34 II RO
-                                <Link
-                                    disabled={true}
-                                    className="tally-sheet-code-list-item btn-list"
-                                    to={PATH_ELECTION_REPORT(electionId, TALLY_SHEET_CODE_PRE_34_II_RO)}
-                                >
-                                    List
-                                </Link>
-                            </li>
 
                             <li>PRE 34
                                 <Link
@@ -210,6 +200,7 @@ export default function Election(props) {
                         </ul>
                     </Grid>
 
+                    <br/>
                     <Divider/>
 
                     <Grid item xs={12}><small>With Preferences</small></Grid>
@@ -219,9 +210,9 @@ export default function Election(props) {
                             {election.subElections.map((subElection) => {
                                 const subElectionId = subElection.electionId;
                                 let tallySheetCode = TALLY_SHEET_CODE_PRE_34_PD;
-                                let tallySheetCodeLabel = "PRE 34 PD";
+                                let tallySheetCodeLabel = "Revised 30 PD";
                                 if (subElection.voteType === "Postal") {
-                                    tallySheetCodeLabel = "PRE 34 PV";
+                                    tallySheetCodeLabel = "Revised 30 PV (Postal)";
                                 }
 
                                 return <li key={subElectionId}>{tallySheetCodeLabel}
@@ -233,7 +224,7 @@ export default function Election(props) {
                                     </Link>
                                 </li>
                             })}
-                            <li>PRE 34 ED
+                            <li>Revised 30 ED
                                 <Link
                                     className="tally-sheet-code-list-item btn-list"
                                     to={PATH_ELECTION_REPORT(electionId, TALLY_SHEET_CODE_PRE_34_ED)}
@@ -242,15 +233,6 @@ export default function Election(props) {
                                 </Link>
                             </li>
 
-
-                            <li>PRE 34 AI
-                                <Link
-                                    className="tally-sheet-code-list-item btn-list"
-                                    to={PATH_ELECTION_REPORT(electionId, TALLY_SHEET_CODE_PRE_34_AI)}
-                                >
-                                    List
-                                </Link>
-                            </li>
                         </ul>
                     </Grid>
                 </Grid>
