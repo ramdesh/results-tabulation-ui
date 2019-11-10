@@ -17,7 +17,13 @@ import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
 
-import {generateReport, getElections, getTallySheet, TALLY_SHEET_STATUS_ENUM, getTallySheetProof} from "../../services/tabulation-api";
+import {
+    generateReport,
+    getElections,
+    getTallySheet,
+    TALLY_SHEET_STATUS_ENUM,
+    getTallySheetProof, getTallySheetVersionHtml, getTallySheetVersionLetterHtml
+} from "../../services/tabulation-api";
 import {MessagesProvider, MessagesConsumer} from "../../services/messages.provider";
 import {
     PATH_ELECTION,
@@ -44,7 +50,7 @@ import TextField from "@material-ui/core/TextField/TextField";
 import {fieldMatch, getFirstOrNull} from "../../utils";
 import {getAreaName} from "../../utils/tallySheet";
 import {VOTE_TYPE} from "../../services/tabulation-api/entities/election.entity";
-import { async } from "q";
+import PrintLetterButton from "../../components/tally-sheet/print-letter-button";
 
 
 export default function ReleaseList({history, queryString, election, subElection}) {
@@ -74,7 +80,7 @@ export default function ReleaseList({history, queryString, election, subElection
     const fetchProofStatuses = async () => {
         const proofStatuses = [];
         for (var i = 0; i < tallySheets.length; i++) {
-            const { submissionProofId } = tallySheets[i];
+            const {submissionProofId} = tallySheets[i];
             const proofStates = await getTallySheetProof(submissionProofId);
             proofStatuses[i] = proofStates;
             setProofStatuses([...proofStatuses]);
@@ -130,10 +136,29 @@ export default function ReleaseList({history, queryString, election, subElection
                 variant="outlined" color="default"
                 size="small"
                 onClick={() => history.push(PATH_ELECTION_RESULTS_RELEASE_VIEW(electionId, tallySheet.tallySheetId))}
-                disabled = {!verified}
+                disabled={!verified}
             >
                 View
             </Button>
+            <Button
+                variant="outlined" color="default"
+                size="small"
+                onClick={() => history.push(PATH_ELECTION_RESULTS_RELEASE_VIEW(electionId, tallySheet.tallySheetId))}
+                disabled={!verified}
+            >
+                View
+            </Button>
+            <PrintLetterButton
+                variant="outlined" color="default"
+                size="small"
+                disabled={!verified}
+                onClick={() => {
+                }}
+                tallySheetId={tallySheet.tallySheetId}
+                tallySheetVersionId={tallySheet.lockedVersionId}
+            >
+                Print Letter
+            </PrintLetterButton>
             <Button
                 variant="outlined" color="default"
                 size="small"
@@ -147,7 +172,7 @@ export default function ReleaseList({history, queryString, election, subElection
                 disabled={loading || released || !verified || !uploaded}
                 size="small"
                 onClick={() => history.push(PATH_ELECTION_RESULTS_RELEASE_VIEW(electionId, tallySheet.tallySheetId))}
-                
+
             >
                 Release
             </Button>
@@ -166,7 +191,7 @@ export default function ReleaseList({history, queryString, election, subElection
                 tbody.push(<TableRow key={tallySheet.tallySheetId}>
                     <TableCell align="left">{getAreaName(tallySheet.electoralDistrict)}</TableCell>
                     <TableCell align="left">{getAreaName(tallySheet.pollingDivision)}</TableCell>
-                    <TableCell align="center">{modifyStateForReleaseView(tallySheet, proofStates )}</TableCell>
+                    <TableCell align="center">{modifyStateForReleaseView(tallySheet, proofStates)}</TableCell>
                     {getActions(tallySheet, proofStates)}
                 </TableRow>);
             }
@@ -222,7 +247,7 @@ export default function ReleaseList({history, queryString, election, subElection
         let status = tallySheet.tallySheetStatus;
         if (status !== TALLY_SHEET_STATUS_ENUM.VERIFIED) {
             return "Not Verified";
-        } 
+        }
         if (proof && proof.finished) {
             return "Released";
         }
@@ -286,10 +311,10 @@ export default function ReleaseList({history, queryString, election, subElection
             const tallySheet = tallySheets[i];
             const proofStates = proofStatuses[i];
             tbody.push(<TableRow key={tallySheet.tallySheetId}>
-                    <TableCell align="left">{getAreaName(tallySheet.country)}</TableCell>
-                    <TableCell align="center">{modifyStateForReleaseView(tallySheet, proofStates)}</TableCell>
-                    {getActions(tallySheet, proofStates)}
-                </TableRow>);
+                <TableCell align="left">{getAreaName(tallySheet.country)}</TableCell>
+                <TableCell align="center">{modifyStateForReleaseView(tallySheet, proofStates)}</TableCell>
+                {getActions(tallySheet, proofStates)}
+            </TableRow>);
         }
 
         return <Table aria-label="simple table">
@@ -325,4 +350,5 @@ export default function ReleaseList({history, queryString, election, subElection
         </div>
     </div>
 }
+
 
