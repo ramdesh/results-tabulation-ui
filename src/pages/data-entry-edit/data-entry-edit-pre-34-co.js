@@ -255,7 +255,7 @@ export default function DataEntryEdit_PRE_34_CO({history, queryString, election,
                                         <TableRow>
                                             <TableCell align="center">Total No of 2nd Preferences</TableCell>
                                             <TableCell align="center">Total No of 3rd Preferences</TableCell>
-                                            <TableCell align="center">Grand Total</TableCell>
+                                            <TableCell align="center">Total</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
@@ -324,7 +324,7 @@ export default function DataEntryEdit_PRE_34_CO({history, queryString, election,
                                         <TableRow>
                                             <TableCell align="center">Total No of 2nd Preferences</TableCell>
                                             <TableCell align="center">Total No of 3rd Preferences</TableCell>
-                                            <TableCell align="center">Grand Total</TableCell>
+                                            <TableCell align="center">Total</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
