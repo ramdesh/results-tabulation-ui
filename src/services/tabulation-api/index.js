@@ -38,6 +38,7 @@ export const ENDPOINT_PATH_TALLY_SHEET_UNLOCK = (tallySheetId) => `/tally-sheet/
 export const ENDPOINT_PATH_TALLY_SHEET_SUBMIT = (tallySheetId) => `/tally-sheet/${tallySheetId}/submit`;
 export const ENDPOINT_PATH_TALLY_SHEET_REQUEST_EDIT = (tallySheetId) => `/tally-sheet/${tallySheetId}/request-edit`;
 export const ENDPOINT_PATH_TALLY_SHEET_VERSION_HTML = (tallySheetId, tallySheetVersionId) => `/tally-sheet/${tallySheetId}/version/${tallySheetVersionId}/html`;
+export const ENDPOINT_PATH_TALLY_SHEET_VERSION_LETTER_HTML = (tallySheetId, tallySheetVersionId) => `/tally-sheet/${tallySheetId}/version/${tallySheetVersionId}/letter/html`;
 
 export const ENDPOINT_PATH_TALLY_SHEET_PROOF = (proofId) => `/proof/${proofId}`;
 export const ENDPOINT_PATH_TALLY_SHEET_PROOF_FINISH = (proofId) => `/proof/${proofId}/finish`;
@@ -248,6 +249,13 @@ export function requestEditForTallySheet(tallySheetId) {
 export function getTallySheetVersionHtml(tallySheetId, tallySheetVersionId) {
     return request({
         url: ENDPOINT_PATH_TALLY_SHEET_VERSION_HTML(tallySheetId, tallySheetVersionId),
+        method: 'get'
+    })
+}
+
+export function getTallySheetVersionLetterHtml(tallySheetId, tallySheetVersionId) {
+    return request({
+        url: ENDPOINT_PATH_TALLY_SHEET_VERSION_LETTER_HTML(tallySheetId, tallySheetVersionId),
         method: 'get'
     })
 }
