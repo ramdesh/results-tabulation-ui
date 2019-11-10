@@ -39,7 +39,9 @@ import {
     TALLY_SHEET_CODE_PRE_30_PD,
     TALLY_SHEET_CODE_PRE_41,
     TALLY_SHEET_CODE_PRE_ALL_ISLAND_RESULTS,
-    TALLY_SHEET_CODE_PRE_ALL_ISLAND_RESULTS_BY_ELECTORAL_DISTRICTS
+    TALLY_SHEET_CODE_PRE_ALL_ISLAND_RESULTS_BY_ELECTORAL_DISTRICTS,
+    TALLY_SHEET_CODE_PRE_34_PD,
+    TALLY_SHEET_CODE_PRE_34_ED
 } from "../../App";
 import Processing from "../../components/processing";
 import Error from "../../components/error";
@@ -116,9 +118,9 @@ export default function ReleaseList({history, queryString, election, subElection
                 title="Tally sheet list cannot be accessed"
             />
         } else {
-            if (tallySheetCode === TALLY_SHEET_CODE_PRE_30_PD) {
+            if (tallySheetCode === TALLY_SHEET_CODE_PRE_30_PD || tallySheetCode === TALLY_SHEET_CODE_PRE_34_PD) {
                 return getTallySheetListJsx_PRE_30_PD(tallySheets)
-            } else if (tallySheetCode === TALLY_SHEET_CODE_PRE_30_ED) {
+            } else if (tallySheetCode === TALLY_SHEET_CODE_PRE_30_ED || tallySheetCode === TALLY_SHEET_CODE_PRE_34_ED) {
                 return getTallySheetListJsx_PRE_30_ED(tallySheets)
             } else if (tallySheetCode === TALLY_SHEET_CODE_PRE_ALL_ISLAND_RESULTS || TALLY_SHEET_CODE_PRE_ALL_ISLAND_RESULTS_BY_ELECTORAL_DISTRICTS) {
                 return getTallySheetListJsx_AllIslandReports(tallySheets)

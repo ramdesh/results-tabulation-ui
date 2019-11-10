@@ -246,7 +246,7 @@ export default function Election(props) {
                                 let tallySheetCode = TALLY_SHEET_CODE_PRE_30_PD;
                                 let tallySheetCodeLabel = "PRE 30 PD";
                                 if (subElection.voteType === "Postal") {
-                                    tallySheetCodeLabel = "PRE 30 PV";
+                                    tallySheetCodeLabel = "PRE 30 PV (Postal)";
                                 }
 
                                 return <li key={subElectionId}>{tallySheetCodeLabel}
@@ -282,6 +282,50 @@ export default function Election(props) {
                                     List
                                 </Link>
                             </li>
+                        </ul>
+                    </Grid>
+                    <br/>
+                    <Divider/>
+
+                    <Grid item xs={12}><small>With Preferences</small></Grid>
+
+                    <Grid item xs={12}>
+                        <ul className="tally-sheet-code-list">
+                            {election.subElections.map((subElection) => {
+                                const subElectionId = subElection.electionId;
+                                let tallySheetCode = TALLY_SHEET_CODE_PRE_34_PD;
+                                let tallySheetCodeLabel = "Revised 30 PD";
+                                if (subElection.voteType === "Postal") {
+                                    tallySheetCodeLabel = "Revised 30 PV (Postal)";
+                                }
+
+                                return <li key={subElectionId}>{tallySheetCodeLabel}
+                                    <Link
+                                        className="tally-sheet-code-list-item btn-list"
+                                        to={PATH_ELECTION_RESULTS_RELEASE(electionId, tallySheetCode, subElectionId)}
+                                    >
+                                        List
+                                    </Link>
+                                </li>
+                            })}
+                            <li>Revised 30 ED
+                                <Link
+                                    className="tally-sheet-code-list-item btn-list"
+                                    to={PATH_ELECTION_RESULTS_RELEASE(electionId, TALLY_SHEET_CODE_PRE_34_ED)}
+                                >
+                                    List
+                                </Link>
+                            </li>
+
+                            <li>Revised All Island
+                                <Link
+                                    className="tally-sheet-code-list-item btn-list"
+                                    to={PATH_ELECTION_RESULTS_RELEASE(electionId, TALLY_SHEET_CODE_PRE_34_AI)}
+                                >
+                                    List
+                                </Link>
+                            </li>
+
                         </ul>
                     </Grid>
                 </Grid>
