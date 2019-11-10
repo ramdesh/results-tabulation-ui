@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState } from "react";
+import React, {Component, useEffect, useState} from "react";
 
 import {
     getTallySheetProof, getProofImage,
@@ -6,7 +6,7 @@ import {
     saveTallySheetVersion,
     TALLY_SHEET_STATUS_ENUM, unlockTallySheet, uploadTallySheetProof
 } from "../services/tabulation-api";
-import { MESSAGE_TYPES } from "../services/messages.provider";
+import {MESSAGE_TYPES} from "../services/messages.provider";
 import {
     PATH_ELECTION, PATH_ELECTION_BY_ID,
     COUNTING_CENTRE_WISE_DATA_ENTRY_TALLY_SHEET_CODES, PATH_ELECTION_RESULTS_RELEASE
@@ -16,7 +16,8 @@ import Error from "../components/error";
 import BreadCrumb from "../components/bread-crumb";
 import Button from "@material-ui/core/Button";
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { MESSAGES_EN } from "../locale/messages_en";
+import {MESSAGES_EN} from "../locale/messages_en";
+import PrintLetterButton from "../components/tally-sheet/print-letter-button";
 
 
 export default function ReleaseView(props) {
@@ -29,12 +30,12 @@ export default function ReleaseView(props) {
     const RELEASE_STATUS_ENUM = {
         RELEASE_STATE_NOT_LOADED: -4,
         RELEASE_STATE_LOADING: -3,
-        RELEASE_UNFINISHED : 0,
-        RELEASE_FINISHED : 1,
+        RELEASE_UNFINISHED: 0,
+        RELEASE_FINISHED: 1,
     };
 
-    const { history, election, messages } = props
-    const { electionId, electionName } = election;
+    const {history, election, messages} = props
+    const {electionId, electionName} = election;
     const [tallySheet, setTallySheet] = useState(props.tallySheet);
     const [tallySheetVersionId, setTallySheetVersionId] = useState(null);
     const [tallySheetVersionHtml, setTallySheetVersionHtml] = useState("");
@@ -50,7 +51,7 @@ export default function ReleaseView(props) {
 
 
     const fetchTallySheetVersion = async () => {
-        const { tallySheetId, tallySheetCode, latestVersionId, submittedVersionId, lockedVersionId, tallySheetStatus } = tallySheet;
+        const {tallySheetId, tallySheetCode, latestVersionId, submittedVersionId, lockedVersionId, tallySheetStatus} = tallySheet;
         let tallySheetVersionId = null;
         if (COUNTING_CENTRE_WISE_DATA_ENTRY_TALLY_SHEET_CODES.indexOf(tallySheetCode) >= 0) {
             if (lockedVersionId) {
@@ -74,7 +75,7 @@ export default function ReleaseView(props) {
 
     const fetchTallySheetVersionHtml = async () => {
         setTallySheetVersionHtml("Processing ... ");
-        const { tallySheetId } = tallySheet;
+        const {tallySheetId} = tallySheet;
         const tallySheetVersionHtml = await getTallySheetVersionHtml(tallySheetId, tallySheetVersionId);
 
         setTallySheetVersionHtml(tallySheetVersionHtml)
@@ -83,13 +84,13 @@ export default function ReleaseView(props) {
     const fetchProofStatus = async () => {
         setLatestProofId(PROOF_STATUS_ENUM.PROOF_LOADING);
         setReleaseState(RELEASE_STATUS_ENUM.RELEASE_STATE_LOADING);
-        const { submissionProofId } = tallySheet;
+        const {submissionProofId} = tallySheet;
         const proofStatus = await getTallySheetProof(submissionProofId);
         updateProofStatus(proofStatus);
     }
 
     const updateProofStatus = (proofStatus) => {
-        const { scannedFiles, finished } = proofStatus;
+        const {scannedFiles, finished} = proofStatus;
         setReleaseState(finished ? RELEASE_STATUS_ENUM.RELEASE_FINISHED : RELEASE_STATUS_ENUM.RELEASE_UNFINISHED);
         if (scannedFiles.length > 0) {
             const latestProof = scannedFiles[scannedFiles.length - 1].fileId;
@@ -102,7 +103,7 @@ export default function ReleaseView(props) {
     const fetchProofImage = async () => {
         setTallySheetProof("Loading proof image ...");
         const proofImgArray = await getProofImage(latestProofId);
-        var proofImgBlob = new Blob([proofImgArray], { type: "image/jpeg" });
+        var proofImgBlob = new Blob([proofImgArray], {type: "image/jpeg"});
         const proofImgDataUrl = URL.createObjectURL(proofImgBlob);
         setTallySheetProof(proofImgDataUrl)
     };
@@ -139,11 +140,11 @@ export default function ReleaseView(props) {
     const handleUpload = () => async (evt) => {
         setProcessing(true);
         try {
-            const { submissionProofId } = tallySheet;
+            const {submissionProofId} = tallySheet;
             var formData = new FormData();
             formData.append("proofId", submissionProofId);
             formData.append("scannedFile", evt.target.files[0]);
-            const proofStatus  = await uploadTallySheetProof(formData, progressEvent => setProgress(100*progressEvent.loaded/progressEvent.total));
+            const proofStatus = await uploadTallySheetProof(formData, progressEvent => setProgress(100 * progressEvent.loaded / progressEvent.total));
             updateProofStatus(proofStatus);
             messages.push("Success", MESSAGES_EN.success_upload, MESSAGE_TYPES.SUCCESS);
             setProgress(-1)
@@ -154,12 +155,12 @@ export default function ReleaseView(props) {
     };
 
     const getReportViewJsx = () => {
-        const { tallySheetCode, tallySheetStatus } = tallySheet;
+        const {tallySheetCode, tallySheetStatus} = tallySheet;
         const subElectionId = tallySheet.electionId;
 
         const breadCrumbLinkList = [
-            { label: "elections", to: PATH_ELECTION() },
-            { label: electionName, to: PATH_ELECTION_BY_ID(electionId) }
+            {label: "elections", to: PATH_ELECTION()},
+            {label: electionName, to: PATH_ELECTION_BY_ID(electionId)}
         ];
         breadCrumbLinkList.push({
             label: tallySheetCode.toLowerCase() + " release",
@@ -168,23 +169,23 @@ export default function ReleaseView(props) {
         let leftPlane;
 
         if (latestProofId === PROOF_STATUS_ENUM.PROOF_LOADING) {
-            leftPlane = <div style={{ float: "right", width: "50%", textAlign: "center" }}>Loading proof status ...</div>;
+            leftPlane = <div style={{float: "right", width: "50%", textAlign: "center"}}>Loading proof status ...</div>;
         } else if (latestProofId === PROOF_STATUS_ENUM.PROOF_NOT_UPLOADED) {
-            leftPlane = <div style={{ float: "right", width: "50%", textAlign: "center" }}>Proof not uploaded</div>;
+            leftPlane = <div style={{float: "right", width: "50%", textAlign: "center"}}>Proof not uploaded</div>;
         } else if (latestProofId >= 0) {
             if (tallySheetProof.startsWith('blob:')) {
-                leftPlane = <img src={tallySheetProof} style={{ float: "right", width: "50%" }} />;
+                leftPlane = <img src={tallySheetProof} style={{float: "right", width: "50%"}}/>;
             } else {
-                leftPlane = <div style={{ float: "right", width: "50%", textAlign: "center" }}>{tallySheetProof}</div>;
+                leftPlane = <div style={{float: "right", width: "50%", textAlign: "center"}}>{tallySheetProof}</div>;
             }
         }
 
-        const isUploadDisabled = tallySheet.tallySheetStatus !== TALLY_SHEET_STATUS_ENUM.VERIFIED || 
-                                 releaseState !== RELEASE_STATUS_ENUM.RELEASE_UNFINISHED;
-        const isReleaseDisabled =  isUploadDisabled || latestProofId < 0;
+        const isUploadDisabled = tallySheet.tallySheetStatus !== TALLY_SHEET_STATUS_ENUM.VERIFIED ||
+            releaseState !== RELEASE_STATUS_ENUM.RELEASE_UNFINISHED;
+        const isReleaseDisabled = isUploadDisabled || latestProofId < 0;
         const imageTitle = releaseState === RELEASE_STATUS_ENUM.RELEASE_FINISHED ? "Released proof" : "Signed draft";
         const progressStyle = {};
-        if (progress<0) {
+        if (progress < 0) {
             progressStyle.visibility = "hidden";
         }
 
@@ -200,15 +201,29 @@ export default function ReleaseView(props) {
                 <div className="report-view-status">
                     <div className="report-view-status-actions">
 
-                        <Button variant="contained" component="label" size="small" disabled={isUploadDisabled || progress > 0} >
+                        <PrintLetterButton
+                            variant="outlined" color="default"
+                            size="small"
+                            onClick={() => {
+                            }}
+                            tallySheetId={tallySheet.tallySheetId}
+                            tallySheetVersionId={tallySheet.lockedVersionId}
+                        >
+                            Print Letter
+                        </PrintLetterButton>
+                        <Button
+                            variant="outlined" color="default" component="label" size="small"
+                            disabled={isUploadDisabled || progress > 0}>
                             Upload Proof
                             <div style={progressStyle} id="upload-progress">
-                                <CircularProgress variant="static" size={20} value={progress} />
+                                <CircularProgress variant="static" size={20} value={progress}/>
                             </div>
-                            <input accept="image/*" type="file" style={{ display: 'none' }} onChange={handleUpload()} />
+                            <input accept="image/*" type="file" style={{display: 'none'}} onChange={handleUpload()}/>
                         </Button>
 
-                        <Button variant="contained" size="small" disabled={isReleaseDisabled} onClick={handleRelease()}>
+                        <Button
+                            variant="outlined" color="default" size="small" disabled={isReleaseDisabled}
+                            onClick={handleRelease()}>
                             Release
                         </Button>
                     </div>
@@ -228,7 +243,7 @@ export default function ReleaseView(props) {
                 {leftPlane}
                 <iframe
                     id="framehalf"
-                    style={{ border: "none", width: "100%" }}
+                    style={{border: "none", width: "100%"}}
                     height={iframeHeight}
                     width={iframeWidth}
                     srcDoc={tallySheetVersionHtml}
