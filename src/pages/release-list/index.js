@@ -252,8 +252,9 @@ export default function ReleaseList({history, queryString, election, subElection
         const tbody = [];
         for (var i = 0; i < tallySheets.length; i++) {
             const tallySheet = tallySheets[i];
+            console.log(fieldMatch(tallySheet.tallySheetStatus, searchParameters.status))
             const proofStates = proofStatuses[i];
-            if (fieldMatch(getAreaName(tallySheet), searchParameters.electoralDistrict) &&
+            if (fieldMatch(getAreaName(tallySheet.electoralDistrict), searchParameters.electoralDistrict) &&
                 fieldMatch(tallySheet.tallySheetStatus, searchParameters.status)) {
                 tbody.push(<TableRow key={tallySheet.tallySheetId}>
                     <TableCell align="left">{getAreaName(tallySheet.electoralDistrict)}</TableCell>
