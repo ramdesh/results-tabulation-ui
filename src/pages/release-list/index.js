@@ -39,7 +39,9 @@ import {
     TALLY_SHEET_CODE_PRE_30_PD,
     TALLY_SHEET_CODE_PRE_41,
     TALLY_SHEET_CODE_PRE_ALL_ISLAND_RESULTS,
-    TALLY_SHEET_CODE_PRE_ALL_ISLAND_RESULTS_BY_ELECTORAL_DISTRICTS
+    TALLY_SHEET_CODE_PRE_ALL_ISLAND_RESULTS_BY_ELECTORAL_DISTRICTS,
+    TALLY_SHEET_CODE_PRE_34_PD,
+    TALLY_SHEET_CODE_PRE_34_ED
 } from "../../App";
 import Processing from "../../components/processing";
 import Error from "../../components/error";
@@ -116,9 +118,9 @@ export default function ReleaseList({history, queryString, election, subElection
                 title="Tally sheet list cannot be accessed"
             />
         } else {
-            if (tallySheetCode === TALLY_SHEET_CODE_PRE_30_PD) {
+            if (tallySheetCode === TALLY_SHEET_CODE_PRE_30_PD || tallySheetCode === TALLY_SHEET_CODE_PRE_34_PD) {
                 return getTallySheetListJsx_PRE_30_PD(tallySheets)
-            } else if (tallySheetCode === TALLY_SHEET_CODE_PRE_30_ED) {
+            } else if (tallySheetCode === TALLY_SHEET_CODE_PRE_30_ED || tallySheetCode === TALLY_SHEET_CODE_PRE_34_ED) {
                 return getTallySheetListJsx_PRE_30_ED(tallySheets)
             } else if (tallySheetCode === TALLY_SHEET_CODE_PRE_ALL_ISLAND_RESULTS || TALLY_SHEET_CODE_PRE_ALL_ISLAND_RESULTS_BY_ELECTORAL_DISTRICTS) {
                 return getTallySheetListJsx_AllIslandReports(tallySheets)
@@ -178,7 +180,7 @@ export default function ReleaseList({history, queryString, election, subElection
             const tallySheet = tallySheets[i];
             const proofStates = proofStatuses[i];
             if (fieldMatch(getAreaName(tallySheet.electoralDistrict), searchParameters.electoralDistrict) &&
-                fieldMatch(tallySheet.tallySheetStatus, searchParameters.status) &&
+                fieldMatch(modifyStateForReleaseView(tallySheet, proofStates), searchParameters.status) &&
                 fieldMatch(getAreaName(tallySheet.pollingDivision), searchParameters.pollingDivision)) {
                 tbody.push(<TableRow key={tallySheet.tallySheetId}>
                     <TableCell align="left">{getAreaName(tallySheet.electoralDistrict)}</TableCell>
@@ -251,8 +253,8 @@ export default function ReleaseList({history, queryString, election, subElection
         for (var i = 0; i < tallySheets.length; i++) {
             const tallySheet = tallySheets[i];
             const proofStates = proofStatuses[i];
-            if (fieldMatch(getAreaName(tallySheet), searchParameters.electoralDistrict) &&
-                fieldMatch(tallySheet.tallySheetStatus, searchParameters.status)) {
+            if (fieldMatch(getAreaName(tallySheet.electoralDistrict), searchParameters.electoralDistrict) &&
+                fieldMatch(modifyStateForReleaseView(tallySheet, proofStates), searchParameters.status)) {
                 tbody.push(<TableRow key={tallySheet.tallySheetId}>
                     <TableCell align="left">{getAreaName(tallySheet.electoralDistrict)}</TableCell>
                     <TableCell align="center">{modifyStateForReleaseView(tallySheet, proofStates)}</TableCell>
