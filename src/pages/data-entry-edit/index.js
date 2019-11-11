@@ -54,6 +54,9 @@ export default function DataEntryEdit({history, queryString, election, tallyShee
                 <div className="data-entry-edit-header-election-name">{electionName}</div>
                 <div className="data-entry-edit-header-tally-sheet-code">{getTallySheetCodeStr(tallySheet)}</div>
             </div>
+            <div>{tallySheet.electoralDistrict ? 'Electoral District: ' + tallySheet.electoralDistrict.areaName : null}
+                {tallySheet.pollingDivision ? ' > Polling Division: ' + tallySheet.pollingDivision.areaName : null}
+                {tallySheet.countingCentre ? ' > Counting Centre: ' + tallySheet.countingCentre.areaName : null}</div>
             {getEditorJsx()}
         </div>
     </div>
