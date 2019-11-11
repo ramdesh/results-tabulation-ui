@@ -180,7 +180,7 @@ export default function ReleaseList({history, queryString, election, subElection
             const tallySheet = tallySheets[i];
             const proofStates = proofStatuses[i];
             if (fieldMatch(getAreaName(tallySheet.electoralDistrict), searchParameters.electoralDistrict) &&
-                fieldMatch(tallySheet.tallySheetStatus, searchParameters.status) &&
+                fieldMatch(modifyStateForReleaseView(tallySheet, proofStates), searchParameters.status) &&
                 fieldMatch(getAreaName(tallySheet.pollingDivision), searchParameters.pollingDivision)) {
                 tbody.push(<TableRow key={tallySheet.tallySheetId}>
                     <TableCell align="left">{getAreaName(tallySheet.electoralDistrict)}</TableCell>
@@ -252,10 +252,9 @@ export default function ReleaseList({history, queryString, election, subElection
         const tbody = [];
         for (var i = 0; i < tallySheets.length; i++) {
             const tallySheet = tallySheets[i];
-            console.log(fieldMatch(tallySheet.tallySheetStatus, searchParameters.status))
             const proofStates = proofStatuses[i];
             if (fieldMatch(getAreaName(tallySheet.electoralDistrict), searchParameters.electoralDistrict) &&
-                fieldMatch(tallySheet.tallySheetStatus, searchParameters.status)) {
+                fieldMatch(modifyStateForReleaseView(tallySheet, proofStates), searchParameters.status)) {
                 tbody.push(<TableRow key={tallySheet.tallySheetId}>
                     <TableCell align="left">{getAreaName(tallySheet.electoralDistrict)}</TableCell>
                     <TableCell align="center">{modifyStateForReleaseView(tallySheet, proofStates)}</TableCell>
