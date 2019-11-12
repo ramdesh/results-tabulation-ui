@@ -246,7 +246,7 @@ export default function ReleaseView(props) {
                             variant="outlined" color="default" size="small"
                             disabled={processing || !tallySheet.locked || tallySheet.released}
                             onClick={handleRelease()}>
-                            Release {tallySheetStatus}
+                            Release
                         </Button>
                     </div>
                 </div>
