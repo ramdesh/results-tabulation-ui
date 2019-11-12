@@ -26,7 +26,7 @@ dashboard.time = {
 
 var rows = 1;
 var seriesName = 'argName';
-var user = window.grafanaBootData.user.name
+var user = window.grafanaBootData.user.login
 
 
 return function (callback) {
