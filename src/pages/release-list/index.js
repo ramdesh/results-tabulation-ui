@@ -163,7 +163,16 @@ export default function ReleaseList({history, queryString, election, subElection
             </Button>
             <Button
                 variant="outlined" color="default"
-                disabled={loading || released || !verified || !uploaded}
+                // disabled={loading || released || !verified || !uploaded}
+                size="small"
+                onClick={() => history.push(PATH_ELECTION_RESULTS_RELEASE_VIEW(electionId, tallySheet.tallySheetId))}
+
+            >
+                Notify
+            </Button>
+            <Button
+                variant="outlined" color="default"
+                // disabled={loading || released || !verified || !uploaded}
                 size="small"
                 onClick={() => history.push(PATH_ELECTION_RESULTS_RELEASE_VIEW(electionId, tallySheet.tallySheetId))}
 
