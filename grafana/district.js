@@ -26,7 +26,7 @@ dashboard.time = {
 
 var rows = 1;
 var seriesName = 'argName';
-var user = window.grafanaBootData.user.login
+var user = window.grafanaBootData.user.name
 
 
 return function (callback) {
@@ -61,12 +61,11 @@ return function (callback) {
         .done(function (result) {
             debugger;
             var district = null
-            if (!_.isUndefined(ARGS.district)) {
                 switch (user){
                     case 'colombo':
                         district = '01 - Colombo';
                         break;
-                    case 'gompaha':
+                    case 'gampaha':
                         district = '02 - Gampaha';
                         break;
                     case 'kalutara':
@@ -81,8 +80,8 @@ return function (callback) {
                     case 'nuwaraeliya':
                         district = '06 - Nuwara Eliya';
                         break;
-                    case 'gall':
-                        district = '07 - Gall';
+                    case 'galle':
+                        district = '07 - Galle';
                         break;
                     case 'matara':
                         district = '08 - Matara';
@@ -130,8 +129,6 @@ return function (callback) {
                         district = '22 - Kegalle';
                         break;
                 }
-               
-            }
 
             var code = {
                 value: district,
