@@ -187,15 +187,15 @@ export default function Election(props) {
                             })}
 
 
-                            <li>PRE 34
-                                <Link
-                                    disabled={true}
-                                    className="tally-sheet-code-list-item btn-list"
-                                    to={PATH_ELECTION_REPORT(electionId, TALLY_SHEET_CODE_PRE_34)}
-                                >
-                                    List
-                                </Link>
-                            </li>
+                            {/*<li>PRE 34*/}
+                                {/*<Link*/}
+                                    {/*disabled={true}*/}
+                                    {/*className="tally-sheet-code-list-item btn-list"*/}
+                                    {/*to={PATH_ELECTION_REPORT(electionId, TALLY_SHEET_CODE_PRE_34)}*/}
+                                {/*>*/}
+                                    {/*List*/}
+                                {/*</Link>*/}
+                            {/*</li>*/}
 
                         </ul>
                     </Grid>
