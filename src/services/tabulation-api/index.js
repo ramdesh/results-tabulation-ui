@@ -37,6 +37,8 @@ export const ENDPOINT_PATH_TALLY_SHEET_LOCK = (tallySheetId) => `/tally-sheet/${
 export const ENDPOINT_PATH_TALLY_SHEET_UNLOCK = (tallySheetId) => `/tally-sheet/${tallySheetId}/unlock`;
 export const ENDPOINT_PATH_TALLY_SHEET_SUBMIT = (tallySheetId) => `/tally-sheet/${tallySheetId}/submit`;
 export const ENDPOINT_PATH_TALLY_SHEET_REQUEST_EDIT = (tallySheetId) => `/tally-sheet/${tallySheetId}/request-edit`;
+export const ENDPOINT_PATH_TALLY_SHEET_NOTIFY = (tallySheetId) => `/tally-sheet/${tallySheetId}/notify`;
+export const ENDPOINT_PATH_TALLY_SHEET_RELEASE = (tallySheetId) => `/tally-sheet/${tallySheetId}/release`;
 export const ENDPOINT_PATH_TALLY_SHEET_VERSION_HTML = (tallySheetId, tallySheetVersionId) => `/tally-sheet/${tallySheetId}/version/${tallySheetVersionId}/html`;
 export const ENDPOINT_PATH_TALLY_SHEET_VERSION_LETTER_HTML = (tallySheetId, tallySheetVersionId) => `/tally-sheet/${tallySheetId}/version/${tallySheetVersionId}/letter/html`;
 
@@ -80,6 +82,8 @@ export const TALLY_SHEET_STATUS_ENUM = {
     VIEWED: "Viewed",
     ENTERED: "Entered, Not Submitted",
     VERIFIED: "Verified",
+    CERTIFIED: "Certified",
+    NOTIFIED: "Notified",
     RELEASED: "Released"
 };
 
@@ -230,6 +234,24 @@ export function submitTallySheet(tallySheetId, tallySheetVersionId) {
         data: {
             submittedVersionId: tallySheetVersionId
         }
+    }).then((tallySheet) => {
+        return refactorTallySheetObject(tallySheet);
+    })
+}
+
+export function notifyTallySheet(tallySheetId, tallySheetVersionId) {
+    return request({
+        url: ENDPOINT_PATH_TALLY_SHEET_NOTIFY(tallySheetId),
+        method: 'put'
+    }).then((tallySheet) => {
+        return refactorTallySheetObject(tallySheet);
+    })
+}
+
+export function releaseTallySheet(tallySheetId, tallySheetVersionId) {
+    return request({
+        url: ENDPOINT_PATH_TALLY_SHEET_RELEASE(tallySheetId),
+        method: 'put'
     }).then((tallySheet) => {
         return refactorTallySheetObject(tallySheet);
     })
