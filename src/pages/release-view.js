@@ -131,7 +131,7 @@ export default function ReleaseView(props) {
         try {
             setTallySheet(await notifyTallySheet(tallySheetId));
             // await fetchProofStatus();
-            messages.push("Success", MESSAGES_EN.success_release, MESSAGE_TYPES.SUCCESS);
+            messages.push("Success", MESSAGES_EN.success_notify, MESSAGE_TYPES.SUCCESS);
         } catch (e) {
             messages.push("Error", MESSAGES_EN.error_updating_report, MESSAGE_TYPES.ERROR);
         }

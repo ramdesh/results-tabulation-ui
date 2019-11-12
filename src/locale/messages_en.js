@@ -15,5 +15,6 @@ export const MESSAGES_EN = {
     success_pre41_submit:"Tally sheet was submitted successfully",
     success_upload:"Proof sheet was submitted successfully",
     success_release: "Report released successfully.",
+    success_notify: "Report notified successfully.",
     error_preferences_not_enabled_yet: "Preferences have not been enabled yet.",
 };
