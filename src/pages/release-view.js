@@ -133,7 +133,7 @@ export default function ReleaseView(props) {
             // await fetchProofStatus();
             messages.push("Success", MESSAGES_EN.success_notify, MESSAGE_TYPES.SUCCESS);
         } catch (e) {
-            messages.push("Error", MESSAGES_EN.error_updating_report, MESSAGE_TYPES.ERROR);
+            messages.push("Error", MESSAGES_EN.error_notify, MESSAGE_TYPES.ERROR);
         }
         setProcessing(false);
     };
@@ -146,7 +146,7 @@ export default function ReleaseView(props) {
             // await fetchProofStatus();
             messages.push("Success", MESSAGES_EN.success_release, MESSAGE_TYPES.SUCCESS);
         } catch (e) {
-            messages.push("Error", MESSAGES_EN.error_updating_report, MESSAGE_TYPES.ERROR);
+            messages.push("Error", MESSAGES_EN.error_release, MESSAGE_TYPES.ERROR);
         }
         setProcessing(false);
     };
