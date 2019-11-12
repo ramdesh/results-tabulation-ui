@@ -4,7 +4,7 @@ import {
     getTallySheetProof, getProofImage,
     getTallySheetVersionHtml, lockTallySheet, finalizeProof,
     saveTallySheetVersion,
-    TALLY_SHEET_STATUS_ENUM, unlockTallySheet, uploadTallySheetProof
+    TALLY_SHEET_STATUS_ENUM, unlockTallySheet, uploadTallySheetProof, notifyTallySheet, releaseTallySheet
 } from "../services/tabulation-api";
 import {MESSAGE_TYPES} from "../services/messages.provider";
 import {
@@ -124,12 +124,26 @@ export default function ReleaseView(props) {
         setIframeHeight(evt.target.contentDocument.documentElement.scrollHeight + 50);
     };
 
+
+    const handleNotify = () => async (evt) => {
+        setProcessing(true);
+        const {tallySheetId} = tallySheet;
+        try {
+            setTallySheet(await notifyTallySheet(tallySheetId));
+            // await fetchProofStatus();
+            messages.push("Success", MESSAGES_EN.success_release, MESSAGE_TYPES.SUCCESS);
+        } catch (e) {
+            messages.push("Error", MESSAGES_EN.error_updating_report, MESSAGE_TYPES.ERROR);
+        }
+        setProcessing(false);
+    };
+
     const handleRelease = () => async (evt) => {
         setProcessing(true);
         const {tallySheetId} = tallySheet;
         try {
-            await finalizeProof(tallySheetId);
-            await fetchProofStatus();
+            setTallySheet(await releaseTallySheet(tallySheetId));
+            // await fetchProofStatus();
             messages.push("Success", MESSAGES_EN.success_release, MESSAGE_TYPES.SUCCESS);
         } catch (e) {
             messages.push("Error", MESSAGES_EN.error_updating_report, MESSAGE_TYPES.ERROR);
@@ -213,7 +227,7 @@ export default function ReleaseView(props) {
                         </PrintLetterButton>
                         <Button
                             variant="outlined" color="default" component="label" size="small"
-                            disabled={isUploadDisabled || progress > 0}>
+                            disabled={processing || isUploadDisabled || progress > 0}>
                             Upload Proof
                             <div style={progressStyle} id="upload-progress">
                                 <CircularProgress variant="static" size={20} value={progress}/>
@@ -222,7 +236,15 @@ export default function ReleaseView(props) {
                         </Button>
 
                         <Button
-                            variant="outlined" color="default" size="small" disabled={isReleaseDisabled}
+                            variant="outlined" color="default" size="small"
+                            disabled={processing || !tallySheet.locked || tallySheet.notified}
+                            onClick={handleNotify()}>
+                            Notify
+                        </Button>
+
+                        <Button
+                            variant="outlined" color="default" size="small"
+                            disabled={processing || !tallySheet.locked || tallySheet.released}
                             onClick={handleRelease()}>
                             Release
                         </Button>

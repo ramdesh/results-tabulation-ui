@@ -232,7 +232,14 @@ export default function Election(props) {
                                     List
                                 </Link>
                             </li>
-
+                            <li>Revised All Island
+                                <Link
+                                    className="tally-sheet-code-list-item btn-list"
+                                    to={PATH_ELECTION_REPORT(electionId, TALLY_SHEET_CODE_PRE_34_AI)}
+                                >
+                                    List
+                                </Link>
+                            </li>
                         </ul>
                     </Grid>
                 </Grid>
