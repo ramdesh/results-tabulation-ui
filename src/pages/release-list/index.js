@@ -163,7 +163,7 @@ export default function ReleaseList({history, queryString, election, subElection
             </Button>
             <Button
                 variant="outlined" color="default"
-                // disabled={loading || released || !verified || !uploaded}
+                disabled={!tallySheet.locked || tallySheet.notified}
                 size="small"
                 onClick={() => history.push(PATH_ELECTION_RESULTS_RELEASE_VIEW(electionId, tallySheet.tallySheetId))}
 
@@ -172,7 +172,7 @@ export default function ReleaseList({history, queryString, election, subElection
             </Button>
             <Button
                 variant="outlined" color="default"
-                // disabled={loading || released || !verified || !uploaded}
+                disabled={!tallySheet.locked || tallySheet.released}
                 size="small"
                 onClick={() => history.push(PATH_ELECTION_RESULTS_RELEASE_VIEW(electionId, tallySheet.tallySheetId))}
 

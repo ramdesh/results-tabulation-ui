@@ -227,7 +227,7 @@ export default function ReleaseView(props) {
                         </PrintLetterButton>
                         <Button
                             variant="outlined" color="default" component="label" size="small"
-                            disabled={isUploadDisabled || progress > 0}>
+                            disabled={processing || isUploadDisabled || progress > 0}>
                             Upload Proof
                             <div style={progressStyle} id="upload-progress">
                                 <CircularProgress variant="static" size={20} value={progress}/>
@@ -237,14 +237,14 @@ export default function ReleaseView(props) {
 
                         <Button
                             variant="outlined" color="default" size="small"
-                            disabled={tallySheet.notified}
+                            disabled={processing || !tallySheet.locked || tallySheet.notified}
                             onClick={handleNotify()}>
                             Notify
                         </Button>
 
                         <Button
                             variant="outlined" color="default" size="small"
-                            disabled={tallySheet.released}
+                            disabled={processing || !tallySheet.locked || tallySheet.released}
                             onClick={handleRelease()}>
                             Release {tallySheetStatus}
                         </Button>
