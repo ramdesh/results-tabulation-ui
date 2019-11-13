@@ -41,6 +41,7 @@ export default function ReleaseView(props) {
     const [tallySheetVersionHtml, setTallySheetVersionHtml] = useState("");
     const [tallySheetProof, setTallySheetProof] = useState("");
     const [latestProofId, setLatestProofId] = useState(PROOF_STATUS_ENUM.PROOF_NOT_LOADED);
+    const [latestProof, setLatestProof] = useState(null);
     const [releaseState, setReleaseState] = useState(RELEASE_STATUS_ENUM.RELEASE_STATE_NOT_LOADED);
     const [progress, setProgress] = useState(-1);
     const [processing, setProcessing] = useState(false);
@@ -93,9 +94,11 @@ export default function ReleaseView(props) {
         const {scannedFiles, finished} = proofStatus;
         setReleaseState(finished ? RELEASE_STATUS_ENUM.RELEASE_FINISHED : RELEASE_STATUS_ENUM.RELEASE_UNFINISHED);
         if (scannedFiles.length > 0) {
-            const latestProof = scannedFiles[scannedFiles.length - 1].fileId;
-            setLatestProofId(latestProof);
+            const latestProof = scannedFiles[scannedFiles.length - 1];
+            setLatestProof(latestProof);
+            setLatestProofId(latestProof.fileId);
         } else {
+            setLatestProof(null);
             setLatestProofId(PROOF_STATUS_ENUM.PROOF_NOT_UPLOADED);
         }
     }
@@ -103,7 +106,7 @@ export default function ReleaseView(props) {
     const fetchProofImage = async () => {
         setTallySheetProof("Loading proof image ...");
         const proofImgArray = await getProofImage(latestProofId);
-        var proofImgBlob = new Blob([proofImgArray], {type: "image/jpeg"});
+        var proofImgBlob = new Blob([proofImgArray], {type: latestProof.fileMimeType});
         const proofImgDataUrl = URL.createObjectURL(proofImgBlob);
         setTallySheetProof(proofImgDataUrl)
     };
@@ -188,7 +191,12 @@ export default function ReleaseView(props) {
             leftPlane = <div style={{float: "right", width: "50%", textAlign: "center"}}>Proof not uploaded</div>;
         } else if (latestProofId >= 0) {
             if (tallySheetProof.startsWith('blob:')) {
-                leftPlane = <img src={tallySheetProof} style={{float: "right", width: "50%"}}/>;
+                leftPlane = <iframe
+                    src={tallySheetProof}
+                    style={{float: "right", width: "50%"}}
+                    height={iframeHeight}
+                    width={iframeWidth}
+                />;
             } else {
                 leftPlane = <div style={{float: "right", width: "50%", textAlign: "center"}}>{tallySheetProof}</div>;
             }
@@ -232,7 +240,8 @@ export default function ReleaseView(props) {
                             <div style={progressStyle} id="upload-progress">
                                 <CircularProgress variant="static" size={20} value={progress}/>
                             </div>
-                            <input accept="image/*" type="file" style={{display: 'none'}} onChange={handleUpload()}/>
+                            <input accept="image/*,application/pdf" type="file" style={{display: 'none'}}
+                                   onChange={handleUpload()}/>
                         </Button>
 
                         <Button
