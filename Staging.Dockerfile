@@ -6,8 +6,8 @@ COPY ./public /app/public
 WORKDIR /app
 RUN npm install
 
-ENV REACT_APP_AUTH_APP_URL="https://tabulations.ecstag.opensource.lk"
-ENV REACT_APP_TABULATION_API_URL="https://apim-gw.ecstag.opensource.lk/tabulation/0.1.0"
+ENV REACT_APP_AUTH_APP_URL="https://tabulations.training.elections.gov.lk"
+ENV REACT_APP_TABULATION_API_URL="https://apim-gw.training.elections.gov.lk/tabulation/0.1.0"
 
 RUN npm run build
 
@@ -20,6 +20,3 @@ WORKDIR /usr/share/nginx/html/
 EXPOSE 80
 
 CMD ["nginx", "-g", "daemon off;"];
-# CMD echo 'window._env_ = {}; window._env_.API_BASE ="'${API_BASE}'"' > env-config.js && nginx -g 'daemon off;'
-# CMD ["bash", "-c", "echo 'window._env_.API_BASE = \"$API_BASE\"' > env-config.js && nginx -g 'daemon off;'"]
-# CMD echo ${API_BASE}
