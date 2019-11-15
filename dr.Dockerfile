@@ -6,7 +6,7 @@ COPY ./public /app/public
 WORKDIR /app
 RUN npm install
 
-ENV REACT_APP_AUTH_APP_URL="https://tabulations.elections.gov.lk"
+ENV REACT_APP_AUTH_APP_URL="https://tabulations-dr-do.elections.gov.lk"
 ENV REACT_APP_TABULATION_API_URL="https://apim-gw-dr-do.elections.gov.lk/tabulation/0.1.0"
 
 RUN npm run build
