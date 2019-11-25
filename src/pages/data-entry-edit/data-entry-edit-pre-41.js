@@ -1,24 +1,6 @@
-import React, {Component, useEffect, useState} from "react";
-import {Link} from 'react-router-dom';
+import React, {useState} from "react";
 import {isNumeric, processNumericValue} from "../../utils";
-import {
-    getElections,
-    getTallySheet,
-    getTallySheetById,
-    getTallySheetVersionById,
-    saveTallySheetVersion, submitTallySheet
-} from "../../services/tabulation-api";
-import {MessagesProvider, MessagesConsumer, MESSAGE_TYPES} from "../../services/messages.provider";
-import {
-    PATH_ELECTION, PATH_ELECTION_BY_ID,
-    PATH_ELECTION_DATA_ENTRY, PATH_ELECTION_DATA_ENTRY_EDIT,
-    TALLY_SHEET_CODE_CE_201,
-    TALLY_SHEET_CODE_CE_201_PV,
-    TALLY_SHEET_CODE_PRE_41
-} from "../../App";
-import BreadCrumb from "../../components/bread-crumb";
 import Processing from "../../components/processing";
-import Error from "../../components/error";
 import Table from "@material-ui/core/Table";
 import TableHead from "@material-ui/core/TableHead";
 import TableFooter from "@material-ui/core/TableFooter";
@@ -28,82 +10,60 @@ import TableBody from "@material-ui/core/TableBody";
 import TextField from '@material-ui/core/TextField';
 
 import Button from '@material-ui/core/Button';
-import {MESSAGES_EN} from "../../locale/messages_en";
+import {useTallySheetEdit} from "./index";
 
 export default function DataEntryEdit_PRE_41({history, queryString, election, tallySheet, messages}) {
-    const {tallySheetId, tallySheetCode} = tallySheet;
-    const {electionId, electionName} = election;
-
     const [candidateWiseCounts, setCandidateWiseCounts] = useState({});
     const [rejectedVoteCount, setRejectedVoteCount] = useState(0);
     const [totalValidVoteCount, setTotalValidVoteCount] = useState(0);
     const [totalVoteCount, setTotalVoteCount] = useState(0);
-    const [processing, setProcessing] = useState(true);
-    const [tallySheetVersion, setTallySheetVersion] = useState(null);
-    const [processingLabel, setProcessingLabel] = useState("Loading");
-    const [saved, setSaved] = useState(false);
 
-    useEffect(() => {
-        if (tallySheet.latestVersionId) {
-            getTallySheetVersionById(tallySheetId, tallySheetCode, tallySheet.latestVersionId).then((tallySheetVersion) => {
-                const latestCandidateWiseCounts = {};
-                const {content, summary} = tallySheetVersion;
-                let validTotal = 0;
-                for (let i = 0; i < content.length; i++) {
-                    let contentRow = content[i];
-                    latestCandidateWiseCounts[contentRow.candidateId] = {
-                        candidateId: contentRow.candidateId,
-                        validVoteCount: contentRow.count,
-                        validVoteCountInWords: contentRow.countInWords
-                    };
-                    validTotal += contentRow.count;
-                }
-                setRejectedVoteCount(summary.rejectedVoteCount);
-                setTotalValidVoteCount(validTotal);
-                setTotalVoteCount((validTotal + summary.rejectedVoteCount));
-                setCandidateWiseCounts(latestCandidateWiseCounts);
-                setProcessing(false);
-            }).catch((error) => {
-                messages.push("Error", MESSAGES_EN.error_tallysheet_not_reachable, MESSAGE_TYPES.ERROR);
-                setProcessing(false);
-            })
-        } else {
-            const initialCandidateWiseCounts = {};
-            election.parties.map(party => {
-                party.candidates.map(candidate => {
-                    initialCandidateWiseCounts[candidate.candidateId] = {
-                        candidateId: candidate.candidateId,
-                        validVoteCount: 0,
-                        validVoteCountInWords: ""
-                    };
-                });
+    const setTallySheetContent = (tallySheetVersion) => {
+        const latestCandidateWiseCounts = {};
+        election.parties.map(party => {
+            party.candidates.map(candidate => {
+                latestCandidateWiseCounts[candidate.candidateId] = {
+                    candidateId: candidate.candidateId,
+                    validVoteCount: 0,
+                    validVoteCountInWords: ""
+                };
             });
-            setCandidateWiseCounts(initialCandidateWiseCounts);
-            setProcessing(false);
+        });
+
+        if (tallySheetVersion) {
+            const {content, summary} = tallySheetVersion;
+            let validTotal = 0;
+            for (let i = 0; i < content.length; i++) {
+                let contentRow = content[i];
+                latestCandidateWiseCounts[contentRow.candidateId] = {
+                    candidateId: contentRow.candidateId,
+                    validVoteCount: contentRow.count,
+                    validVoteCountInWords: contentRow.countInWords
+                };
+                validTotal += contentRow.count;
+            }
+            setRejectedVoteCount(summary.rejectedVoteCount);
+            setTotalValidVoteCount(validTotal);
+            setTotalVoteCount((validTotal + summary.rejectedVoteCount));
         }
-    }, []);
 
-    const handleValidVoteCountChange = candidateId => event => {
-        setCandidateWiseCounts({
-            ...candidateWiseCounts,
-            [candidateId]: {
-                ...candidateWiseCounts[candidateId],
-                validVoteCount: processNumericValue(event.target.value)
-            }
-        })
+        setCandidateWiseCounts(latestCandidateWiseCounts);
     };
 
-    const handleValidVoteCountInWordsChange = candidateId => event => {
-        setCandidateWiseCounts({
-            ...candidateWiseCounts,
-            [candidateId]: {
-                ...candidateWiseCounts[candidateId],
-                validVoteCountInWords: event.target.value
+    const validateTallySheetContent = () => {
+        for (let key in candidateWiseCounts) {
+            if (!isNumeric(candidateWiseCounts[key]["validVoteCount"])) {
+                return false;
             }
-        })
+        }
+
+        return (isNumeric(rejectedVoteCount) &&
+            calculateTotalVoteCount() === totalVoteCount &&
+            calculateTotalValidVoteCount() === totalValidVoteCount
+        )
     };
 
-    const getTallySheetSaveRequestBody = () => {
+    const getTallySheetRequestBody = () => {
         const content = [];
         election.parties.map(party => {
             party.candidates.map(candidate => {
@@ -125,43 +85,37 @@ export default function DataEntryEdit_PRE_41({history, queryString, election, ta
         }
     };
 
-    const handleClickNext = (saved = true) => async (event) => {
-        if (validateAllValues()) {
-            setSaved(saved)
-            setProcessing(true);
-            setProcessingLabel("Saving");
-            try {
-                const body = getTallySheetSaveRequestBody();
-                const tallySheetVersion = await saveTallySheetVersion(tallySheetId, tallySheetCode, body);
+    const {processing, processingLabel, saved, handleClickNext, handleClickSubmit, handleClickBackToEdit} = useTallySheetEdit({
+        messages,
+        history,
+        election,
+        tallySheet,
+        setTallySheetContent,
+        validateTallySheetContent,
+        getTallySheetRequestBody
+    });
 
-                setTallySheetVersion(tallySheetVersion);
-            } catch (e) {
-                messages.push("Error", MESSAGES_EN.error_tallysheet_save, MESSAGE_TYPES.ERROR);
+
+    const handleValidVoteCountChange = candidateId => event => {
+        setCandidateWiseCounts({
+            ...candidateWiseCounts,
+            [candidateId]: {
+                ...candidateWiseCounts[candidateId],
+                validVoteCount: processNumericValue(event.target.value)
             }
-            setProcessing(false);
-        } else {
-            messages.push("Error", MESSAGES_EN.error_input, MESSAGE_TYPES.ERROR)
-        }
+        })
     };
 
-    const handleClickSubmit = () => async (event) => {
-        setProcessing(true);
-        setProcessingLabel("Submitting");
-        try {
-            const {tallySheetVersionId} = tallySheetVersion;
-            const tallySheet = await submitTallySheet(tallySheetId, tallySheetVersionId);
-
-            messages.push("Success", MESSAGES_EN.success_pre41_submit, MESSAGE_TYPES.SUCCESS);
-            setTimeout(() => {
-                const subElectionId = tallySheet.electionId;
-                history.push(PATH_ELECTION_DATA_ENTRY(electionId, tallySheetCode, subElectionId));
-            }, 1000)
-        } catch (e) {
-            messages.push("Error", MESSAGES_EN.error_tallysheet_submit, MESSAGE_TYPES.ERROR);
-        }
-
-        setProcessing(false);
+    const handleValidVoteCountInWordsChange = candidateId => event => {
+        setCandidateWiseCounts({
+            ...candidateWiseCounts,
+            [candidateId]: {
+                ...candidateWiseCounts[candidateId],
+                validVoteCountInWords: event.target.value
+            }
+        })
     };
+
 
     function calculateTotalValidVoteCount() {
         let total = 0;
@@ -170,19 +124,6 @@ export default function DataEntryEdit_PRE_41({history, queryString, election, ta
         }
 
         return total;
-    }
-
-    function validateAllValues() {
-        for (let key in candidateWiseCounts) {
-            if (!isNumeric(candidateWiseCounts[key]["validVoteCount"])) {
-                return false;
-            }
-        }
-        return (isNumeric(rejectedVoteCount) &&
-            calculateTotalVoteCount() === totalVoteCount &&
-            calculateTotalValidVoteCount() === totalValidVoteCount
-        )
-
     }
 
     function calculateTotalVoteCount() {
@@ -247,7 +188,7 @@ export default function DataEntryEdit_PRE_41({history, queryString, election, ta
                         <TableCell align="right" colSpan={4}>
                             <div className="page-bottom-fixed-action-bar">
                                 <Button
-                                    variant="contained" color="default" onClick={handleClickNext(false)}
+                                    variant="contained" color="default" onClick={handleClickBackToEdit()}
                                     disabled={processing}
                                 >
                                     Edit

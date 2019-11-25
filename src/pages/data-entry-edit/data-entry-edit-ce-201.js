@@ -1,23 +1,5 @@
-import React, {Component, useEffect, useState} from "react";
-import {Link} from 'react-router-dom';
-import {
-    getElections, getPollingStations,
-    getTallySheet,
-    getTallySheetById,
-    getTallySheetVersionById,
-    saveTallySheetVersion, submitTallySheet
-} from "../../services/tabulation-api";
-import {MessagesProvider, MessagesConsumer, MESSAGE_TYPES} from "../../services/messages.provider";
-import {
-    PATH_ELECTION, PATH_ELECTION_BY_ID,
-    PATH_ELECTION_DATA_ENTRY, PATH_ELECTION_DATA_ENTRY_EDIT,
-    TALLY_SHEET_CODE_CE_201,
-    TALLY_SHEET_CODE_CE_201_PV,
-    TALLY_SHEET_CODE_PRE_41
-} from "../../App";
-import BreadCrumb from "../../components/bread-crumb";
+import React, {useState} from "react";
 import Processing from "../../components/processing";
-import Error from "../../components/error";
 import Table from "@material-ui/core/Table";
 import TableHead from "@material-ui/core/TableHead";
 import TableFooter from "@material-ui/core/TableFooter";
@@ -28,63 +10,54 @@ import TextField from '@material-ui/core/TextField';
 
 import Button from '@material-ui/core/Button';
 import {isNumeric, processNumericValue} from "../../utils";
-import {MESSAGES_EN} from "../../locale/messages_en";
+import {useTallySheetEdit} from "./index";
 
 export default function DataEntryEdit_CE_201({history, queryString, election, tallySheet, messages}) {
-    const {tallySheetId, tallySheetCode} = tallySheet;
-    const {electionId, electionName} = election;
-
     const [pollingStationMap, setPollingStationMap] = useState({});
     const [pollingStations, setPollingStations] = useState([]);
-    const [processing, setProcessing] = useState(true);
-    const [tallySheetVersion, setTallySheetVersion] = useState(null);
-    const [processingLabel, setProcessingLabel] = useState("Loading");
-    const [saved, setSaved] = useState(false);
     const [totalOrdinaryBallotCountFromBoxCount, setTotalOrdinaryBallotCountFromBoxCount] = useState(0);
 
-    const fetchData = async () => {
-        try {
-            const pollingStations = tallySheet.area.pollingStations;
-            const pollingStationMap = {};
+    const setTallySheetContent = (tallySheetVersion) => {
+        const pollingStations = tallySheet.area.pollingStations;
+        const pollingStationMap = {};
 
-            pollingStations.map((pollingStation) => {
-                pollingStationMap[pollingStation.areaId] = {
-                    areaId: pollingStation.areaId,
-                    ordinaryBallotCountFromBoxCount: 0,
-                    pollingDistricts: pollingStation.pollingDistricts
-                };
-            });
+        pollingStations.map((pollingStation) => {
+            pollingStationMap[pollingStation.areaId] = {
+                areaId: pollingStation.areaId,
+                ordinaryBallotCountFromBoxCount: 0,
+                pollingDistricts: pollingStation.pollingDistricts
+            };
+        });
 
-            let total = 0;
-            if (tallySheet.latestVersionId) {
-                const latestVersion = await getTallySheetVersionById(tallySheetId, tallySheetCode, tallySheet.latestVersionId);
-
-                const {content} = latestVersion;
-                for (let i = 0; i < content.length; i++) {
-                    let contentRow = content[i];
-                    let {ordinaryBallotCountFromBoxCount} = contentRow;
-                    if (ordinaryBallotCountFromBoxCount) {
-                        pollingStationMap[contentRow.areaId].ordinaryBallotCountFromBoxCount = ordinaryBallotCountFromBoxCount
-                        total += ordinaryBallotCountFromBoxCount
-                    }
+        let total = 0;
+        if (tallySheetVersion) {
+            const {content} = tallySheetVersion;
+            for (let i = 0; i < content.length; i++) {
+                let contentRow = content[i];
+                let {ordinaryBallotCountFromBoxCount} = contentRow;
+                if (ordinaryBallotCountFromBoxCount) {
+                    pollingStationMap[contentRow.areaId].ordinaryBallotCountFromBoxCount = ordinaryBallotCountFromBoxCount
+                    total += ordinaryBallotCountFromBoxCount
                 }
             }
-
-            setPollingStations(pollingStations);
-            setPollingStationMap(pollingStationMap);
-            setTotalOrdinaryBallotCountFromBoxCount(total);
-        } catch (error) {
-            messages.push("Error", MESSAGES_EN.error_tallysheet_not_reachable, MESSAGE_TYPES.ERROR);
         }
 
-        setProcessing(false);
+        setPollingStations(pollingStations);
+        setPollingStationMap(pollingStationMap);
+        setTotalOrdinaryBallotCountFromBoxCount(total);
     };
 
-    useEffect(() => {
-        fetchData()
-    }, []);
+    const validateTallySheetContent = () => {
+        for (let key in pollingStationMap) {
+            if (!isNumeric(pollingStationMap[key]["ordinaryBallotCountFromBoxCount"])) {
+                return false;
+            }
+        }
+        return (calculateTotalOrdinaryBallotCountFromBoxCount() === totalOrdinaryBallotCountFromBoxCount)
 
-    const getTallySheetSaveRequestBody = () => {
+    };
+
+    const getTallySheetRequestBody = () => {
         const content = [];
 
         pollingStations.map(pollingStation => {
@@ -110,43 +83,15 @@ export default function DataEntryEdit_CE_201({history, queryString, election, ta
         };
     };
 
-    const handleClickNext = (saved = true) => async (event) => {
-        if (validateAllValues()) {
-            setSaved(saved)
-            setProcessing(true);
-            setProcessingLabel("Saving");
-            try {
-                const body = getTallySheetSaveRequestBody();
-                const tallySheetVersion = await saveTallySheetVersion(tallySheetId, tallySheetCode, body);
-
-                setTallySheetVersion(tallySheetVersion);
-            } catch (e) {
-                messages.push("Error", MESSAGES_EN.error_tallysheet_save, MESSAGE_TYPES.ERROR);
-            }
-            setProcessing(false);
-        } else {
-            messages.push("Error", MESSAGES_EN.error_input, MESSAGE_TYPES.ERROR)
-        }
-    };
-
-    const handleClickSubmit = () => async (event) => {
-        setProcessing(true);
-        setProcessingLabel("Submitting");
-        try {
-            const {tallySheetVersionId} = tallySheetVersion;
-            const tallySheet = await submitTallySheet(tallySheetId, tallySheetVersionId);
-
-            messages.push("Success", MESSAGES_EN.success_pre41_submit, MESSAGE_TYPES.SUCCESS);
-            setTimeout(() => {
-                const subElectionId = tallySheet.electionId;
-                history.push(PATH_ELECTION_DATA_ENTRY(electionId, tallySheetCode, subElectionId));
-            }, 1000)
-        } catch (e) {
-            messages.push("Error", MESSAGES_EN.error_tallysheet_submit, MESSAGE_TYPES.ERROR);
-        }
-
-        setProcessing(false);
-    };
+    const {processing, processingLabel, saved, handleClickNext, handleClickSubmit, handleClickBackToEdit} = useTallySheetEdit({
+        messages,
+        history,
+        election,
+        tallySheet,
+        setTallySheetContent,
+        validateTallySheetContent,
+        getTallySheetRequestBody
+    });
 
     const handleOrdinaryBallotCountFromBoxCountChange = areaId => event => {
         setPollingStationMap({
@@ -170,16 +115,6 @@ export default function DataEntryEdit_CE_201({history, queryString, election, ta
     const handleTotalOrdinaryBallotCountFromBoxCountChange = () => event => {
         setTotalOrdinaryBallotCountFromBoxCount(processNumericValue(event.target.value));
     };
-
-    function validateAllValues() {
-        for (let key in pollingStationMap) {
-            if (!isNumeric(pollingStationMap[key]["ordinaryBallotCountFromBoxCount"])) {
-                return false;
-            }
-        }
-        return (calculateTotalOrdinaryBallotCountFromBoxCount() === totalOrdinaryBallotCountFromBoxCount)
-
-    }
 
     function getTallySheetEditForm() {
         if (saved) {
@@ -212,7 +147,7 @@ export default function DataEntryEdit_CE_201({history, queryString, election, ta
                     <TableRow>
                         <TableCell align="right" colSpan={3}>
                             <div className="page-bottom-fixed-action-bar">
-                                <Button variant="contained" color="default" onClick={handleClickNext(false)}>
+                                <Button variant="contained" color="default" onClick={handleClickBackToEdit()}>
                                     Edit
                                 </Button>
                                 <Button variant="contained" color="primary" onClick={handleClickSubmit()}>
@@ -257,7 +192,7 @@ export default function DataEntryEdit_CE_201({history, queryString, election, ta
                                     onChange={handleOrdinaryBallotCountFromBoxCountChange(areaId)}
                                     inputProps={{
                                         style: {
-                                          height: '10px'
+                                            height: '10px'
                                         },
                                     }}
                                 />
@@ -296,8 +231,6 @@ export default function DataEntryEdit_CE_201({history, queryString, election, ta
             return null;
         }
     }
-
-    // return getTallySheetEditForm()
 
 
     return <Processing showProgress={processing} label={processingLabel}>
