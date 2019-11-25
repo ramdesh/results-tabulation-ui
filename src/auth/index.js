@@ -86,14 +86,12 @@ export class ProtectedRoute extends Component {
             return <Route
                 {...this.props}
                 component={(props) => {
-                    return <MessagesProvider>
-                        <MessagesConsumer>
-                            {(messages) => {
-                                return <this.props.component {...props} messages={messages}/>
-                            }}
+                    return <MessagesConsumer>
+                        {(messages) => {
+                            return <this.props.component {...props} messages={messages}/>
+                        }}
 
-                        </MessagesConsumer>
-                    </MessagesProvider>
+                    </MessagesConsumer>
                 }}
             />
         }

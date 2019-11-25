@@ -6,8 +6,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
-import {getElections, getTallySheet, TALLY_SHEET_STATUS_ENUM, unlockTallySheet} from "../services/tabulation-api";
-import {MessagesProvider, MessagesConsumer, MESSAGE_TYPES} from "../services/messages.provider";
+import {getTallySheet, TALLY_SHEET_STATUS_ENUM} from "../services/tabulation-api";
 import {
     PATH_ELECTION, PATH_ELECTION_BY_ID,
     PATH_ELECTION_DATA_ENTRY, PATH_ELECTION_DATA_ENTRY_EDIT, PATH_ELECTION_REPORT_VIEW,
@@ -16,14 +15,11 @@ import {
     TALLY_SHEET_CODE_PRE_41
 } from "../App";
 import Processing from "../components/processing";
-import Error from "../components/error";
 import BreadCrumb from "../components/bread-crumb";
 import Button from "@material-ui/core/Button";
-import {getAreaName, getElectoralDistrictName, getPollingDivisionName, getTallySheetCodeStr} from "../utils/tallySheet";
+import {getAreaName, getTallySheetCodeStr} from "../utils/tallySheet";
 import TextField from "@material-ui/core/TextField/TextField";
-import {fieldMatch, getFirstOrNull} from "../utils";
-
-import {VOTE_TYPE} from "../services/tabulation-api/entities/election.entity";
+import {fieldMatch} from "../utils";
 
 
 export default function DataEntryList({history, queryString, election, subElection}) {
