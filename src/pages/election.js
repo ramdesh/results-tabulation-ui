@@ -1,7 +1,5 @@
-import React, {Component, useEffect, useState} from "react";
+import React from "react";
 import {Link} from 'react-router-dom';
-import {getElections} from "../services/tabulation-api";
-import {MessagesProvider, MessagesConsumer} from "../services/messages.provider";
 import {
     PATH_ELECTION,
     PATH_ELECTION_BY_ID,

@@ -18,13 +18,10 @@ import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
 
 import {
-    generateReport,
-    getElections,
     getTallySheet,
     TALLY_SHEET_STATUS_ENUM,
-    getTallySheetProof, getTallySheetVersionHtml, getTallySheetVersionLetterHtml
+    getTallySheetProof
 } from "../../services/tabulation-api";
-import {MessagesProvider, MessagesConsumer} from "../../services/messages.provider";
 import {
     PATH_ELECTION,
     PATH_ELECTION_BY_ID,

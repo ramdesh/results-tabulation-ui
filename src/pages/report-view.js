@@ -1,19 +1,10 @@
-import React, {Component, useEffect, useState} from "react";
-import {Link} from 'react-router-dom';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-
+import React, {useEffect, useState} from "react";
 import {
-    getElections,
-    getTallySheet,
     getTallySheetVersionHtml, lockTallySheet, requestEditForTallySheet,
     saveTallySheetVersion,
     TALLY_SHEET_STATUS_ENUM, unlockTallySheet
 } from "../services/tabulation-api";
-import {MessagesProvider, MessagesConsumer, MESSAGE_TYPES} from "../services/messages.provider";
+import {MESSAGE_TYPES} from "../services/messages.provider";
 import {
     PATH_ELECTION,
     PATH_ELECTION_BY_ID,
