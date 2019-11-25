@@ -6,13 +6,16 @@ import * as serviceWorker from './serviceWorker';
 import {BrowserRouter} from "react-router-dom";
 import {Router} from "react-router";
 import {history} from "./utils";
+import {MessagesProvider} from "./services/messages.provider";
 
 ReactDOM.render(
-    <BrowserRouter>
-        <Router history={history}>
-            <App/>
-        </Router>
-    </BrowserRouter>
+    <MessagesProvider>
+        <BrowserRouter>
+            <Router history={history}>
+                <App/>
+            </Router>
+        </BrowserRouter>
+    </MessagesProvider>
     , document.getElementById('root')
 );
 
