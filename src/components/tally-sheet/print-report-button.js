@@ -1,14 +1,13 @@
 import React from "react";
-import {getTallySheetVersionLetterHtml} from "../../services/tabulation-api";
+import {getTallySheetVersionHtml} from "../../services/tabulation-api";
 import FetchHtmlAndPrintButton from "./fetch-html-and-print-button";
 
-export default function PrintLetterButton(props) {
-
-
+export default function PrintReportButton(props) {
+    
     const fetchHtml = async () => {
         const {tallySheetId, tallySheetVersionId} = props;
 
-        return await getTallySheetVersionLetterHtml(tallySheetId, tallySheetVersionId);
+        return await getTallySheetVersionHtml(tallySheetId, tallySheetVersionId);
     };
 
     return <FetchHtmlAndPrintButton
